@@ -1,3 +1,4 @@
 {
-  "cSpell.words": ["bragment", "browserslist", "commitlint", "craco"]
+  "cSpell.words": ["bragment", "browserslist", "commitlint", "craco"],
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
