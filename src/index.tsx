@@ -8,7 +8,16 @@ ReactDOM.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById('root'),
+  () => {
+    const overture = document.getElementById('overture');
+    setTimeout(() => {
+      overture?.classList.add('loaded');
+    }, 3000);
+    setTimeout(() => {
+      overture?.remove();
+    }, 5000);
+  }
 );
 
 // If you want to start measuring performance in your app, pass a function
