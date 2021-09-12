@@ -1,13 +1,16 @@
-import React from 'react';
+import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import App from './components/App';
 import reportWebVitals from './reportWebVitals';
+import stores, { AppContext } from './stores';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <StrictMode>
+    <AppContext.Provider value={stores}>
+      <App />
+    </AppContext.Provider>
+  </StrictMode>,
   document.getElementById('root'),
   () => {
     const overture = document.getElementById('overture');
