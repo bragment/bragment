@@ -1,1 +1,22 @@
-{}
+{
+  "email": "Email",
+  "password": "Password",
+  "username": "Username",
+  "usernameOrEmail": "Username or Email",
+  "signIn": "Sign In",
+  "signOut": "Sign Out",
+  "signUp": "Sign Up",
+  "haveAnAccount": "Already have an account?",
+  "notHaveAnAccount": "Don't have an account?",
+  "forgotPassword": "Forgot password?",
+  "rememberMe": "Remember me",
+  "backToSignIn": "Back to sign in?",
+  "sendPasswordResetEmail": "Send password reset email",
+  "invalidUsernameOrPassword": "Invalid username/password.",
+  "existingEmail": "Email already exists.",
+  "existingUsername": "Username already exists.",
+  "requiredEmail": "Email is required.",
+  "requiredUsername": "Username is required.",
+  "requiredPassword": "Password is required.",
+  "networkError": "Network error, please try again later."
+}

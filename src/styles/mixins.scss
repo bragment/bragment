@@ -1,0 +1,89 @@
+@import './functions.scss', './variables.scss';
+
+@mixin _color-button($color) {
+  border-radius: $border-radius-base;
+  background-color: $color;
+  border-color: $color;
+  &:hover,
+  &:focus {
+    $color-hover: color-lighten($color);
+    background-color: $color-hover;
+    border-color: $color-hover;
+  }
+  &:active {
+    $color-active: color-darken($color);
+    background-color: $color-active;
+    border-color: $color-active;
+  }
+}
+
+@mixin _color-input($color) {
+  &.ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled),
+  &.ant-input {
+    &:focus {
+      border-color: $color;
+      box-shadow: transparentize($color, $amount: 0.2);
+    }
+    &:hover {
+      border-color: $color;
+    }
+  }
+}
+
+@mixin _color-link($color) {
+  &.ant-btn {
+    color: $color;
+    &:hover,
+    &:focus {
+      $color-hover: color-lighten($color);
+      color: $color-hover;
+    }
+    &:active {
+      $color-active: color-darken($color);
+      color: $color-active;
+    }
+  }
+}
+
+@mixin _input-affix($margin-lr, $prefix: true) {
+  margin: 0 $margin-lr;
+  height: 100%;
+  position: absolute;
+  z-index: 1;
+  @if $prefix {
+    left: 0;
+  } @else {
+    right: 0;
+  }
+}
+
+@mixin _input(
+  $font-size,
+  $padding-tb,
+  $padding-lr,
+  $has-prefix: false,
+  $has-suffix: false
+) {
+  border-radius: $border-radius-base;
+  padding: 0;
+  &.ant-input {
+    padding: $padding-tb $padding-lr;
+  }
+  .ant-input {
+    border-radius: $border-radius-base;
+    padding: $padding-tb $padding-lr;
+    $affix-width: $padding-lr + $font-size + $padding-lr;
+    @if $has-prefix {
+      padding-left: $affix-width;
+    }
+    @if $has-suffix {
+      padding-right: $affix-width;
+    }
+  }
+  .ant-input-prefix {
+    @include _input-affix($padding-lr, true);
+  }
+  .ant-input-suffix {
+    @include _input-affix($padding-lr, false);
+  }
+}

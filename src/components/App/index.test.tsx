@@ -1,14 +1,22 @@
 import { render, screen } from '@testing-library/react';
-import { ELanguage, languages } from '../../i18n/types';
+import { formatMessage } from '../../i18n';
+import { ELanguage } from '../../i18n/types';
 import stores from '../../stores';
 import App from './index';
 
-test('renders app', () => {
+test('render app', () => {
   render(<App />);
   stores.settingStore.setLanguage(ELanguage.EN_US);
-  let headerElement = screen.getByText(languages[ELanguage.EN_US]);
-  expect(headerElement).toBeInTheDocument();
+  let signInButton = screen.getByText(
+    formatMessage(ELanguage.EN_US, 'signIn'),
+    { selector: 'button>span' }
+  );
+  expect(signInButton).toBeInTheDocument();
   stores.settingStore.setLanguage(ELanguage.ZH_CN);
-  headerElement = screen.getByText(languages[ELanguage.ZH_CN]);
-  expect(headerElement).toBeInTheDocument();
+  signInButton = screen.getByText(
+    // NOTE: there is one space between 2 chinese characters.
+    formatMessage(ELanguage.ZH_CN, 'signIn').split('').join(' '),
+    { selector: 'button>span' }
+  );
+  expect(signInButton).toBeInTheDocument();
 });

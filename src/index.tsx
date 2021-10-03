@@ -1,9 +1,14 @@
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import { initializeParse } from './api/parse';
 import App from './components/App';
 import reportWebVitals from './reportWebVitals';
 import stores, { AppContext } from './stores';
+import { initializeStores } from './stores/helpers';
+import './styles/index.scss';
+
+initializeParse();
+initializeStores();
 
 ReactDOM.render(
   <StrictMode>
@@ -14,12 +19,11 @@ ReactDOM.render(
   document.getElementById('root'),
   () => {
     const overture = document.getElementById('overture');
-    setTimeout(() => {
-      overture?.classList.add('loaded');
-    }, 3000);
-    setTimeout(() => {
-      overture?.remove();
-    }, 5000);
+    overture?.classList.add('loaded');
+    overture?.remove();
+    // setTimeout(() => {
+    //   overture?.remove();
+    // }, 1000);
   }
 );
 
