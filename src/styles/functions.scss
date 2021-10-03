@@ -1,0 +1,7 @@
+@function color-lighten($base) {
+  @return lighten(adjust-hue($base, -2), 7.84);
+}
+
+@function color-darken($base) {
+  @return darken(adjust-hue($base, 4), 15.49);
+}

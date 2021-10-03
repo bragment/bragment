@@ -1,15 +1,23 @@
 import type { PrimitiveType } from 'intl-messageformat';
 import { useContext } from 'react';
 import { useIntl } from 'react-intl';
-import type { ILocalMessages } from '../i18n/messages';
+import type { ILocalMessages } from '../i18n/types';
 import { AppContext } from '../stores';
 
 export function useAppContext() {
   return useContext(AppContext);
 }
 
+export function useDialogStore() {
+  return useContext(AppContext).dialogStore;
+}
+
 export function useSettingStore() {
   return useContext(AppContext).settingStore;
+}
+
+export function useUserStore() {
+  return useContext(AppContext).userStore;
 }
 
 export function useFormatMessage(): (
