@@ -1,0 +1,62 @@
+@import './variables.scss', './mixins.scss';
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  .ant-form {
+    padding: 4px;
+  }
+  .ant-form-item-control-input {
+    min-height: 40px;
+  }
+
+  .ant-checkbox-wrapper {
+    margin-top: 0.5px;
+  }
+
+  .ant-checkbox-inner {
+    border-radius: $border-radius-base - 2;
+  }
+
+  .ant-modal-content {
+    border-radius: $border-radius-base + 2;
+  }
+
+  .primary-button {
+    @include _color-button($primary-color);
+  }
+  .secondary-button {
+    @include _color-button($secondary-color);
+  }
+  .primary-link {
+    @include _color-link($primary-color);
+  }
+  .secondary-link {
+    @include _color-link($secondary-color);
+  }
+  .primary-input {
+    @include _color-input($primary-color);
+  }
+  .secondary-input {
+    @include _color-input($secondary-color);
+  }
+  .password-input {
+    @include _input(16px, 6.5px, 11px, false, true);
+  }
+  .username-input,
+  .email-input {
+    @include _input(16px, 6.5px, 11px, false, false);
+  }
+
+  .text-logo {
+    height: 100%;
+    background-image: url(../assets/text-mark.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    color: transparent;
+    text-align: justify;
+  }
+}
