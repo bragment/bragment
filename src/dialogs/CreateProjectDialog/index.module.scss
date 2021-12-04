@@ -1,0 +1,35 @@
+@import '../../styles/functions.scss';
+$font-color: rgba(0, 0, 0, 0.45);
+$background-color: rgba(0, 0, 0, 0.2);
+
+@mixin editable() {
+  background-color: $background-color;
+  box-shadow: none;
+  border: none;
+  &:hover {
+    background-color: color-lighten($background-color);
+  }
+  &:focus-within {
+    box-shadow: 0 0 0 2px transparentize($background-color, $amount: 0.4);
+    background-color: color-darken($background-color);
+  }
+}
+
+.wrapper {
+  .fieldInput {
+    @include editable();
+    input {
+      height: 32px;
+      line-height: 32px;
+      font-weight: bold;
+    }
+  }
+  .formActions {
+    margin-bottom: 0;
+  }
+  :global {
+    .ant-modal-body {
+      padding-top: 48px;
+    }
+  }
+}

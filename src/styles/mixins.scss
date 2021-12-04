@@ -1,7 +1,6 @@
 @import './functions.scss', './variables.scss';
 
 @mixin _color-button($color) {
-  border-radius: $border-radius-base;
   background-color: $color;
   border-color: $color;
   &:hover,
@@ -20,9 +19,10 @@
 @mixin _color-input($color) {
   &.ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled),
   &.ant-input {
-    &:focus {
+    &:focus,
+    &.ant-input-affix-wrapper-focused {
       border-color: $color;
-      box-shadow: transparentize($color, $amount: 0.2);
+      box-shadow: 0 0 0 2px transparentize($color, $amount: 0.8);
     }
     &:hover {
       border-color: $color;

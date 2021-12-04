@@ -1,4 +1,4 @@
-@import './variables.scss', './mixins.scss';
+@import './mixins.scss', './variables.scss';
 
 body {
   margin: 0;
@@ -32,6 +32,14 @@ body {
     border-radius: $border-radius-base + 2;
   }
 
+  .ant-card {
+    border-radius: $border-radius-base;
+  }
+
+  .ant-btn {
+    border-radius: $border-radius-base;
+  }
+
   .primary-button {
     @include _color-button($primary-color);
   }
@@ -50,12 +58,17 @@ body {
   .secondary-input {
     @include _color-input($secondary-color);
   }
-  .password-input {
+  .large-input-with-only-suffix {
     @include _input(16px, 6.5px, 11px, false, true);
   }
-  .username-input,
-  .email-input {
+  .large-input-without-affix {
     @include _input(16px, 6.5px, 11px, false, false);
+  }
+  .large-input-with-prefix-and-suffix {
+    @include _input(16px, 6.5px, 11px, true, true);
+  }
+  .middle-input-with-prefix-and-suffix {
+    @include _input(14px, 4px, 11px, true, true);
   }
 
   .text-logo {
