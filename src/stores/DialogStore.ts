@@ -2,6 +2,7 @@ import { action, makeAutoObservable } from 'mobx';
 import { ESignInDialogTabKey } from './types';
 
 export default class DialogStore {
+  public createProjectDialogVisible = false;
   public signInDialogCurrentTab = ESignInDialogTabKey.SIGN_IN;
   public signInDialogVisible = false;
 
@@ -11,6 +12,10 @@ export default class DialogStore {
       setSignInDialogVisible: action,
     });
   }
+
+  public setCreateProjectDialogVisible = (visible: boolean) => {
+    this.createProjectDialogVisible = visible;
+  };
 
   public setSignInDialogCurrentTab = (tab: ESignInDialogTabKey) => {
     this.signInDialogCurrentTab = tab;

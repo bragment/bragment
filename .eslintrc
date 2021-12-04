@@ -30,7 +30,14 @@
         "alphabetize": {
           "order": "asc",
           "caseInsensitive": true
-        }
+        },
+        "pathGroups": [
+          {
+            "pattern": "{.,..}/**/*\\.scss",
+            "group": "object",
+            "position": "after"
+          }
+        ]
       }
     ],
     "prettier/prettier": "warn",

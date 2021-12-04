@@ -1,0 +1,38 @@
+$card-height: 96px;
+$font-color: rgba(0, 0, 0, 0.45);
+$background-color: rgba(0, 0, 0, 0.12);
+
+.wrapper {
+  .label {
+    display: block;
+    margin-bottom: 8px;
+    :global {
+      .anticon {
+        margin-right: 4px;
+      }
+    }
+  }
+}
+
+.creator {
+  height: $card-height;
+  background-color: $background-color;
+  .title {
+    color: $font-color;
+    text-align: center;
+    margin: 0;
+  }
+  :global {
+    .ant-card-body {
+      height: 100%;
+      padding: 37px 8px;
+    }
+    .anticon {
+      margin-right: 4px;
+    }
+  }
+}
+
+.item {
+  height: $card-height;
+}

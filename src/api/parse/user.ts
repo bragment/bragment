@@ -1,4 +1,4 @@
-import { User } from 'parse';
+import Parse from 'parse';
 
 export enum EUserErrorCode {
   INTERNET_DISCONNECTED = 100,
@@ -8,21 +8,21 @@ export enum EUserErrorCode {
 }
 
 export function signUp(username: string, password: string, email?: string) {
-  return User.signUp(username, password, { email });
+  return Parse.User.signUp(username, password, { email });
 }
 
 export function signIn(username: string, password: string) {
-  return User.logIn(username, password);
+  return Parse.User.logIn(username, password);
 }
 
 export function signOut() {
-  return User.logOut();
+  return Parse.User.logOut();
 }
 
 export function requestPasswordReset(email: string) {
-  return User.requestPasswordReset(email);
+  return Parse.User.requestPasswordReset(email);
 }
 
 export function getCurrentUser() {
-  return User.current();
+  return Parse.User.current();
 }
