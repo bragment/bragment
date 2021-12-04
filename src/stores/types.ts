@@ -7,3 +7,8 @@ export enum ESignInDialogTabKey {
   SIGN_UP = 'SIGN_UP',
   FORGOT_PASSWORD = 'FORGOT_PASSWORD',
 }
+
+export enum ERoutePath {
+  HOME = '/',
+  SETTING = '/setting',
+}

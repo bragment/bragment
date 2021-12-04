@@ -1,0 +1,24 @@
+@import '../../styles/variables.scss';
+
+.wrapper {
+  user-select: none;
+  -webkit-app-region: drag;
+
+  display: flex;
+  flex-direction: row;
+  position: absolute;
+  width: 100%;
+  height: $header-height;
+  line-height: $header-height;
+  z-index: 3;
+  background-color: transparent;
+  backdrop-filter: blur(6px);
+}
+
+.rightSide {
+  flex: 1 1 auto;
+  text-align: right;
+  .userActions {
+    padding-right: 16px;
+  }
+}

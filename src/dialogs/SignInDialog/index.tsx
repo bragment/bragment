@@ -42,7 +42,7 @@ function SignInDialog() {
       className={styles.wrap}
       visible={signInDialogVisible && !current}
       maskClosable={false}
-      centered={true}
+      centered
       width={360}
       footer={null}
       onCancel={close}>
