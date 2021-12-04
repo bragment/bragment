@@ -1,5 +1,5 @@
 import type { PrimitiveType } from 'intl-messageformat';
-import { useContext } from 'react';
+import { useCallback, useContext } from 'react';
 import { useIntl } from 'react-intl';
 import type { ILocalMessages } from '../i18n/types';
 import { AppContext } from '../stores';
@@ -10,6 +10,10 @@ export function useAppContext() {
 
 export function useDialogStore() {
   return useContext(AppContext).dialogStore;
+}
+
+export function useProjectStore() {
+  return useContext(AppContext).projectStore;
 }
 
 export function useSettingStore() {
@@ -25,5 +29,8 @@ export function useFormatMessage(): (
   values?: Record<string, PrimitiveType>
 ) => string {
   const intl = useIntl();
-  return (id, values) => intl.formatMessage({ id }, values);
+  return useCallback(
+    (id, values) => intl.formatMessage({ id }, values),
+    [intl]
+  );
 }

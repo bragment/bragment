@@ -7,9 +7,9 @@ import {
 } from '../../components/hooks';
 import { ESignInDialogTabKey, ICurrentUser } from '../../stores/types';
 import ForgotPasswordForm from './ForgotPasswordForm';
-import styles from './index.module.scss';
 import SignInForm from './SignInForm';
 import SignUpForm from './SignUpForm';
+import styles from './index.module.scss';
 
 function SignInDialog() {
   const f = useFormatMessage();

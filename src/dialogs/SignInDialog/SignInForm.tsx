@@ -56,7 +56,7 @@ function SignInForm(props: ISignInFormProps) {
         name="username"
         rules={[{ required: true, message: f('requiredUsername') }]}>
         <Input
-          className={classnames('primary-input', 'username-input')}
+          className={classnames('primary-input', 'large-input-without-affix')}
           placeholder={f('usernameOrEmail')}
           size="large"
         />
@@ -65,7 +65,10 @@ function SignInForm(props: ISignInFormProps) {
         name="password"
         rules={[{ required: true, message: f('requiredPassword') }]}>
         <Input.Password
-          className={classnames('primary-input', 'password-input')}
+          className={classnames(
+            'primary-input',
+            'large-input-with-only-suffix'
+          )}
           size="large"
           placeholder={f('password')}
         />

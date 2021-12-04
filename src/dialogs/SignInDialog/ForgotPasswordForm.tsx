@@ -53,7 +53,7 @@ function ForgotPasswordForm(props: IForgotPasswordFormProps) {
         name="email"
         rules={[{ required: true, message: f('requiredEmail') }]}>
         <Input
-          className={classnames('primary-input', 'email-input')}
+          className={classnames('primary-input', 'large-input-without-affix')}
           placeholder={f('email')}
           size="large"
         />

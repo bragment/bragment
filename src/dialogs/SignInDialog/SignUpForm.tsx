@@ -58,7 +58,7 @@ function SignUpForm(props: ISignUpFormProps) {
         name="username"
         rules={[{ required: true, message: f('requiredUsername') }]}>
         <Input
-          className={classnames('secondary-input', 'username-input')}
+          className={classnames('secondary-input', 'large-input-without-affix')}
           size="large"
           placeholder={f('username')}
         />
@@ -67,7 +67,7 @@ function SignUpForm(props: ISignUpFormProps) {
         name="email"
         rules={[{ required: true, message: f('requiredEmail') }]}>
         <Input
-          className={classnames('secondary-input', 'email-input')}
+          className={classnames('secondary-input', 'large-input-without-affix')}
           size="large"
           placeholder={f('email')}
         />
@@ -76,7 +76,10 @@ function SignUpForm(props: ISignUpFormProps) {
         name="password"
         rules={[{ required: true, message: f('requiredPassword') }]}>
         <Input.Password
-          className={classnames('secondary-input', 'password-input')}
+          className={classnames(
+            'secondary-input',
+            'large-input-with-only-suffix'
+          )}
           size="large"
           placeholder={f('password')}
         />
