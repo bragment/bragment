@@ -1,6 +1,5 @@
 import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Dropdown, Menu } from 'antd';
-import Avatar from 'antd/lib/avatar/avatar';
+import { Avatar, Button, Dropdown, Menu, Space } from 'antd';
 import { observer } from 'mobx-react';
 import { MenuInfo } from 'rc-menu/lib/interface';
 import { signOut } from '../../api/parse';
@@ -12,9 +11,10 @@ const UserAvatar = () => {
   const { setSignInDialogVisible } = useDialogStore();
   const f = useFormatMessage();
 
-  const showSignInDialog = () => {
+  const showSignInDialog = () =>
     setSignInDialogVisible(true, ESignInDialogTabKey.SIGN_IN);
-  };
+  const showSignUpDialog = () =>
+    setSignInDialogVisible(true, ESignInDialogTabKey.SIGN_UP);
 
   const handleMenuClick = (info: MenuInfo) => {
     switch (info.key) {
@@ -39,12 +39,20 @@ const UserAvatar = () => {
   );
   return current ? (
     <Dropdown overlay={menu} trigger={['click']}>
-      <Avatar icon={<UserOutlined />} />
+      <Space>
+        <Avatar icon={<UserOutlined />} />
+      </Space>
     </Dropdown>
   ) : (
-    <Button type="primary" onClick={showSignInDialog}>
-      {f('signIn')}
-    </Button>
+    <Space>
+      <Button type="text" onClick={showSignInDialog}>
+        {f('signIn')}
+      </Button>
+      {'/'}
+      <Button type="text" onClick={showSignUpDialog}>
+        {f('signUp')}
+      </Button>
+    </Space>
   );
 };
 

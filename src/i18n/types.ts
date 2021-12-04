@@ -1,4 +1,4 @@
-import type enUS from './messages/en-US.json';
+import type enUS from './messages/en-US';
 export const languages = {
   'en-US': 'English(US)',
   'zh-CN': '中文(简体)',
