@@ -1,0 +1,27 @@
+fragment IProject on Project {
+  __typename
+  objectId
+  id
+  title
+  description
+  visibility
+}
+
+mutation CreateProject($input: CreateProjectInput!) {
+  createProject(input: $input) {
+    project {
+      ...IProject
+    }
+  }
+}
+
+query PersonalProjects {
+  projects {
+    count
+    edges {
+      node {
+        ...IProject
+      }
+    }
+  }
+}

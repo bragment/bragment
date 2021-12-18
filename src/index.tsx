@@ -1,5 +1,7 @@
+import { ApolloProvider } from '@apollo/client';
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
+import { createApolloClient } from './api/apollo';
 import { initializeParse } from './api/parse';
 import App from './components/App';
 import reportWebVitals from './reportWebVitals';
@@ -9,11 +11,14 @@ import './styles/index.scss';
 
 initializeParse();
 initializeStores();
+const client = createApolloClient();
 
 ReactDOM.render(
   <StrictMode>
     <AppContext.Provider value={stores}>
-      <App />
+      <ApolloProvider client={client}>
+        <App />
+      </ApolloProvider>
     </AppContext.Provider>
   </StrictMode>,
   document.getElementById('root'),
