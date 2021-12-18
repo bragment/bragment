@@ -1,11 +1,17 @@
 @import '../../styles/functions.scss';
-$font-color: rgba(0, 0, 0, 0.45);
+@import '../../styles/variables.scss';
 $background-color: rgba(0, 0, 0, 0.2);
+$placeholder-color: rgba(0, 0, 0, 0.25);
 
 @mixin editable() {
   background-color: $background-color;
   box-shadow: none;
   border: none;
+  border-radius: 6px;
+  &::placeholder,
+  ::placeholder {
+    color: $placeholder-color;
+  }
   &:hover {
     background-color: color-lighten($background-color);
   }
@@ -16,12 +22,20 @@ $background-color: rgba(0, 0, 0, 0.2);
 }
 
 .wrapper {
-  .fieldInput {
+  .fieldInput,
+  .fieldSelect {
     @include editable();
     input {
       height: 32px;
       line-height: 32px;
       font-weight: bold;
+    }
+  }
+  .fieldSelect {
+    :global {
+      .ant-select-selection-item {
+        font-weight: bold;
+      }
     }
   }
   .formActions {
@@ -30,6 +44,26 @@ $background-color: rgba(0, 0, 0, 0.2);
   :global {
     .ant-modal-body {
       padding-top: 48px;
+    }
+    .ant-select-single.ant-select-open .ant-select-selection-item {
+      color: $placeholder-color;
+    }
+  }
+}
+
+.fieldSelect,
+.fieldDropdown {
+  border-radius: $border-radius-base;
+  :global {
+    .anticon {
+      font-weight: normal;
+      padding-right: 11px;
+    }
+    .anticon-lock {
+      color: blue;
+    }
+    .anticon-global {
+      color: green;
     }
   }
 }
