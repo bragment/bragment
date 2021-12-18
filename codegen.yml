@@ -1,0 +1,13 @@
+schema:
+  - ${GRAPHQL_URL}:
+      headers:
+        X-Parse-Application-Id: ${APP_ID}
+        X-Parse-Master-Key: ${MASTER_KEY}
+documents:
+  - src/graphql/**/*.gql
+generates:
+  ./src/graphql/__generated__/types.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
