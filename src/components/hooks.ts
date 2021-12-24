@@ -9,19 +9,19 @@ export function useAppContext() {
 }
 
 export function useDialogStore() {
-  return useContext(AppContext).dialogStore;
+  return useContext(AppContext).dialog;
 }
 
 export function useProjectStore() {
-  return useContext(AppContext).projectStore;
+  return useContext(AppContext).project;
 }
 
 export function useSettingStore() {
-  return useContext(AppContext).settingStore;
+  return useContext(AppContext).setting;
 }
 
 export function useUserStore() {
-  return useContext(AppContext).userStore;
+  return useContext(AppContext).user;
 }
 
 export function useFormatMessage(): (

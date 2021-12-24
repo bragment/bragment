@@ -6,19 +6,23 @@ import {
 } from '@ant-design/icons';
 import { Button, Form, Input, Select } from 'antd';
 import classnames from 'classnames';
-import { memo, useMemo } from 'react';
+import { memo, useCallback, useMemo } from 'react';
 import { useFormatMessage } from '../../components/hooks';
 import {
   IProjectFragmentDoc,
   ProjectVisibility,
   useCreateProjectMutation,
 } from '../../graphql';
+import { IBackground } from '../../stores/types';
+import BackgroundPopover from './BackgroundPopover';
 import styles from './index.module.scss';
 
 interface ICreateProjectFormData {
   title: string;
   description: string;
   visibility: ProjectVisibility;
+  image: string;
+  color: string;
 }
 
 interface ICreateProjectFormProps {
@@ -34,8 +38,15 @@ function CreateProjectForm(props: ICreateProjectFormProps) {
       title: '',
       description: '',
       visibility: ProjectVisibility.Private,
+      image: '',
+      color: '',
     }),
     []
+  );
+  const handleBgChange = useCallback(
+    (bg: IBackground) =>
+      form.setFieldsValue({ image: bg.image || '', color: bg.color || '' }),
+    [form]
   );
   const [addProject, { loading }] = useCreateProjectMutation({
     update(cache, response) {
@@ -61,7 +72,6 @@ function CreateProjectForm(props: ICreateProjectFormProps) {
       }
     },
   });
-
   const handleSubmit = async () => {
     const fields = form.getFieldsValue();
     const input = {
@@ -76,6 +86,12 @@ function CreateProjectForm(props: ICreateProjectFormProps) {
 
   return (
     <Form form={form} initialValues={initialFormValues}>
+      <Form.Item hidden name="image">
+        <input />
+      </Form.Item>
+      <Form.Item hidden name="color">
+        <input />
+      </Form.Item>
       <Form.Item
         required
         name="title"
@@ -89,6 +105,7 @@ function CreateProjectForm(props: ICreateProjectFormProps) {
             'middle-input-with-prefix-and-suffix'
           )}
           prefix={<FormOutlined />}
+          suffix={<BackgroundPopover onChange={handleBgChange} />}
           placeholder={f('projectTitle')}
           size="middle"
         />
