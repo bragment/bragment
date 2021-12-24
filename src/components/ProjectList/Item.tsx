@@ -1,8 +1,9 @@
 import { Card as AntCard } from 'antd';
 import { memo } from 'react';
+import { IProjectFragment } from '../../graphql';
 import styles from './index.module.scss';
-export interface IProjectItemProps {
-  project: { id: string; title: string };
+interface IProjectItemProps {
+  project: IProjectFragment;
 }
 
 function ProjectItem(props: IProjectItemProps) {

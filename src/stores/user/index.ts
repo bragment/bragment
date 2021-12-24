@@ -1,7 +1,7 @@
 import { computed, makeAutoObservable } from 'mobx';
-import { ICurrentUser } from './types';
+import { ICurrentUser } from '../types';
 
-export default class UserStore {
+class UserStore {
   public current: ICurrentUser | undefined;
   get signedIn() {
     return !!this.current;
@@ -17,3 +17,5 @@ export default class UserStore {
     this.current = user;
   };
 }
+
+export default new UserStore();

@@ -1,13 +1,14 @@
 import { Col, Row } from 'antd';
 import { memo, ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import ProjectItem, { IProjectItemProps } from './Item';
+import { IProjectFragment } from '../../graphql';
+import ProjectItem from './Item';
 import styles from './index.module.scss';
 
 interface IProjectListProps {
   label?: string;
   icon?: ReactNode;
-  projects: IProjectItemProps['project'][];
+  projects: IProjectFragment[];
 }
 
 function ProjectList(props: IProjectListProps) {
