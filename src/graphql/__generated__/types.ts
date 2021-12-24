@@ -2,16 +2,10 @@ import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
-export type Exact<T extends { [key: string]: unknown }> = {
-  [K in keyof T]: T[K];
-};
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]?: Maybe<T[SubKey]>;
-};
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]: Maybe<T[SubKey]>;
-};
-const defaultOptions = {};
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+const defaultOptions =  {}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -169,7 +163,7 @@ export type Class = {
 
 /** The CloudCodeFunction enum type contains a list of all available cloud code functions. */
 export enum CloudCodeFunction {
-  CreateProject = 'createProject',
+  CreateProject = 'createProject'
 }
 
 export type CreateClassInput = {
@@ -203,10 +197,14 @@ export type CreateFilePayload = {
 /** The CreateProjectFieldsInput input type is used in operations that involve creation of objects in the Project class. */
 export type CreateProjectFieldsInput = {
   ACL?: InputMaybe<AclInput>;
+  /** This is the object color. */
+  color?: InputMaybe<Scalars['String']>;
   /** This is the object creator. */
   creator?: InputMaybe<UserPointerInput>;
   /** This is the object description. */
   description?: InputMaybe<Scalars['String']>;
+  /** This is the object image. */
+  image?: InputMaybe<Scalars['String']>;
   /** This is the object owner. */
   owner?: InputMaybe<UserPointerInput>;
   /** This is the object title. */
@@ -612,110 +610,132 @@ export type Mutation = {
   updateUser?: Maybe<UpdateUserPayload>;
 };
 
+
 /** Mutation is the top level type for mutations. */
 export type MutationCallCloudCodeArgs = {
   input: CallCloudCodeInput;
 };
+
 
 /** Mutation is the top level type for mutations. */
 export type MutationCreateClassArgs = {
   input: CreateClassInput;
 };
 
+
 /** Mutation is the top level type for mutations. */
 export type MutationCreateFileArgs = {
   input: CreateFileInput;
 };
+
 
 /** Mutation is the top level type for mutations. */
 export type MutationCreateProjectArgs = {
   input: CreateProjectInput;
 };
 
+
 /** Mutation is the top level type for mutations. */
 export type MutationCreateRoleArgs = {
   input: CreateRoleInput;
 };
+
 
 /** Mutation is the top level type for mutations. */
 export type MutationCreateSessionArgs = {
   input: CreateSessionInput;
 };
 
+
 /** Mutation is the top level type for mutations. */
 export type MutationCreateUserArgs = {
   input: CreateUserInput;
 };
+
 
 /** Mutation is the top level type for mutations. */
 export type MutationDeleteClassArgs = {
   input: DeleteClassInput;
 };
 
+
 /** Mutation is the top level type for mutations. */
 export type MutationDeleteRoleArgs = {
   input: DeleteRoleInput;
 };
+
 
 /** Mutation is the top level type for mutations. */
 export type MutationDeleteSessionArgs = {
   input: DeleteSessionInput;
 };
 
+
 /** Mutation is the top level type for mutations. */
 export type MutationDeleteUserArgs = {
   input: DeleteUserInput;
 };
+
 
 /** Mutation is the top level type for mutations. */
 export type MutationLogInArgs = {
   input: LogInInput;
 };
 
+
 /** Mutation is the top level type for mutations. */
 export type MutationLogInWithArgs = {
   input: LogInWithInput;
 };
+
 
 /** Mutation is the top level type for mutations. */
 export type MutationLogOutArgs = {
   input: LogOutInput;
 };
 
+
 /** Mutation is the top level type for mutations. */
 export type MutationResetPasswordArgs = {
   input: ResetPasswordInput;
 };
+
 
 /** Mutation is the top level type for mutations. */
 export type MutationSendVerificationEmailArgs = {
   input: SendVerificationEmailInput;
 };
 
+
 /** Mutation is the top level type for mutations. */
 export type MutationSignUpArgs = {
   input: SignUpInput;
 };
+
 
 /** Mutation is the top level type for mutations. */
 export type MutationUpdateClassArgs = {
   input: UpdateClassInput;
 };
 
+
 /** Mutation is the top level type for mutations. */
 export type MutationUpdateProjectArgs = {
   input: UpdateProjectInput;
 };
+
 
 /** Mutation is the top level type for mutations. */
 export type MutationUpdateRoleArgs = {
   input: UpdateRoleInput;
 };
 
+
 /** Mutation is the top level type for mutations. */
 export type MutationUpdateSessionArgs = {
   input: UpdateSessionInput;
 };
+
 
 /** Mutation is the top level type for mutations. */
 export type MutationUpdateUserArgs = {
@@ -821,29 +841,32 @@ export type PolygonWhereInput = {
 };
 
 /** The Project object type is used in operations that involve outputting objects of Project class. */
-export type Project = Node &
-  ParseObject & {
-    __typename?: 'Project';
-    ACL: Acl;
-    /** This is the date in which the object was created. */
-    createdAt: Scalars['Date'];
-    /** This is the object creator. */
-    creator?: Maybe<User>;
-    /** This is the object description. */
-    description?: Maybe<Scalars['String']>;
-    /** The ID of an object */
-    id: Scalars['ID'];
-    /** This is the object id. */
-    objectId: Scalars['ID'];
-    /** This is the object owner. */
-    owner?: Maybe<User>;
-    /** This is the object title. */
-    title?: Maybe<Scalars['String']>;
-    /** This is the date in which the object was las updated. */
-    updatedAt: Scalars['Date'];
-    /** This is the object visibility. */
-    visibility?: Maybe<Scalars['String']>;
-  };
+export type Project = Node & ParseObject & {
+  __typename?: 'Project';
+  ACL: Acl;
+  /** This is the object color. */
+  color?: Maybe<Scalars['String']>;
+  /** This is the date in which the object was created. */
+  createdAt: Scalars['Date'];
+  /** This is the object creator. */
+  creator?: Maybe<User>;
+  /** This is the object description. */
+  description?: Maybe<Scalars['String']>;
+  /** The ID of an object */
+  id: Scalars['ID'];
+  /** This is the object image. */
+  image?: Maybe<Scalars['String']>;
+  /** This is the object id. */
+  objectId: Scalars['ID'];
+  /** This is the object owner. */
+  owner?: Maybe<User>;
+  /** This is the object title. */
+  title?: Maybe<Scalars['String']>;
+  /** This is the date in which the object was las updated. */
+  updatedAt: Scalars['Date'];
+  /** This is the object visibility. */
+  visibility?: Maybe<Scalars['String']>;
+};
 
 /** A connection to a list of items. */
 export type ProjectConnection = {
@@ -869,6 +892,8 @@ export type ProjectEdge = {
 export enum ProjectOrder {
   AclAsc = 'ACL_ASC',
   AclDesc = 'ACL_DESC',
+  ColorAsc = 'color_ASC',
+  ColorDesc = 'color_DESC',
   CreatedAtAsc = 'createdAt_ASC',
   CreatedAtDesc = 'createdAt_DESC',
   CreatorAsc = 'creator_ASC',
@@ -877,6 +902,8 @@ export enum ProjectOrder {
   DescriptionDesc = 'description_DESC',
   IdAsc = 'id_ASC',
   IdDesc = 'id_DESC',
+  ImageAsc = 'image_ASC',
+  ImageDesc = 'image_DESC',
   ObjectIdAsc = 'objectId_ASC',
   ObjectIdDesc = 'objectId_DESC',
   OwnerAsc = 'owner_ASC',
@@ -886,7 +913,7 @@ export enum ProjectOrder {
   UpdatedAtAsc = 'updatedAt_ASC',
   UpdatedAtDesc = 'updatedAt_DESC',
   VisibilityAsc = 'visibility_ASC',
-  VisibilityDesc = 'visibility_DESC',
+  VisibilityDesc = 'visibility_DESC'
 }
 
 /** Allow to link OR add and link an object of the Project class. */
@@ -916,7 +943,7 @@ export type ProjectRelationWhereInput = {
 export enum ProjectVisibility {
   Private = 'PRIVATE',
   Protected = 'PROTECTED',
-  Public = 'PUBLIC',
+  Public = 'PUBLIC'
 }
 
 /** The ProjectWhereInput input type is used in operations that involve filtering objects of Project class. */
@@ -929,6 +956,8 @@ export type ProjectWhereInput = {
   NOR?: InputMaybe<Array<ProjectWhereInput>>;
   /** This is the OR operator to compound constraints. */
   OR?: InputMaybe<Array<ProjectWhereInput>>;
+  /** This is the object color. */
+  color?: InputMaybe<StringWhereInput>;
   /** This is the object createdAt. */
   createdAt?: InputMaybe<DateWhereInput>;
   /** This is the object creator. */
@@ -937,6 +966,8 @@ export type ProjectWhereInput = {
   description?: InputMaybe<StringWhereInput>;
   /** This is the object id. */
   id?: InputMaybe<IdWhereInput>;
+  /** This is the object image. */
+  image?: InputMaybe<StringWhereInput>;
   /** This is the object objectId. */
   objectId?: InputMaybe<IdWhereInput>;
   /** This is the object owner. */
@@ -997,21 +1028,25 @@ export type Query = {
   viewer: Viewer;
 };
 
+
 /** Query is the top level type for queries. */
 export type QueryClassArgs = {
   name: Scalars['String'];
 };
+
 
 /** Query is the top level type for queries. */
 export type QueryNodeArgs = {
   id: Scalars['ID'];
 };
 
+
 /** Query is the top level type for queries. */
 export type QueryProjectArgs = {
   id: Scalars['ID'];
   options?: InputMaybe<ReadOptionsInput>;
 };
+
 
 /** Query is the top level type for queries. */
 export type QueryProjectsArgs = {
@@ -1025,11 +1060,13 @@ export type QueryProjectsArgs = {
   where?: InputMaybe<ProjectWhereInput>;
 };
 
+
 /** Query is the top level type for queries. */
 export type QueryRoleArgs = {
   id: Scalars['ID'];
   options?: InputMaybe<ReadOptionsInput>;
 };
+
 
 /** Query is the top level type for queries. */
 export type QueryRolesArgs = {
@@ -1043,11 +1080,13 @@ export type QueryRolesArgs = {
   where?: InputMaybe<RoleWhereInput>;
 };
 
+
 /** Query is the top level type for queries. */
 export type QuerySessionArgs = {
   id: Scalars['ID'];
   options?: InputMaybe<ReadOptionsInput>;
 };
+
 
 /** Query is the top level type for queries. */
 export type QuerySessionsArgs = {
@@ -1061,11 +1100,13 @@ export type QuerySessionsArgs = {
   where?: InputMaybe<SessionWhereInput>;
 };
 
+
 /** Query is the top level type for queries. */
 export type QueryUserArgs = {
   id: Scalars['ID'];
   options?: InputMaybe<ReadOptionsInput>;
 };
+
 
 /** Query is the top level type for queries. */
 export type QueryUsersArgs = {
@@ -1095,7 +1136,7 @@ export enum ReadPreference {
   Primary = 'PRIMARY',
   PrimaryPreferred = 'PRIMARY_PREFERRED',
   Secondary = 'SECONDARY',
-  SecondaryPreferred = 'SECONDARY_PREFERRED',
+  SecondaryPreferred = 'SECONDARY_PREFERRED'
 }
 
 /** The RelationFieldInput is used to specify a field of type relation for an object class schema. */
@@ -1119,25 +1160,25 @@ export type ResetPasswordPayload = {
 };
 
 /** The Role object type is used in operations that involve outputting objects of Role class. */
-export type Role = Node &
-  ParseObject & {
-    __typename?: 'Role';
-    ACL: Acl;
-    /** This is the date in which the object was created. */
-    createdAt: Scalars['Date'];
-    /** The ID of an object */
-    id: Scalars['ID'];
-    /** This is the object name. */
-    name?: Maybe<Scalars['String']>;
-    /** This is the object id. */
-    objectId: Scalars['ID'];
-    /** This is the object roles. */
-    roles: RoleConnection;
-    /** This is the date in which the object was las updated. */
-    updatedAt: Scalars['Date'];
-    /** This is the object users. */
-    users: UserConnection;
-  };
+export type Role = Node & ParseObject & {
+  __typename?: 'Role';
+  ACL: Acl;
+  /** This is the date in which the object was created. */
+  createdAt: Scalars['Date'];
+  /** The ID of an object */
+  id: Scalars['ID'];
+  /** This is the object name. */
+  name?: Maybe<Scalars['String']>;
+  /** This is the object id. */
+  objectId: Scalars['ID'];
+  /** This is the object roles. */
+  roles: RoleConnection;
+  /** This is the date in which the object was las updated. */
+  updatedAt: Scalars['Date'];
+  /** This is the object users. */
+  users: UserConnection;
+};
+
 
 /** The Role object type is used in operations that involve outputting objects of Role class. */
 export type RoleRolesArgs = {
@@ -1150,6 +1191,7 @@ export type RoleRolesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<RoleWhereInput>;
 };
+
 
 /** The Role object type is used in operations that involve outputting objects of Role class. */
 export type RoleUsersArgs = {
@@ -1221,7 +1263,7 @@ export enum RoleOrder {
   UpdatedAtAsc = 'updatedAt_ASC',
   UpdatedAtDesc = 'updatedAt_DESC',
   UsersAsc = 'users_ASC',
-  UsersDesc = 'users_DESC',
+  UsersDesc = 'users_DESC'
 }
 
 /** Allow to link OR add and link an object of the Role class. */
@@ -1508,31 +1550,30 @@ export type SendVerificationEmailPayload = {
 };
 
 /** The Session object type is used in operations that involve outputting objects of Session class. */
-export type Session = Node &
-  ParseObject & {
-    __typename?: 'Session';
-    ACL: Acl;
-    /** This is the date in which the object was created. */
-    createdAt: Scalars['Date'];
-    /** This is the object createdWith. */
-    createdWith?: Maybe<Scalars['Object']>;
-    /** This is the object expiresAt. */
-    expiresAt?: Maybe<Scalars['Date']>;
-    /** The ID of an object */
-    id: Scalars['ID'];
-    /** This is the object installationId. */
-    installationId?: Maybe<Scalars['String']>;
-    /** This is the object id. */
-    objectId: Scalars['ID'];
-    /** This is the object restricted. */
-    restricted?: Maybe<Scalars['Boolean']>;
-    /** This is the object sessionToken. */
-    sessionToken?: Maybe<Scalars['String']>;
-    /** This is the date in which the object was las updated. */
-    updatedAt: Scalars['Date'];
-    /** This is the object user. */
-    user?: Maybe<User>;
-  };
+export type Session = Node & ParseObject & {
+  __typename?: 'Session';
+  ACL: Acl;
+  /** This is the date in which the object was created. */
+  createdAt: Scalars['Date'];
+  /** This is the object createdWith. */
+  createdWith?: Maybe<Scalars['Object']>;
+  /** This is the object expiresAt. */
+  expiresAt?: Maybe<Scalars['Date']>;
+  /** The ID of an object */
+  id: Scalars['ID'];
+  /** This is the object installationId. */
+  installationId?: Maybe<Scalars['String']>;
+  /** This is the object id. */
+  objectId: Scalars['ID'];
+  /** This is the object restricted. */
+  restricted?: Maybe<Scalars['Boolean']>;
+  /** This is the object sessionToken. */
+  sessionToken?: Maybe<Scalars['String']>;
+  /** This is the date in which the object was las updated. */
+  updatedAt: Scalars['Date'];
+  /** This is the object user. */
+  user?: Maybe<User>;
+};
 
 /** A connection to a list of items. */
 export type SessionConnection = {
@@ -1577,7 +1618,7 @@ export enum SessionOrder {
   UpdatedAtAsc = 'updatedAt_ASC',
   UpdatedAtDesc = 'updatedAt_DESC',
   UserAsc = 'user_ASC',
-  UserDesc = 'user_DESC',
+  UserDesc = 'user_DESC'
 }
 
 /** Allow to link OR add and link an object of the Session class. */
@@ -1716,10 +1757,14 @@ export type UpdateClassPayload = {
 /** The UpdateProjectFieldsInput input type is used in operations that involve creation of objects in the Project class. */
 export type UpdateProjectFieldsInput = {
   ACL?: InputMaybe<AclInput>;
+  /** This is the object color. */
+  color?: InputMaybe<Scalars['String']>;
   /** This is the object creator. */
   creator?: InputMaybe<UserPointerInput>;
   /** This is the object description. */
   description?: InputMaybe<Scalars['String']>;
+  /** This is the object image. */
+  image?: InputMaybe<Scalars['String']>;
   /** This is the object owner. */
   owner?: InputMaybe<UserPointerInput>;
   /** This is the object title. */
@@ -1829,27 +1874,26 @@ export type UpdateUserPayload = {
 };
 
 /** The User object type is used in operations that involve outputting objects of User class. */
-export type User = Node &
-  ParseObject & {
-    __typename?: 'User';
-    ACL: Acl;
-    /** This is the object authData. */
-    authData?: Maybe<Scalars['Object']>;
-    /** This is the date in which the object was created. */
-    createdAt: Scalars['Date'];
-    /** This is the object email. */
-    email?: Maybe<Scalars['String']>;
-    /** This is the object emailVerified. */
-    emailVerified?: Maybe<Scalars['Boolean']>;
-    /** The ID of an object */
-    id: Scalars['ID'];
-    /** This is the object id. */
-    objectId: Scalars['ID'];
-    /** This is the date in which the object was las updated. */
-    updatedAt: Scalars['Date'];
-    /** This is the object username. */
-    username?: Maybe<Scalars['String']>;
-  };
+export type User = Node & ParseObject & {
+  __typename?: 'User';
+  ACL: Acl;
+  /** This is the object authData. */
+  authData?: Maybe<Scalars['Object']>;
+  /** This is the date in which the object was created. */
+  createdAt: Scalars['Date'];
+  /** This is the object email. */
+  email?: Maybe<Scalars['String']>;
+  /** This is the object emailVerified. */
+  emailVerified?: Maybe<Scalars['Boolean']>;
+  /** The ID of an object */
+  id: Scalars['ID'];
+  /** This is the object id. */
+  objectId: Scalars['ID'];
+  /** This is the date in which the object was las updated. */
+  updatedAt: Scalars['Date'];
+  /** This is the object username. */
+  username?: Maybe<Scalars['String']>;
+};
 
 /** Allow to manage users in ACL. If read and write are null the users have read and write rights. */
 export type UserAcl = {
@@ -1921,7 +1965,7 @@ export enum UserOrder {
   UpdatedAtAsc = 'updatedAt_ASC',
   UpdatedAtDesc = 'updatedAt_DESC',
   UsernameAsc = 'username_ASC',
-  UsernameDesc = 'username_DESC',
+  UsernameDesc = 'username_DESC'
 }
 
 /** Allow to link OR add and link an object of the User class. */
@@ -1997,92 +2041,42 @@ export type WithinInput = {
   box: BoxInput;
 };
 
-export type IProjectFragment = {
-  __typename: 'Project';
-  objectId: string;
-  id: string;
-  title?: string | null | undefined;
-  description?: string | null | undefined;
-  visibility?: string | null | undefined;
-};
+export type IProjectFragment = { __typename: 'Project', objectId: string, id: string, title?: string | null | undefined, description?: string | null | undefined, visibility?: string | null | undefined, image?: string | null | undefined, color?: string | null | undefined };
 
 export type CreateProjectMutationVariables = Exact<{
   input: CreateProjectInput;
 }>;
 
-export type CreateProjectMutation = {
-  __typename?: 'Mutation';
-  createProject?:
-    | {
-        __typename?: 'CreateProjectPayload';
-        project: {
-          __typename: 'Project';
-          objectId: string;
-          id: string;
-          title?: string | null | undefined;
-          description?: string | null | undefined;
-          visibility?: string | null | undefined;
-        };
-      }
-    | null
-    | undefined;
-};
 
-export type PersonalProjectsQueryVariables = Exact<{ [key: string]: never }>;
+export type CreateProjectMutation = { __typename?: 'Mutation', createProject?: { __typename?: 'CreateProjectPayload', project: { __typename: 'Project', objectId: string, id: string, title?: string | null | undefined, description?: string | null | undefined, visibility?: string | null | undefined, image?: string | null | undefined, color?: string | null | undefined } } | null | undefined };
 
-export type PersonalProjectsQuery = {
-  __typename?: 'Query';
-  projects: {
-    __typename?: 'ProjectConnection';
-    count: number;
-    edges?:
-      | Array<
-          | {
-              __typename?: 'ProjectEdge';
-              node?:
-                | {
-                    __typename: 'Project';
-                    objectId: string;
-                    id: string;
-                    title?: string | null | undefined;
-                    description?: string | null | undefined;
-                    visibility?: string | null | undefined;
-                  }
-                | null
-                | undefined;
-            }
-          | null
-          | undefined
-        >
-      | null
-      | undefined;
-  };
-};
+export type PersonalProjectsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PersonalProjectsQuery = { __typename?: 'Query', projects: { __typename?: 'ProjectConnection', count: number, edges?: Array<{ __typename?: 'ProjectEdge', node?: { __typename: 'Project', objectId: string, id: string, title?: string | null | undefined, description?: string | null | undefined, visibility?: string | null | undefined, image?: string | null | undefined, color?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } };
 
 export const IProjectFragmentDoc = gql`
-  fragment IProject on Project {
-    __typename
-    objectId
-    id
-    title
-    description
-    visibility
-  }
-`;
+    fragment IProject on Project {
+  __typename
+  objectId
+  id
+  title
+  description
+  visibility
+  image
+  color
+}
+    `;
 export const CreateProjectDocument = gql`
-  mutation CreateProject($input: CreateProjectInput!) {
-    createProject(input: $input) {
-      project {
-        ...IProject
-      }
+    mutation CreateProject($input: CreateProjectInput!) {
+  createProject(input: $input) {
+    project {
+      ...IProject
     }
   }
-  ${IProjectFragmentDoc}
-`;
-export type CreateProjectMutationFn = Apollo.MutationFunction<
-  CreateProjectMutation,
-  CreateProjectMutationVariables
->;
+}
+    ${IProjectFragmentDoc}`;
+export type CreateProjectMutationFn = Apollo.MutationFunction<CreateProjectMutation, CreateProjectMutationVariables>;
 
 /**
  * __useCreateProjectMutation__
@@ -2101,40 +2095,25 @@ export type CreateProjectMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useCreateProjectMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateProjectMutation,
-    CreateProjectMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    CreateProjectMutation,
-    CreateProjectMutationVariables
-  >(CreateProjectDocument, options);
-}
-export type CreateProjectMutationHookResult = ReturnType<
-  typeof useCreateProjectMutation
->;
-export type CreateProjectMutationResult =
-  Apollo.MutationResult<CreateProjectMutation>;
-export type CreateProjectMutationOptions = Apollo.BaseMutationOptions<
-  CreateProjectMutation,
-  CreateProjectMutationVariables
->;
+export function useCreateProjectMutation(baseOptions?: Apollo.MutationHookOptions<CreateProjectMutation, CreateProjectMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateProjectMutation, CreateProjectMutationVariables>(CreateProjectDocument, options);
+      }
+export type CreateProjectMutationHookResult = ReturnType<typeof useCreateProjectMutation>;
+export type CreateProjectMutationResult = Apollo.MutationResult<CreateProjectMutation>;
+export type CreateProjectMutationOptions = Apollo.BaseMutationOptions<CreateProjectMutation, CreateProjectMutationVariables>;
 export const PersonalProjectsDocument = gql`
-  query PersonalProjects {
-    projects {
-      count
-      edges {
-        node {
-          ...IProject
-        }
+    query PersonalProjects {
+  projects {
+    count
+    edges {
+      node {
+        ...IProject
       }
     }
   }
-  ${IProjectFragmentDoc}
-`;
+}
+    ${IProjectFragmentDoc}`;
 
 /**
  * __usePersonalProjectsQuery__
@@ -2151,37 +2130,14 @@ export const PersonalProjectsDocument = gql`
  *   },
  * });
  */
-export function usePersonalProjectsQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    PersonalProjectsQuery,
-    PersonalProjectsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<PersonalProjectsQuery, PersonalProjectsQueryVariables>(
-    PersonalProjectsDocument,
-    options
-  );
-}
-export function usePersonalProjectsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    PersonalProjectsQuery,
-    PersonalProjectsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    PersonalProjectsQuery,
-    PersonalProjectsQueryVariables
-  >(PersonalProjectsDocument, options);
-}
-export type PersonalProjectsQueryHookResult = ReturnType<
-  typeof usePersonalProjectsQuery
->;
-export type PersonalProjectsLazyQueryHookResult = ReturnType<
-  typeof usePersonalProjectsLazyQuery
->;
-export type PersonalProjectsQueryResult = Apollo.QueryResult<
-  PersonalProjectsQuery,
-  PersonalProjectsQueryVariables
->;
+export function usePersonalProjectsQuery(baseOptions?: Apollo.QueryHookOptions<PersonalProjectsQuery, PersonalProjectsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PersonalProjectsQuery, PersonalProjectsQueryVariables>(PersonalProjectsDocument, options);
+      }
+export function usePersonalProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PersonalProjectsQuery, PersonalProjectsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PersonalProjectsQuery, PersonalProjectsQueryVariables>(PersonalProjectsDocument, options);
+        }
+export type PersonalProjectsQueryHookResult = ReturnType<typeof usePersonalProjectsQuery>;
+export type PersonalProjectsLazyQueryHookResult = ReturnType<typeof usePersonalProjectsLazyQuery>;
+export type PersonalProjectsQueryResult = Apollo.QueryResult<PersonalProjectsQuery, PersonalProjectsQueryVariables>;

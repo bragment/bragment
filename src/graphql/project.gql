@@ -5,6 +5,8 @@ fragment IProject on Project {
   title
   description
   visibility
+  image
+  color
 }
 
 mutation CreateProject($input: CreateProjectInput!) {

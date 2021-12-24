@@ -1,7 +1,7 @@
 import { action, makeAutoObservable } from 'mobx';
-import { ESignInDialogTabKey } from './types';
+import { ESignInDialogTabKey } from '../types';
 
-export default class DialogStore {
+class DialogStore {
   public createProjectDialogVisible = false;
   public signInDialogCurrentTab = ESignInDialogTabKey.SIGN_IN;
   public signInDialogVisible = false;
@@ -31,3 +31,5 @@ export default class DialogStore {
     }
   };
 }
+
+export default new DialogStore();

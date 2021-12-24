@@ -1,14 +1,14 @@
 import { createContext } from 'react';
-import DialogStore from './DialogStore';
-import ProjectStore from './ProjectStore';
-import SettingStore from './SettingStore';
-import UserStore from './UserStore';
+import dialog from './dialog';
+import project from './project';
+import setting from './setting';
+import user from './user';
 
 const stores = {
-  dialogStore: new DialogStore(),
-  projectStore: new ProjectStore(),
-  settingStore: new SettingStore(),
-  userStore: new UserStore(),
+  dialog: dialog,
+  project: project,
+  setting: setting,
+  user: user,
 };
 
 export const AppContext = createContext(stores);

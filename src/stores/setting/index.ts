@@ -1,6 +1,6 @@
 import { computed, makeAutoObservable, observable } from 'mobx';
-import { defaultLanguage, messages } from '../i18n';
-import { ELanguage } from '../i18n/types';
+import { defaultLanguage, messages } from '../../i18n';
+import { ELanguage } from '../../i18n/types';
 
 const APP_LANGUAGE = 'APP_LANGUAGE';
 function getLocalAppLanguage() {
@@ -15,7 +15,7 @@ function setLocalAppLanguage(language: ELanguage) {
   return window.localStorage.setItem(APP_LANGUAGE, language);
 }
 
-export default class SettingStore {
+class SettingStore {
   public language = getLocalAppLanguage();
   get localMessages() {
     return messages[this.language] || messages[defaultLanguage];
@@ -32,3 +32,5 @@ export default class SettingStore {
     this.language = language;
   };
 }
+
+export default new SettingStore();
