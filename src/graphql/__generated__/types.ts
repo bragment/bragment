@@ -2050,10 +2050,10 @@ export type CreateProjectMutationVariables = Exact<{
 
 export type CreateProjectMutation = { __typename?: 'Mutation', createProject?: { __typename?: 'CreateProjectPayload', project: { __typename: 'Project', objectId: string, id: string, title?: string | null | undefined, description?: string | null | undefined, visibility?: string | null | undefined, image?: string | null | undefined, color?: string | null | undefined } } | null | undefined };
 
-export type PersonalProjectsQueryVariables = Exact<{ [key: string]: never; }>;
+export type AllProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PersonalProjectsQuery = { __typename?: 'Query', projects: { __typename?: 'ProjectConnection', count: number, edges?: Array<{ __typename?: 'ProjectEdge', node?: { __typename: 'Project', objectId: string, id: string, title?: string | null | undefined, description?: string | null | undefined, visibility?: string | null | undefined, image?: string | null | undefined, color?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } };
+export type AllProjectsQuery = { __typename?: 'Query', projects: { __typename?: 'ProjectConnection', count: number, edges?: Array<{ __typename?: 'ProjectEdge', node?: { __typename: 'Project', objectId: string, id: string, title?: string | null | undefined, description?: string | null | undefined, visibility?: string | null | undefined, image?: string | null | undefined, color?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } };
 
 export const IProjectFragmentDoc = gql`
     fragment IProject on Project {
@@ -2102,9 +2102,9 @@ export function useCreateProjectMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateProjectMutationHookResult = ReturnType<typeof useCreateProjectMutation>;
 export type CreateProjectMutationResult = Apollo.MutationResult<CreateProjectMutation>;
 export type CreateProjectMutationOptions = Apollo.BaseMutationOptions<CreateProjectMutation, CreateProjectMutationVariables>;
-export const PersonalProjectsDocument = gql`
-    query PersonalProjects {
-  projects {
+export const AllProjectsDocument = gql`
+    query AllProjects {
+  projects(order: updatedAt_DESC) {
     count
     edges {
       node {
@@ -2116,28 +2116,28 @@ export const PersonalProjectsDocument = gql`
     ${IProjectFragmentDoc}`;
 
 /**
- * __usePersonalProjectsQuery__
+ * __useAllProjectsQuery__
  *
- * To run a query within a React component, call `usePersonalProjectsQuery` and pass it any options that fit your needs.
- * When your component renders, `usePersonalProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useAllProjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAllProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = usePersonalProjectsQuery({
+ * const { data, loading, error } = useAllProjectsQuery({
  *   variables: {
  *   },
  * });
  */
-export function usePersonalProjectsQuery(baseOptions?: Apollo.QueryHookOptions<PersonalProjectsQuery, PersonalProjectsQueryVariables>) {
+export function useAllProjectsQuery(baseOptions?: Apollo.QueryHookOptions<AllProjectsQuery, AllProjectsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<PersonalProjectsQuery, PersonalProjectsQueryVariables>(PersonalProjectsDocument, options);
+        return Apollo.useQuery<AllProjectsQuery, AllProjectsQueryVariables>(AllProjectsDocument, options);
       }
-export function usePersonalProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PersonalProjectsQuery, PersonalProjectsQueryVariables>) {
+export function useAllProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AllProjectsQuery, AllProjectsQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<PersonalProjectsQuery, PersonalProjectsQueryVariables>(PersonalProjectsDocument, options);
+          return Apollo.useLazyQuery<AllProjectsQuery, AllProjectsQueryVariables>(AllProjectsDocument, options);
         }
-export type PersonalProjectsQueryHookResult = ReturnType<typeof usePersonalProjectsQuery>;
-export type PersonalProjectsLazyQueryHookResult = ReturnType<typeof usePersonalProjectsLazyQuery>;
-export type PersonalProjectsQueryResult = Apollo.QueryResult<PersonalProjectsQuery, PersonalProjectsQueryVariables>;
+export type AllProjectsQueryHookResult = ReturnType<typeof useAllProjectsQuery>;
+export type AllProjectsLazyQueryHookResult = ReturnType<typeof useAllProjectsLazyQuery>;
+export type AllProjectsQueryResult = Apollo.QueryResult<AllProjectsQuery, AllProjectsQueryVariables>;

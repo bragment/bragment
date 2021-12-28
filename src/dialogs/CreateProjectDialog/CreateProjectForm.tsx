@@ -3,18 +3,18 @@ import {
   FormOutlined,
   GlobalOutlined,
   LockOutlined,
+  PictureOutlined,
 } from '@ant-design/icons';
 import { Button, Form, Input, Select } from 'antd';
-import classnames from 'classnames';
-import { memo, useCallback, useMemo } from 'react';
+import classNames from 'classnames';
+import { memo, useCallback, useMemo, useState } from 'react';
 import { useFormatMessage } from '../../components/hooks';
 import {
   IProjectFragmentDoc,
   ProjectVisibility,
   useCreateProjectMutation,
 } from '../../graphql';
-import { IBackground } from '../../stores/types';
-import BackgroundPopover from './BackgroundPopover';
+import BackgroundPopover, { IBackground } from './BackgroundPopover';
 import styles from './index.module.scss';
 
 interface ICreateProjectFormData {
@@ -32,6 +32,7 @@ interface ICreateProjectFormProps {
 function CreateProjectForm(props: ICreateProjectFormProps) {
   const { onFinish } = props;
   const f = useFormatMessage();
+  const [bgPopoverVisible, setBgPopoverVisible] = useState(false);
   const [form] = Form.useForm<ICreateProjectFormData>();
   const initialFormValues = useMemo<ICreateProjectFormData>(
     () => ({
@@ -43,6 +44,9 @@ function CreateProjectForm(props: ICreateProjectFormProps) {
     }),
     []
   );
+  const handleBgPopoverVisibleChange = useCallback((visible: boolean) => {
+    setBgPopoverVisible(visible);
+  }, []);
   const handleBgChange = useCallback(
     (bg: IBackground) =>
       form.setFieldsValue({ image: bg.image || '', color: bg.color || '' }),
@@ -100,12 +104,20 @@ function CreateProjectForm(props: ICreateProjectFormProps) {
           autoComplete="off"
           autoFocus
           bordered={false}
-          className={classnames(
+          className={classNames(
             styles.fieldInput,
+            styles.titleField,
+            bgPopoverVisible && styles.withBgPopover,
             'middle-input-with-prefix-and-suffix'
           )}
           prefix={<FormOutlined />}
-          suffix={<BackgroundPopover onChange={handleBgChange} />}
+          suffix={
+            <BackgroundPopover
+              onChange={handleBgChange}
+              onVisibleChange={handleBgPopoverVisibleChange}>
+              <PictureOutlined />
+            </BackgroundPopover>
+          }
           placeholder={f('projectTitle')}
           size="middle"
         />
@@ -114,7 +126,7 @@ function CreateProjectForm(props: ICreateProjectFormProps) {
         <Input
           autoComplete="off"
           bordered={false}
-          className={classnames(
+          className={classNames(
             styles.fieldInput,
             'middle-input-with-prefix-and-suffix'
           )}

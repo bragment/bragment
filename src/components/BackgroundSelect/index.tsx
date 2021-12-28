@@ -2,80 +2,68 @@ import { CheckOutlined } from '@ant-design/icons';
 import { Card as AntCard, Col, Row } from 'antd';
 import classNames from 'classnames';
 import { memo, MouseEvent as ReactMouseEvent } from 'react';
-import type {
-  IBackground,
-  IPhoto,
-  ISelectedStandByBgData,
-} from '../../stores/types';
 import styles from './index.module.scss';
 
-interface IBackgroundSelectProps {
+export type IBackgroundOption =
+  | { type: 'color'; color: string }
+  | { type: 'photo'; image: string; color?: string };
+
+export interface IBackgroundSelectProps {
   size?: 'small' | 'large';
-  colors: string[];
-  photos: IPhoto[];
-  value: IBackground;
-  onChange: (data: ISelectedStandByBgData | null) => void;
+  options: IBackgroundOption[];
+  current: number;
+  onChange: (index: number) => void;
 }
 
 function BackgroundSelect(props: IBackgroundSelectProps) {
-  const { colors, photos, size = 'small', value, onChange } = props;
+  const { current, options, size = 'small', onChange } = props;
 
   const handleClick = (event: ReactMouseEvent) => {
     const { target } = event;
-    const option =
+    const div =
       target instanceof Element ? target.closest('.' + styles.option) : null;
 
     if (
-      !(option instanceof HTMLElement) ||
-      !option.dataset ||
-      option.dataset.index === undefined
+      !(div instanceof HTMLElement) ||
+      !div.dataset ||
+      div.dataset.index === undefined
     ) {
       return;
     }
-    const type = option.dataset.type;
-    const index = parseInt(option.dataset.index, 10);
     if (onChange) {
-      const data =
-        option.dataset.selected || (type !== 'color' && type !== 'photo')
-          ? null
-          : { type, index };
-      onChange(data);
+      const selected = div.dataset.selected;
+      const index = parseInt(div.dataset.index, 10);
+      const option = options[index];
+      if (selected || index < 0 || !option) {
+        onChange(-1);
+      } else {
+        onChange(index);
+      }
     }
   };
-
-  const colorOrPhotoList: (string | IPhoto)[] = [...photos, ...colors];
 
   return (
     <div
       className={classNames(styles.wrapper, styles[size])}
       onClick={handleClick}>
       <Row gutter={[12, 12]}>
-        {colorOrPhotoList.map((el, i) => {
-          let selected;
-          let type;
+        {options.map((option, index) => {
+          const selected = index === current;
           let key;
           let backgroundColor;
           let backgroundImage;
-          let index;
-          if (typeof el === 'string') {
-            type = 'color';
-            key = el;
-            index = i - photos.length;
-            selected = value.color === el;
-            backgroundColor = el;
+          if (option.type === 'color') {
+            key = option.color;
+            backgroundColor = option.color;
           } else {
-            type = 'photo';
-            key = el.image;
-            index = i;
-            selected = value.image === el.image;
-            backgroundColor = el.color;
-            backgroundImage = `url(${el.image})`;
+            key = option.image;
+            backgroundColor = option.color;
+            backgroundImage = `url(${option.image})`;
           }
           return (
             <Col span={6} key={key}>
               <AntCard
                 className={styles.option}
-                data-type={type}
                 data-index={index}
                 data-selected={selected || undefined}
                 bordered={false}

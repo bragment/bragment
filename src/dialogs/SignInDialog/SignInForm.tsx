@@ -1,5 +1,5 @@
 import { Button, Checkbox, Form, Input } from 'antd';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import { observer } from 'mobx-react';
 import { useState } from 'react';
 import { resetFormFieldError, setFormFieldError } from '../../api/antd/helpers';
@@ -56,7 +56,7 @@ function SignInForm(props: ISignInFormProps) {
         name="username"
         rules={[{ required: true, message: f('requiredUsername') }]}>
         <Input
-          className={classnames('primary-input', 'large-input-without-affix')}
+          className={classNames('primary-input', 'large-input-without-affix')}
           placeholder={f('usernameOrEmail')}
           size="large"
         />
@@ -65,7 +65,7 @@ function SignInForm(props: ISignInFormProps) {
         name="password"
         rules={[{ required: true, message: f('requiredPassword') }]}>
         <Input.Password
-          className={classnames(
+          className={classNames(
             'primary-input',
             'large-input-with-only-suffix'
           )}

@@ -6,3 +6,18 @@ export async function loadStandByUnsplashPhotos() {
   projectStore.setStandByUnsplashPhotos(photos);
   return photos;
 }
+
+export function resetSelectedUnsplashPhoto() {
+  const { selectedBuiltinColor, selectedUnsplashPhoto, standByUnsplashPhotos } =
+    projectStore;
+  if (selectedBuiltinColor) {
+    return;
+  }
+  let newPhoto = standByUnsplashPhotos[0];
+  if (selectedUnsplashPhoto) {
+    newPhoto =
+      standByUnsplashPhotos.find((el) => el.id === selectedUnsplashPhoto.id) ||
+      newPhoto;
+  }
+  projectStore.setSelectedUnsplashPhoto(newPhoto);
+}

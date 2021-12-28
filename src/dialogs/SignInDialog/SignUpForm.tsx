@@ -1,5 +1,5 @@
 import { Button, Form, Input } from 'antd';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import { memo, useState } from 'react';
 import { resetFormFieldError, setFormFieldError } from '../../api/antd/helpers';
 import { EUserErrorCode, signUp } from '../../api/parse';
@@ -58,7 +58,7 @@ function SignUpForm(props: ISignUpFormProps) {
         name="username"
         rules={[{ required: true, message: f('requiredUsername') }]}>
         <Input
-          className={classnames('secondary-input', 'large-input-without-affix')}
+          className={classNames('secondary-input', 'large-input-without-affix')}
           size="large"
           placeholder={f('username')}
         />
@@ -67,7 +67,7 @@ function SignUpForm(props: ISignUpFormProps) {
         name="email"
         rules={[{ required: true, message: f('requiredEmail') }]}>
         <Input
-          className={classnames('secondary-input', 'large-input-without-affix')}
+          className={classNames('secondary-input', 'large-input-without-affix')}
           size="large"
           placeholder={f('email')}
         />
@@ -76,7 +76,7 @@ function SignUpForm(props: ISignUpFormProps) {
         name="password"
         rules={[{ required: true, message: f('requiredPassword') }]}>
         <Input.Password
-          className={classnames(
+          className={classNames(
             'secondary-input',
             'large-input-with-only-suffix'
           )}
