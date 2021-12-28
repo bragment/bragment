@@ -1,50 +1,26 @@
-import { action, computed, makeAutoObservable } from 'mobx';
-import {
-  getMainColor,
-  getMainImageUrl,
-  getThumbImageUrl,
-} from '../../api/unsplash/helpers';
+import { action, makeAutoObservable } from 'mobx';
 import type { IRandomPhoto } from '../../api/unsplash/types';
-import { IBackground, ISelectedStandByBgData } from '../types';
+
+const builtinColors = [
+  '#2196f3',
+  '#00bcd4',
+  '#4caf50',
+  '#9e9e9e',
+  '#ff9800',
+  '#9c27b0',
+  '#f44336',
+  '#fbc02d',
+];
 
 class ProjectStore {
   public loading = false;
+  public selectedBuiltinColor: string | null = null;
+  public selectedUnsplashPhoto: IRandomPhoto | null = null;
+  public standByBuiltinColors = builtinColors;
   public standByUnsplashPhotos: IRandomPhoto[] = [];
-  public selectedStandByBgData: ISelectedStandByBgData | null = null;
-  public standByBgColors = [
-    '#2196f3',
-    '#00bcd4',
-    '#4caf50',
-    '#9e9e9e',
-    '#ff9800',
-    '#9c27b0',
-    '#f44336',
-    '#fbc02d',
-  ];
-  get standByBgPhotos() {
-    return this.standByUnsplashPhotos.map((photo) => ({
-      image: getThumbImageUrl(getMainImageUrl(photo)),
-      color: getMainColor(photo),
-    }));
-  }
-  get selectedStandByBg() {
-    const bg: IBackground = {};
-    if (this.selectedStandByBgData) {
-      const { index, type } = this.selectedStandByBgData;
-      if (type === 'color') {
-        bg.color = this.standByBgColors[index];
-      }
-      if (type === 'photo') {
-        bg.image = this.standByBgPhotos[index].image;
-        bg.color = this.standByBgPhotos[index].color;
-      }
-    }
-    return bg;
-  }
 
   constructor() {
     makeAutoObservable(this, {
-      standByBgPhotos: computed,
       setStandByUnsplashPhotos: action,
     });
   }
@@ -57,8 +33,12 @@ class ProjectStore {
     this.standByUnsplashPhotos = photos;
   };
 
-  public setSelectedStandByBgData = (data: ISelectedStandByBgData | null) => {
-    this.selectedStandByBgData = data;
+  public setSelectedUnsplashPhoto = (photo: IRandomPhoto | null) => {
+    this.selectedUnsplashPhoto = photo;
+  };
+
+  public setSelectedBuiltinColor = (color: string | null) => {
+    this.selectedBuiltinColor = color;
   };
 }
 

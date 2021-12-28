@@ -17,8 +17,8 @@ mutation CreateProject($input: CreateProjectInput!) {
   }
 }
 
-query PersonalProjects {
-  projects {
+query AllProjects {
+  projects(order: updatedAt_DESC) {
     count
     edges {
       node {

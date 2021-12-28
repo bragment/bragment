@@ -1,5 +1,5 @@
 import { Button, Form, Input } from 'antd';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import { observer } from 'mobx-react';
 import { useState } from 'react';
 import { resetFormFieldError, setFormFieldError } from '../../api/antd/helpers';
@@ -53,7 +53,7 @@ function ForgotPasswordForm(props: IForgotPasswordFormProps) {
         name="email"
         rules={[{ required: true, message: f('requiredEmail') }]}>
         <Input
-          className={classnames('primary-input', 'large-input-without-affix')}
+          className={classNames('primary-input', 'large-input-without-affix')}
           placeholder={f('email')}
           size="large"
         />
@@ -61,7 +61,7 @@ function ForgotPasswordForm(props: IForgotPasswordFormProps) {
       <Form.Item />
       <Form.Item>
         <Button
-          className={classnames('primary-button', styles.sendEmailButton)}
+          className={classNames('primary-button', styles.sendEmailButton)}
           size="large"
           type="primary"
           htmlType="submit"
