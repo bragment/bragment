@@ -11,4 +11,5 @@ export enum ESignInDialogTabKey {
 export enum ERoutePath {
   HOME = '/',
   SETTING = '/setting',
+  PROJECT = '/project/:id',
 }

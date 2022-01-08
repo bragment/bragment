@@ -34,7 +34,7 @@ function SignUpForm(props: ISignUpFormProps) {
       const user = await signUp(fields.username, fields.password, fields.email);
       onFinish(user);
       form.resetFields();
-    } catch (error) {
+    } catch (error: any) {
       switch (error.code) {
         case EUserErrorCode.USERNAME_EXISTS:
           setFormFieldError(form, 'username', f('existingUsername'));

@@ -17,7 +17,13 @@ mutation CreateProject($input: CreateProjectInput!) {
   }
 }
 
-query AllProjects {
+query GetProject($id: ID!) {
+  project(id: $id) {
+    ...IProject
+  }
+}
+
+query GetAllProjects {
   projects(order: updatedAt_DESC) {
     count
     edges {

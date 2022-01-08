@@ -35,7 +35,7 @@ function SignInForm(props: ISignInFormProps) {
       const user = await signIn(fields.username, fields.password);
       onFinish(user);
       form.resetFields();
-    } catch (error) {
+    } catch (error: any) {
       switch (error.code) {
         case EUserErrorCode.PASSWORD_INVALID:
           setFormFieldError(form, 'username', f('invalidUsernameOrPassword'));
