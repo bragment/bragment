@@ -12,6 +12,7 @@ export interface IProgressiveBackgroundProps {
 
 function ProgressiveBackground(props: IProgressiveBackgroundProps) {
   const { className, color, image, placeholder } = props;
+
   if (image && placeholder) {
     return (
       <ProgressiveImage src={image} placeholder={placeholder}>
@@ -22,7 +23,7 @@ function ProgressiveBackground(props: IProgressiveBackgroundProps) {
           };
           if (loading) {
             style.filter = 'blur(5px)';
-            style.transform = 'scale(1.05)';
+            style.transform = 'scale(1.1, 1.1)';
           }
           return (
             <div
@@ -37,7 +38,10 @@ function ProgressiveBackground(props: IProgressiveBackgroundProps) {
   return (
     <div
       className={classNames(styles.wrapper, className)}
-      style={{ backgroundColor: color }}
+      style={{
+        backgroundColor: color,
+        backgroundImage: image ? `url(${image})` : undefined,
+      }}
     />
   );
 }

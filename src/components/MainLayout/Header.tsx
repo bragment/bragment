@@ -4,7 +4,7 @@ import styles from './index.module.scss';
 
 function Header() {
   return (
-    <header className={styles.wrapper}>
+    <header className={styles.header}>
       <div className={styles.rightSide}>
         <Space align="center" className={styles.userActions}>
           <UserAvatar />

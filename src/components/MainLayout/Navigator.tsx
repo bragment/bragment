@@ -16,7 +16,7 @@ function Navigator() {
   return (
     <Layout.Sider
       theme={'light'}
-      className={styles.wrapper}
+      className={styles.navigator}
       collapsible
       collapsed={collapsed}
       onCollapse={handleCollapse}>

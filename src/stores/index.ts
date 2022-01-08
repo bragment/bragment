@@ -5,10 +5,10 @@ import setting from './setting';
 import user from './user';
 
 const stores = {
-  dialog: dialog,
-  project: project,
-  setting: setting,
-  user: user,
+  dialog,
+  project,
+  setting,
+  user,
 };
 
 export const AppContext = createContext(stores);

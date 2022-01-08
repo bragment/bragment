@@ -3,11 +3,11 @@ import { memo } from 'react';
 import Scrollbars from 'react-custom-scrollbars';
 import ProjectList from '../../components/ProjectList';
 import ProjectCreator from '../../components/ProjectList/Creator';
-import { IProjectFragment, useAllProjectsQuery } from '../../graphql';
+import { IProjectFragment, useGetAllProjectsQuery } from '../../graphql';
 import styles from './index.module.scss';
 
 function HomePage() {
-  const { data } = useAllProjectsQuery();
+  const { data } = useGetAllProjectsQuery();
   const projects: IProjectFragment[] = [];
   data?.projects.edges?.forEach((el) => {
     if (el?.node) {

@@ -8,12 +8,9 @@ import {
 import { Button, Form, Input, Select } from 'antd';
 import classNames from 'classnames';
 import { memo, useCallback, useMemo, useState } from 'react';
+import { unshiftCachedProjects } from '../../api/apollo';
 import { useFormatMessage } from '../../components/hooks';
-import {
-  IProjectFragmentDoc,
-  ProjectVisibility,
-  useCreateProjectMutation,
-} from '../../graphql';
+import { ProjectVisibility, useCreateProjectMutation } from '../../graphql';
 import BackgroundPopover, { IBackground } from './BackgroundPopover';
 import styles from './index.module.scss';
 
@@ -54,25 +51,9 @@ function CreateProjectForm(props: ICreateProjectFormProps) {
   );
   const [addProject, { loading }] = useCreateProjectMutation({
     update(cache, response) {
-      const a = response.data?.createProject;
-      if (a) {
-        cache.modify({
-          fields: {
-            projects(existingProjects) {
-              const newProjectRef = cache.writeFragment({
-                data: a.project,
-                fragment: IProjectFragmentDoc,
-              });
-              return {
-                ...existingProjects,
-                edges: [
-                  { node: newProjectRef, __typename: 'ProjectEdge' },
-                  ...existingProjects.edges,
-                ],
-              };
-            },
-          },
-        });
+      const result = response.data?.createProject;
+      if (result) {
+        unshiftCachedProjects(cache, result.project);
       }
     },
   });
