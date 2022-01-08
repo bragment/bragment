@@ -16,7 +16,8 @@ function ProjectItem(props: IProjectItemProps) {
       <ProgressiveBackground
         className={styles.background}
         color={color || undefined}
-        placeholder={image ? getSmallImageUrl(image) : undefined}
+        // NOTE: without progressive
+        // placeholder={image ? getSmallImageUrl(image) : undefined}
         image={image ? getSmallImageUrl(image) : undefined}
       />
       <div className={styles.foreground}>

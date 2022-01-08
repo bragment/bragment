@@ -32,7 +32,7 @@ function ForgotPasswordForm(props: IForgotPasswordFormProps) {
       // TODO: should fixed emailAdapter in parse server
       await requestPasswordReset(fields.email);
       // TODO: should show email sent message
-    } catch (error) {
+    } catch (error: any) {
       switch (error.code) {
         case EUserErrorCode.PASSWORD_INVALID:
           setFormFieldError(form, 'email', f('invalidUsernameOrPassword'));

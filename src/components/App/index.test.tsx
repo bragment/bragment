@@ -7,7 +7,7 @@ import App from './index';
 test('render app', async () => {
   const { findByText } = render(<App />);
   act(() => {
-    stores.settingStore.setLanguage(ELanguage.EN_US);
+    stores.setting.setLanguage(ELanguage.EN_US);
   });
   let signInButton = await findByText(
     formatMessage(ELanguage.EN_US, 'signIn'),
@@ -17,7 +17,7 @@ test('render app', async () => {
   );
   expect(signInButton).toBeInTheDocument();
   act(() => {
-    stores.settingStore.setLanguage(ELanguage.ZH_CN);
+    stores.setting.setLanguage(ELanguage.ZH_CN);
   });
   signInButton = await findByText(formatMessage(ELanguage.ZH_CN, 'signIn'), {
     selector: 'button>span',
