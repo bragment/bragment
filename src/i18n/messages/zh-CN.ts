@@ -2,6 +2,7 @@ export default {
   backToSignIn: '返回登录？',
   createNewProject: '创建新项目...',
   createProject: '创建项目',
+  defaultView: '默认视图',
   email: '邮箱',
   existingEmail: '邮箱已被占用',
   existingUsername: '用户名已被占用',
