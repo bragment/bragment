@@ -8,7 +8,11 @@ import {
   getSmallImageUrl,
   getThumbImageUrl,
 } from '../../api/unsplash/helpers';
-import { useDialogStore, useProjectStore } from '../../components/hooks';
+import {
+  useDialogStore,
+  useProjectStore,
+  useUserStore,
+} from '../../components/hooks';
 import ProgressiveBackground, {
   IProgressiveBackgroundProps,
 } from '../../components/ProgressiveBackground';
@@ -22,6 +26,7 @@ import styles from './index.module.scss';
 function CreateProjectDialog() {
   const { createProjectDialogVisible, setCreateProjectDialogVisible } =
     useDialogStore();
+  const { currentPersonalWorkspace } = useUserStore();
   const {
     selectedBuiltinColor,
     selectedUnsplashPhoto,
@@ -48,17 +53,15 @@ function CreateProjectDialog() {
   }, [fetchUnsplashPhotos]);
 
   const backgroundData = useMemo(() => {
-    const data: IProgressiveBackgroundProps = {};
+    const bg: IProgressiveBackgroundProps = {};
     if (selectedBuiltinColor) {
-      data.color = selectedBuiltinColor;
+      bg.color = selectedBuiltinColor;
     } else if (selectedUnsplashPhoto) {
-      data.color = getMainColor(selectedUnsplashPhoto);
-      data.image = getSmallImageUrl(getMainImageUrl(selectedUnsplashPhoto));
-      data.placeholder = getThumbImageUrl(
-        getMainImageUrl(selectedUnsplashPhoto)
-      );
+      bg.color = getMainColor(selectedUnsplashPhoto);
+      bg.image = getSmallImageUrl(getMainImageUrl(selectedUnsplashPhoto));
+      bg.placeholder = getThumbImageUrl(getMainImageUrl(selectedUnsplashPhoto));
     }
-    return data;
+    return bg;
   }, [selectedBuiltinColor, selectedUnsplashPhoto]);
   const hasBackground = !!backgroundData.image || !!backgroundData.color;
 
@@ -75,7 +78,10 @@ function CreateProjectDialog() {
       onCancel={handleClose}>
       <ProgressiveBackground {...backgroundData} />
       <div className={styles.foreground}>
-        <CreateProjectForm onFinish={handleFinish} />
+        <CreateProjectForm
+          defaultWorkspace={currentPersonalWorkspace}
+          onFinish={handleFinish}
+        />
       </div>
     </Modal>
   );

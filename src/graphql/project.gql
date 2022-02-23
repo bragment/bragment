@@ -9,6 +9,30 @@ fragment IProject on Project {
   color
 }
 
+fragment IProjectView on ProjectView {
+  __typename
+  objectId
+  id
+  title
+  columnOrder {
+    ... on Element {
+      value
+    }
+  }
+}
+
+fragment IProjectColumn on ProjectColumn {
+  __typename
+  objectId
+  id
+  title
+  itemOrder {
+    ... on Element {
+      value
+    }
+  }
+}
+
 mutation CreateProject($input: CreateProjectInput!) {
   createProject(input: $input) {
     project {
@@ -20,6 +44,22 @@ mutation CreateProject($input: CreateProjectInput!) {
 query GetProject($id: ID!) {
   project(id: $id) {
     ...IProject
+  }
+  projectViews(where: { project: { have: { id: { equalTo: $id } } } }) {
+    count
+    edges {
+      node {
+        ...IProjectView
+      }
+    }
+  }
+  projectColumns(where: { project: { have: { id: { equalTo: $id } } } }) {
+    count
+    edges {
+      node {
+        ...IProjectColumn
+      }
+    }
   }
 }
 

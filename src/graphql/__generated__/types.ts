@@ -49,7 +49,7 @@ export type AclInput = {
 };
 
 /** Use Inline Fragment on Array to get results: https://graphql.org/learn/queries/#inline-fragments */
-export type ArrayResult = Element | Project | Role | Session | User;
+export type ArrayResult = Element | Migration | Project | ProjectColumn | ProjectItem | ProjectView | Role | Session | User | Workspace;
 
 /** The ArrayWhereInput input type is used in operations that involve filtering objects by a field of type Array. */
 export type ArrayWhereInput = {
@@ -163,7 +163,8 @@ export type Class = {
 
 /** The CloudCodeFunction enum type contains a list of all available cloud code functions. */
 export enum CloudCodeFunction {
-  CreateProject = 'createProject'
+  CreateProject = 'createProject',
+  MigrateAllSchemas = 'migrateAllSchemas'
 }
 
 export type CreateClassInput = {
@@ -194,34 +195,111 @@ export type CreateFilePayload = {
   fileInfo: FileInfo;
 };
 
+/** The CreateMigrationFieldsInput input type is used in operations that involve creation of objects in the Migration class. */
+export type CreateMigrationFieldsInput = {
+  ACL?: InputMaybe<AclInput>;
+  /** This is the object name. */
+  name?: InputMaybe<Scalars['String']>;
+  /** This is the object status. */
+  status?: InputMaybe<Scalars['String']>;
+};
+
+export type CreateMigrationInput = {
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** These are the fields that will be used to create the new object. */
+  fields?: InputMaybe<CreateMigrationFieldsInput>;
+};
+
+export type CreateMigrationPayload = {
+  __typename?: 'CreateMigrationPayload';
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** This is the created object. */
+  migration: Migration;
+};
+
+/** The CreateProjectColumnFieldsInput input type is used in operations that involve creation of objects in the ProjectColumn class. */
+export type CreateProjectColumnFieldsInput = {
+  ACL?: InputMaybe<AclInput>;
+  /** This is the object createdBy. */
+  createdBy?: InputMaybe<UserPointerInput>;
+  /** This is the object itemOrder. */
+  itemOrder?: InputMaybe<Array<InputMaybe<Scalars['Any']>>>;
+  /** This is the object project. */
+  project?: InputMaybe<ProjectPointerInput>;
+  /** This is the object title. */
+  title?: InputMaybe<Scalars['String']>;
+};
+
 /** The CreateProjectFieldsInput input type is used in operations that involve creation of objects in the Project class. */
 export type CreateProjectFieldsInput = {
   ACL?: InputMaybe<AclInput>;
   /** This is the object color. */
   color?: InputMaybe<Scalars['String']>;
-  /** This is the object creator. */
-  creator?: InputMaybe<UserPointerInput>;
+  /** This is the object createdBy. */
+  createdBy?: InputMaybe<UserPointerInput>;
   /** This is the object description. */
   description?: InputMaybe<Scalars['String']>;
   /** This is the object image. */
   image?: InputMaybe<Scalars['String']>;
-  /** This is the object owner. */
-  owner?: InputMaybe<UserPointerInput>;
   /** This is the object title. */
   title?: InputMaybe<Scalars['String']>;
   /** This is the object visibility. */
   visibility?: InputMaybe<Scalars['String']>;
+  /** This is the object workspace. */
+  workspace?: InputMaybe<WorkspacePointerInput>;
 };
 
 export type CreateProjectInput = {
   clientMutationId?: InputMaybe<Scalars['String']>;
+  defaultViewTitle?: InputMaybe<Scalars['String']>;
   fields?: InputMaybe<CreateProjectFieldsInput>;
+};
+
+/** The CreateProjectItemFieldsInput input type is used in operations that involve creation of objects in the ProjectItem class. */
+export type CreateProjectItemFieldsInput = {
+  ACL?: InputMaybe<AclInput>;
+  /** This is the object content. */
+  content?: InputMaybe<Scalars['String']>;
+  /** This is the object createdBy. */
+  createdBy?: InputMaybe<UserPointerInput>;
+  /** This is the object image. */
+  image?: InputMaybe<Scalars['String']>;
+  /** This is the object link. */
+  link?: InputMaybe<Scalars['String']>;
+  /** This is the object project. */
+  project?: InputMaybe<ProjectPointerInput>;
+  /** This is the object title. */
+  title?: InputMaybe<Scalars['String']>;
 };
 
 export type CreateProjectPayload = {
   __typename?: 'CreateProjectPayload';
   clientMutationId?: Maybe<Scalars['String']>;
   project: Project;
+};
+
+/** The CreateProjectViewFieldsInput input type is used in operations that involve creation of objects in the ProjectView class. */
+export type CreateProjectViewFieldsInput = {
+  ACL?: InputMaybe<AclInput>;
+  /** This is the object columnOrder. */
+  columnOrder?: InputMaybe<Array<InputMaybe<Scalars['Any']>>>;
+  /** This is the object createdBy. */
+  createdBy?: InputMaybe<UserPointerInput>;
+  /** This is the object project. */
+  project?: InputMaybe<ProjectPointerInput>;
+  /** This is the object title. */
+  title?: InputMaybe<Scalars['String']>;
+};
+
+export type CreateProjectViewInput = {
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  fields?: InputMaybe<CreateProjectViewFieldsInput>;
+};
+
+export type CreateProjectViewPayload = {
+  __typename?: 'CreateProjectViewPayload';
+  ProjectView: ProjectView;
+  clientMutationId?: Maybe<Scalars['String']>;
 };
 
 /** The CreateRoleFieldsInput input type is used in operations that involve creation of objects in the Role class. */
@@ -291,6 +369,8 @@ export type CreateUserFieldsInput = {
   password: Scalars['String'];
   /** This is the object username. */
   username: Scalars['String'];
+  /** This is the object workspaces. */
+  workspaces?: InputMaybe<WorkspaceRelationInput>;
 };
 
 export type CreateUserInput = {
@@ -304,6 +384,17 @@ export type CreateUserPayload = {
   clientMutationId?: Maybe<Scalars['String']>;
   /** This is the created object. */
   user: User;
+};
+
+/** The CreateWorkspaceFieldsInput input type is used in operations that involve creation of objects in the Workspace class. */
+export type CreateWorkspaceFieldsInput = {
+  ACL?: InputMaybe<AclInput>;
+  /** This is the object createdBy. */
+  createdBy?: InputMaybe<UserPointerInput>;
+  /** This is the object name. */
+  name?: InputMaybe<Scalars['String']>;
+  /** This is the object type. */
+  type?: InputMaybe<Scalars['String']>;
 };
 
 /** The DateWhereInput input type is used in operations that involve filtering objects by a field of type Date. */
@@ -343,6 +434,19 @@ export type DeleteClassPayload = {
   /** This is the deleted class. */
   class: Class;
   clientMutationId?: Maybe<Scalars['String']>;
+};
+
+export type DeleteMigrationInput = {
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** This is the object id. You can use either the global or the object id. */
+  id: Scalars['ID'];
+};
+
+export type DeleteMigrationPayload = {
+  __typename?: 'DeleteMigrationPayload';
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** This is the deleted object. */
+  migration: Migration;
 };
 
 export type DeleteRoleInput = {
@@ -563,6 +667,114 @@ export type LogOutPayload = {
   ok: Scalars['Boolean'];
 };
 
+/** The Migration object type is used in operations that involve outputting objects of Migration class. */
+export type Migration = Node & ParseObject & {
+  __typename?: 'Migration';
+  ACL: Acl;
+  /** This is the date in which the object was created. */
+  createdAt: Scalars['Date'];
+  /** The ID of an object */
+  id: Scalars['ID'];
+  /** This is the object name. */
+  name?: Maybe<Scalars['String']>;
+  /** This is the object id. */
+  objectId: Scalars['ID'];
+  /** This is the object status. */
+  status?: Maybe<Scalars['String']>;
+  /** This is the date in which the object was las updated. */
+  updatedAt: Scalars['Date'];
+};
+
+/** A connection to a list of items. */
+export type MigrationConnection = {
+  __typename?: 'MigrationConnection';
+  /** This is the total matched objecs count that is returned when the count flag is set. */
+  count: Scalars['Int'];
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<MigrationEdge>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+/** An edge in a connection. */
+export type MigrationEdge = {
+  __typename?: 'MigrationEdge';
+  /** A cursor for use in pagination */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge */
+  node?: Maybe<Migration>;
+};
+
+/** The MigrationOrder input type is used when sorting objects of the Migration class. */
+export enum MigrationOrder {
+  AclAsc = 'ACL_ASC',
+  AclDesc = 'ACL_DESC',
+  CreatedAtAsc = 'createdAt_ASC',
+  CreatedAtDesc = 'createdAt_DESC',
+  IdAsc = 'id_ASC',
+  IdDesc = 'id_DESC',
+  NameAsc = 'name_ASC',
+  NameDesc = 'name_DESC',
+  ObjectIdAsc = 'objectId_ASC',
+  ObjectIdDesc = 'objectId_DESC',
+  StatusAsc = 'status_ASC',
+  StatusDesc = 'status_DESC',
+  UpdatedAtAsc = 'updatedAt_ASC',
+  UpdatedAtDesc = 'updatedAt_DESC'
+}
+
+/** Allow to link OR add and link an object of the Migration class. */
+export type MigrationPointerInput = {
+  /** Create and link an object from Migration class. */
+  createAndLink?: InputMaybe<CreateMigrationFieldsInput>;
+  /** Link an existing object from Migration class. You can use either the global or the object id. */
+  link?: InputMaybe<Scalars['ID']>;
+};
+
+/** Allow to add, remove, createAndAdd objects of the Migration class into a relation field. */
+export type MigrationRelationInput = {
+  /** Add existing objects from the Migration class into the relation. You can use either the global or the object ids. */
+  add?: InputMaybe<Array<Scalars['ID']>>;
+  /** Create and add objects of the Migration class into the relation. */
+  createAndAdd?: InputMaybe<Array<CreateMigrationFieldsInput>>;
+  /** Remove existing objects from the Migration class out of the relation. You can use either the global or the object ids. */
+  remove?: InputMaybe<Array<Scalars['ID']>>;
+};
+
+/** The MigrationRelationWhereInput input type is used in operations that involve filtering objects of Migration class. */
+export type MigrationRelationWhereInput = {
+  /** Check if the relation/pointer contains objects. */
+  exists?: InputMaybe<Scalars['Boolean']>;
+  /** Run a relational/pointer query where at least one child object can match. */
+  have?: InputMaybe<MigrationWhereInput>;
+  /** Run an inverted relational/pointer query where at least one child object can match. */
+  haveNot?: InputMaybe<MigrationWhereInput>;
+};
+
+/** The MigrationWhereInput input type is used in operations that involve filtering objects of Migration class. */
+export type MigrationWhereInput = {
+  /** This is the object ACL. */
+  ACL?: InputMaybe<ObjectWhereInput>;
+  /** This is the AND operator to compound constraints. */
+  AND?: InputMaybe<Array<MigrationWhereInput>>;
+  /** This is the NOR operator to compound constraints. */
+  NOR?: InputMaybe<Array<MigrationWhereInput>>;
+  /** This is the OR operator to compound constraints. */
+  OR?: InputMaybe<Array<MigrationWhereInput>>;
+  /** This is the object createdAt. */
+  createdAt?: InputMaybe<DateWhereInput>;
+  /** This is the object id. */
+  id?: InputMaybe<IdWhereInput>;
+  /** This is the object name. */
+  name?: InputMaybe<StringWhereInput>;
+  /** This is the object objectId. */
+  objectId?: InputMaybe<IdWhereInput>;
+  /** This is the object status. */
+  status?: InputMaybe<StringWhereInput>;
+  /** This is the object updatedAt. */
+  updatedAt?: InputMaybe<DateWhereInput>;
+};
+
 /** Mutation is the top level type for mutations. */
 export type Mutation = {
   __typename?: 'Mutation';
@@ -572,7 +784,10 @@ export type Mutation = {
   createClass?: Maybe<CreateClassPayload>;
   /** The createFile mutation can be used to create and upload a new file. */
   createFile?: Maybe<CreateFilePayload>;
+  /** The createMigration mutation can be used to create a new object of the Migration class. */
+  createMigration?: Maybe<CreateMigrationPayload>;
   createProject?: Maybe<CreateProjectPayload>;
+  createProjectView?: Maybe<CreateProjectViewPayload>;
   /** The createRole mutation can be used to create a new object of the Role class. */
   createRole?: Maybe<CreateRolePayload>;
   /** The createSession mutation can be used to create a new object of the Session class. */
@@ -581,6 +796,8 @@ export type Mutation = {
   createUser?: Maybe<CreateUserPayload>;
   /** The deleteClass mutation can be used to delete an existing object class. */
   deleteClass?: Maybe<DeleteClassPayload>;
+  /** The deleteMigration mutation can be used to delete an object of the Migration class. */
+  deleteMigration?: Maybe<DeleteMigrationPayload>;
   /** The deleteRole mutation can be used to delete an object of the Role class. */
   deleteRole?: Maybe<DeleteRolePayload>;
   /** The deleteSession mutation can be used to delete an object of the Session class. */
@@ -601,7 +818,10 @@ export type Mutation = {
   signUp?: Maybe<SignUpPayload>;
   /** The updateClass mutation can be used to update the schema for an existing object class. */
   updateClass?: Maybe<UpdateClassPayload>;
+  /** The updateMigration mutation can be used to update an object of the Migration class. */
+  updateMigration?: Maybe<UpdateMigrationPayload>;
   updateProject?: Maybe<UpdateProjectPayload>;
+  updateProjectView?: Maybe<UpdateProjectViewPayload>;
   /** The updateRole mutation can be used to update an object of the Role class. */
   updateRole?: Maybe<UpdateRolePayload>;
   /** The updateSession mutation can be used to update an object of the Session class. */
@@ -630,8 +850,20 @@ export type MutationCreateFileArgs = {
 
 
 /** Mutation is the top level type for mutations. */
+export type MutationCreateMigrationArgs = {
+  input: CreateMigrationInput;
+};
+
+
+/** Mutation is the top level type for mutations. */
 export type MutationCreateProjectArgs = {
   input: CreateProjectInput;
+};
+
+
+/** Mutation is the top level type for mutations. */
+export type MutationCreateProjectViewArgs = {
+  input: CreateProjectViewInput;
 };
 
 
@@ -656,6 +888,12 @@ export type MutationCreateUserArgs = {
 /** Mutation is the top level type for mutations. */
 export type MutationDeleteClassArgs = {
   input: DeleteClassInput;
+};
+
+
+/** Mutation is the top level type for mutations. */
+export type MutationDeleteMigrationArgs = {
+  input: DeleteMigrationInput;
 };
 
 
@@ -720,8 +958,20 @@ export type MutationUpdateClassArgs = {
 
 
 /** Mutation is the top level type for mutations. */
+export type MutationUpdateMigrationArgs = {
+  input: UpdateMigrationInput;
+};
+
+
+/** Mutation is the top level type for mutations. */
 export type MutationUpdateProjectArgs = {
   input: UpdateProjectInput;
+};
+
+
+/** Mutation is the top level type for mutations. */
+export type MutationUpdateProjectViewArgs = {
+  input: UpdateProjectViewInput;
 };
 
 
@@ -848,8 +1098,8 @@ export type Project = Node & ParseObject & {
   color?: Maybe<Scalars['String']>;
   /** This is the date in which the object was created. */
   createdAt: Scalars['Date'];
-  /** This is the object creator. */
-  creator?: Maybe<User>;
+  /** This is the object createdBy. */
+  createdBy?: Maybe<User>;
   /** This is the object description. */
   description?: Maybe<Scalars['String']>;
   /** The ID of an object */
@@ -858,14 +1108,130 @@ export type Project = Node & ParseObject & {
   image?: Maybe<Scalars['String']>;
   /** This is the object id. */
   objectId: Scalars['ID'];
-  /** This is the object owner. */
-  owner?: Maybe<User>;
   /** This is the object title. */
   title?: Maybe<Scalars['String']>;
   /** This is the date in which the object was las updated. */
   updatedAt: Scalars['Date'];
   /** This is the object visibility. */
   visibility?: Maybe<Scalars['String']>;
+  /** This is the object workspace. */
+  workspace?: Maybe<Workspace>;
+};
+
+/** The ProjectColumn object type is used in operations that involve outputting objects of ProjectColumn class. */
+export type ProjectColumn = Node & ParseObject & {
+  __typename?: 'ProjectColumn';
+  ACL: Acl;
+  /** This is the date in which the object was created. */
+  createdAt: Scalars['Date'];
+  /** This is the object createdBy. */
+  createdBy?: Maybe<User>;
+  /** The ID of an object */
+  id: Scalars['ID'];
+  /** Use Inline Fragment on Array to get results: https://graphql.org/learn/queries/#inline-fragments */
+  itemOrder?: Maybe<Array<Maybe<ArrayResult>>>;
+  /** This is the object id. */
+  objectId: Scalars['ID'];
+  /** This is the object project. */
+  project?: Maybe<Project>;
+  /** This is the object title. */
+  title?: Maybe<Scalars['String']>;
+  /** This is the date in which the object was las updated. */
+  updatedAt: Scalars['Date'];
+};
+
+/** A connection to a list of items. */
+export type ProjectColumnConnection = {
+  __typename?: 'ProjectColumnConnection';
+  /** This is the total matched objecs count that is returned when the count flag is set. */
+  count: Scalars['Int'];
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<ProjectColumnEdge>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+/** An edge in a connection. */
+export type ProjectColumnEdge = {
+  __typename?: 'ProjectColumnEdge';
+  /** A cursor for use in pagination */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge */
+  node?: Maybe<ProjectColumn>;
+};
+
+/** The ProjectColumnOrder input type is used when sorting objects of the ProjectColumn class. */
+export enum ProjectColumnOrder {
+  AclAsc = 'ACL_ASC',
+  AclDesc = 'ACL_DESC',
+  CreatedAtAsc = 'createdAt_ASC',
+  CreatedAtDesc = 'createdAt_DESC',
+  CreatedByAsc = 'createdBy_ASC',
+  CreatedByDesc = 'createdBy_DESC',
+  IdAsc = 'id_ASC',
+  IdDesc = 'id_DESC',
+  ItemOrderAsc = 'itemOrder_ASC',
+  ItemOrderDesc = 'itemOrder_DESC',
+  ObjectIdAsc = 'objectId_ASC',
+  ObjectIdDesc = 'objectId_DESC',
+  ProjectAsc = 'project_ASC',
+  ProjectDesc = 'project_DESC',
+  TitleAsc = 'title_ASC',
+  TitleDesc = 'title_DESC',
+  UpdatedAtAsc = 'updatedAt_ASC',
+  UpdatedAtDesc = 'updatedAt_DESC'
+}
+
+/** Allow to link OR add and link an object of the ProjectColumn class. */
+export type ProjectColumnPointerInput = {
+  /** Link an existing object from ProjectColumn class. You can use either the global or the object id. */
+  link?: InputMaybe<Scalars['ID']>;
+};
+
+/** Allow to add, remove, createAndAdd objects of the ProjectColumn class into a relation field. */
+export type ProjectColumnRelationInput = {
+  /** Add existing objects from the ProjectColumn class into the relation. You can use either the global or the object ids. */
+  add?: InputMaybe<Array<Scalars['ID']>>;
+  /** Remove existing objects from the ProjectColumn class out of the relation. You can use either the global or the object ids. */
+  remove?: InputMaybe<Array<Scalars['ID']>>;
+};
+
+/** The ProjectColumnRelationWhereInput input type is used in operations that involve filtering objects of ProjectColumn class. */
+export type ProjectColumnRelationWhereInput = {
+  /** Check if the relation/pointer contains objects. */
+  exists?: InputMaybe<Scalars['Boolean']>;
+  /** Run a relational/pointer query where at least one child object can match. */
+  have?: InputMaybe<ProjectColumnWhereInput>;
+  /** Run an inverted relational/pointer query where at least one child object can match. */
+  haveNot?: InputMaybe<ProjectColumnWhereInput>;
+};
+
+/** The ProjectColumnWhereInput input type is used in operations that involve filtering objects of ProjectColumn class. */
+export type ProjectColumnWhereInput = {
+  /** This is the object ACL. */
+  ACL?: InputMaybe<ObjectWhereInput>;
+  /** This is the AND operator to compound constraints. */
+  AND?: InputMaybe<Array<ProjectColumnWhereInput>>;
+  /** This is the NOR operator to compound constraints. */
+  NOR?: InputMaybe<Array<ProjectColumnWhereInput>>;
+  /** This is the OR operator to compound constraints. */
+  OR?: InputMaybe<Array<ProjectColumnWhereInput>>;
+  /** This is the object createdAt. */
+  createdAt?: InputMaybe<DateWhereInput>;
+  /** This is the object createdBy. */
+  createdBy?: InputMaybe<UserRelationWhereInput>;
+  /** This is the object id. */
+  id?: InputMaybe<IdWhereInput>;
+  /** This is the object itemOrder. */
+  itemOrder?: InputMaybe<ArrayWhereInput>;
+  /** This is the object objectId. */
+  objectId?: InputMaybe<IdWhereInput>;
+  /** This is the object project. */
+  project?: InputMaybe<ProjectRelationWhereInput>;
+  /** This is the object title. */
+  title?: InputMaybe<StringWhereInput>;
+  /** This is the object updatedAt. */
+  updatedAt?: InputMaybe<DateWhereInput>;
 };
 
 /** A connection to a list of items. */
@@ -888,6 +1254,134 @@ export type ProjectEdge = {
   node?: Maybe<Project>;
 };
 
+/** The ProjectItem object type is used in operations that involve outputting objects of ProjectItem class. */
+export type ProjectItem = Node & ParseObject & {
+  __typename?: 'ProjectItem';
+  ACL: Acl;
+  /** This is the object content. */
+  content?: Maybe<Scalars['String']>;
+  /** This is the date in which the object was created. */
+  createdAt: Scalars['Date'];
+  /** This is the object createdBy. */
+  createdBy?: Maybe<User>;
+  /** The ID of an object */
+  id: Scalars['ID'];
+  /** This is the object image. */
+  image?: Maybe<Scalars['String']>;
+  /** This is the object link. */
+  link?: Maybe<Scalars['String']>;
+  /** This is the object id. */
+  objectId: Scalars['ID'];
+  /** This is the object project. */
+  project?: Maybe<Project>;
+  /** This is the object title. */
+  title?: Maybe<Scalars['String']>;
+  /** This is the date in which the object was las updated. */
+  updatedAt: Scalars['Date'];
+};
+
+/** A connection to a list of items. */
+export type ProjectItemConnection = {
+  __typename?: 'ProjectItemConnection';
+  /** This is the total matched objecs count that is returned when the count flag is set. */
+  count: Scalars['Int'];
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<ProjectItemEdge>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+/** An edge in a connection. */
+export type ProjectItemEdge = {
+  __typename?: 'ProjectItemEdge';
+  /** A cursor for use in pagination */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge */
+  node?: Maybe<ProjectItem>;
+};
+
+/** The ProjectItemOrder input type is used when sorting objects of the ProjectItem class. */
+export enum ProjectItemOrder {
+  AclAsc = 'ACL_ASC',
+  AclDesc = 'ACL_DESC',
+  ContentAsc = 'content_ASC',
+  ContentDesc = 'content_DESC',
+  CreatedAtAsc = 'createdAt_ASC',
+  CreatedAtDesc = 'createdAt_DESC',
+  CreatedByAsc = 'createdBy_ASC',
+  CreatedByDesc = 'createdBy_DESC',
+  IdAsc = 'id_ASC',
+  IdDesc = 'id_DESC',
+  ImageAsc = 'image_ASC',
+  ImageDesc = 'image_DESC',
+  LinkAsc = 'link_ASC',
+  LinkDesc = 'link_DESC',
+  ObjectIdAsc = 'objectId_ASC',
+  ObjectIdDesc = 'objectId_DESC',
+  ProjectAsc = 'project_ASC',
+  ProjectDesc = 'project_DESC',
+  TitleAsc = 'title_ASC',
+  TitleDesc = 'title_DESC',
+  UpdatedAtAsc = 'updatedAt_ASC',
+  UpdatedAtDesc = 'updatedAt_DESC'
+}
+
+/** Allow to link OR add and link an object of the ProjectItem class. */
+export type ProjectItemPointerInput = {
+  /** Link an existing object from ProjectItem class. You can use either the global or the object id. */
+  link?: InputMaybe<Scalars['ID']>;
+};
+
+/** Allow to add, remove, createAndAdd objects of the ProjectItem class into a relation field. */
+export type ProjectItemRelationInput = {
+  /** Add existing objects from the ProjectItem class into the relation. You can use either the global or the object ids. */
+  add?: InputMaybe<Array<Scalars['ID']>>;
+  /** Remove existing objects from the ProjectItem class out of the relation. You can use either the global or the object ids. */
+  remove?: InputMaybe<Array<Scalars['ID']>>;
+};
+
+/** The ProjectItemRelationWhereInput input type is used in operations that involve filtering objects of ProjectItem class. */
+export type ProjectItemRelationWhereInput = {
+  /** Check if the relation/pointer contains objects. */
+  exists?: InputMaybe<Scalars['Boolean']>;
+  /** Run a relational/pointer query where at least one child object can match. */
+  have?: InputMaybe<ProjectItemWhereInput>;
+  /** Run an inverted relational/pointer query where at least one child object can match. */
+  haveNot?: InputMaybe<ProjectItemWhereInput>;
+};
+
+/** The ProjectItemWhereInput input type is used in operations that involve filtering objects of ProjectItem class. */
+export type ProjectItemWhereInput = {
+  /** This is the object ACL. */
+  ACL?: InputMaybe<ObjectWhereInput>;
+  /** This is the AND operator to compound constraints. */
+  AND?: InputMaybe<Array<ProjectItemWhereInput>>;
+  /** This is the NOR operator to compound constraints. */
+  NOR?: InputMaybe<Array<ProjectItemWhereInput>>;
+  /** This is the OR operator to compound constraints. */
+  OR?: InputMaybe<Array<ProjectItemWhereInput>>;
+  /** This is the object content. */
+  content?: InputMaybe<StringWhereInput>;
+  /** This is the object createdAt. */
+  createdAt?: InputMaybe<DateWhereInput>;
+  /** This is the object createdBy. */
+  createdBy?: InputMaybe<UserRelationWhereInput>;
+  /** This is the object id. */
+  id?: InputMaybe<IdWhereInput>;
+  /** This is the object image. */
+  image?: InputMaybe<StringWhereInput>;
+  /** This is the object link. */
+  link?: InputMaybe<StringWhereInput>;
+  /** This is the object objectId. */
+  objectId?: InputMaybe<IdWhereInput>;
+  /** This is the object project. */
+  project?: InputMaybe<ProjectRelationWhereInput>;
+  /** This is the object title. */
+  title?: InputMaybe<StringWhereInput>;
+  /** This is the object updatedAt. */
+  updatedAt?: InputMaybe<DateWhereInput>;
+};
+
 /** The ProjectOrder input type is used when sorting objects of the Project class. */
 export enum ProjectOrder {
   AclAsc = 'ACL_ASC',
@@ -896,8 +1390,8 @@ export enum ProjectOrder {
   ColorDesc = 'color_DESC',
   CreatedAtAsc = 'createdAt_ASC',
   CreatedAtDesc = 'createdAt_DESC',
-  CreatorAsc = 'creator_ASC',
-  CreatorDesc = 'creator_DESC',
+  CreatedByAsc = 'createdBy_ASC',
+  CreatedByDesc = 'createdBy_DESC',
   DescriptionAsc = 'description_ASC',
   DescriptionDesc = 'description_DESC',
   IdAsc = 'id_ASC',
@@ -906,14 +1400,14 @@ export enum ProjectOrder {
   ImageDesc = 'image_DESC',
   ObjectIdAsc = 'objectId_ASC',
   ObjectIdDesc = 'objectId_DESC',
-  OwnerAsc = 'owner_ASC',
-  OwnerDesc = 'owner_DESC',
   TitleAsc = 'title_ASC',
   TitleDesc = 'title_DESC',
   UpdatedAtAsc = 'updatedAt_ASC',
   UpdatedAtDesc = 'updatedAt_DESC',
   VisibilityAsc = 'visibility_ASC',
-  VisibilityDesc = 'visibility_DESC'
+  VisibilityDesc = 'visibility_DESC',
+  WorkspaceAsc = 'workspace_ASC',
+  WorkspaceDesc = 'workspace_DESC'
 }
 
 /** Allow to link OR add and link an object of the Project class. */
@@ -940,6 +1434,122 @@ export type ProjectRelationWhereInput = {
   haveNot?: InputMaybe<ProjectWhereInput>;
 };
 
+/** The ProjectView object type is used in operations that involve outputting objects of ProjectView class. */
+export type ProjectView = Node & ParseObject & {
+  __typename?: 'ProjectView';
+  ACL: Acl;
+  /** Use Inline Fragment on Array to get results: https://graphql.org/learn/queries/#inline-fragments */
+  columnOrder?: Maybe<Array<Maybe<ArrayResult>>>;
+  /** This is the date in which the object was created. */
+  createdAt: Scalars['Date'];
+  /** This is the object createdBy. */
+  createdBy?: Maybe<User>;
+  /** The ID of an object */
+  id: Scalars['ID'];
+  /** This is the object id. */
+  objectId: Scalars['ID'];
+  /** This is the object project. */
+  project?: Maybe<Project>;
+  /** This is the object title. */
+  title?: Maybe<Scalars['String']>;
+  /** This is the date in which the object was las updated. */
+  updatedAt: Scalars['Date'];
+};
+
+/** A connection to a list of items. */
+export type ProjectViewConnection = {
+  __typename?: 'ProjectViewConnection';
+  /** This is the total matched objecs count that is returned when the count flag is set. */
+  count: Scalars['Int'];
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<ProjectViewEdge>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+/** An edge in a connection. */
+export type ProjectViewEdge = {
+  __typename?: 'ProjectViewEdge';
+  /** A cursor for use in pagination */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge */
+  node?: Maybe<ProjectView>;
+};
+
+/** The ProjectViewOrder input type is used when sorting objects of the ProjectView class. */
+export enum ProjectViewOrder {
+  AclAsc = 'ACL_ASC',
+  AclDesc = 'ACL_DESC',
+  ColumnOrderAsc = 'columnOrder_ASC',
+  ColumnOrderDesc = 'columnOrder_DESC',
+  CreatedAtAsc = 'createdAt_ASC',
+  CreatedAtDesc = 'createdAt_DESC',
+  CreatedByAsc = 'createdBy_ASC',
+  CreatedByDesc = 'createdBy_DESC',
+  IdAsc = 'id_ASC',
+  IdDesc = 'id_DESC',
+  ObjectIdAsc = 'objectId_ASC',
+  ObjectIdDesc = 'objectId_DESC',
+  ProjectAsc = 'project_ASC',
+  ProjectDesc = 'project_DESC',
+  TitleAsc = 'title_ASC',
+  TitleDesc = 'title_DESC',
+  UpdatedAtAsc = 'updatedAt_ASC',
+  UpdatedAtDesc = 'updatedAt_DESC'
+}
+
+/** Allow to link OR add and link an object of the ProjectView class. */
+export type ProjectViewPointerInput = {
+  /** Link an existing object from ProjectView class. You can use either the global or the object id. */
+  link?: InputMaybe<Scalars['ID']>;
+};
+
+/** Allow to add, remove, createAndAdd objects of the ProjectView class into a relation field. */
+export type ProjectViewRelationInput = {
+  /** Add existing objects from the ProjectView class into the relation. You can use either the global or the object ids. */
+  add?: InputMaybe<Array<Scalars['ID']>>;
+  /** Remove existing objects from the ProjectView class out of the relation. You can use either the global or the object ids. */
+  remove?: InputMaybe<Array<Scalars['ID']>>;
+};
+
+/** The ProjectViewRelationWhereInput input type is used in operations that involve filtering objects of ProjectView class. */
+export type ProjectViewRelationWhereInput = {
+  /** Check if the relation/pointer contains objects. */
+  exists?: InputMaybe<Scalars['Boolean']>;
+  /** Run a relational/pointer query where at least one child object can match. */
+  have?: InputMaybe<ProjectViewWhereInput>;
+  /** Run an inverted relational/pointer query where at least one child object can match. */
+  haveNot?: InputMaybe<ProjectViewWhereInput>;
+};
+
+/** The ProjectViewWhereInput input type is used in operations that involve filtering objects of ProjectView class. */
+export type ProjectViewWhereInput = {
+  /** This is the object ACL. */
+  ACL?: InputMaybe<ObjectWhereInput>;
+  /** This is the AND operator to compound constraints. */
+  AND?: InputMaybe<Array<ProjectViewWhereInput>>;
+  /** This is the NOR operator to compound constraints. */
+  NOR?: InputMaybe<Array<ProjectViewWhereInput>>;
+  /** This is the OR operator to compound constraints. */
+  OR?: InputMaybe<Array<ProjectViewWhereInput>>;
+  /** This is the object columnOrder. */
+  columnOrder?: InputMaybe<ArrayWhereInput>;
+  /** This is the object createdAt. */
+  createdAt?: InputMaybe<DateWhereInput>;
+  /** This is the object createdBy. */
+  createdBy?: InputMaybe<UserRelationWhereInput>;
+  /** This is the object id. */
+  id?: InputMaybe<IdWhereInput>;
+  /** This is the object objectId. */
+  objectId?: InputMaybe<IdWhereInput>;
+  /** This is the object project. */
+  project?: InputMaybe<ProjectRelationWhereInput>;
+  /** This is the object title. */
+  title?: InputMaybe<StringWhereInput>;
+  /** This is the object updatedAt. */
+  updatedAt?: InputMaybe<DateWhereInput>;
+};
+
 export enum ProjectVisibility {
   Private = 'PRIVATE',
   Protected = 'PROTECTED',
@@ -960,8 +1570,8 @@ export type ProjectWhereInput = {
   color?: InputMaybe<StringWhereInput>;
   /** This is the object createdAt. */
   createdAt?: InputMaybe<DateWhereInput>;
-  /** This is the object creator. */
-  creator?: InputMaybe<UserRelationWhereInput>;
+  /** This is the object createdBy. */
+  createdBy?: InputMaybe<UserRelationWhereInput>;
   /** This is the object description. */
   description?: InputMaybe<StringWhereInput>;
   /** This is the object id. */
@@ -970,14 +1580,14 @@ export type ProjectWhereInput = {
   image?: InputMaybe<StringWhereInput>;
   /** This is the object objectId. */
   objectId?: InputMaybe<IdWhereInput>;
-  /** This is the object owner. */
-  owner?: InputMaybe<UserRelationWhereInput>;
   /** This is the object title. */
   title?: InputMaybe<StringWhereInput>;
   /** This is the object updatedAt. */
   updatedAt?: InputMaybe<DateWhereInput>;
   /** This is the object visibility. */
   visibility?: InputMaybe<StringWhereInput>;
+  /** This is the object workspace. */
+  workspace?: InputMaybe<WorkspaceRelationWhereInput>;
 };
 
 /** Allow to manage public rights. */
@@ -1006,10 +1616,26 @@ export type Query = {
   classes: Array<Class>;
   /** The health query can be used to check if the server is up and running. */
   health: Scalars['Boolean'];
+  /** The migration query can be used to get an object of the Migration class by its id. */
+  migration: Migration;
+  /** The migrations query can be used to find objects of the Migration class. */
+  migrations: MigrationConnection;
   /** Fetches an object given its ID */
   node?: Maybe<Node>;
   /** The project query can be used to get an object of the Project class by its id. */
   project: Project;
+  /** The projectColumn query can be used to get an object of the ProjectColumn class by its id. */
+  projectColumn: ProjectColumn;
+  /** The projectColumns query can be used to find objects of the ProjectColumn class. */
+  projectColumns: ProjectColumnConnection;
+  /** The projectItem query can be used to get an object of the ProjectItem class by its id. */
+  projectItem: ProjectItem;
+  /** The projectItems query can be used to find objects of the ProjectItem class. */
+  projectItems: ProjectItemConnection;
+  /** The projectView query can be used to get an object of the ProjectView class by its id. */
+  projectView: ProjectView;
+  /** The projectViews query can be used to find objects of the ProjectView class. */
+  projectViews: ProjectViewConnection;
   /** The projects query can be used to find objects of the Project class. */
   projects: ProjectConnection;
   /** The role query can be used to get an object of the Role class by its id. */
@@ -1026,12 +1652,36 @@ export type Query = {
   users: UserConnection;
   /** The viewer query can be used to return the current user data. */
   viewer: Viewer;
+  /** The workspace query can be used to get an object of the Workspace class by its id. */
+  workspace: Workspace;
+  /** The workspaces query can be used to find objects of the Workspace class. */
+  workspaces: WorkspaceConnection;
 };
 
 
 /** Query is the top level type for queries. */
 export type QueryClassArgs = {
   name: Scalars['String'];
+};
+
+
+/** Query is the top level type for queries. */
+export type QueryMigrationArgs = {
+  id: Scalars['ID'];
+  options?: InputMaybe<ReadOptionsInput>;
+};
+
+
+/** Query is the top level type for queries. */
+export type QueryMigrationsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  options?: InputMaybe<ReadOptionsInput>;
+  order?: InputMaybe<Array<MigrationOrder>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<MigrationWhereInput>;
 };
 
 
@@ -1045,6 +1695,66 @@ export type QueryNodeArgs = {
 export type QueryProjectArgs = {
   id: Scalars['ID'];
   options?: InputMaybe<ReadOptionsInput>;
+};
+
+
+/** Query is the top level type for queries. */
+export type QueryProjectColumnArgs = {
+  id: Scalars['ID'];
+  options?: InputMaybe<ReadOptionsInput>;
+};
+
+
+/** Query is the top level type for queries. */
+export type QueryProjectColumnsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  options?: InputMaybe<ReadOptionsInput>;
+  order?: InputMaybe<Array<ProjectColumnOrder>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<ProjectColumnWhereInput>;
+};
+
+
+/** Query is the top level type for queries. */
+export type QueryProjectItemArgs = {
+  id: Scalars['ID'];
+  options?: InputMaybe<ReadOptionsInput>;
+};
+
+
+/** Query is the top level type for queries. */
+export type QueryProjectItemsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  options?: InputMaybe<ReadOptionsInput>;
+  order?: InputMaybe<Array<ProjectItemOrder>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<ProjectItemWhereInput>;
+};
+
+
+/** Query is the top level type for queries. */
+export type QueryProjectViewArgs = {
+  id: Scalars['ID'];
+  options?: InputMaybe<ReadOptionsInput>;
+};
+
+
+/** Query is the top level type for queries. */
+export type QueryProjectViewsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  options?: InputMaybe<ReadOptionsInput>;
+  order?: InputMaybe<Array<ProjectViewOrder>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<ProjectViewWhereInput>;
 };
 
 
@@ -1118,6 +1828,26 @@ export type QueryUsersArgs = {
   order?: InputMaybe<Array<UserOrder>>;
   skip?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<UserWhereInput>;
+};
+
+
+/** Query is the top level type for queries. */
+export type QueryWorkspaceArgs = {
+  id: Scalars['ID'];
+  options?: InputMaybe<ReadOptionsInput>;
+};
+
+
+/** Query is the top level type for queries. */
+export type QueryWorkspacesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  options?: InputMaybe<ReadOptionsInput>;
+  order?: InputMaybe<Array<WorkspaceOrder>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<WorkspaceWhereInput>;
 };
 
 /** The ReadOptionsInputt type is used in queries in order to set the read preferences. */
@@ -1754,23 +2484,60 @@ export type UpdateClassPayload = {
   clientMutationId?: Maybe<Scalars['String']>;
 };
 
+/** The UpdateMigrationFieldsInput input type is used in operations that involve creation of objects in the Migration class. */
+export type UpdateMigrationFieldsInput = {
+  ACL?: InputMaybe<AclInput>;
+  /** This is the object name. */
+  name?: InputMaybe<Scalars['String']>;
+  /** This is the object status. */
+  status?: InputMaybe<Scalars['String']>;
+};
+
+export type UpdateMigrationInput = {
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** These are the fields that will be used to update the object. */
+  fields?: InputMaybe<UpdateMigrationFieldsInput>;
+  /** This is the object id. You can use either the global or the object id. */
+  id: Scalars['ID'];
+};
+
+export type UpdateMigrationPayload = {
+  __typename?: 'UpdateMigrationPayload';
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** This is the updated object. */
+  migration: Migration;
+};
+
+/** The UpdateProjectColumnFieldsInput input type is used in operations that involve creation of objects in the ProjectColumn class. */
+export type UpdateProjectColumnFieldsInput = {
+  ACL?: InputMaybe<AclInput>;
+  /** This is the object createdBy. */
+  createdBy?: InputMaybe<UserPointerInput>;
+  /** This is the object itemOrder. */
+  itemOrder?: InputMaybe<Array<InputMaybe<Scalars['Any']>>>;
+  /** This is the object project. */
+  project?: InputMaybe<ProjectPointerInput>;
+  /** This is the object title. */
+  title?: InputMaybe<Scalars['String']>;
+};
+
 /** The UpdateProjectFieldsInput input type is used in operations that involve creation of objects in the Project class. */
 export type UpdateProjectFieldsInput = {
   ACL?: InputMaybe<AclInput>;
   /** This is the object color. */
   color?: InputMaybe<Scalars['String']>;
-  /** This is the object creator. */
-  creator?: InputMaybe<UserPointerInput>;
+  /** This is the object createdBy. */
+  createdBy?: InputMaybe<UserPointerInput>;
   /** This is the object description. */
   description?: InputMaybe<Scalars['String']>;
   /** This is the object image. */
   image?: InputMaybe<Scalars['String']>;
-  /** This is the object owner. */
-  owner?: InputMaybe<UserPointerInput>;
   /** This is the object title. */
   title?: InputMaybe<Scalars['String']>;
   /** This is the object visibility. */
   visibility?: InputMaybe<Scalars['String']>;
+  /** This is the object workspace. */
+  workspace?: InputMaybe<WorkspacePointerInput>;
 };
 
 export type UpdateProjectInput = {
@@ -1779,10 +2546,52 @@ export type UpdateProjectInput = {
   id: Scalars['ID'];
 };
 
+/** The UpdateProjectItemFieldsInput input type is used in operations that involve creation of objects in the ProjectItem class. */
+export type UpdateProjectItemFieldsInput = {
+  ACL?: InputMaybe<AclInput>;
+  /** This is the object content. */
+  content?: InputMaybe<Scalars['String']>;
+  /** This is the object createdBy. */
+  createdBy?: InputMaybe<UserPointerInput>;
+  /** This is the object image. */
+  image?: InputMaybe<Scalars['String']>;
+  /** This is the object link. */
+  link?: InputMaybe<Scalars['String']>;
+  /** This is the object project. */
+  project?: InputMaybe<ProjectPointerInput>;
+  /** This is the object title. */
+  title?: InputMaybe<Scalars['String']>;
+};
+
 export type UpdateProjectPayload = {
   __typename?: 'UpdateProjectPayload';
   clientMutationId?: Maybe<Scalars['String']>;
   project: Project;
+};
+
+/** The UpdateProjectViewFieldsInput input type is used in operations that involve creation of objects in the ProjectView class. */
+export type UpdateProjectViewFieldsInput = {
+  ACL?: InputMaybe<AclInput>;
+  /** This is the object columnOrder. */
+  columnOrder?: InputMaybe<Array<InputMaybe<Scalars['Any']>>>;
+  /** This is the object createdBy. */
+  createdBy?: InputMaybe<UserPointerInput>;
+  /** This is the object project. */
+  project?: InputMaybe<ProjectPointerInput>;
+  /** This is the object title. */
+  title?: InputMaybe<Scalars['String']>;
+};
+
+export type UpdateProjectViewInput = {
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  fields?: InputMaybe<UpdateProjectViewFieldsInput>;
+  id: Scalars['ID'];
+};
+
+export type UpdateProjectViewPayload = {
+  __typename?: 'UpdateProjectViewPayload';
+  clientMutationId?: Maybe<Scalars['String']>;
+  project: ProjectView;
 };
 
 /** The UpdateRoleFieldsInput input type is used in operations that involve creation of objects in the Role class. */
@@ -1856,6 +2665,8 @@ export type UpdateUserFieldsInput = {
   password?: InputMaybe<Scalars['String']>;
   /** This is the object username. */
   username?: InputMaybe<Scalars['String']>;
+  /** This is the object workspaces. */
+  workspaces?: InputMaybe<WorkspaceRelationInput>;
 };
 
 export type UpdateUserInput = {
@@ -1871,6 +2682,17 @@ export type UpdateUserPayload = {
   clientMutationId?: Maybe<Scalars['String']>;
   /** This is the updated object. */
   user: User;
+};
+
+/** The UpdateWorkspaceFieldsInput input type is used in operations that involve creation of objects in the Workspace class. */
+export type UpdateWorkspaceFieldsInput = {
+  ACL?: InputMaybe<AclInput>;
+  /** This is the object createdBy. */
+  createdBy?: InputMaybe<UserPointerInput>;
+  /** This is the object name. */
+  name?: InputMaybe<Scalars['String']>;
+  /** This is the object type. */
+  type?: InputMaybe<Scalars['String']>;
 };
 
 /** The User object type is used in operations that involve outputting objects of User class. */
@@ -1893,6 +2715,21 @@ export type User = Node & ParseObject & {
   updatedAt: Scalars['Date'];
   /** This is the object username. */
   username?: Maybe<Scalars['String']>;
+  /** This is the object workspaces. */
+  workspaces: WorkspaceConnection;
+};
+
+
+/** The User object type is used in operations that involve outputting objects of User class. */
+export type UserWorkspacesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  options?: InputMaybe<ReadOptionsInput>;
+  order?: InputMaybe<Array<WorkspaceOrder>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<WorkspaceWhereInput>;
 };
 
 /** Allow to manage users in ACL. If read and write are null the users have read and write rights. */
@@ -1942,6 +2779,8 @@ export type UserLoginWithInput = {
   email?: InputMaybe<Scalars['String']>;
   /** This is the object emailVerified. */
   emailVerified?: InputMaybe<Scalars['Boolean']>;
+  /** This is the object workspaces. */
+  workspaces?: InputMaybe<WorkspaceRelationInput>;
 };
 
 /** The UserOrder input type is used when sorting objects of the User class. */
@@ -1965,7 +2804,9 @@ export enum UserOrder {
   UpdatedAtAsc = 'updatedAt_ASC',
   UpdatedAtDesc = 'updatedAt_DESC',
   UsernameAsc = 'username_ASC',
-  UsernameDesc = 'username_DESC'
+  UsernameDesc = 'username_DESC',
+  WorkspacesAsc = 'workspaces_ASC',
+  WorkspacesDesc = 'workspaces_DESC'
 }
 
 /** Allow to link OR add and link an object of the User class. */
@@ -2024,6 +2865,8 @@ export type UserWhereInput = {
   updatedAt?: InputMaybe<DateWhereInput>;
   /** This is the object username. */
   username?: InputMaybe<StringWhereInput>;
+  /** This is the object workspaces. */
+  workspaces?: InputMaybe<WorkspaceRelationWhereInput>;
 };
 
 /** The Viewer object type is used in operations that involve outputting the current user data. */
@@ -2041,7 +2884,126 @@ export type WithinInput = {
   box: BoxInput;
 };
 
+/** The Workspace object type is used in operations that involve outputting objects of Workspace class. */
+export type Workspace = Node & ParseObject & {
+  __typename?: 'Workspace';
+  ACL: Acl;
+  /** This is the date in which the object was created. */
+  createdAt: Scalars['Date'];
+  /** This is the object createdBy. */
+  createdBy?: Maybe<User>;
+  /** The ID of an object */
+  id: Scalars['ID'];
+  /** This is the object name. */
+  name?: Maybe<Scalars['String']>;
+  /** This is the object id. */
+  objectId: Scalars['ID'];
+  /** This is the object type. */
+  type?: Maybe<Scalars['String']>;
+  /** This is the date in which the object was las updated. */
+  updatedAt: Scalars['Date'];
+};
+
+/** A connection to a list of items. */
+export type WorkspaceConnection = {
+  __typename?: 'WorkspaceConnection';
+  /** This is the total matched objecs count that is returned when the count flag is set. */
+  count: Scalars['Int'];
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<WorkspaceEdge>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+/** An edge in a connection. */
+export type WorkspaceEdge = {
+  __typename?: 'WorkspaceEdge';
+  /** A cursor for use in pagination */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge */
+  node?: Maybe<Workspace>;
+};
+
+/** The WorkspaceOrder input type is used when sorting objects of the Workspace class. */
+export enum WorkspaceOrder {
+  AclAsc = 'ACL_ASC',
+  AclDesc = 'ACL_DESC',
+  CreatedAtAsc = 'createdAt_ASC',
+  CreatedAtDesc = 'createdAt_DESC',
+  CreatedByAsc = 'createdBy_ASC',
+  CreatedByDesc = 'createdBy_DESC',
+  IdAsc = 'id_ASC',
+  IdDesc = 'id_DESC',
+  NameAsc = 'name_ASC',
+  NameDesc = 'name_DESC',
+  ObjectIdAsc = 'objectId_ASC',
+  ObjectIdDesc = 'objectId_DESC',
+  TypeAsc = 'type_ASC',
+  TypeDesc = 'type_DESC',
+  UpdatedAtAsc = 'updatedAt_ASC',
+  UpdatedAtDesc = 'updatedAt_DESC'
+}
+
+/** Allow to link OR add and link an object of the Workspace class. */
+export type WorkspacePointerInput = {
+  /** Link an existing object from Workspace class. You can use either the global or the object id. */
+  link?: InputMaybe<Scalars['ID']>;
+};
+
+/** Allow to add, remove, createAndAdd objects of the Workspace class into a relation field. */
+export type WorkspaceRelationInput = {
+  /** Add existing objects from the Workspace class into the relation. You can use either the global or the object ids. */
+  add?: InputMaybe<Array<Scalars['ID']>>;
+  /** Remove existing objects from the Workspace class out of the relation. You can use either the global or the object ids. */
+  remove?: InputMaybe<Array<Scalars['ID']>>;
+};
+
+/** The WorkspaceRelationWhereInput input type is used in operations that involve filtering objects of Workspace class. */
+export type WorkspaceRelationWhereInput = {
+  /** Check if the relation/pointer contains objects. */
+  exists?: InputMaybe<Scalars['Boolean']>;
+  /** Run a relational/pointer query where at least one child object can match. */
+  have?: InputMaybe<WorkspaceWhereInput>;
+  /** Run an inverted relational/pointer query where at least one child object can match. */
+  haveNot?: InputMaybe<WorkspaceWhereInput>;
+};
+
+export enum WorkspaceType {
+  Collective = 'COLLECTIVE',
+  Personal = 'PERSONAL'
+}
+
+/** The WorkspaceWhereInput input type is used in operations that involve filtering objects of Workspace class. */
+export type WorkspaceWhereInput = {
+  /** This is the object ACL. */
+  ACL?: InputMaybe<ObjectWhereInput>;
+  /** This is the AND operator to compound constraints. */
+  AND?: InputMaybe<Array<WorkspaceWhereInput>>;
+  /** This is the NOR operator to compound constraints. */
+  NOR?: InputMaybe<Array<WorkspaceWhereInput>>;
+  /** This is the OR operator to compound constraints. */
+  OR?: InputMaybe<Array<WorkspaceWhereInput>>;
+  /** This is the object createdAt. */
+  createdAt?: InputMaybe<DateWhereInput>;
+  /** This is the object createdBy. */
+  createdBy?: InputMaybe<UserRelationWhereInput>;
+  /** This is the object id. */
+  id?: InputMaybe<IdWhereInput>;
+  /** This is the object name. */
+  name?: InputMaybe<StringWhereInput>;
+  /** This is the object objectId. */
+  objectId?: InputMaybe<IdWhereInput>;
+  /** This is the object type. */
+  type?: InputMaybe<StringWhereInput>;
+  /** This is the object updatedAt. */
+  updatedAt?: InputMaybe<DateWhereInput>;
+};
+
 export type IProjectFragment = { __typename: 'Project', objectId: string, id: string, title?: string | null | undefined, description?: string | null | undefined, visibility?: string | null | undefined, image?: string | null | undefined, color?: string | null | undefined };
+
+export type IProjectViewFragment = { __typename: 'ProjectView', objectId: string, id: string, title?: string | null | undefined, columnOrder?: Array<{ __typename?: 'Element', value: any } | { __typename?: 'Migration' } | { __typename?: 'Project' } | { __typename?: 'ProjectColumn' } | { __typename?: 'ProjectItem' } | { __typename?: 'ProjectView' } | { __typename?: 'Role' } | { __typename?: 'Session' } | { __typename?: 'User' } | { __typename?: 'Workspace' } | null | undefined> | null | undefined };
+
+export type IProjectColumnFragment = { __typename: 'ProjectColumn', objectId: string, id: string, title?: string | null | undefined, itemOrder?: Array<{ __typename?: 'Element', value: any } | { __typename?: 'Migration' } | { __typename?: 'Project' } | { __typename?: 'ProjectColumn' } | { __typename?: 'ProjectItem' } | { __typename?: 'ProjectView' } | { __typename?: 'Role' } | { __typename?: 'Session' } | { __typename?: 'User' } | { __typename?: 'Workspace' } | null | undefined> | null | undefined };
 
 export type CreateProjectMutationVariables = Exact<{
   input: CreateProjectInput;
@@ -2055,12 +3017,19 @@ export type GetProjectQueryVariables = Exact<{
 }>;
 
 
-export type GetProjectQuery = { __typename?: 'Query', project: { __typename: 'Project', objectId: string, id: string, title?: string | null | undefined, description?: string | null | undefined, visibility?: string | null | undefined, image?: string | null | undefined, color?: string | null | undefined } };
+export type GetProjectQuery = { __typename?: 'Query', project: { __typename: 'Project', objectId: string, id: string, title?: string | null | undefined, description?: string | null | undefined, visibility?: string | null | undefined, image?: string | null | undefined, color?: string | null | undefined }, projectViews: { __typename?: 'ProjectViewConnection', count: number, edges?: Array<{ __typename?: 'ProjectViewEdge', node?: { __typename: 'ProjectView', objectId: string, id: string, title?: string | null | undefined, columnOrder?: Array<{ __typename?: 'Element', value: any } | { __typename?: 'Migration' } | { __typename?: 'Project' } | { __typename?: 'ProjectColumn' } | { __typename?: 'ProjectItem' } | { __typename?: 'ProjectView' } | { __typename?: 'Role' } | { __typename?: 'Session' } | { __typename?: 'User' } | { __typename?: 'Workspace' } | null | undefined> | null | undefined } | null | undefined } | null | undefined> | null | undefined }, projectColumns: { __typename?: 'ProjectColumnConnection', count: number, edges?: Array<{ __typename?: 'ProjectColumnEdge', node?: { __typename: 'ProjectColumn', objectId: string, id: string, title?: string | null | undefined, itemOrder?: Array<{ __typename?: 'Element', value: any } | { __typename?: 'Migration' } | { __typename?: 'Project' } | { __typename?: 'ProjectColumn' } | { __typename?: 'ProjectItem' } | { __typename?: 'ProjectView' } | { __typename?: 'Role' } | { __typename?: 'Session' } | { __typename?: 'User' } | { __typename?: 'Workspace' } | null | undefined> | null | undefined } | null | undefined } | null | undefined> | null | undefined } };
 
 export type GetAllProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetAllProjectsQuery = { __typename?: 'Query', projects: { __typename?: 'ProjectConnection', count: number, edges?: Array<{ __typename?: 'ProjectEdge', node?: { __typename: 'Project', objectId: string, id: string, title?: string | null | undefined, description?: string | null | undefined, visibility?: string | null | undefined, image?: string | null | undefined, color?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } };
+
+export type IWorkspaceFragment = { __typename: 'Workspace', objectId: string, id: string, name?: string | null | undefined, type?: string | null | undefined };
+
+export type GetCurrentUserInfoQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCurrentUserInfoQuery = { __typename?: 'Query', viewer: { __typename?: 'Viewer', user: { __typename?: 'User', username?: string | null | undefined, email?: string | null | undefined, workspaces: { __typename?: 'WorkspaceConnection', count: number, edges?: Array<{ __typename?: 'WorkspaceEdge', node?: { __typename: 'Workspace', objectId: string, id: string, name?: string | null | undefined, type?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } } } };
 
 export const IProjectFragmentDoc = gql`
     fragment IProject on Project {
@@ -2072,6 +3041,41 @@ export const IProjectFragmentDoc = gql`
   visibility
   image
   color
+}
+    `;
+export const IProjectViewFragmentDoc = gql`
+    fragment IProjectView on ProjectView {
+  __typename
+  objectId
+  id
+  title
+  columnOrder {
+    ... on Element {
+      value
+    }
+  }
+}
+    `;
+export const IProjectColumnFragmentDoc = gql`
+    fragment IProjectColumn on ProjectColumn {
+  __typename
+  objectId
+  id
+  title
+  itemOrder {
+    ... on Element {
+      value
+    }
+  }
+}
+    `;
+export const IWorkspaceFragmentDoc = gql`
+    fragment IWorkspace on Workspace {
+  __typename
+  objectId
+  id
+  name
+  type
 }
     `;
 export const CreateProjectDocument = gql`
@@ -2114,8 +3118,26 @@ export const GetProjectDocument = gql`
   project(id: $id) {
     ...IProject
   }
+  projectViews(where: {project: {have: {id: {equalTo: $id}}}}) {
+    count
+    edges {
+      node {
+        ...IProjectView
+      }
+    }
+  }
+  projectColumns(where: {project: {have: {id: {equalTo: $id}}}}) {
+    count
+    edges {
+      node {
+        ...IProjectColumn
+      }
+    }
+  }
 }
-    ${IProjectFragmentDoc}`;
+    ${IProjectFragmentDoc}
+${IProjectViewFragmentDoc}
+${IProjectColumnFragmentDoc}`;
 
 /**
  * __useGetProjectQuery__
@@ -2183,3 +3205,48 @@ export function useGetAllProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type GetAllProjectsQueryHookResult = ReturnType<typeof useGetAllProjectsQuery>;
 export type GetAllProjectsLazyQueryHookResult = ReturnType<typeof useGetAllProjectsLazyQuery>;
 export type GetAllProjectsQueryResult = Apollo.QueryResult<GetAllProjectsQuery, GetAllProjectsQueryVariables>;
+export const GetCurrentUserInfoDocument = gql`
+    query GetCurrentUserInfo {
+  viewer {
+    user {
+      username
+      email
+      workspaces {
+        count
+        edges {
+          node {
+            ...IWorkspace
+          }
+        }
+      }
+    }
+  }
+}
+    ${IWorkspaceFragmentDoc}`;
+
+/**
+ * __useGetCurrentUserInfoQuery__
+ *
+ * To run a query within a React component, call `useGetCurrentUserInfoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCurrentUserInfoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCurrentUserInfoQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCurrentUserInfoQuery(baseOptions?: Apollo.QueryHookOptions<GetCurrentUserInfoQuery, GetCurrentUserInfoQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCurrentUserInfoQuery, GetCurrentUserInfoQueryVariables>(GetCurrentUserInfoDocument, options);
+      }
+export function useGetCurrentUserInfoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCurrentUserInfoQuery, GetCurrentUserInfoQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCurrentUserInfoQuery, GetCurrentUserInfoQueryVariables>(GetCurrentUserInfoDocument, options);
+        }
+export type GetCurrentUserInfoQueryHookResult = ReturnType<typeof useGetCurrentUserInfoQuery>;
+export type GetCurrentUserInfoLazyQueryHookResult = ReturnType<typeof useGetCurrentUserInfoLazyQuery>;
+export type GetCurrentUserInfoQueryResult = Apollo.QueryResult<GetCurrentUserInfoQuery, GetCurrentUserInfoQueryVariables>;
