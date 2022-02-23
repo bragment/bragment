@@ -1,0 +1,24 @@
+fragment IWorkspace on Workspace {
+  __typename
+  objectId
+  id
+  name
+  type
+}
+
+query GetCurrentUserInfo {
+  viewer {
+    user {
+      username
+      email
+      workspaces {
+        count
+        edges {
+          node {
+            ...IWorkspace
+          }
+        }
+      }
+    }
+  }
+}

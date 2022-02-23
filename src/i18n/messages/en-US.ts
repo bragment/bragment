@@ -2,6 +2,7 @@ export default {
   backToSignIn: 'Back to sign in?',
   createNewProject: 'Create a new project...',
   createProject: 'Create Project',
+  defaultView: 'Default View',
   email: 'Email',
   existingEmail: 'Email already exists.',
   existingUsername: 'Username already exists.',
