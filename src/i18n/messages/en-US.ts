@@ -1,4 +1,8 @@
 export default {
+  addAnotherCard: 'Add another card.',
+  addAnotherColumn: 'Add another column.',
+  addCard: 'Add Card',
+  addColumn: 'Add Column',
   backToSignIn: 'Back to sign in?',
   createNewProject: 'Create a new project...',
   createProject: 'Create Project',
@@ -9,6 +13,8 @@ export default {
   forgotPassword: 'Forgot password?',
   haveAnAccount: 'Already have an account?',
   home: 'Home',
+  inputCardTitle: 'Input the card title...',
+  inputColumnTitle: 'Input the column title...',
   invalidUsernameOrPassword: 'Invalid username/password.',
   loading: 'Loading...',
   networkError: 'Network error, please try again later.',

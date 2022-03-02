@@ -3,17 +3,12 @@ import { memo } from 'react';
 import Scrollbars from 'react-custom-scrollbars';
 import ProjectList from '../../components/ProjectList';
 import ProjectCreator from '../../components/ProjectList/Creator';
-import { IProjectFragment, useGetAllProjectsQuery } from '../../graphql';
+import { useGetAllProjectsQuery } from '../../graphql';
 import styles from './index.module.scss';
 
 function HomePage() {
   const { data } = useGetAllProjectsQuery();
-  const projects: IProjectFragment[] = [];
-  data?.projects.edges?.forEach((el) => {
-    if (el?.node) {
-      projects.push(el.node);
-    }
-  });
+  const projects = data?.projects;
   return (
     <div className={styles.wrapper}>
       <Scrollbars autoHide>
@@ -26,7 +21,10 @@ function HomePage() {
             </Row>
           </div>
 
-          <ProjectList projects={projects} />
+          <ProjectList
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            projectIds={projects?.edges?.map((el) => el!.node!.objectId) || []}
+          />
         </div>
       </Scrollbars>
     </div>

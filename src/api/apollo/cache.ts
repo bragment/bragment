@@ -1,11 +1,19 @@
 import {
   ApolloCache,
+  ApolloClient,
   FieldPolicy,
   FieldReadFunction,
   InMemoryCache,
   TypedDocumentNode,
 } from '@apollo/client';
-import { IProjectFragmentDoc } from '../../graphql';
+import {
+  EClassName,
+  IProjectColumnFragment,
+  IProjectColumnFragmentDoc,
+  IProjectFragment,
+  IProjectFragmentDoc,
+  WriteProjectViewDocument,
+} from '../../graphql';
 
 function generateFieldPolicies(fieldToType: Record<string, string>) {
   const result: Record<string, FieldPolicy<any> | FieldReadFunction<any>> = {};
@@ -22,42 +30,84 @@ function generateFieldPolicies(fieldToType: Record<string, string>) {
   return result;
 }
 
-export function unshiftCachedField<
+export function unshiftCachedObjectList<
   C = any,
   D = any,
   E extends { edges: any[] } = any
 >(
-  field: string,
-  fragment: TypedDocumentNode,
-  __typename: string,
   cache: ApolloCache<C>,
+  fragment: TypedDocumentNode,
+  typeName: string,
+  listName: string,
   data: D
 ) {
-  cache.modify({
+  return cache.modify({
     fields: {
-      [field]: (existing: E) => {
-        const newProjectRef = cache.writeFragment({
+      [listName]: (existing: E) => {
+        const newRef = cache.writeFragment({
           data,
           fragment,
         });
         return {
           ...existing,
-          edges: [{ node: newProjectRef, __typename }, ...existing.edges],
+          edges: [{ node: newRef, __typename: typeName }, ...existing.edges],
         };
       },
     },
   });
 }
 
-export function unshiftCachedProjects<C = any, D = any>(
+export function unshiftCachedProjects<C = any>(
   cache: ApolloCache<C>,
-  data: D
+  data: IProjectFragment
 ) {
-  return unshiftCachedField(
-    'projects',
+  return unshiftCachedObjectList(
+    cache,
     IProjectFragmentDoc,
     'ProjectEdge',
+    'projects',
+    data
+  );
+}
+
+export function unshiftCachedProjectColumns<C = any>(
+  cache: ApolloCache<C>,
+  data: IProjectColumnFragment
+) {
+  return unshiftCachedObjectList(
     cache,
+    IProjectColumnFragmentDoc,
+    'ProjectColumnEdge',
+    'projectColumns',
+    data
+  );
+}
+
+export function updateCachedObject<C = any, D extends { id: string } = any>(
+  client: ApolloClient<C>,
+  fragment: TypedDocumentNode,
+  objectName: string,
+  objectData: D
+) {
+  return client.writeQuery({
+    query: fragment,
+    data: {
+      [objectName]: objectData,
+    },
+    variables: {
+      id: objectData.id,
+    },
+  });
+}
+
+export function updateCachedProjectView<
+  C = any,
+  D extends { id: string } = any
+>(client: ApolloClient<C>, data: D) {
+  return updateCachedObject(
+    client,
+    WriteProjectViewDocument,
+    'projectView',
     data
   );
 }
@@ -65,7 +115,11 @@ export function unshiftCachedProjects<C = any, D = any>(
 export const memoryCache = new InMemoryCache({
   typePolicies: {
     Query: {
-      fields: generateFieldPolicies({ project: 'Project' }),
+      fields: generateFieldPolicies({
+        project: EClassName.Project,
+        projectView: EClassName.ProjectView,
+        projectColumn: EClassName.ProjectColumn,
+      }),
     },
   },
 });

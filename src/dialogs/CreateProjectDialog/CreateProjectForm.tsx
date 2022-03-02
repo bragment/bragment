@@ -39,22 +39,14 @@ function CreateProjectForm(props: ICreateProjectFormProps) {
   const [form] = Form.useForm<ICreateProjectFormData>();
   const initialFormValues = useMemo<ICreateProjectFormData>(
     () => ({
-      workspace: { link: '' },
+      workspace: { link: defaultWorkspace?.objectId || '' },
       title: '',
       description: '',
       visibility: ProjectVisibility.Private,
       image: '',
       color: '',
     }),
-    []
-  );
-  const handleBgPopoverVisibleChange = useCallback((visible: boolean) => {
-    setBgPopoverVisible(visible);
-  }, []);
-  const handleBgChange = useCallback(
-    (bg: IBackground) =>
-      form.setFieldsValue({ image: bg.image || '', color: bg.color || '' }),
-    [form]
+    [defaultWorkspace]
   );
   const [addProject, { loading }] = useCreateProjectMutation({
     update(cache, response) {
@@ -64,6 +56,15 @@ function CreateProjectForm(props: ICreateProjectFormProps) {
       }
     },
   });
+
+  const handleBgPopoverVisibleChange = useCallback((visible: boolean) => {
+    setBgPopoverVisible(visible);
+  }, []);
+  const handleBgChange = useCallback(
+    (bg: IBackground) =>
+      form.setFieldsValue({ image: bg.image || '', color: bg.color || '' }),
+    [form]
+  );
   const handleSubmit = async () => {
     const fields = form.getFieldsValue();
     const input = {
@@ -78,13 +79,14 @@ function CreateProjectForm(props: ICreateProjectFormProps) {
   };
 
   useEffect(() => {
-    if (defaultWorkspace) {
-      form.setFieldsValue({ workspace: { link: defaultWorkspace.objectId } });
-    }
+    form.setFieldsValue({ workspace: { link: defaultWorkspace?.objectId } });
   }, [defaultWorkspace, form]);
 
   return (
-    <Form form={form} initialValues={initialFormValues}>
+    <Form
+      name="CreateProjectForm"
+      form={form}
+      initialValues={initialFormValues}>
       <Form.Item hidden name={['workspace', 'link']}>
         <input />
       </Form.Item>

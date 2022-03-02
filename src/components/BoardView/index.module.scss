@@ -1,0 +1,26 @@
+@import '../../styles/variables.scss';
+
+.container {
+  height: 100%;
+  background-color: $board-background-color;
+  display: inline-flex;
+  height: 100%;
+  min-width: 100%;
+  padding: $column-gutter-half + $header-height $column-gutter-half
+    $column-gutter-half $column-gutter-half;
+  position: relative;
+
+  .columnPlaceholder {
+    position: absolute;
+    display: none;
+    width: $column-width;
+    border-radius: $border-radius-base;
+    background-color: $column-placeholder-color;
+  }
+
+  &:not(.draggingOver) {
+    .columnPlaceholder {
+      display: none !important;
+    }
+  }
+}
