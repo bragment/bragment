@@ -1,5 +1,6 @@
 import { action, makeAutoObservable } from 'mobx';
 import type { IRandomPhoto } from '../../api/unsplash/types';
+import { IProjectFragment } from '../../graphql';
 
 const builtinColors = [
   '#2196f3',
@@ -13,6 +14,7 @@ const builtinColors = [
 ];
 
 class ProjectStore {
+  public current: IProjectFragment | undefined;
   public loading = false;
   public selectedBuiltinColor: string | null = null;
   public selectedUnsplashPhoto: IRandomPhoto | null = null;
@@ -24,6 +26,10 @@ class ProjectStore {
       setStandByUnsplashPhotos: action,
     });
   }
+
+  public setCurrent = (project: IProjectFragment | undefined) => {
+    this.current = project;
+  };
 
   public setLoading = (loading: boolean) => {
     this.loading = loading;

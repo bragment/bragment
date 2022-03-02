@@ -164,7 +164,10 @@ export type Class = {
 /** The CloudCodeFunction enum type contains a list of all available cloud code functions. */
 export enum CloudCodeFunction {
   CreateProject = 'createProject',
-  MigrateAllSchemas = 'migrateAllSchemas'
+  CreateProjectColumn = 'createProjectColumn',
+  MigrateAllSchemas = 'migrateAllSchemas',
+  MoveProjectColumn = 'moveProjectColumn',
+  UpdateProjectColumn = 'updateProjectColumn'
 }
 
 export type CreateClassInput = {
@@ -223,11 +226,24 @@ export type CreateProjectColumnFieldsInput = {
   /** This is the object createdBy. */
   createdBy?: InputMaybe<UserPointerInput>;
   /** This is the object itemOrder. */
-  itemOrder?: InputMaybe<Array<InputMaybe<Scalars['Any']>>>;
+  itemOrder: Array<InputMaybe<Scalars['Any']>>;
   /** This is the object project. */
-  project?: InputMaybe<ProjectPointerInput>;
+  project: ProjectPointerInput;
   /** This is the object title. */
-  title?: InputMaybe<Scalars['String']>;
+  title: Scalars['String'];
+};
+
+export type CreateProjectColumnInput = {
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  fields?: InputMaybe<CreateProjectColumnFieldsInput>;
+  viewId: Scalars['String'];
+};
+
+export type CreateProjectColumnPayload = {
+  __typename?: 'CreateProjectColumnPayload';
+  clientMutationId?: Maybe<Scalars['String']>;
+  projectColumn: ProjectColumn;
+  projectView: ProjectView;
 };
 
 /** The CreateProjectFieldsInput input type is used in operations that involve creation of objects in the Project class. */
@@ -242,11 +258,11 @@ export type CreateProjectFieldsInput = {
   /** This is the object image. */
   image?: InputMaybe<Scalars['String']>;
   /** This is the object title. */
-  title?: InputMaybe<Scalars['String']>;
+  title: Scalars['String'];
   /** This is the object visibility. */
   visibility?: InputMaybe<Scalars['String']>;
   /** This is the object workspace. */
-  workspace?: InputMaybe<WorkspacePointerInput>;
+  workspace: WorkspacePointerInput;
 };
 
 export type CreateProjectInput = {
@@ -282,24 +298,13 @@ export type CreateProjectPayload = {
 export type CreateProjectViewFieldsInput = {
   ACL?: InputMaybe<AclInput>;
   /** This is the object columnOrder. */
-  columnOrder?: InputMaybe<Array<InputMaybe<Scalars['Any']>>>;
+  columnOrder: Array<InputMaybe<Scalars['Any']>>;
   /** This is the object createdBy. */
   createdBy?: InputMaybe<UserPointerInput>;
   /** This is the object project. */
-  project?: InputMaybe<ProjectPointerInput>;
+  project: ProjectPointerInput;
   /** This is the object title. */
-  title?: InputMaybe<Scalars['String']>;
-};
-
-export type CreateProjectViewInput = {
-  clientMutationId?: InputMaybe<Scalars['String']>;
-  fields?: InputMaybe<CreateProjectViewFieldsInput>;
-};
-
-export type CreateProjectViewPayload = {
-  __typename?: 'CreateProjectViewPayload';
-  ProjectView: ProjectView;
-  clientMutationId?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
 };
 
 /** The CreateRoleFieldsInput input type is used in operations that involve creation of objects in the Role class. */
@@ -392,7 +397,7 @@ export type CreateWorkspaceFieldsInput = {
   /** This is the object createdBy. */
   createdBy?: InputMaybe<UserPointerInput>;
   /** This is the object name. */
-  name?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
   /** This is the object type. */
   type?: InputMaybe<Scalars['String']>;
 };
@@ -775,6 +780,25 @@ export type MigrationWhereInput = {
   updatedAt?: InputMaybe<DateWhereInput>;
 };
 
+export type MoveProjectColumnFieldsInput = {
+  afterId?: InputMaybe<Scalars['ID']>;
+  fromViewId?: InputMaybe<Scalars['ID']>;
+  toViewId: Scalars['ID'];
+};
+
+export type MoveProjectColumnInput = {
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  fields: MoveProjectColumnFieldsInput;
+  id: Scalars['ID'];
+};
+
+export type MoveProjectColumnPayload = {
+  __typename?: 'MoveProjectColumnPayload';
+  clientMutationId?: Maybe<Scalars['String']>;
+  fromProjectView?: Maybe<ProjectView>;
+  toProjectView: ProjectView;
+};
+
 /** Mutation is the top level type for mutations. */
 export type Mutation = {
   __typename?: 'Mutation';
@@ -787,7 +811,7 @@ export type Mutation = {
   /** The createMigration mutation can be used to create a new object of the Migration class. */
   createMigration?: Maybe<CreateMigrationPayload>;
   createProject?: Maybe<CreateProjectPayload>;
-  createProjectView?: Maybe<CreateProjectViewPayload>;
+  createProjectColumn?: Maybe<CreateProjectColumnPayload>;
   /** The createRole mutation can be used to create a new object of the Role class. */
   createRole?: Maybe<CreateRolePayload>;
   /** The createSession mutation can be used to create a new object of the Session class. */
@@ -810,6 +834,7 @@ export type Mutation = {
   logInWith?: Maybe<LogInWithPayload>;
   /** The logOut mutation can be used to log out an existing user. */
   logOut?: Maybe<LogOutPayload>;
+  moveProjectColumn?: Maybe<MoveProjectColumnPayload>;
   /** The resetPassword mutation can be used to reset the password of an existing user. */
   resetPassword?: Maybe<ResetPasswordPayload>;
   /** The sendVerificationEmail mutation can be used to send the verification email again. */
@@ -821,7 +846,7 @@ export type Mutation = {
   /** The updateMigration mutation can be used to update an object of the Migration class. */
   updateMigration?: Maybe<UpdateMigrationPayload>;
   updateProject?: Maybe<UpdateProjectPayload>;
-  updateProjectView?: Maybe<UpdateProjectViewPayload>;
+  updateProjectColumn?: Maybe<UpdateProjectColumnPayload>;
   /** The updateRole mutation can be used to update an object of the Role class. */
   updateRole?: Maybe<UpdateRolePayload>;
   /** The updateSession mutation can be used to update an object of the Session class. */
@@ -862,8 +887,8 @@ export type MutationCreateProjectArgs = {
 
 
 /** Mutation is the top level type for mutations. */
-export type MutationCreateProjectViewArgs = {
-  input: CreateProjectViewInput;
+export type MutationCreateProjectColumnArgs = {
+  input: CreateProjectColumnInput;
 };
 
 
@@ -934,6 +959,12 @@ export type MutationLogOutArgs = {
 
 
 /** Mutation is the top level type for mutations. */
+export type MutationMoveProjectColumnArgs = {
+  input: MoveProjectColumnInput;
+};
+
+
+/** Mutation is the top level type for mutations. */
 export type MutationResetPasswordArgs = {
   input: ResetPasswordInput;
 };
@@ -970,8 +1001,8 @@ export type MutationUpdateProjectArgs = {
 
 
 /** Mutation is the top level type for mutations. */
-export type MutationUpdateProjectViewArgs = {
-  input: UpdateProjectViewInput;
+export type MutationUpdateProjectColumnArgs = {
+  input: UpdateProjectColumnInput;
 };
 
 
@@ -1109,13 +1140,13 @@ export type Project = Node & ParseObject & {
   /** This is the object id. */
   objectId: Scalars['ID'];
   /** This is the object title. */
-  title?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
   /** This is the date in which the object was las updated. */
   updatedAt: Scalars['Date'];
   /** This is the object visibility. */
   visibility?: Maybe<Scalars['String']>;
   /** This is the object workspace. */
-  workspace?: Maybe<Workspace>;
+  workspace: Workspace;
 };
 
 /** The ProjectColumn object type is used in operations that involve outputting objects of ProjectColumn class. */
@@ -1129,13 +1160,13 @@ export type ProjectColumn = Node & ParseObject & {
   /** The ID of an object */
   id: Scalars['ID'];
   /** Use Inline Fragment on Array to get results: https://graphql.org/learn/queries/#inline-fragments */
-  itemOrder?: Maybe<Array<Maybe<ArrayResult>>>;
+  itemOrder: Array<Maybe<ArrayResult>>;
   /** This is the object id. */
   objectId: Scalars['ID'];
   /** This is the object project. */
-  project?: Maybe<Project>;
+  project: Project;
   /** This is the object title. */
-  title?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
   /** This is the date in which the object was las updated. */
   updatedAt: Scalars['Date'];
 };
@@ -1439,7 +1470,7 @@ export type ProjectView = Node & ParseObject & {
   __typename?: 'ProjectView';
   ACL: Acl;
   /** Use Inline Fragment on Array to get results: https://graphql.org/learn/queries/#inline-fragments */
-  columnOrder?: Maybe<Array<Maybe<ArrayResult>>>;
+  columnOrder: Array<Maybe<ArrayResult>>;
   /** This is the date in which the object was created. */
   createdAt: Scalars['Date'];
   /** This is the object createdBy. */
@@ -1449,9 +1480,9 @@ export type ProjectView = Node & ParseObject & {
   /** This is the object id. */
   objectId: Scalars['ID'];
   /** This is the object project. */
-  project?: Maybe<Project>;
+  project: Project;
   /** This is the object title. */
-  title?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
   /** This is the date in which the object was las updated. */
   updatedAt: Scalars['Date'];
 };
@@ -2521,6 +2552,18 @@ export type UpdateProjectColumnFieldsInput = {
   title?: InputMaybe<Scalars['String']>;
 };
 
+export type UpdateProjectColumnInput = {
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  fields?: InputMaybe<UpdateProjectColumnFieldsInput>;
+  id: Scalars['ID'];
+};
+
+export type UpdateProjectColumnPayload = {
+  __typename?: 'UpdateProjectColumnPayload';
+  clientMutationId?: Maybe<Scalars['String']>;
+  projectColumn: ProjectColumn;
+};
+
 /** The UpdateProjectFieldsInput input type is used in operations that involve creation of objects in the Project class. */
 export type UpdateProjectFieldsInput = {
   ACL?: InputMaybe<AclInput>;
@@ -2580,18 +2623,6 @@ export type UpdateProjectViewFieldsInput = {
   project?: InputMaybe<ProjectPointerInput>;
   /** This is the object title. */
   title?: InputMaybe<Scalars['String']>;
-};
-
-export type UpdateProjectViewInput = {
-  clientMutationId?: InputMaybe<Scalars['String']>;
-  fields?: InputMaybe<UpdateProjectViewFieldsInput>;
-  id: Scalars['ID'];
-};
-
-export type UpdateProjectViewPayload = {
-  __typename?: 'UpdateProjectViewPayload';
-  clientMutationId?: Maybe<Scalars['String']>;
-  project: ProjectView;
 };
 
 /** The UpdateRoleFieldsInput input type is used in operations that involve creation of objects in the Role class. */
@@ -2895,7 +2926,7 @@ export type Workspace = Node & ParseObject & {
   /** The ID of an object */
   id: Scalars['ID'];
   /** This is the object name. */
-  name?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
   /** This is the object id. */
   objectId: Scalars['ID'];
   /** This is the object type. */
@@ -2999,37 +3030,86 @@ export type WorkspaceWhereInput = {
   updatedAt?: InputMaybe<DateWhereInput>;
 };
 
-export type IProjectFragment = { __typename: 'Project', objectId: string, id: string, title?: string | null | undefined, description?: string | null | undefined, visibility?: string | null | undefined, image?: string | null | undefined, color?: string | null | undefined };
+export type IProjectFragment = { __typename: 'Project', objectId: string, id: string, title: string, description?: string | null | undefined, visibility?: string | null | undefined, image?: string | null | undefined, color?: string | null | undefined };
 
-export type IProjectViewFragment = { __typename: 'ProjectView', objectId: string, id: string, title?: string | null | undefined, columnOrder?: Array<{ __typename?: 'Element', value: any } | { __typename?: 'Migration' } | { __typename?: 'Project' } | { __typename?: 'ProjectColumn' } | { __typename?: 'ProjectItem' } | { __typename?: 'ProjectView' } | { __typename?: 'Role' } | { __typename?: 'Session' } | { __typename?: 'User' } | { __typename?: 'Workspace' } | null | undefined> | null | undefined };
+export type IProjectViewFragment = { __typename: 'ProjectView', objectId: string, id: string, title: string, columnOrder: Array<{ __typename?: 'Element', value: any } | { __typename?: 'Migration' } | { __typename?: 'Project' } | { __typename?: 'ProjectColumn' } | { __typename?: 'ProjectItem' } | { __typename?: 'ProjectView' } | { __typename?: 'Role' } | { __typename?: 'Session' } | { __typename?: 'User' } | { __typename?: 'Workspace' } | null | undefined> };
 
-export type IProjectColumnFragment = { __typename: 'ProjectColumn', objectId: string, id: string, title?: string | null | undefined, itemOrder?: Array<{ __typename?: 'Element', value: any } | { __typename?: 'Migration' } | { __typename?: 'Project' } | { __typename?: 'ProjectColumn' } | { __typename?: 'ProjectItem' } | { __typename?: 'ProjectView' } | { __typename?: 'Role' } | { __typename?: 'Session' } | { __typename?: 'User' } | { __typename?: 'Workspace' } | null | undefined> | null | undefined };
+export type IProjectColumnFragment = { __typename: 'ProjectColumn', objectId: string, id: string, title: string, itemOrder: Array<{ __typename?: 'Element', value: any } | { __typename?: 'Migration' } | { __typename?: 'Project' } | { __typename?: 'ProjectColumn' } | { __typename?: 'ProjectItem' } | { __typename?: 'ProjectView' } | { __typename?: 'Role' } | { __typename?: 'Session' } | { __typename?: 'User' } | { __typename?: 'Workspace' } | null | undefined> };
 
 export type CreateProjectMutationVariables = Exact<{
   input: CreateProjectInput;
 }>;
 
 
-export type CreateProjectMutation = { __typename?: 'Mutation', createProject?: { __typename?: 'CreateProjectPayload', project: { __typename: 'Project', objectId: string, id: string, title?: string | null | undefined, description?: string | null | undefined, visibility?: string | null | undefined, image?: string | null | undefined, color?: string | null | undefined } } | null | undefined };
+export type CreateProjectMutation = { __typename?: 'Mutation', createProject?: { __typename?: 'CreateProjectPayload', project: { __typename: 'Project', objectId: string, id: string, title: string, description?: string | null | undefined, visibility?: string | null | undefined, image?: string | null | undefined, color?: string | null | undefined } } | null | undefined };
+
+export type CreateProjectColumnMutationVariables = Exact<{
+  input: CreateProjectColumnInput;
+}>;
+
+
+export type CreateProjectColumnMutation = { __typename?: 'Mutation', createProjectColumn?: { __typename?: 'CreateProjectColumnPayload', projectColumn: { __typename: 'ProjectColumn', objectId: string, id: string, title: string, itemOrder: Array<{ __typename?: 'Element', value: any } | { __typename?: 'Migration' } | { __typename?: 'Project' } | { __typename?: 'ProjectColumn' } | { __typename?: 'ProjectItem' } | { __typename?: 'ProjectView' } | { __typename?: 'Role' } | { __typename?: 'Session' } | { __typename?: 'User' } | { __typename?: 'Workspace' } | null | undefined> }, projectView: { __typename: 'ProjectView', objectId: string, id: string, title: string, columnOrder: Array<{ __typename?: 'Element', value: any } | { __typename?: 'Migration' } | { __typename?: 'Project' } | { __typename?: 'ProjectColumn' } | { __typename?: 'ProjectItem' } | { __typename?: 'ProjectView' } | { __typename?: 'Role' } | { __typename?: 'Session' } | { __typename?: 'User' } | { __typename?: 'Workspace' } | null | undefined> } } | null | undefined };
+
+export type RenameProjectColumnMutationVariables = Exact<{
+  input: UpdateProjectColumnInput;
+}>;
+
+
+export type RenameProjectColumnMutation = { __typename?: 'Mutation', updateProjectColumn?: { __typename?: 'UpdateProjectColumnPayload', projectColumn: { __typename: 'ProjectColumn', objectId: string, id: string, title: string } } | null | undefined };
+
+export type MoveProjectColumnMutationVariables = Exact<{
+  input: MoveProjectColumnInput;
+}>;
+
+
+export type MoveProjectColumnMutation = { __typename?: 'Mutation', moveProjectColumn?: { __typename?: 'MoveProjectColumnPayload', fromProjectView?: { __typename: 'ProjectView', objectId: string, id: string, title: string, columnOrder: Array<{ __typename?: 'Element', value: any } | { __typename?: 'Migration' } | { __typename?: 'Project' } | { __typename?: 'ProjectColumn' } | { __typename?: 'ProjectItem' } | { __typename?: 'ProjectView' } | { __typename?: 'Role' } | { __typename?: 'Session' } | { __typename?: 'User' } | { __typename?: 'Workspace' } | null | undefined> } | null | undefined, toProjectView: { __typename: 'ProjectView', objectId: string, id: string, title: string, columnOrder: Array<{ __typename?: 'Element', value: any } | { __typename?: 'Migration' } | { __typename?: 'Project' } | { __typename?: 'ProjectColumn' } | { __typename?: 'ProjectItem' } | { __typename?: 'ProjectView' } | { __typename?: 'Role' } | { __typename?: 'Session' } | { __typename?: 'User' } | { __typename?: 'Workspace' } | null | undefined> } } | null | undefined };
+
+export type GetProjectAllItemsQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetProjectAllItemsQuery = { __typename?: 'Query', projectViews: { __typename?: 'ProjectViewConnection', count: number, edges?: Array<{ __typename?: 'ProjectViewEdge', node?: { __typename: 'ProjectView', objectId: string, id: string, title: string, columnOrder: Array<{ __typename?: 'Element', value: any } | { __typename?: 'Migration' } | { __typename?: 'Project' } | { __typename?: 'ProjectColumn' } | { __typename?: 'ProjectItem' } | { __typename?: 'ProjectView' } | { __typename?: 'Role' } | { __typename?: 'Session' } | { __typename?: 'User' } | { __typename?: 'Workspace' } | null | undefined> } | null | undefined } | null | undefined> | null | undefined }, projectColumns: { __typename?: 'ProjectColumnConnection', count: number, edges?: Array<{ __typename?: 'ProjectColumnEdge', node?: { __typename: 'ProjectColumn', objectId: string, id: string, title: string, itemOrder: Array<{ __typename?: 'Element', value: any } | { __typename?: 'Migration' } | { __typename?: 'Project' } | { __typename?: 'ProjectColumn' } | { __typename?: 'ProjectItem' } | { __typename?: 'ProjectView' } | { __typename?: 'Role' } | { __typename?: 'Session' } | { __typename?: 'User' } | { __typename?: 'Workspace' } | null | undefined> } | null | undefined } | null | undefined> | null | undefined } };
 
 export type GetProjectQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type GetProjectQuery = { __typename?: 'Query', project: { __typename: 'Project', objectId: string, id: string, title?: string | null | undefined, description?: string | null | undefined, visibility?: string | null | undefined, image?: string | null | undefined, color?: string | null | undefined }, projectViews: { __typename?: 'ProjectViewConnection', count: number, edges?: Array<{ __typename?: 'ProjectViewEdge', node?: { __typename: 'ProjectView', objectId: string, id: string, title?: string | null | undefined, columnOrder?: Array<{ __typename?: 'Element', value: any } | { __typename?: 'Migration' } | { __typename?: 'Project' } | { __typename?: 'ProjectColumn' } | { __typename?: 'ProjectItem' } | { __typename?: 'ProjectView' } | { __typename?: 'Role' } | { __typename?: 'Session' } | { __typename?: 'User' } | { __typename?: 'Workspace' } | null | undefined> | null | undefined } | null | undefined } | null | undefined> | null | undefined }, projectColumns: { __typename?: 'ProjectColumnConnection', count: number, edges?: Array<{ __typename?: 'ProjectColumnEdge', node?: { __typename: 'ProjectColumn', objectId: string, id: string, title?: string | null | undefined, itemOrder?: Array<{ __typename?: 'Element', value: any } | { __typename?: 'Migration' } | { __typename?: 'Project' } | { __typename?: 'ProjectColumn' } | { __typename?: 'ProjectItem' } | { __typename?: 'ProjectView' } | { __typename?: 'Role' } | { __typename?: 'Session' } | { __typename?: 'User' } | { __typename?: 'Workspace' } | null | undefined> | null | undefined } | null | undefined } | null | undefined> | null | undefined } };
+export type GetProjectQuery = { __typename?: 'Query', project: { __typename: 'Project', objectId: string, id: string, title: string, description?: string | null | undefined, visibility?: string | null | undefined, image?: string | null | undefined, color?: string | null | undefined } };
+
+export type GetProjectViewQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetProjectViewQuery = { __typename?: 'Query', projectView: { __typename: 'ProjectView', objectId: string, id: string, title: string, columnOrder: Array<{ __typename?: 'Element', value: any } | { __typename?: 'Migration' } | { __typename?: 'Project' } | { __typename?: 'ProjectColumn' } | { __typename?: 'ProjectItem' } | { __typename?: 'ProjectView' } | { __typename?: 'Role' } | { __typename?: 'Session' } | { __typename?: 'User' } | { __typename?: 'Workspace' } | null | undefined> } };
+
+export type GetProjectColumnQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetProjectColumnQuery = { __typename?: 'Query', projectColumn: { __typename: 'ProjectColumn', objectId: string, id: string, title: string, itemOrder: Array<{ __typename?: 'Element', value: any } | { __typename?: 'Migration' } | { __typename?: 'Project' } | { __typename?: 'ProjectColumn' } | { __typename?: 'ProjectItem' } | { __typename?: 'ProjectView' } | { __typename?: 'Role' } | { __typename?: 'Session' } | { __typename?: 'User' } | { __typename?: 'Workspace' } | null | undefined> } };
 
 export type GetAllProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllProjectsQuery = { __typename?: 'Query', projects: { __typename?: 'ProjectConnection', count: number, edges?: Array<{ __typename?: 'ProjectEdge', node?: { __typename: 'Project', objectId: string, id: string, title?: string | null | undefined, description?: string | null | undefined, visibility?: string | null | undefined, image?: string | null | undefined, color?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } };
+export type GetAllProjectsQuery = { __typename?: 'Query', projects: { __typename?: 'ProjectConnection', count: number, edges?: Array<{ __typename?: 'ProjectEdge', node?: { __typename: 'Project', objectId: string, id: string, title: string, description?: string | null | undefined, visibility?: string | null | undefined, image?: string | null | undefined, color?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } };
 
-export type IWorkspaceFragment = { __typename: 'Workspace', objectId: string, id: string, name?: string | null | undefined, type?: string | null | undefined };
+export type WriteProjectViewQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type WriteProjectViewQuery = { __typename?: 'Query', projectView: { __typename: 'ProjectView', objectId: string, id: string, title: string, columnOrder: Array<{ __typename?: 'Element', value: any } | { __typename?: 'Migration' } | { __typename?: 'Project' } | { __typename?: 'ProjectColumn' } | { __typename?: 'ProjectItem' } | { __typename?: 'ProjectView' } | { __typename?: 'Role' } | { __typename?: 'Session' } | { __typename?: 'User' } | { __typename?: 'Workspace' } | null | undefined> } };
+
+export type IWorkspaceFragment = { __typename: 'Workspace', objectId: string, id: string, name: string, type?: string | null | undefined };
 
 export type GetCurrentUserInfoQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCurrentUserInfoQuery = { __typename?: 'Query', viewer: { __typename?: 'Viewer', user: { __typename?: 'User', username?: string | null | undefined, email?: string | null | undefined, workspaces: { __typename?: 'WorkspaceConnection', count: number, edges?: Array<{ __typename?: 'WorkspaceEdge', node?: { __typename: 'Workspace', objectId: string, id: string, name?: string | null | undefined, type?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } } } };
+export type GetCurrentUserInfoQuery = { __typename?: 'Query', viewer: { __typename?: 'Viewer', user: { __typename?: 'User', username?: string | null | undefined, email?: string | null | undefined, workspaces: { __typename?: 'WorkspaceConnection', count: number, edges?: Array<{ __typename?: 'WorkspaceEdge', node?: { __typename: 'Workspace', objectId: string, id: string, name: string, type?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } } } };
 
 export const IProjectFragmentDoc = gql`
     fragment IProject on Project {
@@ -3113,11 +3193,123 @@ export function useCreateProjectMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateProjectMutationHookResult = ReturnType<typeof useCreateProjectMutation>;
 export type CreateProjectMutationResult = Apollo.MutationResult<CreateProjectMutation>;
 export type CreateProjectMutationOptions = Apollo.BaseMutationOptions<CreateProjectMutation, CreateProjectMutationVariables>;
-export const GetProjectDocument = gql`
-    query GetProject($id: ID!) {
-  project(id: $id) {
-    ...IProject
+export const CreateProjectColumnDocument = gql`
+    mutation CreateProjectColumn($input: CreateProjectColumnInput!) {
+  createProjectColumn(input: $input) {
+    projectColumn {
+      ...IProjectColumn
+    }
+    projectView {
+      ...IProjectView
+    }
   }
+}
+    ${IProjectColumnFragmentDoc}
+${IProjectViewFragmentDoc}`;
+export type CreateProjectColumnMutationFn = Apollo.MutationFunction<CreateProjectColumnMutation, CreateProjectColumnMutationVariables>;
+
+/**
+ * __useCreateProjectColumnMutation__
+ *
+ * To run a mutation, you first call `useCreateProjectColumnMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateProjectColumnMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createProjectColumnMutation, { data, loading, error }] = useCreateProjectColumnMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateProjectColumnMutation(baseOptions?: Apollo.MutationHookOptions<CreateProjectColumnMutation, CreateProjectColumnMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateProjectColumnMutation, CreateProjectColumnMutationVariables>(CreateProjectColumnDocument, options);
+      }
+export type CreateProjectColumnMutationHookResult = ReturnType<typeof useCreateProjectColumnMutation>;
+export type CreateProjectColumnMutationResult = Apollo.MutationResult<CreateProjectColumnMutation>;
+export type CreateProjectColumnMutationOptions = Apollo.BaseMutationOptions<CreateProjectColumnMutation, CreateProjectColumnMutationVariables>;
+export const RenameProjectColumnDocument = gql`
+    mutation RenameProjectColumn($input: UpdateProjectColumnInput!) {
+  updateProjectColumn(input: $input) {
+    projectColumn {
+      __typename
+      objectId
+      id
+      title
+    }
+  }
+}
+    `;
+export type RenameProjectColumnMutationFn = Apollo.MutationFunction<RenameProjectColumnMutation, RenameProjectColumnMutationVariables>;
+
+/**
+ * __useRenameProjectColumnMutation__
+ *
+ * To run a mutation, you first call `useRenameProjectColumnMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRenameProjectColumnMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [renameProjectColumnMutation, { data, loading, error }] = useRenameProjectColumnMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useRenameProjectColumnMutation(baseOptions?: Apollo.MutationHookOptions<RenameProjectColumnMutation, RenameProjectColumnMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RenameProjectColumnMutation, RenameProjectColumnMutationVariables>(RenameProjectColumnDocument, options);
+      }
+export type RenameProjectColumnMutationHookResult = ReturnType<typeof useRenameProjectColumnMutation>;
+export type RenameProjectColumnMutationResult = Apollo.MutationResult<RenameProjectColumnMutation>;
+export type RenameProjectColumnMutationOptions = Apollo.BaseMutationOptions<RenameProjectColumnMutation, RenameProjectColumnMutationVariables>;
+export const MoveProjectColumnDocument = gql`
+    mutation moveProjectColumn($input: MoveProjectColumnInput!) {
+  moveProjectColumn(input: $input) {
+    fromProjectView {
+      ...IProjectView
+    }
+    toProjectView {
+      ...IProjectView
+    }
+  }
+}
+    ${IProjectViewFragmentDoc}`;
+export type MoveProjectColumnMutationFn = Apollo.MutationFunction<MoveProjectColumnMutation, MoveProjectColumnMutationVariables>;
+
+/**
+ * __useMoveProjectColumnMutation__
+ *
+ * To run a mutation, you first call `useMoveProjectColumnMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMoveProjectColumnMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [moveProjectColumnMutation, { data, loading, error }] = useMoveProjectColumnMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useMoveProjectColumnMutation(baseOptions?: Apollo.MutationHookOptions<MoveProjectColumnMutation, MoveProjectColumnMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<MoveProjectColumnMutation, MoveProjectColumnMutationVariables>(MoveProjectColumnDocument, options);
+      }
+export type MoveProjectColumnMutationHookResult = ReturnType<typeof useMoveProjectColumnMutation>;
+export type MoveProjectColumnMutationResult = Apollo.MutationResult<MoveProjectColumnMutation>;
+export type MoveProjectColumnMutationOptions = Apollo.BaseMutationOptions<MoveProjectColumnMutation, MoveProjectColumnMutationVariables>;
+export const GetProjectAllItemsDocument = gql`
+    query GetProjectAllItems($id: ID!) {
   projectViews(where: {project: {have: {id: {equalTo: $id}}}}) {
     count
     edges {
@@ -3135,9 +3327,43 @@ export const GetProjectDocument = gql`
     }
   }
 }
-    ${IProjectFragmentDoc}
-${IProjectViewFragmentDoc}
+    ${IProjectViewFragmentDoc}
 ${IProjectColumnFragmentDoc}`;
+
+/**
+ * __useGetProjectAllItemsQuery__
+ *
+ * To run a query within a React component, call `useGetProjectAllItemsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectAllItemsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectAllItemsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetProjectAllItemsQuery(baseOptions: Apollo.QueryHookOptions<GetProjectAllItemsQuery, GetProjectAllItemsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetProjectAllItemsQuery, GetProjectAllItemsQueryVariables>(GetProjectAllItemsDocument, options);
+      }
+export function useGetProjectAllItemsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProjectAllItemsQuery, GetProjectAllItemsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetProjectAllItemsQuery, GetProjectAllItemsQueryVariables>(GetProjectAllItemsDocument, options);
+        }
+export type GetProjectAllItemsQueryHookResult = ReturnType<typeof useGetProjectAllItemsQuery>;
+export type GetProjectAllItemsLazyQueryHookResult = ReturnType<typeof useGetProjectAllItemsLazyQuery>;
+export type GetProjectAllItemsQueryResult = Apollo.QueryResult<GetProjectAllItemsQuery, GetProjectAllItemsQueryVariables>;
+export const GetProjectDocument = gql`
+    query GetProject($id: ID!) {
+  project(id: $id) {
+    ...IProject
+  }
+}
+    ${IProjectFragmentDoc}`;
 
 /**
  * __useGetProjectQuery__
@@ -3166,6 +3392,76 @@ export function useGetProjectLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type GetProjectQueryHookResult = ReturnType<typeof useGetProjectQuery>;
 export type GetProjectLazyQueryHookResult = ReturnType<typeof useGetProjectLazyQuery>;
 export type GetProjectQueryResult = Apollo.QueryResult<GetProjectQuery, GetProjectQueryVariables>;
+export const GetProjectViewDocument = gql`
+    query GetProjectView($id: ID!) {
+  projectView(id: $id) {
+    ...IProjectView
+  }
+}
+    ${IProjectViewFragmentDoc}`;
+
+/**
+ * __useGetProjectViewQuery__
+ *
+ * To run a query within a React component, call `useGetProjectViewQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectViewQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectViewQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetProjectViewQuery(baseOptions: Apollo.QueryHookOptions<GetProjectViewQuery, GetProjectViewQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetProjectViewQuery, GetProjectViewQueryVariables>(GetProjectViewDocument, options);
+      }
+export function useGetProjectViewLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProjectViewQuery, GetProjectViewQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetProjectViewQuery, GetProjectViewQueryVariables>(GetProjectViewDocument, options);
+        }
+export type GetProjectViewQueryHookResult = ReturnType<typeof useGetProjectViewQuery>;
+export type GetProjectViewLazyQueryHookResult = ReturnType<typeof useGetProjectViewLazyQuery>;
+export type GetProjectViewQueryResult = Apollo.QueryResult<GetProjectViewQuery, GetProjectViewQueryVariables>;
+export const GetProjectColumnDocument = gql`
+    query GetProjectColumn($id: ID!) {
+  projectColumn(id: $id) {
+    ...IProjectColumn
+  }
+}
+    ${IProjectColumnFragmentDoc}`;
+
+/**
+ * __useGetProjectColumnQuery__
+ *
+ * To run a query within a React component, call `useGetProjectColumnQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectColumnQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectColumnQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetProjectColumnQuery(baseOptions: Apollo.QueryHookOptions<GetProjectColumnQuery, GetProjectColumnQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetProjectColumnQuery, GetProjectColumnQueryVariables>(GetProjectColumnDocument, options);
+      }
+export function useGetProjectColumnLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProjectColumnQuery, GetProjectColumnQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetProjectColumnQuery, GetProjectColumnQueryVariables>(GetProjectColumnDocument, options);
+        }
+export type GetProjectColumnQueryHookResult = ReturnType<typeof useGetProjectColumnQuery>;
+export type GetProjectColumnLazyQueryHookResult = ReturnType<typeof useGetProjectColumnLazyQuery>;
+export type GetProjectColumnQueryResult = Apollo.QueryResult<GetProjectColumnQuery, GetProjectColumnQueryVariables>;
 export const GetAllProjectsDocument = gql`
     query GetAllProjects {
   projects(order: updatedAt_DESC) {
@@ -3205,6 +3501,41 @@ export function useGetAllProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type GetAllProjectsQueryHookResult = ReturnType<typeof useGetAllProjectsQuery>;
 export type GetAllProjectsLazyQueryHookResult = ReturnType<typeof useGetAllProjectsLazyQuery>;
 export type GetAllProjectsQueryResult = Apollo.QueryResult<GetAllProjectsQuery, GetAllProjectsQueryVariables>;
+export const WriteProjectViewDocument = gql`
+    query WriteProjectView($id: ID!) {
+  projectView(id: $id) {
+    ...IProjectView
+  }
+}
+    ${IProjectViewFragmentDoc}`;
+
+/**
+ * __useWriteProjectViewQuery__
+ *
+ * To run a query within a React component, call `useWriteProjectViewQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWriteProjectViewQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWriteProjectViewQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useWriteProjectViewQuery(baseOptions: Apollo.QueryHookOptions<WriteProjectViewQuery, WriteProjectViewQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<WriteProjectViewQuery, WriteProjectViewQueryVariables>(WriteProjectViewDocument, options);
+      }
+export function useWriteProjectViewLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WriteProjectViewQuery, WriteProjectViewQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<WriteProjectViewQuery, WriteProjectViewQueryVariables>(WriteProjectViewDocument, options);
+        }
+export type WriteProjectViewQueryHookResult = ReturnType<typeof useWriteProjectViewQuery>;
+export type WriteProjectViewLazyQueryHookResult = ReturnType<typeof useWriteProjectViewLazyQuery>;
+export type WriteProjectViewQueryResult = Apollo.QueryResult<WriteProjectViewQuery, WriteProjectViewQueryVariables>;
 export const GetCurrentUserInfoDocument = gql`
     query GetCurrentUserInfo {
   viewer {

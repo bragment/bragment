@@ -41,10 +41,40 @@ mutation CreateProject($input: CreateProjectInput!) {
   }
 }
 
-query GetProject($id: ID!) {
-  project(id: $id) {
-    ...IProject
+mutation CreateProjectColumn($input: CreateProjectColumnInput!) {
+  createProjectColumn(input: $input) {
+    projectColumn {
+      ...IProjectColumn
+    }
+    projectView {
+      ...IProjectView
+    }
   }
+}
+
+mutation RenameProjectColumn($input: UpdateProjectColumnInput!) {
+  updateProjectColumn(input: $input) {
+    projectColumn {
+      __typename
+      objectId
+      id
+      title
+    }
+  }
+}
+
+mutation moveProjectColumn($input: MoveProjectColumnInput!) {
+  moveProjectColumn(input: $input) {
+    fromProjectView {
+      ...IProjectView
+    }
+    toProjectView {
+      ...IProjectView
+    }
+  }
+}
+
+query GetProjectAllItems($id: ID!) {
   projectViews(where: { project: { have: { id: { equalTo: $id } } } }) {
     count
     edges {
@@ -63,6 +93,24 @@ query GetProject($id: ID!) {
   }
 }
 
+query GetProject($id: ID!) {
+  project(id: $id) {
+    ...IProject
+  }
+}
+
+query GetProjectView($id: ID!) {
+  projectView(id: $id) {
+    ...IProjectView
+  }
+}
+
+query GetProjectColumn($id: ID!) {
+  projectColumn(id: $id) {
+    ...IProjectColumn
+  }
+}
+
 query GetAllProjects {
   projects(order: updatedAt_DESC) {
     count
@@ -71,5 +119,11 @@ query GetAllProjects {
         ...IProject
       }
     }
+  }
+}
+
+query WriteProjectView($id: ID!) {
+  projectView(id: $id) {
+    ...IProjectView
   }
 }
