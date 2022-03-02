@@ -1,0 +1,217 @@
+@import '../../../../styles/variables.scss';
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  margin: $column-gutter-half;
+}
+
+.content {
+  flex: 0 1 auto;
+  position: relative;
+  background-color: $column-background-color;
+  &::before {
+    content: '';
+    display: block;
+    position: absolute;
+    height: 6px;
+    width: 100%;
+    top: 0;
+    background-color: $column-background-color;
+  }
+  .container {
+    position: relative;
+    min-height: 6px;
+    padding-top: 6px;
+    &:not(.draggingOver) {
+      .cardPlaceholder {
+        display: none !important;
+      }
+    }
+  }
+  .cardPlaceholder {
+    display: none;
+    width: $column-width;
+    border-radius: $column-border-radius;
+    background-color: rgba(46, 62, 79, 0.45);
+  }
+}
+
+.scrolled {
+  .content::before {
+    z-index: 1;
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.3);
+  }
+}
+
+// header
+.header {
+  border-top-left-radius: $column-border-radius;
+  border-top-right-radius: $column-border-radius;
+  flex: 0 0 auto;
+  display: block;
+  position: relative;
+  padding: $column-gutter-half $column-gutter-half 2px $column-gutter-half;
+  font-size: 14px;
+  width: $column-width;
+  height: $column-header-height;
+  line-height: $column-header-line-height;
+  background-color: $column-background-color;
+  .title {
+    display: inline-block;
+    width: calc(100% - $column-addon-width);
+  }
+  .text {
+    padding: 0 16px;
+    font-weight: bold;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    span {
+      cursor: text;
+    }
+  }
+  .form {
+    padding: 0 4px;
+    input {
+      font-weight: bold;
+    }
+  }
+}
+.hasShadow {
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.3);
+  z-index: 1;
+}
+
+// footer
+.footer {
+  flex: 0 0 auto;
+  display: block;
+  position: relative;
+  textarea {
+    resize: none;
+  }
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    z-index: 0;
+    width: $column-border-radius;
+    height: $column-border-radius;
+    top: 0;
+  }
+  &::before {
+    left: 0;
+    background-image: radial-gradient(
+      circle at 100% 100%,
+      rgba(0, 0, 0, 0) 0,
+      rgba(0, 0, 0, 0) 70.71%,
+      $column-background-color 70.71%
+    );
+  }
+  &::after {
+    right: 0;
+    background-image: radial-gradient(
+      circle at 0% 100%,
+      rgba(0, 0, 0, 0) 0,
+      rgba(0, 0, 0, 0) 70.71%,
+      $column-background-color 70.71%
+    );
+  }
+  .creator {
+    width: 100%;
+    margin: 0;
+    position: relative;
+    z-index: 1;
+  }
+}
+
+// creator
+.creator {
+  width: $column-width;
+  border-radius: $column-border-radius;
+  padding: $column-gutter-half;
+  margin: $column-gutter-half;
+  overflow: hidden;
+  .text {
+    cursor: pointer;
+    padding: 0 4px;
+    height: $column-header-height - $column-gutter-half * 2;
+    line-height: $column-header-height - $column-gutter-half * 2;
+    :global {
+      .anticon {
+        margin-right: 4px;
+      }
+    }
+  }
+  &.textMode {
+    height: $column-header-height;
+    color: var(--light-font-color);
+    background-image: linear-gradient(
+      60deg,
+      rgba(46, 62, 79, 0.7),
+      rgba(46, 62, 79, 0.7)
+    );
+    &:hover {
+      background-image: linear-gradient(
+        60deg,
+        rgba(46, 62, 79, 0.7),
+        rgba(46, 62, 79, 1)
+      );
+    }
+  }
+  &.formMode {
+    height: auto;
+    background-color: $column-background-color;
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.3);
+  }
+  .form {
+    padding-top: 0;
+    input {
+      font-weight: bold;
+    }
+  }
+  .actions {
+    margin: 10px 0 3px 0;
+  }
+  .close {
+    margin-left: 12px;
+  }
+}
+
+.creator,
+.header {
+  :global {
+    .ant-form-item {
+      margin-bottom: 0;
+    }
+  }
+}
+
+@mixin rightAddon($fontSize, $width, $height) {
+  cursor: pointer;
+  display: inline-block;
+  position: absolute;
+  right: $column-gutter-half;
+  width: $width;
+  height: $height;
+  line-height: $height;
+  text-align: center;
+  font-size: $fontSize;
+  :global {
+    .anticon {
+      margin-right: 0;
+    }
+  }
+}
+
+.header .addon {
+  @include rightAddon(12px, $column-addon-width, $column-header-line-height);
+}
+.footer .addon {
+  @include rightAddon(16px, $column-addon-width, $column-addon-width);
+  bottom: $column-gutter-half + 1px;
+}
+.creator.formMode .addon {
+  bottom: $column-gutter-half + 7px;
+}

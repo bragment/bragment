@@ -1,4 +1,8 @@
 export default {
+  addAnotherCard: '添加另一张卡片',
+  addAnotherColumn: '添加另一个列表',
+  addCard: '添加卡片',
+  addColumn: '添加列表',
   backToSignIn: '返回登录？',
   createNewProject: '创建新项目...',
   createProject: '创建项目',
@@ -9,6 +13,8 @@ export default {
   forgotPassword: '忘记密码？',
   haveAnAccount: '已有账号？',
   home: '主页',
+  inputCardTitle: '输入卡片标题...',
+  inputColumnTitle: '输入列表标题...',
   invalidUsernameOrPassword: '无效的用户名或密码',
   loading: '正在加载...',
   networkError: '网络出错，请稍后再试',

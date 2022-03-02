@@ -28,3 +28,4 @@ export function createApolloClient() {
 }
 
 export * from './cache';
+export * from './utils';

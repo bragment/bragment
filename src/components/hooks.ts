@@ -1,6 +1,14 @@
 import type { PrimitiveType } from 'intl-messageformat';
 import { useCallback, useContext } from 'react';
 import { useIntl } from 'react-intl';
+import { convertToGlobalId } from '../api/apollo';
+import {
+  EClassName,
+  useGetProjectAllItemsQuery,
+  useGetProjectColumnQuery,
+  useGetProjectQuery,
+  useGetProjectViewQuery,
+} from '../graphql';
 import type { ILocalMessages } from '../i18n/types';
 import { AppContext } from '../stores';
 
@@ -33,4 +41,28 @@ export function useFormatMessage(): (
     (id, values) => intl.formatMessage({ id }, values),
     [intl]
   );
+}
+
+export function useGetProject(objectId: string) {
+  return useGetProjectQuery({
+    variables: { id: convertToGlobalId(EClassName.Project, objectId) },
+  });
+}
+
+export function useGetProjectAllItems(objectId: string) {
+  return useGetProjectAllItemsQuery({
+    variables: { id: convertToGlobalId(EClassName.Project, objectId) },
+  });
+}
+
+export function useGetProjectView(objectId: string) {
+  return useGetProjectViewQuery({
+    variables: { id: convertToGlobalId(EClassName.ProjectView, objectId) },
+  });
+}
+
+export function useGetProjectColumn(objectId: string) {
+  return useGetProjectColumnQuery({
+    variables: { id: convertToGlobalId(EClassName.ProjectColumn, objectId) },
+  });
 }

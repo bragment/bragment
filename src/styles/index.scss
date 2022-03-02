@@ -74,6 +74,9 @@ body {
   .middle-input-with-prefix-and-suffix {
     @include _input(14px, 4px, 11px, true, true);
   }
+  .middle-input-without-affix {
+    @include _input(14px, 4px, 11px, false, false);
+  }
 
   .text-logo {
     height: 100%;
