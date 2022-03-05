@@ -34,10 +34,10 @@ function ForgotPasswordForm(props: IForgotPasswordFormProps) {
       // TODO: should show email sent message
     } catch (error: any) {
       switch (error.code) {
-        case EUserErrorCode.PASSWORD_INVALID:
+        case EUserErrorCode.PasswordInvalid:
           setFormFieldError(form, 'email', f('invalidUsernameOrPassword'));
           break;
-        case EUserErrorCode.INTERNET_DISCONNECTED:
+        case EUserErrorCode.InternetDisconnected:
         default:
           setFormFieldError(form, 'email', f('networkError'));
           break;

@@ -6,11 +6,15 @@ $header-height: 48px;
 // for board view
 $board-background-color: rgba(215, 215, 215, 0.4);
 $column-addon-width: 32px;
-$column-background-color: white;
+$column-background-color: rgb(246, 246, 246);
 $column-border-radius: $border-radius-base;
 $column-gutter: 16px;
 $column-gutter-half: 8px;
 $column-header-height: 50px;
 $column-header-line-height: 40px;
+$column-content-padding-top: 6px;
 $column-placeholder-color: rgba(46, 62, 79, 0.45);
 $column-width: 280px;
+$card-gutter: 12px;
+$card-gutter-half: 6px;
+$card-width: $column-width - $card-gutter - $card-gutter;

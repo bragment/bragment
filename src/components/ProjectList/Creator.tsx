@@ -23,7 +23,7 @@ function ProjectCreator() {
     } else if (signedIn) {
       setCreateProjectDialogVisible(true);
     } else {
-      setSignInDialogVisible(true, ESignInDialogTabKey.SIGN_IN);
+      setSignInDialogVisible(true, ESignInDialogTabKey.SignIn);
     }
   };
   return (

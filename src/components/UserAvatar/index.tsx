@@ -18,9 +18,9 @@ const UserAvatar = () => {
     useGetCurrentUserInfoLazyQuery();
 
   const showSignInDialog = () =>
-    setSignInDialogVisible(true, ESignInDialogTabKey.SIGN_IN);
+    setSignInDialogVisible(true, ESignInDialogTabKey.SignIn);
   const showSignUpDialog = () =>
-    setSignInDialogVisible(true, ESignInDialogTabKey.SIGN_UP);
+    setSignInDialogVisible(true, ESignInDialogTabKey.SignUp);
 
   useEffect(() => {
     if (current) {

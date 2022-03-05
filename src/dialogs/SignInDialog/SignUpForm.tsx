@@ -36,13 +36,13 @@ function SignUpForm(props: ISignUpFormProps) {
       form.resetFields();
     } catch (error: any) {
       switch (error.code) {
-        case EUserErrorCode.USERNAME_EXISTS:
+        case EUserErrorCode.UsernameExists:
           setFormFieldError(form, 'username', f('existingUsername'));
           break;
-        case EUserErrorCode.EMAIL_EXISTS:
+        case EUserErrorCode.EmailExists:
           setFormFieldError(form, 'email', f('existingEmail'));
           break;
-        case EUserErrorCode.INTERNET_DISCONNECTED:
+        case EUserErrorCode.InternetDisconnected:
         default:
           setFormFieldError(form, 'username', f('networkError'));
           break;

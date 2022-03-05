@@ -14,15 +14,15 @@
     content: '';
     display: block;
     position: absolute;
-    height: 6px;
+    height: $column-content-padding-top;
     width: 100%;
     top: 0;
     background-color: $column-background-color;
   }
   .container {
     position: relative;
-    min-height: 6px;
-    padding-top: 6px;
+    min-height: $column-content-padding-top;
+    padding-top: $column-content-padding-top;
     &:not(.draggingOver) {
       .cardPlaceholder {
         display: none !important;
@@ -31,7 +31,7 @@
   }
   .cardPlaceholder {
     display: none;
-    width: $column-width;
+    width: $card-width;
     border-radius: $column-border-radius;
     background-color: rgba(46, 62, 79, 0.45);
   }
@@ -77,10 +77,6 @@
       font-weight: bold;
     }
   }
-}
-.hasShadow {
-  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.3);
-  z-index: 1;
 }
 
 // footer

@@ -4,17 +4,17 @@ import { getSmallImageUrl } from '../../api/unsplash/helpers';
 import { useGetProject } from '../hooks';
 import ProgressiveBackground from '../ProgressiveBackground';
 import styles from './index.module.scss';
-interface IProjectItemProps {
+interface IProjectProps {
   objectId: string;
 }
 
-function ProjectItem(props: IProjectItemProps) {
+function Project(props: IProjectProps) {
   const { objectId } = props;
   const { data: projectData } = useGetProject(objectId);
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const { title, image, color } = projectData!.project!;
   return (
-    <AntCard className={styles.item} bordered={false} hoverable>
+    <AntCard className={styles.project} bordered={false} hoverable>
       <ProgressiveBackground
         className={styles.background}
         color={color || undefined}
@@ -29,4 +29,4 @@ function ProjectItem(props: IProjectItemProps) {
   );
 }
 
-export default memo(ProjectItem);
+export default memo(Project);

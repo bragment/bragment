@@ -1,5 +1,4 @@
 import { Form, Input } from 'antd';
-import classnames from 'classnames';
 import { memo, KeyboardEvent as ReactKeyboardEvent, useMemo } from 'react';
 import { useRenameProjectColumnMutation } from '../../../../graphql';
 
@@ -66,7 +65,7 @@ function RenameColumnForm(props: IRenameColumnFormProps) {
       <Form.Item name="title">
         <Input
           autoFocus
-          className={classnames('middle-input-without-affix')}
+          className="middle-input-without-affix"
           placeholder={defaultTitle}
           onBlur={handleInputBlur}
           onPressEnter={handleSubmit}

@@ -1,10 +1,10 @@
 import Parse from 'parse';
 
 export enum EUserErrorCode {
-  INTERNET_DISCONNECTED = 100,
-  PASSWORD_INVALID = 101,
-  USERNAME_EXISTS = 202,
-  EMAIL_EXISTS = 203,
+  InternetDisconnected = 100,
+  PasswordInvalid = 101,
+  UsernameExists = 202,
+  EmailExists = 203,
 }
 
 export function signUp(username: string, password: string, email?: string) {

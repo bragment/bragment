@@ -21,11 +21,11 @@ function Navigator() {
       collapsed={collapsed}
       onCollapse={handleCollapse}>
       <Menu selectedKeys={[location.pathname]}>
-        <Menu.Item key={ERoutePath.HOME} icon={<AppstoreOutlined />}>
-          <Link to={ERoutePath.HOME}>{f('home')}</Link>
+        <Menu.Item key={ERoutePath.Home} icon={<AppstoreOutlined />}>
+          <Link to={ERoutePath.Home}>{f('home')}</Link>
         </Menu.Item>
-        <Menu.Item key={ERoutePath.SETTING} icon={<SettingOutlined />}>
-          <Link to={ERoutePath.SETTING}>{f('setting')}</Link>
+        <Menu.Item key={ERoutePath.Setting} icon={<SettingOutlined />}>
+          <Link to={ERoutePath.Setting}>{f('setting')}</Link>
         </Menu.Item>
       </Menu>
     </Layout.Sider>

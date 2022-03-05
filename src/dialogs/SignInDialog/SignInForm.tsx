@@ -37,10 +37,10 @@ function SignInForm(props: ISignInFormProps) {
       form.resetFields();
     } catch (error: any) {
       switch (error.code) {
-        case EUserErrorCode.PASSWORD_INVALID:
+        case EUserErrorCode.PasswordInvalid:
           setFormFieldError(form, 'username', f('invalidUsernameOrPassword'));
           break;
-        case EUserErrorCode.INTERNET_DISCONNECTED:
+        case EUserErrorCode.InternetDisconnected:
         default:
           setFormFieldError(form, 'username', f('networkError'));
           break;

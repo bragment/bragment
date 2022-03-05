@@ -8,12 +8,14 @@ import {
 } from '@apollo/client';
 import {
   EClassName,
+  GetProjectColumnDocument,
+  GetProjectViewDocument,
   IProjectColumnFragment,
   IProjectColumnFragmentDoc,
   IProjectFragment,
   IProjectFragmentDoc,
-  WriteProjectViewDocument,
 } from '../../graphql';
+import { convertToGlobalId } from './utils';
 
 function generateFieldPolicies(fieldToType: Record<string, string>) {
   const result: Record<string, FieldPolicy<any> | FieldReadFunction<any>> = {};
@@ -83,7 +85,21 @@ export function unshiftCachedProjectColumns<C = any>(
   );
 }
 
-export function updateCachedObject<C = any, D extends { id: string } = any>(
+export function readCachedObject<C = any>(
+  client: ApolloClient<C>,
+  fragment: TypedDocumentNode,
+  className: string,
+  objectId: string
+) {
+  return client.readQuery({
+    query: fragment,
+    variables: {
+      id: convertToGlobalId(className, objectId),
+    },
+  });
+}
+
+export function writeCachedObject<C = any, D extends { id: string } = any>(
   client: ApolloClient<C>,
   fragment: TypedDocumentNode,
   objectName: string,
@@ -100,16 +116,36 @@ export function updateCachedObject<C = any, D extends { id: string } = any>(
   });
 }
 
-export function updateCachedProjectView<
+export function writeCachedProjectView<C = any, D extends { id: string } = any>(
+  client: ApolloClient<C>,
+  data: D
+) {
+  return writeCachedObject(client, GetProjectViewDocument, 'projectView', data);
+}
+
+export function writeCachedProjectColumn<
   C = any,
   D extends { id: string } = any
 >(client: ApolloClient<C>, data: D) {
-  return updateCachedObject(
+  return writeCachedObject(
     client,
-    WriteProjectViewDocument,
-    'projectView',
+    GetProjectColumnDocument,
+    'projectColumn',
     data
   );
+}
+
+export function readCachedProjectColumn<C = any>(
+  client: ApolloClient<C>,
+  objectId: string
+) {
+  const result = readCachedObject(
+    client,
+    GetProjectColumnDocument,
+    EClassName.ProjectColumn,
+    objectId
+  );
+  return result ? (result.projectColumn as IProjectColumnFragment) : undefined;
 }
 
 export const memoryCache = new InMemoryCache({
@@ -119,6 +155,7 @@ export const memoryCache = new InMemoryCache({
         project: EClassName.Project,
         projectView: EClassName.ProjectView,
         projectColumn: EClassName.ProjectColumn,
+        projectItem: EClassName.ProjectItem,
       }),
     },
   },

@@ -1,9 +1,9 @@
 export enum EDragType {
-  Column = 'Column',
-  Card = 'Card',
+  Column = 'COLUMN',
+  Card = 'CARD',
 }
 
 export enum ETitleMode {
-  Text = 'Text',
-  Form = 'Form',
+  Text = 'TEXT',
+  Form = 'FORM',
 }
