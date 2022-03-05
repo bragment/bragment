@@ -1,0 +1,23 @@
+@import '../../../../styles/variables.scss';
+
+.wrapper {
+  width: $card-width;
+  margin: 0 $card-gutter $card-gutter $card-gutter;
+  padding: 0;
+
+  .body {
+    padding: 8px;
+  }
+
+  :global {
+    .ant-card-body {
+      height: 100%;
+      padding: 0px;
+      overflow: hidden;
+      border-radius: 2px;
+    }
+    .ant-btn-link {
+      padding: 0;
+    }
+  }
+}

@@ -3,7 +3,7 @@ import { ESignInDialogTabKey } from '../types';
 
 class DialogStore {
   public createProjectDialogVisible = false;
-  public signInDialogCurrentTab = ESignInDialogTabKey.SIGN_IN;
+  public signInDialogCurrentTab = ESignInDialogTabKey.SignIn;
   public signInDialogVisible = false;
 
   constructor() {

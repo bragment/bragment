@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import { memo, useCallback, useRef } from 'react';
+import { memo, useCallback, useRef, useState } from 'react';
 import {
   Draggable,
   DraggableProvided,
@@ -13,7 +13,13 @@ import {
   Scrollbars,
 } from 'react-custom-scrollbars';
 
+import { Element } from '../../../../graphql';
 import { useGetProjectColumn } from '../../../hooks';
+import CardList from '../../CardList';
+import {
+  calculateColumnBodyScrollBarMaxHeightByFooterHeight,
+  defaultColumnBodyScrollBarMaxHeight,
+} from '../../helpers';
 import { EDragType } from '../../types';
 import Footer from './Footer';
 import Header from './Header';
@@ -28,7 +34,11 @@ function Column(props: IColumnProps) {
   const { objectId, index } = props;
   const { data: columnData } = useGetProjectColumn(objectId);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
+  const [scrollbarMaxHeight, setScrollbarMaxHeight] = useState(
+    defaultColumnBodyScrollBarMaxHeight
+  );
   const column = columnData?.projectColumn;
+  const itemOrder = column?.itemOrder as Element[] | undefined;
 
   const handleScrollFrame = useCallback((values: IPositionValues) => {
     if (values.scrollTop !== 0) {
@@ -37,6 +47,13 @@ function Column(props: IColumnProps) {
       wrapperRef.current?.classList.remove(styles.scrolled);
     }
   }, []);
+
+  const handleFooterHeightChange = useCallback((footerHeight?: number) => {
+    setScrollbarMaxHeight(
+      calculateColumnBodyScrollBarMaxHeightByFooterHeight(footerHeight)
+    );
+  }, []);
+
   return column ? (
     <Draggable draggableId={objectId} index={index}>
       {(
@@ -58,6 +75,7 @@ function Column(props: IColumnProps) {
           />
           <Scrollbars
             className={styles.content}
+            autoHeightMax={scrollbarMaxHeight}
             autoHeight
             autoHide
             onUpdate={handleScrollFrame}
@@ -75,13 +93,18 @@ function Column(props: IColumnProps) {
                   )}
                   {...dropProvided.droppableProps}>
                   <div className={styles.cardPlaceholder} />
-                  {/* TODO: <CardList></CardList> */}
+                  {itemOrder && (
+                    <CardList cardIds={itemOrder.map((el) => el.value)} />
+                  )}
                   {dropProvided.placeholder}
                 </div>
               )}
             </Droppable>
           </Scrollbars>
-          <Footer objectId={objectId} />
+          <Footer
+            objectId={objectId}
+            onHeightChange={handleFooterHeightChange}
+          />
         </div>
       )}
     </Draggable>

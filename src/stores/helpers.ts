@@ -12,7 +12,7 @@ export function initializeStores() {
     if (user.current) {
       dialog.setSignInDialogVisible(false);
     } else {
-      dialog.setSignInDialogVisible(true, ESignInDialogTabKey.SIGN_IN);
+      dialog.setSignInDialogVisible(true, ESignInDialogTabKey.SignIn);
     }
   });
 }

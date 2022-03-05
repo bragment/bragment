@@ -1,8 +1,9 @@
 import { useApolloClient } from '@apollo/client';
 import classnames from 'classnames';
-import { memo, useCallback } from 'react';
+import { memo, useCallback, useRef } from 'react';
 import {
   DragDropContext,
+  DraggableLocation,
   DragStart,
   DragUpdate,
   Droppable,
@@ -11,16 +12,25 @@ import {
   DropResult,
 } from 'react-beautiful-dnd';
 import { Scrollbars } from 'react-custom-scrollbars';
-import { generateElement, updateCachedProjectView } from '../../api/apollo';
-import { Element, useMoveProjectColumnMutation } from '../../graphql';
+import {
+  generateElement,
+  readCachedProjectColumn,
+  writeCachedProjectColumn,
+  writeCachedProjectView,
+} from '../../api/apollo';
+import {
+  Element,
+  useMoveProjectColumnMutation,
+  useMoveProjectItemMutation,
+} from '../../graphql';
 import { useGetProjectView } from '../hooks';
 import ColumnList from './ColumnList';
 import ColumnCreator from './ColumnList/Creator';
 import {
-  getColumnPlaceholder,
+  draggingHandlers,
+  getCardWrapperId,
   getColumnWrapperId,
-  handleColumnDragStart,
-  handleColumnDragUpdate,
+  requestAutoScrolling,
 } from './helpers';
 
 import { EDragType } from './types';
@@ -35,60 +45,141 @@ function BoardView(props: IBoardViewProps) {
   const client = useApolloClient();
   const { data } = useGetProjectView(objectId);
   const [moveProjectColumn] = useMoveProjectColumnMutation();
+  const [moveProjectItem] = useMoveProjectItemMutation();
+  const scrollBarRef = useRef<Scrollbars>(null);
+  const draggingDivRef = useRef<HTMLDivElement>();
+  const stopAutoScrollingRef = useRef<() => unknown>();
   const view = data?.projectView;
   const columnOrder = view?.columnOrder as Element[] | undefined;
 
-  const handleDragEnd = useCallback(
-    async (result: DropResult) => {
-      const { destination, source, type } = result;
-      if (!view || !columnOrder || !destination) {
+  const moveColumn = useCallback(
+    async (source: DraggableLocation, destination: DraggableLocation) => {
+      const { index: fromIndex } = source;
+      const { index: toIndex } = destination;
+      const columnId = getColumnWrapperId(fromIndex);
+      if (!view || !columnId || fromIndex === toIndex) {
         return;
       }
-      if (type === EDragType.Column) {
-        getColumnPlaceholder()?.removeAttribute('style');
-        const columnId = getColumnWrapperId(source.index);
-        if (!columnId || source.index === destination.index) {
-          return;
-        }
-        const newColumnOrder = [...columnOrder];
-        newColumnOrder.splice(source.index, 1);
-        newColumnOrder.splice(destination.index, 0, generateElement(columnId));
-        const afterColumnId: string | undefined =
-          newColumnOrder[destination.index - 1]?.value;
-        updateCachedProjectView(client, {
-          ...view,
-          columnOrder: newColumnOrder,
-        });
-        await moveProjectColumn({
-          variables: {
-            input: {
-              id: columnId,
-              fields: { toViewId: view.objectId, afterId: afterColumnId },
-            },
+      const newColumnOrder = [...view.columnOrder] as Element[];
+      newColumnOrder.splice(fromIndex, 1);
+      newColumnOrder.splice(toIndex, 0, generateElement(columnId));
+      const toViewId = view.objectId;
+      const afterId: string | undefined = newColumnOrder[toIndex - 1]?.value;
+      writeCachedProjectView(client, {
+        ...view,
+        columnOrder: newColumnOrder,
+      });
+      await moveProjectColumn({
+        variables: {
+          input: {
+            id: columnId,
+            fields: { toViewId, afterId },
           },
+        },
+      });
+    },
+    [client, view, moveProjectColumn]
+  );
+
+  const moveCard = useCallback(
+    async (source: DraggableLocation, destination: DraggableLocation) => {
+      const { index: fromIndex, droppableId: fromColumnId } = source;
+      const { index: toIndex, droppableId: toColumnId } = destination;
+      const itemId = getCardWrapperId(fromColumnId, fromIndex);
+      const sameColumn = fromColumnId === toColumnId;
+      const toColumn = readCachedProjectColumn(client, toColumnId);
+      const fromColumn = sameColumn
+        ? toColumn
+        : readCachedProjectColumn(client, fromColumnId);
+      if (
+        !itemId ||
+        !fromColumn ||
+        !toColumn ||
+        (sameColumn && fromIndex === toIndex)
+      ) {
+        return;
+      }
+      const newToItemOrder = [...toColumn.itemOrder] as Element[];
+      const newFromItemOrder = sameColumn
+        ? newToItemOrder
+        : ([...fromColumn.itemOrder] as Element[]);
+      newFromItemOrder.splice(fromIndex, 1);
+      newToItemOrder.splice(toIndex, 0, generateElement(itemId));
+      const afterId: string | undefined = newToItemOrder[toIndex - 1]?.value;
+      writeCachedProjectColumn(client, {
+        ...toColumn,
+        itemOrder: newToItemOrder,
+      });
+      if (!sameColumn) {
+        writeCachedProjectColumn(client, {
+          ...fromColumn,
+          itemOrder: newFromItemOrder,
         });
       }
+      await moveProjectItem({
+        variables: {
+          input: {
+            id: itemId,
+            fields: { toColumnId, fromColumnId, afterId },
+          },
+        },
+      });
     },
-    [moveProjectColumn, client, view, columnOrder]
+    [client, moveProjectItem]
+  );
+
+  const handleDragEnd = useCallback(
+    async (result: DropResult) => {
+      stopAutoScrollingRef.current && stopAutoScrollingRef.current();
+      stopAutoScrollingRef.current = undefined;
+      draggingDivRef.current = undefined;
+      const { destination, source, type } = result;
+      if (!destination) {
+        return;
+      }
+      draggingHandlers.dragEnd[type as EDragType](destination);
+      if (type === EDragType.Column) {
+        moveColumn(source, destination);
+      }
+      if (type === EDragType.Card) {
+        moveCard(source, destination);
+      }
+    },
+    [moveColumn, moveCard]
   );
   const handleDragStart = useCallback((initial: DragStart) => {
     const { source, type } = initial;
-    if (type === EDragType.Column) {
-      handleColumnDragStart(source);
+    const div = (draggingDivRef.current =
+      draggingHandlers.getDragging[type as EDragType](source) || undefined);
+    if (div) {
+      draggingHandlers.dragStart[type as EDragType](div, source);
+      const boardDiv = div.closest('.' + styles.container);
+      const scrollDiv = boardDiv?.parentElement;
+      const scrollBar = scrollBarRef.current;
+      // HACK: See https://github.com/atlassian/react-beautiful-dnd/issues/131
+      if (type === EDragType.Card && scrollDiv && scrollBar) {
+        stopAutoScrollingRef.current = requestAutoScrolling(
+          div,
+          scrollDiv,
+          () => scrollBar.scrollLeft(scrollDiv.scrollLeft + 10),
+          () => scrollBar.scrollLeft(scrollDiv.scrollLeft - 10)
+        );
+      }
     }
   }, []);
   const handleDragUpdate = useCallback((initial: DragUpdate) => {
-    const { destination, source, type } = initial;
+    const { destination, type } = initial;
     if (!destination) {
       return;
     }
-    if (type === EDragType.Column) {
-      handleColumnDragUpdate(source, destination);
+    const div = draggingDivRef.current;
+    if (div) {
+      draggingHandlers.dragUpdate[type as EDragType](div, destination);
     }
   }, []);
 
   return (
-    <Scrollbars autoHide>
+    <Scrollbars ref={scrollBarRef} autoHide>
       <DragDropContext
         onDragStart={handleDragStart}
         onDragUpdate={handleDragUpdate}
@@ -99,6 +190,7 @@ function BoardView(props: IBoardViewProps) {
           direction="horizontal">
           {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => (
             <div
+              id={objectId}
               ref={provided.innerRef}
               className={classnames(
                 styles.container,
@@ -111,7 +203,7 @@ function BoardView(props: IBoardViewProps) {
               )}
               {provided.placeholder}
               {view && (
-                <div className={styles.actions}>
+                <div>
                   <ColumnCreator viewId={view.objectId} />
                 </div>
               )}

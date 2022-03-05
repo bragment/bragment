@@ -6,6 +6,7 @@ import {
   EClassName,
   useGetProjectAllItemsQuery,
   useGetProjectColumnQuery,
+  useGetProjectItemQuery,
   useGetProjectQuery,
   useGetProjectViewQuery,
 } from '../graphql';
@@ -64,5 +65,11 @@ export function useGetProjectView(objectId: string) {
 export function useGetProjectColumn(objectId: string) {
   return useGetProjectColumnQuery({
     variables: { id: convertToGlobalId(EClassName.ProjectColumn, objectId) },
+  });
+}
+
+export function useGetProjectItem(objectId: string) {
+  return useGetProjectItemQuery({
+    variables: { id: convertToGlobalId(EClassName.ProjectItem, objectId) },
   });
 }
