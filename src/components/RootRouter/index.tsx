@@ -16,12 +16,12 @@ function RootRouter() {
             path="/*"
             element={
               <AnimatedRoutes>
-                <Route path={ERoutePath.SETTING} element={<SettingPage />} />
-                <Route path={ERoutePath.HOME} element={<HomePage />} />
+                <Route path={ERoutePath.Setting} element={<SettingPage />} />
+                <Route path={ERoutePath.Home} element={<HomePage />} />
               </AnimatedRoutes>
             }
           />
-          <Route path={ERoutePath.PROJECT} element={<ProjectPage />} />
+          <Route path={ERoutePath.Project} element={<ProjectPage />} />
         </Route>
       </Routes>
     </HashRouter>

@@ -1,6 +1,5 @@
 import { CloseOutlined } from '@ant-design/icons';
 import { Button, Form, Input } from 'antd';
-import classnames from 'classnames';
 import { memo, useEffect, useMemo } from 'react';
 import { useCreateProjectColumnMutation } from '../../../graphql';
 import { useFormatMessage } from '../../hooks';
@@ -67,7 +66,7 @@ function CreateColumnForm(props: ICreateColumnFormProps) {
       <Form.Item name="title">
         <Input
           autoFocus
-          className={classnames('middle-input-without-affix')}
+          className="middle-input-without-affix"
           placeholder={f('inputColumnTitle')}
         />
       </Form.Item>

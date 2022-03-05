@@ -2,7 +2,7 @@ import { Row } from 'antd';
 import { memo, ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { a, config, useTrail } from 'react-spring';
-import ProjectItem from './Item';
+import Project from './Project';
 import styles from './index.module.scss';
 
 interface IProjectListProps {
@@ -37,7 +37,7 @@ function ProjectList(props: IProjectListProps) {
               key={objectId}
               style={style}>
               <Link to={`/project/${objectId}`}>
-                <ProjectItem objectId={objectId} />
+                <Project objectId={objectId} />
               </Link>
             </a.div>
           );

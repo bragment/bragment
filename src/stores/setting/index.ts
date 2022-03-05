@@ -6,6 +6,7 @@ const APP_LANGUAGE = 'APP_LANGUAGE';
 function getLocalAppLanguage() {
   const language =
     window.localStorage.getItem(APP_LANGUAGE) || navigator.language;
+  // NOTE: Keys of ELanguage are uppercase.
   if (language.toUpperCase().replace(/-/g, '_') in ELanguage) {
     return language as ELanguage;
   }

@@ -30,7 +30,7 @@ function ColumnCreator(props: IColumnCreatorProps) {
     if (signedIn) {
       setMode(ETitleMode.Form);
     } else {
-      setSignInDialogVisible(true, ESignInDialogTabKey.SIGN_IN);
+      setSignInDialogVisible(true, ESignInDialogTabKey.SignIn);
     }
   };
 

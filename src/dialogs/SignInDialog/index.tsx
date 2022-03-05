@@ -24,13 +24,13 @@ function SignInDialog() {
   const close = () => setSignInDialogVisible(false);
 
   const gotoSignIn = () =>
-    setSignInDialogCurrentTab(ESignInDialogTabKey.SIGN_IN);
+    setSignInDialogCurrentTab(ESignInDialogTabKey.SignIn);
 
   const gotoSignUp = () =>
-    setSignInDialogCurrentTab(ESignInDialogTabKey.SIGN_UP);
+    setSignInDialogCurrentTab(ESignInDialogTabKey.SignUp);
 
   const gotoForgotPassword = () =>
-    setSignInDialogCurrentTab(ESignInDialogTabKey.FORGOT_PASSWORD);
+    setSignInDialogCurrentTab(ESignInDialogTabKey.ForgotPassword);
 
   const handleFinish = (user: ICurrentUser) => {
     setCurrent(user);
@@ -50,7 +50,7 @@ function SignInDialog() {
         <div className="text-logo" />
       </div>
       <Tabs activeKey={signInDialogCurrentTab}>
-        <Tabs.TabPane tab={f('signIn')} key={ESignInDialogTabKey.SIGN_IN}>
+        <Tabs.TabPane tab={f('signIn')} key={ESignInDialogTabKey.SignIn}>
           <SignInForm
             onFinish={handleFinish}
             gotoSignUp={gotoSignUp}
@@ -59,12 +59,12 @@ function SignInDialog() {
         </Tabs.TabPane>
         <Tabs.TabPane
           tab={f('signUp')}
-          key={ESignInDialogTabKey.FORGOT_PASSWORD}>
+          key={ESignInDialogTabKey.ForgotPassword}>
           <ForgotPasswordForm gotoSignIn={gotoSignIn} />
         </Tabs.TabPane>
         <Tabs.TabPane
           tab={f('forgotPassword')}
-          key={ESignInDialogTabKey.SIGN_UP}>
+          key={ESignInDialogTabKey.SignUp}>
           <SignUpForm onFinish={handleFinish} gotoSignIn={gotoSignIn} />
         </Tabs.TabPane>
       </Tabs>
