@@ -66,6 +66,7 @@ function CreateColumnForm(props: ICreateColumnFormProps) {
       <Form.Item name="title">
         <Input
           autoFocus
+          autoComplete="off"
           className="middle-input-without-affix"
           placeholder={f('inputColumnTitle')}
         />
