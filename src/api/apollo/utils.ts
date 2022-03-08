@@ -12,6 +12,10 @@ export function convertToObjectId(className: string, id: string) {
   return window.atob(id).slice(className.length + 1);
 }
 
+export function checkClassGlobalId(className: string, id: string) {
+  return window.atob(id).startsWith(className);
+}
+
 export function generateElement<T = any>(value: T) {
   return {
     __typename: 'Element',

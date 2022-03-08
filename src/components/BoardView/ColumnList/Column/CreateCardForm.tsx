@@ -40,14 +40,14 @@ function CreateCardForm(props: ICreateCardFormProps) {
   const [addProjectItem, { loading }] = useCreateProjectItemMutation();
 
   const handleTitleChange = () => {
-    const inputHeight =
-      inputRef.current?.resizableTextArea?.textArea.clientHeight;
-    if (inputHeightRef.current !== inputHeight) {
-      inputHeightRef.current = inputHeight || 0;
-      if (onHeightChange) {
-        // NOTE: formHeight = inputHeight + 16
-        onHeightChange(inputHeightRef.current + 69);
-      }
+    const textArea = inputRef.current?.resizableTextArea?.textArea;
+    if (!textArea || !onHeightChange) {
+      return;
+    }
+    if (inputHeightRef.current !== textArea.clientHeight) {
+      inputHeightRef.current = textArea.clientHeight;
+      // NOTE: formHeight = inputHeight + 16
+      onHeightChange(inputHeightRef.current + 69);
     }
   };
 
@@ -91,6 +91,7 @@ function CreateCardForm(props: ICreateCardFormProps) {
         <TextArea
           ref={inputRef}
           autoFocus
+          autoComplete="off"
           className="middle-input-without-affix"
           placeholder={f('inputCardTitle')}
           autoSize={{ minRows: 1, maxRows: inputMaxRows }}

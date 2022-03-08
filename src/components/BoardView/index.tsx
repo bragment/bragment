@@ -1,8 +1,8 @@
 import { useApolloClient } from '@apollo/client';
-import classnames from 'classnames';
-import { memo, useCallback, useRef } from 'react';
 import {
+  BeforeCapture,
   DragDropContext,
+  DragDropContextInstance,
   DraggableLocation,
   DragStart,
   DragUpdate,
@@ -10,15 +10,22 @@ import {
   DroppableProvided,
   DroppableStateSnapshot,
   DropResult,
-} from 'react-beautiful-dnd';
+  moveByWindowScroll,
+  setDragDropContextContainer,
+} from '@breeze2/react-beautiful-dnd';
+import classnames from 'classnames';
+import { memo, useCallback, useRef } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars';
+
 import {
+  checkClassGlobalId,
   generateElement,
   readCachedProjectColumn,
   writeCachedProjectColumn,
   writeCachedProjectView,
 } from '../../api/apollo';
 import {
+  EClassName,
   Element,
   useMoveProjectColumnMutation,
   useMoveProjectItemMutation,
@@ -28,11 +35,11 @@ import ColumnList from './ColumnList';
 import ColumnCreator from './ColumnList/Creator';
 import {
   draggingHandlers,
-  getCardWrapperId,
-  getColumnWrapperId,
+  getCardWrapperObjectId,
+  getColumnWrapperObjectId,
   requestAutoScrolling,
+  runningPaceByTimes,
 } from './helpers';
-
 import { EDragType } from './types';
 import styles from './index.module.scss';
 
@@ -47,6 +54,8 @@ function BoardView(props: IBoardViewProps) {
   const [moveProjectColumn] = useMoveProjectColumnMutation();
   const [moveProjectItem] = useMoveProjectItemMutation();
   const scrollBarRef = useRef<Scrollbars>(null);
+  const dragDropContextRef = useRef<DragDropContextInstance>(null);
+  const containerDivRef = useRef<HTMLDivElement>();
   const draggingDivRef = useRef<HTMLDivElement>();
   const stopAutoScrollingRef = useRef<() => unknown>();
   const view = data?.projectView;
@@ -56,7 +65,7 @@ function BoardView(props: IBoardViewProps) {
     async (source: DraggableLocation, destination: DraggableLocation) => {
       const { index: fromIndex } = source;
       const { index: toIndex } = destination;
-      const columnId = getColumnWrapperId(fromIndex);
+      const columnId = getColumnWrapperObjectId(fromIndex);
       if (!view || !columnId || fromIndex === toIndex) {
         return;
       }
@@ -85,7 +94,7 @@ function BoardView(props: IBoardViewProps) {
     async (source: DraggableLocation, destination: DraggableLocation) => {
       const { index: fromIndex, droppableId: fromColumnId } = source;
       const { index: toIndex, droppableId: toColumnId } = destination;
-      const itemId = getCardWrapperId(fromColumnId, fromIndex);
+      const itemId = getCardWrapperObjectId(fromColumnId, fromIndex);
       const sameColumn = fromColumnId === toColumnId;
       const toColumn = readCachedProjectColumn(client, toColumnId);
       const fromColumn = sameColumn
@@ -129,7 +138,8 @@ function BoardView(props: IBoardViewProps) {
   );
 
   const handleDragEnd = useCallback(
-    async (result: DropResult) => {
+    (result: DropResult) => {
+      setDragDropContextContainer(undefined);
       stopAutoScrollingRef.current && stopAutoScrollingRef.current();
       stopAutoScrollingRef.current = undefined;
       draggingDivRef.current = undefined;
@@ -147,25 +157,57 @@ function BoardView(props: IBoardViewProps) {
     },
     [moveColumn, moveCard]
   );
+  const handleBeforeCapture = (before: BeforeCapture) => {
+    const { draggableId } = before;
+    if (checkClassGlobalId(EClassName.ProjectItem, draggableId)) {
+      setDragDropContextContainer(containerDivRef.current?.parentElement);
+    }
+  };
+  const handleBeforeDragStart = (initial: DragStart) => {
+    const { source, type } = initial;
+    draggingDivRef.current =
+      draggingHandlers.getDragging[type as EDragType](source) || undefined;
+  };
   const handleDragStart = useCallback((initial: DragStart) => {
     const { source, type } = initial;
-    const div = (draggingDivRef.current =
-      draggingHandlers.getDragging[type as EDragType](source) || undefined);
-    if (div) {
-      draggingHandlers.dragStart[type as EDragType](div, source);
-      const boardDiv = div.closest('.' + styles.container);
-      const scrollDiv = boardDiv?.parentElement;
-      const scrollBar = scrollBarRef.current;
-      // HACK: See https://github.com/atlassian/react-beautiful-dnd/issues/131
-      if (type === EDragType.Card && scrollDiv && scrollBar) {
-        stopAutoScrollingRef.current = requestAutoScrolling(
-          div,
-          scrollDiv,
-          () => scrollBar.scrollLeft(scrollDiv.scrollLeft + 10),
-          () => scrollBar.scrollLeft(scrollDiv.scrollLeft - 10)
-        );
-      }
+    const div = draggingDivRef.current;
+    if (!div) {
+      return;
     }
+    draggingHandlers.dragStart[type as EDragType](div, source);
+    // HACK: See https://github.com/atlassian/react-beautiful-dnd/issues/131
+    const store = dragDropContextRef.current?.getStore();
+    const boardDiv = div.closest('.' + styles.container);
+    const scrollDiv = boardDiv?.parentElement;
+    const scrollBar = scrollBarRef.current;
+    if (type !== EDragType.Card || !scrollDiv || !scrollBar || !store) {
+      return;
+    }
+    let times = 0;
+    let goRight = true;
+    const scroll = (right: boolean) => {
+      if (!draggingDivRef.current) {
+        return;
+      }
+      if ((right && !goRight) || (!right && goRight)) {
+        goRight = !goRight;
+        times = 0;
+      }
+      scrollBar.scrollLeft(
+        scrollDiv.scrollLeft + runningPaceByTimes(++times) * (goRight ? 1 : -1)
+      );
+      store.dispatch(
+        moveByWindowScroll({
+          newScroll: { x: scrollDiv.scrollLeft, y: 0 },
+        })
+      );
+    };
+    stopAutoScrollingRef.current = requestAutoScrolling(
+      div,
+      scrollDiv,
+      scroll.bind(undefined, true),
+      scroll.bind(undefined, false)
+    );
   }, []);
   const handleDragUpdate = useCallback((initial: DragUpdate) => {
     const { destination, type } = initial;
@@ -181,6 +223,9 @@ function BoardView(props: IBoardViewProps) {
   return (
     <Scrollbars ref={scrollBarRef} autoHide>
       <DragDropContext
+        ref={dragDropContextRef}
+        onBeforeCapture={handleBeforeCapture}
+        onBeforeDragStart={handleBeforeDragStart}
         onDragStart={handleDragStart}
         onDragUpdate={handleDragUpdate}
         onDragEnd={handleDragEnd}>
@@ -190,8 +235,10 @@ function BoardView(props: IBoardViewProps) {
           direction="horizontal">
           {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => (
             <div
-              id={objectId}
-              ref={provided.innerRef}
+              ref={(ref) => {
+                provided.innerRef(ref);
+                containerDivRef.current = ref || undefined;
+              }}
               className={classnames(
                 styles.container,
                 snapshot.isDraggingOver ? styles.draggingOver : ''

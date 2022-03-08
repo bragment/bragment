@@ -1,10 +1,10 @@
-import { Card as AntdCard } from 'antd';
-import { memo } from 'react';
 import {
   Draggable,
   DraggableProvided,
   DraggableStateSnapshot,
-} from 'react-beautiful-dnd';
+} from '@breeze2/react-beautiful-dnd';
+import { Card as AntdCard } from 'antd';
+import { memo } from 'react';
 import { useGetProjectItem } from '../../../hooks';
 
 import styles from './index.module.scss';
@@ -20,11 +20,12 @@ function Card(props: ICardProps) {
   const item = itemData?.projectItem;
 
   return item ? (
-    <Draggable draggableId={objectId} index={index}>
+    <Draggable draggableId={item.id} index={index}>
       {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
         <div
           className={styles.wrapper}
-          data-rdb-draggable-index={index}
+          data-rbd-draggable-index={index}
+          data-rbd-draggable-object-id={objectId}
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}>
