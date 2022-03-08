@@ -1,13 +1,12 @@
-import classnames from 'classnames';
-import { memo, useCallback, useRef, useState } from 'react';
 import {
   Draggable,
   DraggableProvided,
-  DraggableStateSnapshot,
   Droppable,
   DroppableProvided,
   DroppableStateSnapshot,
-} from 'react-beautiful-dnd';
+} from '@breeze2/react-beautiful-dnd';
+import classnames from 'classnames';
+import { memo, useCallback, useRef, useState } from 'react';
 import {
   positionValues as IPositionValues,
   Scrollbars,
@@ -55,14 +54,12 @@ function Column(props: IColumnProps) {
   }, []);
 
   return column ? (
-    <Draggable draggableId={objectId} index={index}>
-      {(
-        dragProvided: DraggableProvided,
-        dragSnapshot: DraggableStateSnapshot
-      ) => (
+    <Draggable draggableId={column.id} index={index}>
+      {(dragProvided: DraggableProvided) => (
         <div
           className={classnames(styles.wrapper)}
-          data-rdb-draggable-index={index}
+          data-rbd-draggable-index={index}
+          data-rbd-draggable-object-id={objectId}
           ref={(ref) => {
             dragProvided.innerRef(ref);
             wrapperRef.current = ref;

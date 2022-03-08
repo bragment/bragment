@@ -2,6 +2,7 @@ import { UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Dropdown, Space } from 'antd';
 import { observer } from 'mobx-react';
 import { useEffect } from 'react';
+import { signOut } from '../../api/parse';
 import {
   IWorkspaceFragment,
   useGetCurrentUserInfoLazyQuery,
@@ -29,6 +30,7 @@ const UserAvatar = () => {
   }, [current, getCurrentUserInfo]);
   useEffect(() => {
     if (error) {
+      signOut();
       setCurrent(undefined);
     }
   }, [error, setCurrent]);

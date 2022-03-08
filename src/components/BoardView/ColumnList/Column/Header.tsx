@@ -1,7 +1,7 @@
 import { DownOutlined } from '@ant-design/icons';
+import { DraggableProvidedDragHandleProps } from '@breeze2/react-beautiful-dnd';
 import classnames from 'classnames';
 import { forwardRef, memo, useState } from 'react';
-import { DraggableProvidedDragHandleProps } from 'react-beautiful-dnd';
 import { ETitleMode } from '../../types';
 import RenameColumnForm from './RenameColumnForm';
 import styles from './index.module.scss';

@@ -1,4 +1,4 @@
-import { DraggableLocation } from 'react-beautiful-dnd';
+import { DraggableLocation } from '@breeze2/react-beautiful-dnd';
 
 import { EDragType } from './types';
 import cardStyles from './CardList/Card/index.module.scss';
@@ -62,21 +62,21 @@ export function getColumnPlaceholder() {
 
 export function getColumnWrapper(index: number) {
   return document.querySelector<HTMLDivElement>(
-    `.${columnStyles.wrapper}[data-rdb-draggable-index="${index}"]`
+    `.${columnStyles.wrapper}[data-rbd-draggable-index="${index}"]`
   );
 }
 
-export function getColumnWrapperId(index: number) {
+export function getColumnWrapperObjectId(index: number) {
   const div = getColumnWrapper(index);
-  return div?.dataset.rbdDraggableId;
+  return div?.dataset.rbdDraggableObjectId;
 }
 
-export function getCardWrapperId(droppableId: string, index: number) {
+export function getCardWrapperObjectId(droppableId: string, index: number) {
   const container = getColumnContainer(droppableId);
   const div = container
     ? getCardWrapperInColumnContainer(container, index)
     : undefined;
-  return div?.dataset.rbdDraggableId;
+  return div?.dataset.rbdDraggableObjectId;
 }
 
 export function getColumnContainer(droppableId: string) {
@@ -115,7 +115,7 @@ export function getCardWrapperInColumnContainer(
   index: number
 ) {
   return container.querySelector<HTMLDivElement>(
-    `.${cardStyles.wrapper}[data-rdb-draggable-index="${index}"]`
+    `.${cardStyles.wrapper}[data-rbd-draggable-index="${index}"]`
   );
 }
 
@@ -264,4 +264,14 @@ export function requestAutoScrolling(
   return () => {
     ended = true;
   };
+}
+
+export function runningPaceByTimes(times: number) {
+  if (times > 60) {
+    return 40;
+  } else if (times > 20) {
+    return 20;
+  } else {
+    return 10;
+  }
 }
