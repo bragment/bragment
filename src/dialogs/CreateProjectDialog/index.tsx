@@ -7,7 +7,7 @@ import {
   getMainImageUrl,
   getSmallImageUrl,
   getThumbImageUrl,
-} from '../../api/unsplash/helpers';
+} from '../../api/unsplash';
 import {
   useDialogStore,
   useProjectStore,
