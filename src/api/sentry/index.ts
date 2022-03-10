@@ -11,7 +11,7 @@ export function initializeSentry() {
   ) {
     try {
       Sentry.init({
-        release: process.env.REACT_APP_VERSION,
+        release: process.env.APP_VERSION,
         dsn: process.env.SENTRY_DSN,
         integrations: [new Integrations.BrowserTracing()],
         environment: getEnvironment() || undefined,
