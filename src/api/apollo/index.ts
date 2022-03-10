@@ -1,10 +1,11 @@
 import { ApolloClient, createHttpLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { getCurrentUser } from '../parse';
+import { getGraphqlURL } from '../utils';
 import { memoryCache } from './cache';
 
 export function createApolloClient() {
-  const uri = process.env.GRAPHQL_URL;
+  const uri = getGraphqlURL();
   const appId = process.env.APP_ID;
   const version = process.env.APP_VERSION;
   const httpLink = createHttpLink({ uri });

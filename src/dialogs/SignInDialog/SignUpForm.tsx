@@ -1,7 +1,7 @@
 import { Button, Form, Input } from 'antd';
 import classNames from 'classnames';
 import { memo, useState } from 'react';
-import { resetFormFieldError, setFormFieldError } from '../../api/antd/helpers';
+import { resetFormFieldError, setFormFieldError } from '../../api/antd';
 import { EUserErrorCode, signUp } from '../../api/parse';
 import { useFormatMessage } from '../../components/hooks';
 import { ICurrentUser } from '../../stores/types';
