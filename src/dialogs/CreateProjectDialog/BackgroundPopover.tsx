@@ -5,7 +5,7 @@ import {
   getMainColor,
   getMainImageUrl,
   getThumbImageUrl,
-} from '../../api/unsplash/helpers';
+} from '../../api/unsplash';
 import BackgroundSelect, {
   IBackgroundOption,
 } from '../../components/BackgroundSelect';

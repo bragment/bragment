@@ -3,12 +3,14 @@ import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import { createApolloClient } from './api/apollo';
 import { initializeParse } from './api/parse';
+import { initializeSentry } from './api/sentry';
 import App from './components/App';
 import reportWebVitals from './reportWebVitals';
 import stores, { AppContext } from './stores';
 import { initializeStores } from './stores/helpers';
 import './styles/index.scss';
 
+initializeSentry();
 initializeParse();
 initializeStores();
 const client = createApolloClient();

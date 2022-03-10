@@ -2,7 +2,7 @@ import { Button, Checkbox, Form, Input } from 'antd';
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
 import { useState } from 'react';
-import { resetFormFieldError, setFormFieldError } from '../../api/antd/helpers';
+import { resetFormFieldError, setFormFieldError } from '../../api/antd';
 import { EUserErrorCode, signIn } from '../../api/parse';
 import { useFormatMessage } from '../../components/hooks';
 import { ICurrentUser } from '../../stores/types';

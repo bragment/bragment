@@ -1,9 +1,6 @@
 import { memo, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import {
-  getRegularImageUrl,
-  getSmallImageUrl,
-} from '../../api/unsplash/helpers';
+import { getRegularImageUrl, getSmallImageUrl } from '../../api/unsplash';
 import BoardView from '../../components/BoardView';
 import {
   useGetProject,

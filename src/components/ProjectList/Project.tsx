@@ -1,6 +1,6 @@
 import { Card as AntCard } from 'antd';
 import { memo } from 'react';
-import { getSmallImageUrl } from '../../api/unsplash/helpers';
+import { getSmallImageUrl } from '../../api/unsplash';
 import { useGetProject } from '../hooks';
 import ProgressiveBackground from '../ProgressiveBackground';
 import styles from './index.module.scss';
