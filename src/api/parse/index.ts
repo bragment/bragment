@@ -8,3 +8,4 @@ export function initializeParse() {
 }
 
 export * from './user';
+export * from './types';

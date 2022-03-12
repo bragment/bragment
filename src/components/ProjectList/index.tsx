@@ -11,6 +11,8 @@ interface IProjectListProps {
   projectIds: string[];
 }
 
+export const PROJECT_LIST_GUTTER = 16;
+
 function ProjectList(props: IProjectListProps) {
   const { label, icon, projectIds } = props;
   const gutter = 16;

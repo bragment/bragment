@@ -4,7 +4,7 @@ import { IWorkspaceFragment, WorkspaceType } from '../../graphql';
 import { ICurrentUser } from '../types';
 
 class UserStore {
-  public current: ICurrentUser | undefined;
+  public current: ICurrentUser | null = null;
   public workspaces: IWorkspaceFragment[] = [];
   get signedIn() {
     return !!this.current;
@@ -19,7 +19,7 @@ class UserStore {
     });
   }
 
-  public setCurrent = (user: ICurrentUser | undefined) => {
+  public setCurrent = (user: ICurrentUser | null) => {
     this.current = user;
     if (user) {
       setSentryUser({

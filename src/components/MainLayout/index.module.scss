@@ -53,5 +53,8 @@
     .ant-menu-item-selected::after {
       border-right: none;
     }
+    .ant-layout-sider-trigger {
+      position: absolute;
+    }
   }
 }

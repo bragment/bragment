@@ -77,7 +77,7 @@ function Column(props: IColumnProps) {
             autoHide
             onUpdate={handleScrollFrame}
             onScrollFrame={handleScrollFrame}>
-            <Droppable droppableId={objectId} type={EDragType.Card}>
+            <Droppable droppableId={column.id} type={EDragType.Card}>
               {(
                 dropProvided: DroppableProvided,
                 dropSnapshot: DroppableStateSnapshot

@@ -2,25 +2,23 @@ import { LogoutOutlined } from '@ant-design/icons';
 import { Menu, MenuProps } from 'antd';
 import { observer } from 'mobx-react';
 import { MenuInfo } from 'rc-menu/lib/interface';
-import { signOut } from '../../api/parse';
-import { useFormatMessage, useUserStore } from '../hooks';
+import { useFormatMessage, useUserSignOut } from '../hooks';
 
 const UserAvatarMenu = (props: MenuProps) => {
-  const { setCurrent } = useUserStore();
-
+  const userSignOut = useUserSignOut();
   const f = useFormatMessage();
 
+  const handlers: Record<string, () => void> = {
+    signOut: () => {
+      setImmediate(() => {
+        userSignOut();
+      });
+    },
+  };
+
   const handleMenuClick = (info: MenuInfo) => {
-    switch (info.key) {
-      case 'signOut':
-        // NOTE: after dropdown hiding
-        setImmediate(() => {
-          signOut();
-          setCurrent(undefined);
-        });
-        break;
-      default:
-        break;
+    if (info.key in handlers) {
+      handlers[info.key]();
     }
   };
 
