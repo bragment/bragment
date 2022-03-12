@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { observer } from 'mobx-react';
 import { useState } from 'react';
 import { resetFormFieldError, setFormFieldError } from '../../api/antd';
-import { EUserErrorCode, requestPasswordReset } from '../../api/parse';
+import { EParseErrorCode, requestPasswordReset } from '../../api/parse';
 import { useFormatMessage } from '../../components/hooks';
 import styles from './index.module.scss';
 
@@ -34,10 +34,10 @@ function ForgotPasswordForm(props: IForgotPasswordFormProps) {
       // TODO: should show email sent message
     } catch (error: any) {
       switch (error.code) {
-        case EUserErrorCode.PasswordInvalid:
+        case EParseErrorCode.ObjectNotFound:
           setFormFieldError(form, 'email', f('invalidUsernameOrPassword'));
           break;
-        case EUserErrorCode.InternetDisconnected:
+        case EParseErrorCode.ConnectionFailed:
         default:
           setFormFieldError(form, 'email', f('networkError'));
           break;

@@ -2,7 +2,7 @@ import { Button, Form, Input } from 'antd';
 import classNames from 'classnames';
 import { memo, useState } from 'react';
 import { resetFormFieldError, setFormFieldError } from '../../api/antd';
-import { EUserErrorCode, signUp } from '../../api/parse';
+import { EParseErrorCode, signUp } from '../../api/parse';
 import { useFormatMessage } from '../../components/hooks';
 import { ICurrentUser } from '../../stores/types';
 
@@ -36,13 +36,13 @@ function SignUpForm(props: ISignUpFormProps) {
       form.resetFields();
     } catch (error: any) {
       switch (error.code) {
-        case EUserErrorCode.UsernameExists:
+        case EParseErrorCode.UsernameTaken:
           setFormFieldError(form, 'username', f('existingUsername'));
           break;
-        case EUserErrorCode.EmailExists:
+        case EParseErrorCode.EmailTaken:
           setFormFieldError(form, 'email', f('existingEmail'));
           break;
-        case EUserErrorCode.InternetDisconnected:
+        case EParseErrorCode.ConnectionFailed:
         default:
           setFormFieldError(form, 'username', f('networkError'));
           break;
@@ -58,6 +58,7 @@ function SignUpForm(props: ISignUpFormProps) {
         name="username"
         rules={[{ required: true, message: f('requiredUsername') }]}>
         <Input
+          autoComplete="username"
           className={classNames('secondary-input', 'large-input-without-affix')}
           size="large"
           placeholder={f('username')}
@@ -76,6 +77,7 @@ function SignUpForm(props: ISignUpFormProps) {
         name="password"
         rules={[{ required: true, message: f('requiredPassword') }]}>
         <Input.Password
+          autoComplete="new-password"
           className={classNames(
             'secondary-input',
             'large-input-with-only-suffix'

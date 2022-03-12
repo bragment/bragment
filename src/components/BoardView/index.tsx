@@ -1,9 +1,7 @@
-import { useApolloClient } from '@apollo/client';
 import {
   BeforeCapture,
   DragDropContext,
   DragDropContextInstance,
-  DraggableLocation,
   DragStart,
   DragUpdate,
   Droppable,
@@ -17,20 +15,9 @@ import classnames from 'classnames';
 import { memo, useCallback, useRef } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars';
 
-import {
-  checkClassGlobalId,
-  generateElement,
-  readCachedProjectColumn,
-  writeCachedProjectColumn,
-  writeCachedProjectView,
-} from '../../api/apollo';
-import {
-  EClassName,
-  Element,
-  useMoveProjectColumnMutation,
-  useMoveProjectItemMutation,
-} from '../../graphql';
-import { useGetProjectView } from '../hooks';
+import { checkClassGlobalId, convertToObjectId } from '../../api/apollo';
+import { EClassName, Element } from '../../graphql';
+import { useGetProjectView, useHandleGraphqlError } from '../hooks';
 import ColumnList from './ColumnList';
 import ColumnCreator from './ColumnList/Creator';
 import {
@@ -40,6 +27,7 @@ import {
   requestAutoScrolling,
   runningPaceByTimes,
 } from './helpers';
+import { useMoveCard, useMoveColumn } from './hooks';
 import { EDragType } from './types';
 import styles from './index.module.scss';
 
@@ -49,10 +37,10 @@ interface IBoardViewProps {
 
 function BoardView(props: IBoardViewProps) {
   const { objectId } = props;
-  const client = useApolloClient();
   const { data } = useGetProjectView(objectId);
-  const [moveProjectColumn] = useMoveProjectColumnMutation();
-  const [moveProjectItem] = useMoveProjectItemMutation();
+  const moveCard = useMoveCard();
+  const moveColumn = useMoveColumn();
+  const handleGraphqlError = useHandleGraphqlError();
   const scrollBarRef = useRef<Scrollbars>(null);
   const dragDropContextRef = useRef<DragDropContextInstance>(null);
   const containerDivRef = useRef<HTMLDivElement>();
@@ -61,84 +49,8 @@ function BoardView(props: IBoardViewProps) {
   const view = data?.projectView;
   const columnOrder = view?.columnOrder as Element[] | undefined;
 
-  const moveColumn = useCallback(
-    async (source: DraggableLocation, destination: DraggableLocation) => {
-      const { index: fromIndex } = source;
-      const { index: toIndex } = destination;
-      const columnId = getColumnWrapperObjectId(fromIndex);
-      if (!view || !columnId || fromIndex === toIndex) {
-        return;
-      }
-      const newColumnOrder = [...view.columnOrder] as Element[];
-      newColumnOrder.splice(fromIndex, 1);
-      newColumnOrder.splice(toIndex, 0, generateElement(columnId));
-      const toViewId = view.objectId;
-      const afterId: string | undefined = newColumnOrder[toIndex - 1]?.value;
-      writeCachedProjectView(client, {
-        ...view,
-        columnOrder: newColumnOrder,
-      });
-      await moveProjectColumn({
-        variables: {
-          input: {
-            id: columnId,
-            fields: { toViewId, afterId },
-          },
-        },
-      });
-    },
-    [client, view, moveProjectColumn]
-  );
-
-  const moveCard = useCallback(
-    async (source: DraggableLocation, destination: DraggableLocation) => {
-      const { index: fromIndex, droppableId: fromColumnId } = source;
-      const { index: toIndex, droppableId: toColumnId } = destination;
-      const itemId = getCardWrapperObjectId(fromColumnId, fromIndex);
-      const sameColumn = fromColumnId === toColumnId;
-      const toColumn = readCachedProjectColumn(client, toColumnId);
-      const fromColumn = sameColumn
-        ? toColumn
-        : readCachedProjectColumn(client, fromColumnId);
-      if (
-        !itemId ||
-        !fromColumn ||
-        !toColumn ||
-        (sameColumn && fromIndex === toIndex)
-      ) {
-        return;
-      }
-      const newToItemOrder = [...toColumn.itemOrder] as Element[];
-      const newFromItemOrder = sameColumn
-        ? newToItemOrder
-        : ([...fromColumn.itemOrder] as Element[]);
-      newFromItemOrder.splice(fromIndex, 1);
-      newToItemOrder.splice(toIndex, 0, generateElement(itemId));
-      const afterId: string | undefined = newToItemOrder[toIndex - 1]?.value;
-      writeCachedProjectColumn(client, {
-        ...toColumn,
-        itemOrder: newToItemOrder,
-      });
-      if (!sameColumn) {
-        writeCachedProjectColumn(client, {
-          ...fromColumn,
-          itemOrder: newFromItemOrder,
-        });
-      }
-      await moveProjectItem({
-        variables: {
-          input: {
-            id: itemId,
-            fields: { toColumnId, fromColumnId, afterId },
-          },
-        },
-      });
-    },
-    [client, moveProjectItem]
-  );
-
   const handleDragEnd = useCallback(
-    (result: DropResult) => {
+    async (result: DropResult) => {
       setDragDropContextContainer(undefined);
       stopAutoScrollingRef.current && stopAutoScrollingRef.current();
       stopAutoScrollingRef.current = undefined;
@@ -149,13 +61,40 @@ function BoardView(props: IBoardViewProps) {
       }
       draggingHandlers.dragEnd[type as EDragType](destination);
       if (type === EDragType.Column) {
-        moveColumn(source, destination);
+        const { index: fromIndex } = source;
+        const { index: toIndex } = destination;
+        const columnId = getColumnWrapperObjectId(fromIndex);
+        const toViewId =
+          /* eslint-disable @typescript-eslint/no-non-null-assertion */ view!
+            .objectId;
+        const error = await moveColumn(
+          /* eslint-disable @typescript-eslint/no-non-null-assertion */ columnId!,
+          toViewId,
+          toIndex,
+          toViewId,
+          fromIndex
+        );
+        if (error) {
+          handleGraphqlError(error);
+        }
       }
       if (type === EDragType.Card) {
-        moveCard(source, destination);
+        const { index: fromIndex, droppableId: fromColumnId } = source;
+        const { index: toIndex, droppableId: toColumnId } = destination;
+        const itemId = getCardWrapperObjectId(fromColumnId, fromIndex);
+        const error = await moveCard(
+          /* eslint-disable @typescript-eslint/no-non-null-assertion */ itemId!,
+          convertToObjectId(EClassName.ProjectColumn, toColumnId),
+          toIndex,
+          convertToObjectId(EClassName.ProjectColumn, fromColumnId),
+          fromIndex
+        );
+        if (error) {
+          handleGraphqlError(error);
+        }
       }
     },
-    [moveColumn, moveCard]
+    [view, moveColumn, moveCard, handleGraphqlError]
   );
   const handleBeforeCapture = (before: BeforeCapture) => {
     const { draggableId } = before;

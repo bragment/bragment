@@ -13,7 +13,7 @@ import styles from './index.module.scss';
 
 function SignInDialog() {
   const f = useFormatMessage();
-  const { current, setCurrent } = useUserStore();
+  const { current: currentUser, setCurrent } = useUserStore();
   const {
     signInDialogCurrentTab,
     signInDialogVisible,
@@ -40,7 +40,7 @@ function SignInDialog() {
   return (
     <Modal
       className={styles.wrap}
-      visible={signInDialogVisible && !current}
+      visible={signInDialogVisible && !currentUser}
       maskClosable={false}
       centered
       width={360}

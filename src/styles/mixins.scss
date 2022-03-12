@@ -69,7 +69,8 @@
   &.ant-input {
     padding: $padding-tb $padding-lr;
   }
-  .ant-input {
+  .ant-input,
+  > input.ant-input {
     border-radius: $border-radius-base;
     padding: $padding-tb $padding-lr;
     $affix-width: $padding-lr + $font-size + $padding-lr;

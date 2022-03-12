@@ -1,12 +1,17 @@
+import { ApolloError, useApolloClient } from '@apollo/client';
+import { message } from 'antd';
 import type { PrimitiveType } from 'intl-messageformat';
 import { useCallback, useContext } from 'react';
 import { useIntl } from 'react-intl';
-import { convertToGlobalId } from '../api/apollo';
+import { convertToGlobalId, getGraphqlErrorCode } from '../api/apollo';
+import { EParseErrorCode, signOut } from '../api/parse';
 import {
   EClassName,
+  useGetProjectAllItemsLazyQuery,
   useGetProjectAllItemsQuery,
   useGetProjectColumnQuery,
   useGetProjectItemQuery,
+  useGetProjectLazyQuery,
   useGetProjectQuery,
   useGetProjectViewQuery,
 } from '../graphql';
@@ -49,9 +54,19 @@ export function useGetProject(objectId: string) {
     variables: { id: convertToGlobalId(EClassName.Project, objectId) },
   });
 }
+export function useGetProjectLazy(objectId: string) {
+  return useGetProjectLazyQuery({
+    variables: { id: convertToGlobalId(EClassName.Project, objectId) },
+  });
+}
 
 export function useGetProjectAllItems(objectId: string) {
   return useGetProjectAllItemsQuery({
+    variables: { id: convertToGlobalId(EClassName.Project, objectId) },
+  });
+}
+export function useGetProjectAllItemsLazy(objectId: string) {
+  return useGetProjectAllItemsLazyQuery({
     variables: { id: convertToGlobalId(EClassName.Project, objectId) },
   });
 }
@@ -72,4 +87,35 @@ export function useGetProjectItem(objectId: string) {
   return useGetProjectItemQuery({
     variables: { id: convertToGlobalId(EClassName.ProjectItem, objectId) },
   });
+}
+
+export function useUserSignOut() {
+  const client = useApolloClient();
+  const { setCurrent, setWorkspaces } = useUserStore();
+  return useCallback(() => {
+    signOut();
+    setCurrent(null);
+    setWorkspaces([]);
+    client.clearStore();
+  }, [client, setCurrent, setWorkspaces]);
+}
+
+export function useHandleGraphqlError() {
+  const userSignOut = useUserSignOut();
+  const f = useFormatMessage();
+  return useCallback(
+    (error: ApolloError) => {
+      const errorCode = getGraphqlErrorCode(error);
+      switch (errorCode) {
+        case EParseErrorCode.InvalidSessionToken:
+          userSignOut();
+          break;
+        case EParseErrorCode.ConnectionFailed:
+        default:
+          message.destroy();
+          message.error(f('networkError'));
+      }
+    },
+    [userSignOut, f]
+  );
 }
