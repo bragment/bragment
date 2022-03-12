@@ -2,18 +2,23 @@ import { UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Dropdown, Space } from 'antd';
 import { observer } from 'mobx-react';
 import { useEffect } from 'react';
-import { signOut } from '../../api/parse';
 import {
   IWorkspaceFragment,
   useGetCurrentUserInfoLazyQuery,
 } from '../../graphql';
 import { ESignInDialogTabKey } from '../../stores/types';
-import { useDialogStore, useFormatMessage, useUserStore } from '../hooks';
+import {
+  useDialogStore,
+  useFormatMessage,
+  useHandleGraphqlError,
+  useUserStore,
+} from '../hooks';
 import UserAvatarMenu from './Menu';
 
 const UserAvatar = () => {
-  const { current, setCurrent, setWorkspaces } = useUserStore();
+  const { current, setWorkspaces } = useUserStore();
   const { setSignInDialogVisible } = useDialogStore();
+  const handleGraphqlError = useHandleGraphqlError();
   const f = useFormatMessage();
   const [getCurrentUserInfo, { error, data }] =
     useGetCurrentUserInfoLazyQuery();
@@ -30,10 +35,9 @@ const UserAvatar = () => {
   }, [current, getCurrentUserInfo]);
   useEffect(() => {
     if (error) {
-      signOut();
-      setCurrent(undefined);
+      handleGraphqlError(error);
     }
-  }, [error, setCurrent]);
+  }, [error, handleGraphqlError]);
   useEffect(() => {
     if (data) {
       const workspaces: IWorkspaceFragment[] = [];

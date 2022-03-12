@@ -1,20 +1,43 @@
 import { Col, Row } from 'antd';
-import { memo } from 'react';
+import { observer } from 'mobx-react';
+import { useEffect, useState } from 'react';
 import Scrollbars from 'react-custom-scrollbars';
-import ProjectList from '../../components/ProjectList';
+import { useHandleGraphqlError, useUserStore } from '../../components/hooks';
+import ProjectList, { PROJECT_LIST_GUTTER } from '../../components/ProjectList';
 import ProjectCreator from '../../components/ProjectList/Creator';
-import { useGetAllProjectsQuery } from '../../graphql';
+import { GetAllProjectsQuery, useGetAllProjectsLazyQuery } from '../../graphql';
 import styles from './index.module.scss';
 
 function HomePage() {
-  const { data } = useGetAllProjectsQuery();
-  const projects = data?.projects;
+  const handleGraphqlError = useHandleGraphqlError();
+  const [getAllProjects, { data, error }] = useGetAllProjectsLazyQuery();
+  const { current: currentUser } = useUserStore();
+  const [projects, setProjects] = useState<GetAllProjectsQuery['projects']>();
+
+  useEffect(() => {
+    if (currentUser) {
+      getAllProjects();
+    } else {
+      setProjects(undefined);
+    }
+  }, [currentUser, getAllProjects]);
+
+  useEffect(() => {
+    setProjects(data?.projects);
+  }, [data]);
+
+  useEffect(() => {
+    if (error) {
+      handleGraphqlError(error);
+    }
+  }, [error, handleGraphqlError]);
+
   return (
     <div className={styles.wrapper}>
       <Scrollbars autoHide>
         <div className={styles.container}>
           <div className={styles.projectCreatorWrapper}>
-            <Row gutter={[12, 12]}>
+            <Row gutter={[PROJECT_LIST_GUTTER, PROJECT_LIST_GUTTER]}>
               <Col xl={4} lg={6} md={8} sm={12} xs={24}>
                 <ProjectCreator />
               </Col>
@@ -31,4 +54,4 @@ function HomePage() {
   );
 }
 
-export default memo(HomePage);
+export default observer(HomePage);

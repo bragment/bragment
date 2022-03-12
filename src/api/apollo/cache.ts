@@ -14,6 +14,7 @@ import {
   IProjectColumnFragmentDoc,
   IProjectFragment,
   IProjectFragmentDoc,
+  IProjectViewFragment,
 } from '../../graphql';
 import { convertToGlobalId } from './utils';
 
@@ -121,6 +122,19 @@ export function writeCachedProjectView<C = any, D extends { id: string } = any>(
   data: D
 ) {
   return writeCachedObject(client, GetProjectViewDocument, 'projectView', data);
+}
+
+export function readCachedProjectView<C = any>(
+  client: ApolloClient<C>,
+  objectId: string
+) {
+  const result = readCachedObject(
+    client,
+    GetProjectViewDocument,
+    EClassName.ProjectView,
+    objectId
+  );
+  return result ? (result.projectView as IProjectViewFragment) : undefined;
 }
 
 export function writeCachedProjectColumn<

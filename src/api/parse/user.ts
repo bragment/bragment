@@ -1,12 +1,5 @@
 import Parse from 'parse';
 
-export enum EUserErrorCode {
-  InternetDisconnected = 100,
-  PasswordInvalid = 101,
-  UsernameExists = 202,
-  EmailExists = 203,
-}
-
 export function signUp(username: string, password: string, email?: string) {
   return Parse.User.signUp(username, password, { email });
 }
@@ -24,5 +17,5 @@ export function requestPasswordReset(email: string) {
 }
 
 export function getCurrentUser() {
-  return Parse.User.current();
+  return Parse.User.current() || null;
 }

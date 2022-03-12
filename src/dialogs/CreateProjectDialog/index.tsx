@@ -1,7 +1,7 @@
 import { Modal } from 'antd';
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import {
   getMainColor,
   getMainImageUrl,
@@ -33,6 +33,7 @@ function CreateProjectDialog() {
     setSelectedBuiltinColor,
     setSelectedUnsplashPhoto,
   } = useProjectStore();
+  const hasFetchedRef = useRef(false);
   const handleClose = () => setCreateProjectDialogVisible(false);
   const handleFinish = async () => {
     handleClose();
@@ -49,8 +50,11 @@ function CreateProjectDialog() {
   );
 
   useEffect(() => {
-    fetchUnsplashPhotos();
-  }, [fetchUnsplashPhotos]);
+    if (createProjectDialogVisible && !hasFetchedRef.current) {
+      hasFetchedRef.current = true;
+      fetchUnsplashPhotos();
+    }
+  }, [createProjectDialogVisible, fetchUnsplashPhotos]);
 
   const backgroundData = useMemo(() => {
     const bg: IProgressiveBackgroundProps = {};

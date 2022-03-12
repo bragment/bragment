@@ -14,7 +14,7 @@ const builtinColors = [
 ];
 
 class ProjectStore {
-  public current: IProjectFragment | undefined;
+  public current: IProjectFragment | null = null;
   public loading = false;
   public selectedBuiltinColor: string | null = null;
   public selectedUnsplashPhoto: IRandomPhoto | null = null;
@@ -27,7 +27,7 @@ class ProjectStore {
     });
   }
 
-  public setCurrent = (project: IProjectFragment | undefined) => {
+  public setCurrent = (project: IProjectFragment | null) => {
     this.current = project;
   };
 

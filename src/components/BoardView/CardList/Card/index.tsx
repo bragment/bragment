@@ -1,8 +1,4 @@
-import {
-  Draggable,
-  DraggableProvided,
-  DraggableStateSnapshot,
-} from '@breeze2/react-beautiful-dnd';
+import { Draggable, DraggableProvided } from '@breeze2/react-beautiful-dnd';
 import { Card as AntdCard } from 'antd';
 import { memo } from 'react';
 import { useGetProjectItem } from '../../../hooks';
@@ -21,7 +17,7 @@ function Card(props: ICardProps) {
 
   return item ? (
     <Draggable draggableId={item.id} index={index}>
-      {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
+      {(provided: DraggableProvided) => (
         <div
           className={styles.wrapper}
           data-rbd-draggable-index={index}
@@ -30,7 +26,7 @@ function Card(props: ICardProps) {
           {...provided.draggableProps}
           {...provided.dragHandleProps}>
           <AntdCard hoverable bordered={false}>
-            <div className={styles.body}>{item.title}</div>
+            <div className={styles.body}>{item.title || item.content}</div>
           </AntdCard>
         </div>
       )}

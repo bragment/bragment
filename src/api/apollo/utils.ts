@@ -1,3 +1,4 @@
+import { ApolloError, ServerError } from '@apollo/client';
 import {
   CreateProjectItemFieldsInput,
   Element,
@@ -65,4 +66,8 @@ export function generateDefaultCreateProjectItemFieldsInput(
     }
   }
   return fields;
+}
+
+export function getGraphqlErrorCode(error: ApolloError): number | undefined {
+  return (error.networkError as ServerError)?.result?.code;
 }

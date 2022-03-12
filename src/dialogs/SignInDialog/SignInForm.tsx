@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { observer } from 'mobx-react';
 import { useState } from 'react';
 import { resetFormFieldError, setFormFieldError } from '../../api/antd';
-import { EUserErrorCode, signIn } from '../../api/parse';
+import { EParseErrorCode, signIn } from '../../api/parse';
 import { useFormatMessage } from '../../components/hooks';
 import { ICurrentUser } from '../../stores/types';
 
@@ -37,10 +37,10 @@ function SignInForm(props: ISignInFormProps) {
       form.resetFields();
     } catch (error: any) {
       switch (error.code) {
-        case EUserErrorCode.PasswordInvalid:
+        case EParseErrorCode.ObjectNotFound:
           setFormFieldError(form, 'username', f('invalidUsernameOrPassword'));
           break;
-        case EUserErrorCode.InternetDisconnected:
+        case EParseErrorCode.ConnectionFailed:
         default:
           setFormFieldError(form, 'username', f('networkError'));
           break;
@@ -56,6 +56,7 @@ function SignInForm(props: ISignInFormProps) {
         name="username"
         rules={[{ required: true, message: f('requiredUsername') }]}>
         <Input
+          autoComplete="username"
           className={classNames('primary-input', 'large-input-without-affix')}
           placeholder={f('usernameOrEmail')}
           size="large"
@@ -65,6 +66,7 @@ function SignInForm(props: ISignInFormProps) {
         name="password"
         rules={[{ required: true, message: f('requiredPassword') }]}>
         <Input.Password
+          autoComplete="current-password"
           className={classNames(
             'primary-input',
             'large-input-with-only-suffix'
