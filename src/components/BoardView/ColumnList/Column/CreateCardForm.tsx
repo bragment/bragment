@@ -4,10 +4,10 @@ import TextArea, { TextAreaRef } from 'antd/lib/input/TextArea';
 import debounce from 'lodash.debounce';
 import { memo, useEffect, useMemo, useRef, useState } from 'react';
 
-import { generateDefaultCreateProjectItemFieldsInput } from '../../../../api/apollo';
 import { useCreateProjectItemMutation } from '../../../../graphql';
 import { useFormatMessage } from '../../../hooks';
 import { calculateColumnFooterTextAreaMaxRows } from '../../helpers';
+import { generateDefaultCreateProjectItemFieldsInput } from './helpers';
 import styles from './index.module.scss';
 
 export interface ICreateCardFormProps {
@@ -58,9 +58,8 @@ function CreateCardForm(props: ICreateCardFormProps) {
       return;
     }
     const fields = generateDefaultCreateProjectItemFieldsInput(
-      projectId,
-      columnId,
-      content
+      content,
+      projectId
     );
     const input = {
       fields,

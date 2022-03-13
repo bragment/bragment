@@ -10,10 +10,11 @@ import styles from './index.module.scss';
 interface IColumnFooterProps {
   objectId: string;
   onHeightChange?: (height?: number) => void;
+  onCreateCardFinish?: () => void;
 }
 
 function ColumnFooter(props: IColumnFooterProps) {
-  const { objectId, onHeightChange } = props;
+  const { objectId, onHeightChange, onCreateCardFinish } = props;
   const f = useFormatMessage();
   const { current } = useProjectStore();
   const [mode, setMode] = useState(ETitleMode.Text);
@@ -30,6 +31,9 @@ function ColumnFooter(props: IColumnFooterProps) {
 
   const handleFinish = () => {
     setMode(ETitleMode.Text);
+    if (onCreateCardFinish) {
+      onCreateCardFinish();
+    }
   };
 
   const handleHeightChange = (formHeight: number) => {

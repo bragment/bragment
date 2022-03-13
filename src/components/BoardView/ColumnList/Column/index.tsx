@@ -33,6 +33,7 @@ function Column(props: IColumnProps) {
   const { objectId, index } = props;
   const { data: columnData } = useGetProjectColumn(objectId);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
+  const scrollBarRef = useRef<Scrollbars>(null);
   const [scrollbarMaxHeight, setScrollbarMaxHeight] = useState(
     defaultColumnBodyScrollBarMaxHeight
   );
@@ -53,6 +54,10 @@ function Column(props: IColumnProps) {
     );
   }, []);
 
+  const handleCreateCardFinish = useCallback(() => {
+    scrollBarRef.current?.scrollToBottom();
+  }, []);
+
   return column ? (
     <Draggable draggableId={column.id} index={index}>
       {(dragProvided: DraggableProvided) => (
@@ -71,6 +76,7 @@ function Column(props: IColumnProps) {
             dragHandle={dragProvided.dragHandleProps}
           />
           <Scrollbars
+            ref={scrollBarRef}
             className={styles.content}
             autoHeightMax={scrollbarMaxHeight}
             autoHeight
@@ -101,6 +107,7 @@ function Column(props: IColumnProps) {
           <Footer
             objectId={objectId}
             onHeightChange={handleFooterHeightChange}
+            onCreateCardFinish={handleCreateCardFinish}
           />
         </div>
       )}
