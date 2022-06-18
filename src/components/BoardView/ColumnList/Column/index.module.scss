@@ -144,7 +144,7 @@
   &.textMode {
     user-select: none;
     height: $column-header-height;
-    color: var(--light-font-color);
+    color: rgba($color: #ffffff, $alpha: 0.85);
     background-image: linear-gradient(
       60deg,
       rgba(46, 62, 79, 0.7),

@@ -10,7 +10,7 @@ const UserAvatarMenu = (props: MenuProps) => {
 
   const handlers: Record<string, () => void> = {
     signOut: () => {
-      setImmediate(() => {
+      setTimeout(() => {
         userSignOut();
       });
     },
@@ -23,11 +23,17 @@ const UserAvatarMenu = (props: MenuProps) => {
   };
 
   return (
-    <Menu prefixCls={props.prefixCls} onClick={handleMenuClick}>
-      <Menu.Item key="signOut" icon={<LogoutOutlined />}>
-        {f('signOut')}
-      </Menu.Item>
-    </Menu>
+    <Menu
+      prefixCls={props.prefixCls}
+      onClick={handleMenuClick}
+      items={[
+        {
+          key: 'signOut',
+          icon: <LogoutOutlined />,
+          label: f('signOut'),
+        },
+      ]}
+    />
   );
 };
 

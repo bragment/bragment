@@ -1,4 +1,4 @@
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import {
   defaultLanguage,
@@ -9,24 +9,24 @@ import { ELanguage } from '../../i18n/types';
 import Router from './index';
 
 test('render router', async () => {
-  const { findByText } = render(
+  render(
     <IntlProvider locale={defaultLanguage} messages={defaultLocalMessages}>
       <Router />
     </IntlProvider>
   );
-  const settingMenuItem = await findByText(
+  const settingMenuItem = await screen.findByText(
     formatMessage(ELanguage.EN_US, 'setting'),
     {
       selector: 'span>a',
     }
   );
   expect(settingMenuItem).toBeInTheDocument();
-  let pageText = await findByText('home page', {
+  let pageText = await screen.findByText('home page', {
     selector: 'div',
   });
   expect(pageText).toBeInTheDocument();
   fireEvent(settingMenuItem, new MouseEvent('click', { bubbles: true }));
-  pageText = await findByText('setting page', {
+  pageText = await screen.findByText('setting page', {
     selector: 'div',
   });
   expect(pageText).toBeInTheDocument();

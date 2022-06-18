@@ -20,7 +20,7 @@
   &.ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled),
   &.ant-input {
     &:focus,
-    &.ant-input-affix-wrapper-focused {
+    &.ant-input-affix-wrapper-focused:not(.ant-input-affix-wrapper-status-error) {
       border-color: $color;
       box-shadow: 0 0 0 2px transparentize($color, $amount: 0.8);
     }

@@ -1,7 +1,20 @@
 import classNames from 'classnames';
-import { CSSProperties, memo } from 'react';
-import ProgressiveImage from 'react-progressive-image';
+import { Component, CSSProperties, memo, ReactElement } from 'react';
+import ReactProgressiveImage, {
+  ProgressiveImageProps,
+  ProgressiveImageState,
+} from 'react-progressive-image';
 import styles from './index.module.scss';
+
+class FixedReactProgressiveImage extends Component<
+  ProgressiveImageProps & {
+    children: (src: string, loading: boolean) => ReactElement;
+  },
+  ProgressiveImageState
+> {}
+
+const ProgressiveImage =
+  ReactProgressiveImage as typeof FixedReactProgressiveImage;
 
 export interface IProgressiveBackgroundProps {
   className?: string;

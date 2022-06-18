@@ -20,14 +20,21 @@ function Navigator() {
       collapsible
       collapsed={collapsed}
       onCollapse={handleCollapse}>
-      <Menu selectedKeys={[location.pathname]}>
-        <Menu.Item key={ERoutePath.Home} icon={<AppstoreOutlined />}>
-          <Link to={ERoutePath.Home}>{f('home')}</Link>
-        </Menu.Item>
-        <Menu.Item key={ERoutePath.Setting} icon={<SettingOutlined />}>
-          <Link to={ERoutePath.Setting}>{f('setting')}</Link>
-        </Menu.Item>
-      </Menu>
+      <Menu
+        selectedKeys={[location.pathname]}
+        items={[
+          {
+            key: ERoutePath.Home,
+            icon: <AppstoreOutlined />,
+            label: <Link to={ERoutePath.Home}>{f('home')}</Link>,
+          },
+          {
+            key: ERoutePath.Setting,
+            icon: <SettingOutlined />,
+            label: <Link to={ERoutePath.Setting}>{f('setting')}</Link>,
+          },
+        ]}
+      />
     </Layout.Sider>
   );
 }

@@ -15,7 +15,7 @@ test('render app', () => {
       <SignInDialog />
     </IntlProvider>
   );
-  stores.dialogStore.setSignInDialogVisible(true, ESignInDialogTabKey.SIGN_IN);
+  stores.dialog.setSignInDialogVisible(true, ESignInDialogTabKey.SignIn);
   const signInButton = screen.getByText(
     formatMessage(defaultLanguage, 'signIn'),
     { selector: 'button>span' }
@@ -23,7 +23,7 @@ test('render app', () => {
   expect(signInButton).toBeInTheDocument();
   fireEvent(signInButton, new MouseEvent('click', { bubbles: true }));
 
-  stores.dialogStore.setSignInDialogVisible(true, ESignInDialogTabKey.SIGN_UP);
+  stores.dialog.setSignInDialogVisible(true, ESignInDialogTabKey.SignUp);
   const signUpButton = screen.getByText(
     formatMessage(defaultLanguage, 'signUp'),
     { selector: 'button>span' }
@@ -31,9 +31,9 @@ test('render app', () => {
   expect(signUpButton).toBeInTheDocument();
   fireEvent(signUpButton, new MouseEvent('click', { bubbles: true }));
 
-  stores.dialogStore.setSignInDialogVisible(
+  stores.dialog.setSignInDialogVisible(
     true,
-    ESignInDialogTabKey.FORGOT_PASSWORD
+    ESignInDialogTabKey.ForgotPassword
   );
   const sendEmailButton = screen.getByText(
     formatMessage(defaultLanguage, 'sendPasswordResetEmail'),

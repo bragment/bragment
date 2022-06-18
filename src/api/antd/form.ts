@@ -1,7 +1,7 @@
 import { FormInstance } from 'antd';
 import { NamePath } from 'antd/lib/form/interface';
 
-export function setFormFieldError<T extends any>(
+export function setFormFieldError<T = any>(
   form: FormInstance<T>,
   name: NamePath,
   error: string
@@ -14,7 +14,7 @@ export function setFormFieldError<T extends any>(
   ]);
 }
 
-export function resetFormFieldError<T extends any>(
+export function resetFormFieldError<T = any>(
   form: FormInstance<T>,
   name: NamePath | NamePath[]
 ) {

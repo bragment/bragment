@@ -8,6 +8,9 @@
     "commitlint",
     "craco"
   ],
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "eslint.format.enable": true,
+  "javascript.inlayHints.variableTypes.enabled": true,
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
