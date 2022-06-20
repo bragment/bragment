@@ -30,4 +30,9 @@ export interface IWorkspace {
 export interface IProject {
   _id: string;
   title: string;
+  workspace: string;
+  background?: {
+    image?: string;
+    color?: string;
+  };
 }

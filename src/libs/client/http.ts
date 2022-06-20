@@ -2,7 +2,8 @@ import axios, { AxiosInstance } from 'axios';
 import { IApiError } from './types';
 
 export const mainServerApi = axios.create({
-  baseURL: process.env.MAIN_SERVER_URL,
+  // baseURL: process.env.MAIN_SERVER_URL,
+  baseURL: 'https://bragment-kovejvvsa-breezelin.vercel.app/api',
   timeout: 30 * 1000,
   headers: {
     'content-type': 'application/json',

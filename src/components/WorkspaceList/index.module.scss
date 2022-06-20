@@ -1,0 +1,23 @@
+@import '../../styles/variables.scss';
+
+.listWrapper {
+}
+
+.itemWrapper {
+  color: #404040;
+  .title {
+    font-size: 20px;
+    font-weight: bold;
+  }
+}
+
+.creatorWrapper {
+  .title {
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+}
+
+.formWrapper {
+}

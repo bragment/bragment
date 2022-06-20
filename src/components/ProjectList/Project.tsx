@@ -1,18 +1,18 @@
 import { Card as AntCard } from 'antd';
 import { memo } from 'react';
 import { getSmallImageUrl } from '../../api/unsplash';
+import { IProject } from '../../libs/client/types';
 import { useGetProject } from '../hooks';
 import ProgressiveBackground from '../ProgressiveBackground';
 import styles from './index.module.scss';
 interface IProjectProps {
-  objectId: string;
+  project: IProject;
 }
 
 function Project(props: IProjectProps) {
-  const { objectId } = props;
-  const { data: projectData } = useGetProject(objectId);
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const { title, image, color } = projectData!.project!;
+  const { project } = props;
+  const { title, background = {} } = project;
+  const { image, color } = background;
   return (
     <AntCard className={styles.project} bordered={false} hoverable>
       <ProgressiveBackground
