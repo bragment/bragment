@@ -1,19 +1,25 @@
 import { ApolloProvider } from '@apollo/client';
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
+import { QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 import { createApolloClient } from './api/apollo';
 import { initializeParse } from './api/parse';
 import { initializeSentry } from './api/sentry';
 import App from './components/App';
+import { createQueryClient } from './libs/react-query';
 import reportWebVitals from './reportWebVitals';
 import stores, { AppContext } from './stores';
 import { initializeStores } from './stores/helpers';
+
 import './styles/index.scss';
 
 initializeSentry();
 initializeParse();
 initializeStores();
-const client = createApolloClient();
+const apolloClient = createApolloClient();
+
+const queryClient = createQueryClient();
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -21,9 +27,12 @@ const root = ReactDOM.createRoot(
 root.render(
   <StrictMode>
     <AppContext.Provider value={stores}>
-      <ApolloProvider client={client}>
-        <App />
-      </ApolloProvider>
+      <QueryClientProvider client={queryClient}>
+        <ApolloProvider client={apolloClient}>
+          <App />
+          <ReactQueryDevtools />
+        </ApolloProvider>
+      </QueryClientProvider>
     </AppContext.Provider>
   </StrictMode>
 );

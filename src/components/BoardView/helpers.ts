@@ -232,8 +232,7 @@ export const draggingHandlers = {
   dragEnd: {
     [EDragType.Card]: (to: DraggableLocation) =>
       getCardPlaceholder(to.droppableId)?.removeAttribute('style'),
-    [EDragType.Column]: (to: DraggableLocation) =>
-      getColumnPlaceholder()?.removeAttribute('style'),
+    [EDragType.Column]: () => getColumnPlaceholder()?.removeAttribute('style'),
   },
 };
 

@@ -3,8 +3,10 @@ import classNames from 'classnames';
 import { observer } from 'mobx-react';
 import { useState } from 'react';
 import { resetFormFieldError, setFormFieldError } from '../../api/antd';
-import { EParseErrorCode, signIn } from '../../api/parse';
 import { useFormatMessage } from '../../components/hooks';
+import { parseApiErrorMessage } from '../../libs/client';
+import { EApiErrorMessage } from '../../libs/client/types';
+import { useUserSignInMutation } from '../../libs/react-query';
 import { ICurrentUser } from '../../stores/types';
 
 interface ISignInFormData {
@@ -22,6 +24,7 @@ function SignInForm(props: ISignInFormProps) {
   const { onFinish, gotoSignUp, gotoForgotPassword } = props;
   const [form] = Form.useForm<ISignInFormData>();
   const [submitting, setSubmitting] = useState(false);
+  const signInMutation = useUserSignInMutation();
   const f = useFormatMessage();
 
   const handleSubmit = async () => {
@@ -32,15 +35,14 @@ function SignInForm(props: ISignInFormProps) {
     resetFormFieldError(form, ['username', 'password']);
     try {
       const fields = form.getFieldsValue();
-      const user = await signIn(fields.username, fields.password);
+      const { user } = await signInMutation.mutateAsync(fields);
       onFinish(user);
       form.resetFields();
     } catch (error: any) {
-      switch (error.code) {
-        case EParseErrorCode.ObjectNotFound:
+      switch (parseApiErrorMessage(error)) {
+        case EApiErrorMessage.InvalidPassword:
           setFormFieldError(form, 'username', f('invalidUsernameOrPassword'));
           break;
-        case EParseErrorCode.ConnectionFailed:
         default:
           setFormFieldError(form, 'username', f('networkError'));
           break;

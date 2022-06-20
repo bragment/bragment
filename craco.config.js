@@ -10,6 +10,8 @@ process.env.REACT_APP_VERSION = packageData.version;
 const environmentVariablesWebpackPlugin = new DefinePlugin({
   'process.env.APP_ID': JSON.stringify(packageData.name),
   'process.env.APP_VERSION': JSON.stringify(packageData.version),
+  'process.env.MAIN_SERVER_URL': JSON.stringify(process.env.MAIN_SERVER_URL),
+  'process.env.VICE_SERVER_URL': JSON.stringify(process.env.VICE_SERVER_URL),
   'process.env.SERVER_URL': JSON.stringify(process.env.SERVER_URL),
   'process.env.GRAPHQL_URL': JSON.stringify(process.env.GRAPHQL_URL),
   'process.env.SENTRY_DSN': JSON.stringify(process.env.SENTRY_DSN),

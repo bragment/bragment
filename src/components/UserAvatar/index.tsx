@@ -2,26 +2,22 @@ import { UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Dropdown, Space } from 'antd';
 import { observer } from 'mobx-react';
 import { useEffect } from 'react';
-import {
-  IWorkspaceFragment,
-  useGetCurrentUserInfoLazyQuery,
-} from '../../graphql';
+import { useUserProfileQuery } from '../../libs/react-query/user';
 import { ESignInDialogTabKey } from '../../stores/types';
 import {
   useDialogStore,
   useFormatMessage,
-  useHandleGraphqlError,
+  useHandleServerApiError,
   useUserStore,
 } from '../hooks';
 import UserAvatarMenu from './Menu';
 
 const UserAvatar = () => {
-  const { current, setWorkspaces } = useUserStore();
+  const { current } = useUserStore();
   const { setSignInDialogVisible } = useDialogStore();
-  const handleGraphqlError = useHandleGraphqlError();
+  const handleServerApiError = useHandleServerApiError();
   const f = useFormatMessage();
-  const [getCurrentUserInfo, { error, data }] =
-    useGetCurrentUserInfoLazyQuery();
+  const { error } = useUserProfileQuery(!!current);
 
   const showSignInDialog = () =>
     setSignInDialogVisible(true, ESignInDialogTabKey.SignIn);
@@ -29,26 +25,10 @@ const UserAvatar = () => {
     setSignInDialogVisible(true, ESignInDialogTabKey.SignUp);
 
   useEffect(() => {
-    if (current) {
-      getCurrentUserInfo();
-    }
-  }, [current, getCurrentUserInfo]);
-  useEffect(() => {
     if (error) {
-      handleGraphqlError(error);
+      handleServerApiError(error);
     }
-  }, [error, handleGraphqlError]);
-  useEffect(() => {
-    if (data) {
-      const workspaces: IWorkspaceFragment[] = [];
-      data.viewer.user.workspaces.edges?.forEach((el) => {
-        if (el && el.node) {
-          workspaces.push(el.node);
-        }
-      });
-      setWorkspaces(workspaces);
-    }
-  }, [data, setWorkspaces]);
+  }, [error, handleServerApiError]);
 
   return current ? (
     <Dropdown overlay={<UserAvatarMenu />} trigger={['click']}>

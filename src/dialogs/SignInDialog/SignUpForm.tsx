@@ -2,8 +2,10 @@ import { Button, Form, Input } from 'antd';
 import classNames from 'classnames';
 import { memo, useState } from 'react';
 import { resetFormFieldError, setFormFieldError } from '../../api/antd';
-import { EParseErrorCode, signUp } from '../../api/parse';
 import { useFormatMessage } from '../../components/hooks';
+import { parseApiErrorMessage } from '../../libs/client';
+import { EApiErrorMessage } from '../../libs/client/types';
+import { useUserSignUpMutation } from '../../libs/react-query';
 import { ICurrentUser } from '../../stores/types';
 
 interface ISignUpFormData {
@@ -22,6 +24,7 @@ function SignUpForm(props: ISignUpFormProps) {
   const [form] = Form.useForm<ISignUpFormData>();
   const [submitting, setSubmitting] = useState(false);
   const f = useFormatMessage();
+  const signUpMutation = useUserSignUpMutation();
   const handleSubmit = async () => {
     if (submitting) {
       return;
@@ -31,18 +34,17 @@ function SignUpForm(props: ISignUpFormProps) {
     resetFormFieldError(form, ['email', 'username', 'password']);
     try {
       const fields = form.getFieldsValue();
-      const user = await signUp(fields.username, fields.password, fields.email);
+      const { user } = await signUpMutation.mutateAsync(fields);
       onFinish(user);
       form.resetFields();
     } catch (error: any) {
-      switch (error.code) {
-        case EParseErrorCode.UsernameTaken:
+      switch (parseApiErrorMessage(error)) {
+        case EApiErrorMessage.UsernameTaken:
           setFormFieldError(form, 'username', f('existingUsername'));
           break;
-        case EParseErrorCode.EmailTaken:
+        case EApiErrorMessage.EmailTaken:
           setFormFieldError(form, 'email', f('existingEmail'));
           break;
-        case EParseErrorCode.ConnectionFailed:
         default:
           setFormFieldError(form, 'username', f('networkError'));
           break;

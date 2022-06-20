@@ -2,16 +2,19 @@ import { LogoutOutlined } from '@ant-design/icons';
 import { Menu, MenuProps } from 'antd';
 import { observer } from 'mobx-react';
 import { MenuInfo } from 'rc-menu/lib/interface';
-import { useFormatMessage, useUserSignOut } from '../hooks';
+import { useUserSignOutMutation } from '../../libs/react-query';
+import { useFormatMessage, useUserStore } from '../hooks';
 
 const UserAvatarMenu = (props: MenuProps) => {
-  const userSignOut = useUserSignOut();
+  const { setCurrent } = useUserStore();
   const f = useFormatMessage();
+  const singOutMutation = useUserSignOutMutation();
 
   const handlers: Record<string, () => void> = {
     signOut: () => {
       setTimeout(() => {
-        userSignOut();
+        setCurrent(null);
+        singOutMutation.mutate();
       });
     },
   };

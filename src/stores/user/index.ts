@@ -1,6 +1,7 @@
 import { computed, makeAutoObservable } from 'mobx';
 import { setSentryUser, unsetSentryUser } from '../../api/sentry';
 import { IWorkspaceFragment, WorkspaceType } from '../../graphql';
+import { setCachedCurrentUser } from '../../libs/client';
 import { ICurrentUser } from '../types';
 
 class UserStore {
@@ -21,11 +22,12 @@ class UserStore {
 
   public setCurrent = (user: ICurrentUser | null) => {
     this.current = user;
+    setCachedCurrentUser(user);
     if (user) {
       setSentryUser({
-        id: user.id,
-        email: user.getEmail(),
-        username: user.getUsername(),
+        id: user._id,
+        email: user.email,
+        username: user.username,
       });
     } else {
       unsetSentryUser();

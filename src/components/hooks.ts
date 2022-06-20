@@ -1,10 +1,10 @@
-import { ApolloError, useApolloClient } from '@apollo/client';
+import { ApolloError } from '@apollo/client';
 import { message } from 'antd';
 import type { PrimitiveType } from 'intl-messageformat';
 import { useCallback, useContext } from 'react';
 import { useIntl } from 'react-intl';
 import { convertToGlobalId, getGraphqlErrorCode } from '../api/apollo';
-import { EParseErrorCode, signOut } from '../api/parse';
+import { EParseErrorCode } from '../api/parse';
 import {
   EClassName,
   useGetProjectAllItemsLazyQuery,
@@ -16,6 +16,9 @@ import {
   useGetProjectViewQuery,
 } from '../graphql';
 import type { ILocalMessages } from '../i18n/types';
+import { parseApiErrorMessage } from '../libs/client';
+import { EApiErrorMessage, IApiError } from '../libs/client/types';
+import { useUserSignOutMutation } from '../libs/react-query';
 import { AppContext } from '../stores';
 
 export function useAppContext() {
@@ -90,14 +93,30 @@ export function useGetProjectItem(objectId: string) {
 }
 
 export function useUserSignOut() {
-  const client = useApolloClient();
-  const { setCurrent, setWorkspaces } = useUserStore();
+  const singOutMutation = useUserSignOutMutation();
+  const { setCurrent } = useUserStore();
   return useCallback(() => {
-    signOut();
     setCurrent(null);
-    setWorkspaces([]);
-    client.clearStore();
-  }, [client, setCurrent, setWorkspaces]);
+    singOutMutation.mutate();
+  }, [setCurrent, singOutMutation]);
+}
+
+export function useHandleServerApiError() {
+  const userSignOut = useUserSignOut();
+  const f = useFormatMessage();
+  return useCallback(
+    (error: IApiError) => {
+      switch (parseApiErrorMessage(error)) {
+        case EApiErrorMessage.InvalidPassword:
+          userSignOut();
+          break;
+        default:
+          message.destroy();
+          message.error(f('networkError'));
+      }
+    },
+    [f, userSignOut]
+  );
 }
 
 export function useHandleGraphqlError() {

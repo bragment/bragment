@@ -1,6 +1,6 @@
-import type { getCurrentUser } from '../api/parse';
+import type { IUser } from '../libs/client/types';
 
-export type ICurrentUser = NonNullable<ReturnType<typeof getCurrentUser>>;
+export type ICurrentUser = IUser;
 
 export enum ESignInDialogTabKey {
   SignIn = 'SIGN_IN',
