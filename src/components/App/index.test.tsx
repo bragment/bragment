@@ -1,18 +1,28 @@
-import { act, render, screen } from '@testing-library/react';
-import { ELanguage, languages } from '../../i18n/types';
-import stores from '../../stores';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { formatMessage } from '../../i18n';
+import { ELanguage } from '../../i18n/types';
 import App from './index';
 
-test('renders app', () => {
+test('app render', async () => {
   render(<App />);
-  act(() => {
-    stores.settingStore.setLanguage(ELanguage.EN_US);
+  await waitFor(async () => {
+    const pageText = await screen.findByText('home page', {
+      selector: 'div',
+    });
+    expect(pageText).toBeInTheDocument();
   });
-  let headerElement = screen.getByText(languages[ELanguage.EN_US]);
-  expect(headerElement).toBeInTheDocument();
-  act(() => {
-    stores.settingStore.setLanguage(ELanguage.ZH_CN);
+
+  const settingMenuItem = await screen.findByText(
+    formatMessage(ELanguage.EN_US, 'setting'),
+    {
+      selector: 'span>a',
+    }
+  );
+  fireEvent(settingMenuItem, new MouseEvent('click', { bubbles: true }));
+  await waitFor(async () => {
+    const pageText = await screen.findByText('setting page', {
+      selector: 'div',
+    });
+    expect(pageText).toBeInTheDocument();
   });
-  headerElement = screen.getByText(languages[ELanguage.ZH_CN]);
-  expect(headerElement).toBeInTheDocument();
 });

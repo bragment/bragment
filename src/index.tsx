@@ -1,9 +1,10 @@
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
 import App from './components/App';
 import reportWebVitals from './reportWebVitals';
 import stores, { AppContext } from './stores';
+
+import './styles/index.scss';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -13,10 +14,10 @@ const handleAppMount = () => {
   const overture = document.getElementById('overture');
   setTimeout(() => {
     overture?.classList.add('loaded');
-  }, 2000);
-  setTimeout(() => {
-    overture?.remove();
-  }, 4000);
+    setTimeout(() => {
+      overture?.remove();
+    }, 600);
+  }, 2100);
 };
 
 root.render(

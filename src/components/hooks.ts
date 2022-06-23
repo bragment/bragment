@@ -1,7 +1,7 @@
 import type { PrimitiveType } from 'intl-messageformat';
 import { useCallback, useContext } from 'react';
 import { useIntl } from 'react-intl';
-import type { ILocalMessages } from '../i18n/messages';
+import type { ILocalMessages } from '../i18n/types';
 import { AppContext } from '../stores';
 
 export function useAppContext() {

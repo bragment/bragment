@@ -1,8 +1,6 @@
-import { ELanguage } from '../types';
-import enUS from './en-US.json';
-import zhCN from './zh-CN.json';
-
-export type ILocalMessages = typeof enUS;
+import { ELanguage, ILocalMessages } from '../types';
+import enUS from './en-US';
+import zhCN from './zh-CN';
 
 const messages: Record<ELanguage, ILocalMessages> = {
   [ELanguage.EN_US]: { ...enUS },
