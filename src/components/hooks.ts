@@ -1,7 +1,11 @@
+import { message } from 'antd';
 import type { PrimitiveType } from 'intl-messageformat';
 import { useCallback, useContext } from 'react';
 import { useIntl } from 'react-intl';
 import type { ILocalMessages } from '../i18n/types';
+import { parseApiErrorMessage } from '../libs/client';
+import { EApiErrorMessage, IApiError } from '../libs/client/types';
+import { useUserSignOutMutation } from '../libs/react-query';
 import { AppContext } from '../stores';
 
 export function useAppContext() {
@@ -9,7 +13,11 @@ export function useAppContext() {
 }
 
 export function useSettingStore() {
-  return useContext(AppContext).settingStore;
+  return useContext(AppContext).setting;
+}
+
+export function useUserStore() {
+  return useContext(AppContext).user;
 }
 
 export function useFormatMessage(): (
@@ -20,5 +28,32 @@ export function useFormatMessage(): (
   return useCallback(
     (id, values) => intl.formatMessage({ id }, values),
     [intl]
+  );
+}
+
+export function useUserSignOut() {
+  const singOutMutation = useUserSignOutMutation();
+  const { setCurrent } = useUserStore();
+  return useCallback(() => {
+    setCurrent(null);
+    singOutMutation.mutate();
+  }, [setCurrent, singOutMutation]);
+}
+
+export function useHandleServerApiError() {
+  const userSignOut = useUserSignOut();
+  const f = useFormatMessage();
+  return useCallback(
+    (error: IApiError) => {
+      switch (parseApiErrorMessage(error)) {
+        case EApiErrorMessage.InvalidPassword:
+          userSignOut();
+          break;
+        default:
+          message.destroy();
+          message.error(f('networkError'));
+      }
+    },
+    [f, userSignOut]
   );
 }

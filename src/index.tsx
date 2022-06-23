@@ -1,8 +1,8 @@
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './components/App';
+import App from './App';
+import RootRouter from './components/RootRouter';
 import reportWebVitals from './reportWebVitals';
-import stores, { AppContext } from './stores';
 
 import './styles/index.scss';
 
@@ -22,9 +22,9 @@ const handleAppMount = () => {
 
 root.render(
   <StrictMode>
-    <AppContext.Provider value={stores}>
-      <App onMount={handleAppMount} />
-    </AppContext.Provider>
+    <App onMount={handleAppMount}>
+      <RootRouter />
+    </App>
   </StrictMode>
 );
 

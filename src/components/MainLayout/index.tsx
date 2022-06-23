@@ -1,7 +1,7 @@
 import { Layout } from 'antd';
 import { memo } from 'react';
 import { Outlet } from 'react-router-dom';
-import Navigator from './Navigator';
+import Navigator from '../Navigator';
 import styles from './index.module.scss';
 
 function MainLayout() {

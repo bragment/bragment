@@ -1,8 +1,10 @@
 import { createContext } from 'react';
-import SettingStore from './SettingStore';
+import setting from './setting';
+import user from './user';
 
 const stores = {
-  settingStore: new SettingStore(),
+  setting,
+  user,
 };
 
 export const AppContext = createContext(stores);

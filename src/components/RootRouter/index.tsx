@@ -1,37 +1,30 @@
-import { lazy, memo, Suspense } from 'react';
+import { memo } from 'react';
 import { HashRouter, Route, Routes } from 'react-router-dom';
+import HomePage from '../../pages/HomePage';
+import SettingPage from '../../pages/SettingPage';
+import SignInPage from '../../pages/SignInPage';
 import MainLayout from '../MainLayout';
 import AnimatedRoutes from './AnimatedRoutes';
+import AuthGuard from './AuthGuard';
 import { ERoutePath } from './types';
-
-const HomePage = lazy(() => import('../../pages/HomePage'));
-const SettingPage = lazy(() => import('../../pages/SettingPage'));
 
 function RootRouter() {
   return (
     <HashRouter>
       <Routes>
-        <Route element={<MainLayout />}>
+        <Route path={ERoutePath.SignIn} element={<SignInPage />} />
+        <Route
+          element={
+            <AuthGuard>
+              <MainLayout />
+            </AuthGuard>
+          }>
           <Route
-            path="/*"
+            path={ERoutePath.Any}
             element={
               <AnimatedRoutes>
-                <Route
-                  path={ERoutePath.Setting}
-                  element={
-                    <Suspense fallback={<div />}>
-                      <SettingPage />
-                    </Suspense>
-                  }
-                />
-                <Route
-                  path={ERoutePath.Home}
-                  element={
-                    <Suspense fallback={<div />}>
-                      <HomePage />
-                    </Suspense>
-                  }
-                />
+                <Route path={ERoutePath.Setting} element={<SettingPage />} />
+                <Route path={ERoutePath.Home} element={<HomePage />} />
               </AnimatedRoutes>
             }
           />

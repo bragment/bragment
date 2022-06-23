@@ -1,0 +1,9 @@
+@mixin _svgMark($svgUrl) {
+  height: 100%;
+  background-image: $svgUrl;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  color: transparent;
+  text-align: justify;
+}

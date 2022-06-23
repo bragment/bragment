@@ -4,7 +4,7 @@ export const languages = {
   'zh-CN': '中文(简体)',
 };
 
-// NOTE: These keys of ELanguage should be uppercase.
+// NOTE: These keys of ELanguage should be uppercase. see `src/stores/setting/index.ts`
 export enum ELanguage {
   EN_US = 'en-US',
   ZH_CN = 'zh-CN',
