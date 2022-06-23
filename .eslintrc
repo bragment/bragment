@@ -13,9 +13,26 @@
     {
       "files": ["*.ts", "*.tsx"],
       "parser": "@typescript-eslint/parser"
+    },
+    {
+      "files": ["src/i18n/messages/*.ts"],
+      "parser": "@typescript-eslint/parser",
+      "rules": {
+        "sort-keys": "warn"
+      }
     }
   ],
   "rules": {
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/no-empty-interface": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-shadow": "error",
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      { "argsIgnorePattern": "^_", "destructuredArrayIgnorePattern": "^_" }
+    ],
+    "@typescript-eslint/no-var-requires": "off",
     "import/no-anonymous-default-export": "off",
     "import/order": [
       "warn",
@@ -23,7 +40,14 @@
         "alphabetize": {
           "order": "asc",
           "caseInsensitive": true
-        }
+        },
+        "pathGroups": [
+          {
+            "pattern": "{.,..}/**/*\\.scss",
+            "group": "object",
+            "position": "after"
+          }
+        ]
       }
     ],
     "prettier/prettier": "warn",
@@ -35,18 +59,20 @@
       }
     ],
     "no-shadow": "off",
+    "react/jsx-boolean-value": ["warn", "never"],
+    "react/self-closing-comp": [
+      "warn",
+      {
+        "component": true,
+        "html": true
+      }
+    ],
     "sort-imports": [
       "warn",
       {
         "ignoreCase": true,
         "ignoreDeclarationSort": true
       }
-    ],
-    "@typescript-eslint/no-var-requires": "off",
-    "@typescript-eslint/no-shadow": "error",
-    "@typescript-eslint/explicit-module-boundary-types": "off",
-    "@typescript-eslint/explicit-function-return-type": "off",
-    "@typescript-eslint/no-empty-interface": "off",
-    "@typescript-eslint/no-explicit-any": "off"
+    ]
   }
 }
