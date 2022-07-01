@@ -1,6 +1,7 @@
-import { Card, Layout, Tabs } from 'antd';
+import { Card, Tabs } from 'antd';
 import { observer } from 'mobx-react';
 import { useEffect, useRef, useState } from 'react';
+import Scrollbars from 'react-custom-scrollbars-2';
 import { Location, useLocation, useNavigate } from 'react-router-dom';
 import { useFormatMessage, useUserStore } from '../../components/hooks';
 import { IUser } from '../../libs/client/types';
@@ -41,9 +42,9 @@ function SignInPage() {
   }, [current, location, navigate]);
 
   return (
-    <Layout className={styles.wrapper}>
-      <Layout.Content className={styles.body}>
-        <Card className={styles.card} hoverable={false}>
+    <Scrollbars autoHide>
+      <div className={styles.wrapper}>
+        <Card className={styles.body} hoverable={false}>
           <div className={styles.logo}>
             <div className="text-mark" />
           </div>
@@ -65,8 +66,8 @@ function SignInPage() {
             </Tabs.TabPane>
           </Tabs>
         </Card>
-      </Layout.Content>
-    </Layout>
+      </div>
+    </Scrollbars>
   );
 }
 

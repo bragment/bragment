@@ -3,4 +3,5 @@ export enum ERoutePath {
   Home = '/',
   Setting = '/setting',
   SignIn = '/signIn',
+  Workspace = '/workspace',
 }

@@ -12,3 +12,4 @@ export function createQueryClient() {
 }
 
 export * from './user';
+export * from './workspace';

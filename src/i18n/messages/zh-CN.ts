@@ -1,5 +1,7 @@
 export default {
   backToSignIn: '返回登录？',
+  confirm: '确定',
+  createYourWorkspace: '新建工作区',
   email: '邮箱',
   existingEmail: '邮箱已被占用',
   existingUsername: '用户名已被占用',
@@ -14,6 +16,7 @@ export default {
   requiredEmail: '请输入邮箱',
   requiredPassword: '请输入密码',
   requiredUsername: '请输入用户名',
+  requiredWorkspaceTitle: '请输入工作区名称',
   sendPasswordResetEmail: '发送重置密码邮件',
   setting: '设置',
   signIn: '登录',
@@ -21,4 +24,6 @@ export default {
   signUp: '注册',
   username: '用户名',
   usernameOrEmail: '用户名或邮箱',
+  workspace: '工作区',
+  workspaceTitle: '工作区名称',
 };

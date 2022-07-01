@@ -10,6 +10,7 @@ export type IApiError = AxiosError<IApiErrorResponseData>;
 
 export enum EApiErrorMessage {
   // NOTE: for user
+  Unauthorized = 'Unauthorized',
   UsernameTaken = 'Username Taken',
   EmailTaken = 'Email Taken',
   UsernameAndEmailTaken = 'Username and Email Taken',
@@ -20,6 +21,7 @@ export interface IUser {
   _id: string;
   username: string;
   email: string;
+  mainWorkspace?: string;
 }
 
 export interface IWorkspace {

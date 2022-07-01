@@ -8,15 +8,21 @@ import UserAvatarMenu from './Menu';
 import styles from './index.module.scss';
 
 const UserAvatar = () => {
-  const { signedIn } = useUserStore();
+  const { setCurrent, signedIn } = useUserStore();
   const handleServerApiError = useHandleServerApiError();
-  const { error } = useUserProfileQuery(signedIn);
+  const { data, error } = useUserProfileQuery(signedIn);
 
   useEffect(() => {
     if (error) {
       handleServerApiError(error);
     }
   }, [error, handleServerApiError]);
+
+  useEffect(() => {
+    if (data) {
+      setCurrent(data.user);
+    }
+  }, [data, setCurrent]);
 
   return (
     <Dropdown

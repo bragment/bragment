@@ -4,22 +4,38 @@ import {
   useQuery,
   useQueryClient,
 } from 'react-query';
-import { fetchProfile, IUserProfile, signIn, signOut, signUp } from '../client';
-import { IApiError } from '../client/types';
+import {
+  fetchMyProfile,
+  IUserProfile,
+  signIn,
+  signOut,
+  signUp,
+  updateMyData,
+} from '../client';
+import { IApiError, IUser } from '../client/types';
+import { EQueryKey } from './types';
+
+function updateUserCurrentQueryData(
+  queryClient: QueryClient,
+  user: Partial<IUser>
+) {
+  queryClient.setQueryData<IUser | undefined>(EQueryKey.MyData, (old) =>
+    old ? { ...old, ...user } : undefined
+  );
+}
 
 function setUserProfileQueryData(
   queryClient: QueryClient,
-  profile: IUserProfile
+  profile: IUserProfile | undefined
 ) {
-  queryClient.setQueryData('profile', profile);
-  queryClient.setQueryData('workspaces', profile.workspaces);
-  queryClient.setQueryData('projects', profile.projects);
+  queryClient.setQueryData(EQueryKey.MyProfile, profile);
+  queryClient.setQueryData(EQueryKey.MyData, profile?.user);
+  queryClient.setQueryData(EQueryKey.MyWorkspaces, profile?.workspaces);
+  queryClient.setQueryData(EQueryKey.MyProjects, profile?.projects);
 }
 
 function unsetUserProfileQueryData(queryClient: QueryClient) {
-  queryClient.setQueryData('profile', undefined);
-  queryClient.setQueryData('workspaces', []);
-  queryClient.setQueryData('projects', []);
+  setUserProfileQueryData(queryClient, undefined);
 }
 
 export function useUserSignInMutation() {
@@ -52,12 +68,25 @@ export function useUserSignOutMutation() {
   });
 }
 
-export function useUserProfileQuery(enabled: boolean) {
+export function useUserUpdateMutation() {
   const queryClient = useQueryClient();
-  return useQuery<IUserProfile, IApiError>('profile', fetchProfile, {
-    enabled,
-    onSuccess: (profile) => {
-      setUserProfileQueryData(queryClient, profile);
+  return useMutation('update', updateMyData, {
+    onSuccess: (user) => {
+      updateUserCurrentQueryData(queryClient, user);
     },
   });
+}
+
+export function useUserProfileQuery(enabled: boolean) {
+  const queryClient = useQueryClient();
+  return useQuery<IUserProfile, IApiError>(
+    EQueryKey.MyProfile,
+    fetchMyProfile,
+    {
+      enabled,
+      onSuccess: (profile) => {
+        setUserProfileQueryData(queryClient, profile);
+      },
+    }
+  );
 }

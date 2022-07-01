@@ -1,6 +1,7 @@
 import { Layout } from 'antd';
 import { memo } from 'react';
 import { Outlet } from 'react-router-dom';
+import DialogContainer from '../DialogContainer';
 import Navigator from '../Navigator';
 import styles from './index.module.scss';
 
@@ -13,6 +14,7 @@ function MainLayout() {
           <Outlet />
         </Layout.Content>
       </Layout>
+      <DialogContainer />
     </Layout>
   );
 }

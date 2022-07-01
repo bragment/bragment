@@ -12,6 +12,10 @@ export function useAppContext() {
   return useContext(AppContext);
 }
 
+export function useDialogStore() {
+  return useContext(AppContext).dialog;
+}
+
 export function useSettingStore() {
   return useContext(AppContext).setting;
 }
@@ -46,6 +50,7 @@ export function useHandleServerApiError() {
   return useCallback(
     (error: IApiError) => {
       switch (parseApiErrorMessage(error)) {
+        case EApiErrorMessage.Unauthorized:
         case EApiErrorMessage.InvalidPassword:
           userSignOut();
           break;

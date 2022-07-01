@@ -23,6 +23,10 @@ export interface IUserResetPasswordInput {
   email: string;
 }
 
+export interface IUserUpdateInput {
+  mainWorkspace: string;
+}
+
 export function signUp(input: IUserSignUpInput) {
   return baseRequest<IUserProfile>(
     mainServerApi,
@@ -49,6 +53,14 @@ export function requestPasswordReset(input: IUserResetPasswordInput) {
   return baseRequest<void>(mainServerApi, 'POST', '/auth/resetPassword', input);
 }
 
-export function fetchProfile() {
-  return baseRequest<IUserProfile>(mainServerApi, 'GET', '/user/profile');
+export function updateMyData(input: IUserUpdateInput) {
+  return baseRequest<Partial<IUser>>(mainServerApi, 'PUT', '/my', input);
+}
+
+export function fetchMyProfile() {
+  return baseRequest<IUserProfile>(mainServerApi, 'GET', '/my/profile');
+}
+
+export function fetchMyWorkspaces() {
+  return baseRequest<IWorkspace[]>(mainServerApi, 'GET', '/my/workspaces');
 }

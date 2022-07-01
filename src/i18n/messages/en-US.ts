@@ -1,5 +1,7 @@
 export default {
   backToSignIn: 'Back to sign in?',
+  confirm: 'Confirm',
+  createYourWorkspace: 'Create your workspace',
   email: 'Email',
   existingEmail: 'Email already exists.',
   existingUsername: 'Username already exists.',
@@ -14,6 +16,7 @@ export default {
   requiredEmail: 'Email is required.',
   requiredPassword: 'Password is required.',
   requiredUsername: 'Username is required.',
+  requiredWorkspaceTitle: 'Workspace title is required.',
   sendPasswordResetEmail: 'Send password reset email',
   setting: 'Setting',
   signIn: 'Sign In',
@@ -21,4 +24,6 @@ export default {
   signUp: 'Sign Up',
   username: 'Username',
   usernameOrEmail: 'Username or Email',
+  workspace: 'Workspace',
+  workspaceTitle: 'Workspace Title',
 };

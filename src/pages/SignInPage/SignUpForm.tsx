@@ -59,7 +59,7 @@ function SignUpForm(props: ISignUpFormProps) {
         name="username"
         rules={[{ required: true, message: f('requiredUsername') }]}>
         <Input
-          autoComplete="username"
+          autoComplete="off"
           className={classNames('secondary-input', 'large-input-without-affix')}
           size="large"
           placeholder={f('username')}
@@ -69,6 +69,7 @@ function SignUpForm(props: ISignUpFormProps) {
         name="email"
         rules={[{ required: true, message: f('requiredEmail') }]}>
         <Input
+          autoComplete="off"
           className={classNames('secondary-input', 'large-input-without-affix')}
           size="large"
           placeholder={f('email')}
