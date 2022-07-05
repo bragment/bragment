@@ -1,0 +1,111 @@
+$backgroundColor: rgba(0, 0, 0, 0.25);
+$placeholderColor: rgba(0, 0, 0, 0.3);
+$borderRadiusBase: 6px;
+
+@mixin editable() {
+  background-color: $backgroundColor;
+  box-shadow: none;
+  border: none;
+  border-radius: $borderRadiusBase;
+  &::placeholder,
+  ::placeholder {
+    color: $placeholderColor;
+  }
+  &:hover {
+    background-color: color-lighten($backgroundColor);
+  }
+  &:focus-within {
+    box-shadow: 0 0 0 2px transparentize($backgroundColor, $amount: 0.4);
+    background-color: color-darken($backgroundColor);
+  }
+}
+
+.wrapper {
+  .fieldInput,
+  .fieldSelect {
+    @include editable();
+    input {
+      height: 32px;
+      line-height: 32px;
+      font-weight: bold;
+    }
+  }
+  .fieldSelect {
+    :global {
+      .ant-select-selection-item {
+        font-weight: bold;
+      }
+    }
+  }
+  .formActions {
+    margin-bottom: 0;
+  }
+  .foreground {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    padding: 48px 24px 24px 24px;
+    background-color: rgba(255, 255, 255, 0.65);
+  }
+  &.withoutContentBackground {
+    :global {
+      .ant-modal-content {
+        background-color: transparent;
+      }
+    }
+  }
+
+  :global {
+    .ant-modal-content {
+      overflow: hidden;
+    }
+    .ant-modal-body {
+      padding: 0;
+      height: 312px;
+      position: relative;
+    }
+    .ant-select-single.ant-select-open .ant-select-selection-item {
+      color: $placeholderColor;
+    }
+  }
+}
+
+.fieldSelect,
+.fieldDropdown {
+  border-radius: $borderRadiusBase;
+  :global {
+    .anticon {
+      font-weight: normal;
+      padding-right: 11px;
+    }
+    .anticon-lock {
+      color: blue;
+    }
+    .anticon-global {
+      color: green;
+    }
+  }
+}
+
+.titleField:global(.middle-input-with-prefix-and-suffix) {
+  :global {
+    .ant-input-suffix {
+      padding: 0 11px;
+      margin: 0;
+      color: rgba(0, 0, 0, 0.45);
+      transition: color 0.3s;
+      &:hover {
+        color: rgba(0, 0, 0, 0.75);
+      }
+    }
+  }
+}
+.titleField.withBgPopover {
+  :global {
+    .ant-input-suffix {
+      color: rgba(0, 0, 0, 0.75);
+    }
+  }
+}

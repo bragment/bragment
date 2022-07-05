@@ -47,12 +47,14 @@
     "react-custom-scrollbars-2": "^4.5.0",
     "react-dom": "^18.2.0",
     "react-intl": "^6.0.4",
+    "react-progressive-graceful-image": "^0.6.14",
     "react-query": "^3.39.1",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "react-spring": "^9.4.5",
     "typescript": "4.7.4",
     "typescript-plugin-css-modules": "^3.4.0",
+    "unsplash-js": "^7.0.15",
     "web-vitals": "^2.1.4"
   },
   "browserslist": {

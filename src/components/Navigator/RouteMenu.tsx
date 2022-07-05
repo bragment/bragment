@@ -19,8 +19,8 @@ import styles from './index.module.scss';
 function RouteMenu() {
   const f = useFormatMessage();
   const location = useLocation();
-  const { current, mainWorkspaceId } = useUserStore();
-  const { data: workspaces } = useCurrentWorkspaceListQuery(!!current);
+  const { current: currentUser, mainWorkspaceId } = useUserStore();
+  const { data: workspaces } = useCurrentWorkspaceListQuery(!!currentUser);
   const [mainWorkspace, setMainWorkspace] = useState<IWorkspace | null>(null);
 
   const isHomePage = location.pathname === ERoutePath.Home;
@@ -28,11 +28,11 @@ function RouteMenu() {
   const isWorkspace = location.pathname === ERoutePath.Workspace;
 
   useEffect(() => {
-    const main = workspaces?.find(
-      (workspace) => workspace._id === mainWorkspaceId
-    );
+    const main = currentUser
+      ? workspaces?.find((workspace) => workspace._id === mainWorkspaceId)
+      : undefined;
     setMainWorkspace(main || null);
-  }, [workspaces, mainWorkspaceId]);
+  }, [currentUser, workspaces, mainWorkspaceId]);
 
   return (
     <Menu

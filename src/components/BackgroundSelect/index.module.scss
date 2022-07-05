@@ -1,0 +1,42 @@
+.wrapper {
+  &.small {
+    width: 164px;
+    .option {
+      height: 32px;
+    }
+  }
+  &.large {
+    width: 292px;
+    .option {
+      height: 64px;
+    }
+  }
+  .option {
+    border-radius: 6px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  :global {
+    .ant-card-body {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      color: white;
+      font-size: 14px;
+      .anticon {
+        position: absolute;
+        right: 9px;
+        bottom: 9px;
+      }
+    }
+    .ant-row {
+      margin-top: 6px;
+      margin-bottom: 6px;
+    }
+    .ant-col {
+      text-align: center;
+    }
+  }
+}

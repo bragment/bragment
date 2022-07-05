@@ -16,6 +16,10 @@ export function useDialogStore() {
   return useContext(AppContext).dialog;
 }
 
+export function useProjectStore() {
+  return useContext(AppContext).project;
+}
+
 export function useSettingStore() {
   return useContext(AppContext).setting;
 }

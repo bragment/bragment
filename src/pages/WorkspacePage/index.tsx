@@ -1,11 +1,11 @@
 import { Layout } from 'antd';
 import { observer } from 'mobx-react';
 import { useEffect, useState } from 'react';
-import Scrollbars from 'react-custom-scrollbars-2';
 import { useUserStore } from '../../components/hooks';
 import { IWorkspace } from '../../libs/client/types';
 import { useCurrentWorkspaceListQuery } from '../../libs/react-query';
 import CreateWorkspaceView from './CreateWorkspaceView';
+import MainView from './MainView';
 import SideView from './SideView';
 
 function WorkspacePage() {
@@ -21,25 +21,23 @@ function WorkspacePage() {
   );
 
   useEffect(() => {
-    const target =
-      workspaces?.find((workspace) => workspace._id === targetWorkspaceId) ||
-      workspaces?.find((workspace) => workspace._id === mainWorkspaceId) ||
-      workspaces?.slice(0, 1).pop();
+    const target = currentUser
+      ? workspaces?.find((workspace) => workspace._id === targetWorkspaceId) ||
+        workspaces?.find((workspace) => workspace._id === mainWorkspaceId) ||
+        workspaces?.slice(0, 1).pop()
+      : undefined;
     setTargetWorkspace(target || null);
-  }, [workspaces, mainWorkspaceId, targetWorkspaceId]);
+  }, [currentUser, workspaces, mainWorkspaceId, targetWorkspaceId]);
 
-  return (
-    <Scrollbars autoHide>
-      {shouldCreateWorkspace ? (
-        <CreateWorkspaceView />
-      ) : (
-        targetWorkspace && (
-          <Layout>
-            <SideView workspace={targetWorkspace} />
-          </Layout>
-        )
-      )}
-    </Scrollbars>
+  return shouldCreateWorkspace ? (
+    <CreateWorkspaceView />
+  ) : (
+    targetWorkspace && (
+      <Layout>
+        <SideView workspace={targetWorkspace} />
+        <MainView workspace={targetWorkspace} />
+      </Layout>
+    )
   );
 }
 

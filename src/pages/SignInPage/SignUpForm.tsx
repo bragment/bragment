@@ -31,8 +31,8 @@ function SignUpForm(props: ISignUpFormProps) {
 
     setSubmitting(true);
     resetFormFieldError(form, ['email', 'username', 'password']);
+    const fields = await form.validateFields();
     try {
-      const fields = form.getFieldsValue();
       const { user } = await signUpMutation.mutateAsync(fields);
       onFinish(user);
       form.resetFields();

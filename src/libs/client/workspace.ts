@@ -9,3 +9,11 @@ export async function createWorkspace(workspace: Partial<IWorkspace>) {
     workspace
   );
 }
+
+export function fetchWorkspaceProjects(id: string) {
+  return baseRequest<IProject[]>(
+    mainServerApi,
+    'GET',
+    `/workspace/${id}/projects`
+  );
+}

@@ -24,17 +24,32 @@ export interface IUser {
   mainWorkspace?: string;
 }
 
+export interface IMember {
+  users: string[];
+}
+
 export interface IWorkspace {
   _id: string;
   title: string;
+  owner: IMember;
 }
 
 export interface IProject {
   _id: string;
   title: string;
+  background: IProjectBackground;
+  visibility: EProjectVisibility;
   workspace: string;
-  background?: {
-    image?: string;
-    color?: string;
-  };
+  owner: IMember;
+}
+
+export interface IProjectBackground {
+  image?: string;
+  color?: string;
+}
+
+export enum EProjectVisibility {
+  Public = 'PUBLIC',
+  Protected = 'PROTECTED',
+  Private = 'PRIVATE',
 }

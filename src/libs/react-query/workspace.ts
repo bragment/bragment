@@ -1,8 +1,28 @@
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import {
+  QueryFunctionContext,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from 'react-query';
 import { fetchMyWorkspaces } from '../client';
-import { IApiError, IWorkspace } from '../client/types';
-import { createWorkspace } from '../client/workspace';
+import { IApiError, IProject, IWorkspace } from '../client/types';
+import { createWorkspace, fetchWorkspaceProjects } from '../client/workspace';
 import { EQueryKey } from './types';
+
+function fetchProjectListFn(context: QueryFunctionContext) {
+  const [_key, id] = context.queryKey as [string, string];
+  return fetchWorkspaceProjects(id);
+}
+
+export function useWorkspaceProjectListQuery(id: string, enabled: boolean) {
+  return useQuery<IProject[], IApiError>(
+    [EQueryKey.WorkspaceProjects, id],
+    fetchProjectListFn,
+    {
+      enabled,
+    }
+  );
+}
 
 export function useCurrentWorkspaceListQuery(enabled: boolean) {
   return useQuery<IWorkspace[], IApiError>(

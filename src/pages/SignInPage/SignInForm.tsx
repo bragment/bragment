@@ -32,8 +32,8 @@ function SignInForm(props: ISignInFormProps) {
     }
     setSubmitting(true);
     resetFormFieldError(form, ['username', 'password']);
+    const fields = await form.validateFields();
     try {
-      const fields = form.getFieldsValue();
       const { user } = await signInMutation.mutateAsync(fields);
       onFinish(user);
       form.resetFields();
