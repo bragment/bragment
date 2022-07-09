@@ -1,4 +1,16 @@
 .wrapper {
+  height: 100%;
+  width: 100%;
+  min-height: 360px;
+  background-color: transparent;
+}
+
+.body {
+  position: relative;
+  background-color: transparent;
+}
+
+.navigator {
   user-select: none;
   -webkit-app-region: drag;
   z-index: 5;

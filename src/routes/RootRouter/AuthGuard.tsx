@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { useUserStore } from '../hooks';
+import { useUserStore } from '../../components/hooks';
 import { ERoutePath } from '../types';
 
 interface IAuthGuardProps {

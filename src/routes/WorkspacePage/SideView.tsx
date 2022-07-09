@@ -1,7 +1,6 @@
 import { LayoutTwoTone, PlusOutlined, RightOutlined } from '@ant-design/icons';
 import { Layout, PageHeader } from 'antd';
 import { memo } from 'react';
-import Scrollbars from 'react-custom-scrollbars-2';
 import {
   useDialogStore,
   useFormatMessage,
@@ -31,29 +30,27 @@ function SideView(props: ISideViewProps) {
 
   return (
     <Layout.Sider theme={'light'} className={styles.sideView} width={280}>
-      <Scrollbars autoHide>
-        <PageHeader
-          title={title}
-          avatar={{
-            shape: 'square',
-            children: getFirstChar(title),
-            className: avatarStyles.wrapper,
-          }}>
-          {isOwner && (
-            <MenuOption
-              title={f('createNewProject')}
-              prefix={<PlusOutlined />}
-              onClick={handelCreateNewProject}
-            />
-          )}
+      <PageHeader
+        title={title}
+        avatar={{
+          shape: 'square',
+          children: getFirstChar(title),
+          className: avatarStyles.wrapper,
+        }}>
+        {isOwner && (
           <MenuOption
-            title={f('projectList')}
-            active
-            prefix={<LayoutTwoTone />}
-            suffix={<RightOutlined />}
+            title={f('createNewProject')}
+            prefix={<PlusOutlined />}
+            onClick={handelCreateNewProject}
           />
-        </PageHeader>
-      </Scrollbars>
+        )}
+        <MenuOption
+          title={f('projectList')}
+          active
+          prefix={<LayoutTwoTone />}
+          suffix={<RightOutlined />}
+        />
+      </PageHeader>
     </Layout.Sider>
   );
 }

@@ -1,8 +1,8 @@
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import RootRouter from './components/RootRouter';
 import reportWebVitals from './reportWebVitals';
+import RootRouter from './routes/RootRouter';
 
 import './styles/index.scss';
 

@@ -13,3 +13,5 @@ const stores = {
 
 export const AppContext = createContext(stores);
 export default stores;
+
+(window as any).stores = stores;

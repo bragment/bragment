@@ -1,0 +1,85 @@
+$normalColor: #000000;
+
+.wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  backface-visibility: hidden;
+
+  .background {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: -1;
+  }
+
+  .foreground {
+    background-color: rgba(#dcdcdc, 0.32);
+    backdrop-filter: blur(5px);
+  }
+
+  .mainView {
+    background-color: transparent;
+  }
+
+  .sideView {
+    background-color: rgba(#ffffff, 0.36);
+    .body {
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      .content > div {
+        padding: 0 24px 16px 24px;
+      }
+      > :global(.ant-page-header-heading) {
+        height: 56px;
+        padding: 16px 24px 0 24px;
+      }
+      > :global(.ant-page-header-content) {
+        height: calc(100% - 56px);
+      }
+    }
+  }
+}
+
+.dataModelList {
+  padding: 0;
+  .item {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 0px;
+  }
+  .createTrigger {
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    text-align: center;
+    line-height: 32px;
+    &:hover {
+      background-color: rgba($normalColor, 0.03);
+    }
+    &:active {
+      background-color: rgba($normalColor, 0.06);
+    }
+  }
+  :global {
+    .ant-page-header-heading-title {
+      font-size: 16px;
+    }
+    .ant-page-header-content {
+      padding-top: 0;
+      padding-left: 16px;
+    }
+    .ant-form-item {
+      margin-top: 4px;
+      margin-bottom: 4px;
+      .ant-input {
+        font-weight: bold;
+      }
+    }
+  }
+}

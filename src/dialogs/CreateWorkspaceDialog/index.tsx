@@ -1,18 +1,13 @@
 import { Modal } from 'antd';
 import { observer } from 'mobx-react';
 import { useNavigate } from 'react-router-dom';
-import {
-  useDialogStore,
-  useFormatMessage,
-  useUserStore,
-} from '../../components/hooks';
-import { ERoutePath } from '../../components/types';
+import { useDialogStore, useFormatMessage } from '../../components/hooks';
 import { IWorkspace } from '../../libs/client/types';
+import { ERoutePath } from '../../routes/types';
 import CreateWorkspaceForm from './CreateWorkspaceForm';
 
 function CreateProjectDialog() {
   const f = useFormatMessage();
-  const { setMainWorkspaceId } = useUserStore();
   const navigate = useNavigate();
   const { createWorkspaceDialogVisible, setCreateWorkspaceDialogVisible } =
     useDialogStore();
@@ -22,8 +17,7 @@ function CreateProjectDialog() {
   };
   const handleFinish = async (workspace: IWorkspace) => {
     setCreateWorkspaceDialogVisible(false);
-    setMainWorkspaceId(workspace._id);
-    navigate(ERoutePath.Workspace);
+    navigate(ERoutePath.Workspace + '/' + workspace._id, { replace: true });
   };
 
   return (

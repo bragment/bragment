@@ -5,6 +5,7 @@ import Scrollbars from 'react-custom-scrollbars-2';
 import { Location, useLocation, useNavigate } from 'react-router-dom';
 import { useFormatMessage, useUserStore } from '../../components/hooks';
 import { IUser } from '../../libs/client/types';
+import { ERoutePath } from '../../routes/types';
 import ForgotPasswordForm from './ForgotPasswordForm';
 import SignInForm from './SignInForm';
 import SignUpForm from './SignUpForm';
@@ -33,10 +34,14 @@ function SignInPage() {
   };
 
   useEffect(() => {
-    if (currentUserRef.current !== current && current) {
-      const locationState = location.state as { from?: Location };
-      const from = locationState?.from?.pathname || '/';
-      navigate(from, { replace: true });
+    if (current) {
+      if (currentUserRef.current !== current) {
+        const locationState = location.state as { from?: Location };
+        const from = locationState?.from?.pathname || ERoutePath.Home;
+        navigate(from, { replace: true });
+      } else {
+        navigate(ERoutePath.Home, { replace: true });
+      }
     }
     currentUserRef.current = current;
   }, [current, location, navigate]);

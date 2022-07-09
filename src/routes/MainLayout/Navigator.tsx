@@ -1,12 +1,12 @@
 import { Layout } from 'antd';
 import { memo } from 'react';
-import UserAvatar from '../UserAvatar';
+import UserAvatar from '../../components/UserAvatar';
 import RouteMenu from './RouteMenu';
 import styles from './index.module.scss';
 
 function Navigator() {
   return (
-    <Layout.Sider collapsed theme={'light'} className={styles.wrapper}>
+    <Layout.Sider collapsed theme={'light'} className={styles.navigator}>
       <Layout>
         <Layout.Header>
           <div className={styles.logo}>

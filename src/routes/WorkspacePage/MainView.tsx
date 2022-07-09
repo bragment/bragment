@@ -1,5 +1,6 @@
 import { Layout } from 'antd';
 import { memo } from 'react';
+import Scrollbars from 'react-custom-scrollbars-2';
 import { IWorkspace } from '../../libs/client/types';
 import ProjectListView from './ProjectListView';
 import styles from './index.module.scss';
@@ -13,7 +14,9 @@ function MainView(props: IMainViewProps) {
 
   return (
     <Layout.Content className={styles.mainView}>
-      <ProjectListView workspace={workspace} />
+      <Scrollbars autoHide>
+        <ProjectListView workspace={workspace} />
+      </Scrollbars>
     </Layout.Content>
   );
 }

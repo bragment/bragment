@@ -1,15 +1,24 @@
-.mainView {
-  background-color: transparent;
-}
+.wrapper {
+  .mainView {
+    background-color: transparent;
+  }
 
-.sideView {
-  background-color: rgba($color: #ffffff, $alpha: 0.36);
+  .sideView {
+    background-color: rgba(#ffffff, 0.36);
+  }
 }
 
 .projectListView {
   .creatorWrapper {
     padding: 24px 24px 0 24px;
   }
+}
+.projectListEmpty {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .createWorkspaceView {

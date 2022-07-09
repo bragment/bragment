@@ -1,5 +1,5 @@
 import { computed, makeAutoObservable } from 'mobx';
-import { IUser } from '../../libs/client/types';
+import { IProject, IUser } from '../../libs/client/types';
 
 const SIGNED_IN = 'SIGNED_IN';
 function getLocalSignedIn() {
@@ -15,7 +15,7 @@ function setLocalSignedIn(signedIn: boolean) {
 
 class UserStore {
   public current: IUser | null = null;
-  public targetWorkspaceId: string | undefined;
+  public currentProject: IProject | null = null;
   public signedIn = getLocalSignedIn();
 
   get mainWorkspaceId() {
@@ -29,6 +29,7 @@ class UserStore {
   public setCurrent = (user: IUser | null) => {
     this.current = user;
     this.setSignedIn(!!user);
+    this.setCurrentProject(null);
   };
 
   public updateCurrent = (user: Partial<IUser>) => {
@@ -37,8 +38,8 @@ class UserStore {
     }
   };
 
-  public setTargetWorkspaceId = (workspaceId: string | undefined) => {
-    this.targetWorkspaceId = workspaceId;
+  public setCurrentProject = (project: IProject | null) => {
+    this.currentProject = project;
   };
 
   public setMainWorkspaceId = (workspaceId: string) => {

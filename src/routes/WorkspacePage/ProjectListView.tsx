@@ -7,7 +7,6 @@ import {
 import { Button, Empty } from 'antd';
 import { observer } from 'mobx-react';
 import { useEffect, useState } from 'react';
-import Scrollbars from 'react-custom-scrollbars-2';
 import {
   useDialogStore,
   useFormatMessage,
@@ -59,45 +58,44 @@ function ProjectListView(props: IProjectListViewProps) {
     setPublicProjects(publicList);
   }, [projects]);
 
-  return (
-    <Scrollbars autoHide>
-      <div className={styles.projectListView}>
-        {isLoading && (
-          <ProjectList
-            loading
-            icon={<LoadingOutlined />}
-            title={f('loading')}
-          />
-        )}
-        {!!privateProjects.length && (
-          <ProjectList
-            icon={<LockOutlined />}
-            title={f('privateProjects')}
-            projects={privateProjects}
-          />
-        )}
-        {!!publicProjects.length && (
-          <ProjectList
-            icon={<GlobalOutlined />}
-            title={f('publicProjects')}
-            projects={publicProjects}
-          />
-        )}
-        {projects && projects.length === 0 && (
-          <Empty description={f('haveNoProject')}>
-            {isOwner && (
-              <Button
-                type="primary"
-                size="large"
-                icon={<PlusOutlined />}
-                onClick={handelCreateNewProject}>
-                {f('createProject')}
-              </Button>
-            )}
-          </Empty>
-        )}
+  if (projects?.length === 0) {
+    return (
+      <div className={styles.projectListEmpty}>
+        <Empty description={f('haveNoProject')}>
+          {isOwner && (
+            <Button
+              type="primary"
+              size="large"
+              icon={<PlusOutlined />}
+              onClick={handelCreateNewProject}>
+              {f('createProject')}
+            </Button>
+          )}
+        </Empty>
       </div>
-    </Scrollbars>
+    );
+  }
+
+  return (
+    <div className={styles.projectListView}>
+      {isLoading && (
+        <ProjectList loading icon={<LoadingOutlined />} title={f('loading')} />
+      )}
+      {!!privateProjects.length && (
+        <ProjectList
+          icon={<LockOutlined />}
+          title={f('privateProjects')}
+          projects={privateProjects}
+        />
+      )}
+      {!!publicProjects.length && (
+        <ProjectList
+          icon={<GlobalOutlined />}
+          title={f('publicProjects')}
+          projects={publicProjects}
+        />
+      )}
+    </div>
   );
 }
 

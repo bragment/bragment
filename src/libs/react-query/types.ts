@@ -4,4 +4,6 @@ export enum EQueryKey {
   MyWorkspaces = 'MyWorkspaces',
   MyProjects = 'MyProjects',
   WorkspaceProjects = 'WorkspaceProjects',
+  Workspace = 'Workspace',
+  Project = 'Project',
 }

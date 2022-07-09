@@ -41,6 +41,7 @@ export interface IProject {
   visibility: EProjectVisibility;
   workspace: string;
   owner: IMember;
+  models: IProjectDataModel[];
 }
 
 export interface IProjectBackground {
@@ -52,4 +53,9 @@ export enum EProjectVisibility {
   Public = 'PUBLIC',
   Protected = 'PROTECTED',
   Private = 'PRIVATE',
+}
+
+export interface IProjectDataModel {
+  title: string;
+  createdAt: string;
 }

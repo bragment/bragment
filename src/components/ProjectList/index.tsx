@@ -1,8 +1,10 @@
 import { List, PageHeader, Space } from 'antd';
 import { memo, ReactNode } from 'react';
+import { Link } from 'react-router-dom';
 import ProjectItem from '../../components/ProjectItem';
 import ProjectItemPlaceholder from '../../components/ProjectItem/Placeholder';
 import { IProject } from '../../libs/client/types';
+import { ERoutePath } from '../../routes/types';
 
 interface IProjectListProps {
   title: string;
@@ -24,7 +26,16 @@ export const LIST_GRID = {
 function ProjectList(props: IProjectListProps) {
   const { icon, title, projects, loading } = props;
 
-  const renderItem = (project: IProject) => <ProjectItem project={project} />;
+  const renderItem = (project: IProject) => (
+    <Link
+      key={project._id}
+      to={
+        ERoutePath.Project.replace(':id', project._id) +
+        `?workspaceId=${project.workspace}`
+      }>
+      <ProjectItem project={project} />
+    </Link>
+  );
   const renderItemPlaceholder = () => <ProjectItemPlaceholder />;
 
   return (

@@ -8,12 +8,12 @@ import {
 import { Menu } from 'antd';
 import { observer } from 'mobx-react';
 import { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useMatch } from 'react-router-dom';
+import { useFormatMessage, useUserStore } from '../../components/hooks';
+import WorkspaceAvatar from '../../components/WorkspaceAvatar';
 import { IWorkspace } from '../../libs/client/types';
 import { useCurrentWorkspaceListQuery } from '../../libs/react-query';
-import { useFormatMessage, useUserStore } from '../hooks';
 import { ERoutePath } from '../types';
-import WorkspaceAvatar from '../WorkspaceAvatar';
 import styles from './index.module.scss';
 
 function RouteMenu() {
@@ -23,9 +23,9 @@ function RouteMenu() {
   const { data: workspaces } = useCurrentWorkspaceListQuery(!!currentUser);
   const [mainWorkspace, setMainWorkspace] = useState<IWorkspace | null>(null);
 
-  const isHomePage = location.pathname === ERoutePath.Home;
-  const isSettingPage = location.pathname === ERoutePath.Setting;
-  const isWorkspace = location.pathname === ERoutePath.Workspace;
+  const isHomePage = useMatch(ERoutePath.Home);
+  const isSettingPage = useMatch(ERoutePath.Setting);
+  const isWorkspacePage = useMatch(ERoutePath.Workspace);
 
   useEffect(() => {
     const main = currentUser
@@ -47,14 +47,23 @@ function RouteMenu() {
         {
           key: ERoutePath.Workspace,
           icon:
-            isWorkspace && mainWorkspace ? (
+            isWorkspacePage && mainWorkspace ? (
               <span className={styles.workspaceIcon}>
                 <WorkspaceAvatar size="small" workspace={mainWorkspace} />
               </span>
             ) : (
               <TeamOutlined />
             ),
-          label: <Link to={ERoutePath.Workspace}>{f('workspace')}</Link>,
+          label: (
+            <Link
+              to={
+                workspaces?.length === 0
+                  ? ERoutePath.WorkspaceCreate
+                  : ERoutePath.Workspace
+              }>
+              {f('workspace')}
+            </Link>
+          ),
         },
         {
           key: ERoutePath.Setting,

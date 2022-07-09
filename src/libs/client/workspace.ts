@@ -10,6 +10,10 @@ export async function createWorkspace(workspace: Partial<IWorkspace>) {
   );
 }
 
+export async function fetchWorkspace(id: string) {
+  return baseRequest<IWorkspace>(mainServerApi, 'GET', `/workspace/${id}`);
+}
+
 export function fetchWorkspaceProjects(id: string) {
   return baseRequest<IProject[]>(
     mainServerApi,

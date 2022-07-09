@@ -4,6 +4,8 @@ export default {
   createNewProject: '新建项目...',
   createProject: '新建项目',
   createYourWorkspace: '新建工作区',
+  dataModel: '数据源',
+  dataModelTitle: '数据源名称',
   email: '邮箱',
   existingEmail: '邮箱已被占用',
   existingUsername: '用户名已被占用',

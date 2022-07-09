@@ -4,6 +4,8 @@ export default {
   createNewProject: 'Create a new project...',
   createProject: 'Create Project',
   createYourWorkspace: 'Create your workspace',
+  dataModel: 'Data Source',
+  dataModelTitle: 'Data Source Title',
   email: 'Email',
   existingEmail: 'Email already exists.',
   existingUsername: 'Username already exists.',

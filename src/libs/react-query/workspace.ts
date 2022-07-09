@@ -6,12 +6,21 @@ import {
 } from 'react-query';
 import { fetchMyWorkspaces } from '../client';
 import { IApiError, IProject, IWorkspace } from '../client/types';
-import { createWorkspace, fetchWorkspaceProjects } from '../client/workspace';
+import {
+  createWorkspace,
+  fetchWorkspace,
+  fetchWorkspaceProjects,
+} from '../client/workspace';
 import { EQueryKey } from './types';
 
 function fetchProjectListFn(context: QueryFunctionContext) {
   const [_key, id] = context.queryKey as [string, string];
   return fetchWorkspaceProjects(id);
+}
+
+function fetchWorkspaceFn(context: QueryFunctionContext) {
+  const [_key, id] = context.queryKey as [string, string];
+  return fetchWorkspace(id);
 }
 
 export function useWorkspaceProjectListQuery(id: string, enabled: boolean) {
@@ -30,6 +39,21 @@ export function useCurrentWorkspaceListQuery(enabled: boolean) {
     fetchMyWorkspaces,
     {
       enabled,
+    }
+  );
+}
+
+export function useWorkspaceQuery(id: string, enabled: boolean) {
+  const queryClient = useQueryClient();
+  return useQuery<IWorkspace, IApiError>(
+    [EQueryKey.Workspace, id],
+    fetchWorkspaceFn,
+    {
+      enabled,
+      initialData: () =>
+        queryClient
+          .getQueryData<IWorkspace[]>([EQueryKey.MyWorkspaces])
+          ?.find((workspace) => workspace._id === id),
     }
   );
 }

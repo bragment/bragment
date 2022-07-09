@@ -26,7 +26,7 @@ import styles from './index.module.scss';
 function CreateProjectDialog() {
   const { createProjectDialogVisible, setCreateProjectDialogVisible } =
     useDialogStore();
-  const { targetWorkspaceId, mainWorkspaceId } = useUserStore();
+  const { mainWorkspaceId } = useUserStore();
   const {
     selectedBuiltinColor,
     selectedUnsplashPhoto,
@@ -83,7 +83,7 @@ function CreateProjectDialog() {
       <ProgressiveBackground {...backgroundData} />
       <div className={styles.foreground}>
         <CreateProjectForm
-          defaultWorkspaceId={targetWorkspaceId || mainWorkspaceId}
+          defaultWorkspaceId={mainWorkspaceId}
           onFinish={handleFinish}
         />
       </div>
