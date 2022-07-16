@@ -1,39 +1,38 @@
-import { LogoutOutlined } from '@ant-design/icons';
-import { Menu, MenuProps } from 'antd';
+import classNames from 'classnames';
 import { observer } from 'mobx-react';
-import { MenuInfo } from 'rc-menu/lib/interface';
+import { HiOutlineLogout } from 'react-icons/hi';
 import { useFormatMessage, useUserSignOut } from '../hooks';
 
-const UserAvatarMenu = (props: MenuProps) => {
+interface IUserAvatarMenuProps {
+  className?: string;
+}
+
+const UserAvatarMenu = (props: IUserAvatarMenuProps) => {
+  const { className } = props;
   const f = useFormatMessage();
   const singOut = useUserSignOut();
 
-  const handlers: Record<string, () => void> = {
-    signOut: () => {
-      setTimeout(() => {
-        singOut();
-      });
-    },
-  };
-
-  const handleMenuClick = (info: MenuInfo) => {
-    if (info.key in handlers) {
-      handlers[info.key]();
-    }
+  const handleSignOut = () => {
+    setTimeout(() => {
+      singOut();
+    });
   };
 
   return (
-    <Menu
-      prefixCls={props.prefixCls}
-      onClick={handleMenuClick}
-      items={[
-        {
-          key: 'signOut',
-          icon: <LogoutOutlined />,
-          label: f('signOut'),
-        },
-      ]}
-    />
+    <ul
+      tabIndex={0}
+      className={classNames(
+        'dropdown-content menu bg-base-200 md:bg-base-100',
+        'w-52 p-2 shadow rounded-box',
+        className
+      )}>
+      <li onClick={handleSignOut}>
+        <span>
+          <HiOutlineLogout className="text-xl" />
+          {f('signOut')}
+        </span>
+      </li>
+    </ul>
   );
 };
 

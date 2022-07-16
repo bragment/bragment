@@ -4,15 +4,9 @@ import {
   useQuery,
   useQueryClient,
 } from 'react-query';
-import {
-  fetchMyProfile,
-  IUserProfile,
-  signIn,
-  signOut,
-  signUp,
-  updateMyData,
-} from '../client';
-import { IApiError, IUser } from '../client/types';
+import { fetchMyProfile, updateMyData } from '../client';
+import { IApiError, IUser, IUserProfile } from '../client/types';
+import { setUserProfileQueryData } from './auth';
 import { EQueryKey } from './types';
 
 function updateUserCurrentQueryData(
@@ -22,50 +16,6 @@ function updateUserCurrentQueryData(
   queryClient.setQueryData<IUser | undefined>(EQueryKey.MyData, (old) =>
     old ? { ...old, ...user } : undefined
   );
-}
-
-function setUserProfileQueryData(
-  queryClient: QueryClient,
-  profile: IUserProfile | undefined
-) {
-  queryClient.setQueryData(EQueryKey.MyProfile, profile);
-  queryClient.setQueryData(EQueryKey.MyData, profile?.user);
-  queryClient.setQueryData(EQueryKey.MyWorkspaces, profile?.workspaces);
-  queryClient.setQueryData(EQueryKey.MyProjects, profile?.projects);
-}
-
-function unsetUserProfileQueryData(queryClient: QueryClient) {
-  setUserProfileQueryData(queryClient, undefined);
-}
-
-export function useUserSignInMutation() {
-  const queryClient = useQueryClient();
-  return useMutation('signIn', signIn, {
-    onSuccess: (profile) => {
-      setUserProfileQueryData(queryClient, profile);
-    },
-  });
-}
-
-export function useUserSignUpMutation() {
-  const queryClient = useQueryClient();
-  return useMutation('signUp', signUp, {
-    onSuccess: (profile) => {
-      setUserProfileQueryData(queryClient, profile);
-    },
-  });
-}
-
-export function useUserSignOutMutation() {
-  const queryClient = useQueryClient();
-  return useMutation('signOut', signOut, {
-    onMutate: () => {
-      unsetUserProfileQueryData(queryClient);
-    },
-    onSettled: () => {
-      queryClient.clear();
-    },
-  });
 }
 
 export function useUserUpdateMutation() {

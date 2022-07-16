@@ -1,32 +1,41 @@
-import { Typography } from 'antd';
+import classNames from 'classnames';
 import { observer } from 'mobx-react';
-import { useNavigate } from 'react-router-dom';
+import { useCallback } from 'react';
 import { useFormatMessage, useUserStore } from '../../components/hooks';
-import CreateWorkspaceForm from '../../dialogs/CreateWorkspaceDialog/CreateWorkspaceForm';
 import { IWorkspace } from '../../libs/client/types';
 import { useUserUpdateMutation } from '../../libs/react-query';
-import { ERoutePath } from '../types';
-import styles from './index.module.scss';
+import { useNavigateWorkspaceInstancePage } from '../hooks';
+import CreateWorkspaceForm from './CreateWorkspaceForm';
 
 function CreateWorkspaceView() {
   const f = useFormatMessage();
-  const { updateCurrent: updateCurrentUser } = useUserStore();
+  const { current: currentUser, updateCurrent: updateCurrentUser } =
+    useUserStore();
   const userUpdateMutation = useUserUpdateMutation();
-  const navigate = useNavigate();
+  const navigate = useNavigateWorkspaceInstancePage();
 
-  const handleFinish = async (workspace: IWorkspace) => {
-    const mainWorkspace = workspace._id;
-    navigate(ERoutePath.Workspace, { replace: true });
-    const user = await userUpdateMutation.mutateAsync({ mainWorkspace });
-    updateCurrentUser(user);
-  };
+  const handleFinish = useCallback(
+    async (workspace: IWorkspace) => {
+      const id = workspace._id;
+      navigate(id, { replace: true });
+      if (!currentUser?.mainWorkspace) {
+        const user = await userUpdateMutation.mutateAsync({
+          mainWorkspace: id,
+        });
+        updateCurrentUser(user);
+      }
+    },
+    [currentUser, userUpdateMutation, navigate, updateCurrentUser]
+  );
 
   return (
-    <div className={styles.createWorkspaceView}>
-      <div className={styles.body}>
-        <Typography.Title level={2}>
-          {f('createYourWorkspace')}
-        </Typography.Title>
+    <div
+      className={classNames(
+        'bg-base-200 text-base-content',
+        'w-full h-full min-h-[36rem] flex justify-center items-center'
+      )}>
+      <div className="w-96 mx-3 pb-16">
+        <label className="font-bold text-3xl">{f('createYourWorkspace')}</label>
         <CreateWorkspaceForm onFinish={handleFinish} />
       </div>
     </div>

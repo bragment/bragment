@@ -1,14 +1,19 @@
-import { UserOutlined } from '@ant-design/icons';
-import { Avatar, Dropdown } from 'antd';
+import classNames from 'classnames';
 import { observer } from 'mobx-react';
 import { useEffect } from 'react';
 import { useUserProfileQuery } from '../../libs/react-query';
+import { getFirstChar } from '../../utils';
 import { useHandleServerApiError, useUserStore } from '../hooks';
 import UserAvatarMenu from './Menu';
-import styles from './index.module.scss';
 
-const UserAvatar = () => {
-  const { setCurrent, signedIn } = useUserStore();
+interface IUserAvatarProps {
+  className?: string;
+  menuClassName?: string;
+}
+
+const UserAvatar = (props: IUserAvatarProps) => {
+  const { className, menuClassName } = props;
+  const { current, signedIn, setCurrent } = useUserStore();
   const handleServerApiError = useHandleServerApiError();
   const { data, error } = useUserProfileQuery(signedIn);
 
@@ -25,12 +30,20 @@ const UserAvatar = () => {
   }, [data, setCurrent]);
 
   return (
-    <Dropdown
-      className={styles.wrapper}
-      overlay={<UserAvatarMenu />}
-      trigger={['click']}>
-      <Avatar icon={<UserOutlined />} />
-    </Dropdown>
+    <div className={classNames('dropdown', className)}>
+      <label tabIndex={0} className="avatar placeholder">
+        <div
+          className={classNames(
+            'ring ring-offset-base-100 ring-offset-2 bg-accent-focus text-accent-content',
+            'w-8 rounded-full cursor-pointer'
+          )}>
+          <span className="text-xl font-bold">
+            {getFirstChar(current?.username || '')}
+          </span>
+        </div>
+      </label>
+      <UserAvatarMenu className={menuClassName} />
+    </div>
   );
 };
 

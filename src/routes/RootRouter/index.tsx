@@ -1,44 +1,52 @@
 import { memo } from 'react';
 import { HashRouter, Route, Routes } from 'react-router-dom';
+import AuthPage from '../AuthPage';
+import ForgotPasswordForm from '../AuthPage/ForgotPasswordForm';
+import SignInForm from '../AuthPage/SignInForm';
+import SignUpForm from '../AuthPage/SignUpForm';
 import HomePage from '../HomePage';
-import MainLayout from '../MainLayout';
-import ProjectPage from '../ProjectPage';
+import RootPage from '../RootPage';
 import SettingPage from '../SettingPage';
-import SignInPage from '../SignInPage';
 import { ERoutePath, ERoutePathName } from '../types';
 import WorkspacePage from '../WorkspacePage';
 import CreateWorkspaceView from '../WorkspacePage/CreateWorkspaceView';
-import CurrentWorkspaceView from '../WorkspacePage/CurrentWorkspaceView';
+import WorkspaceInstanceView from '../WorkspacePage/WorkspaceInstanceView';
 import AuthGuard from './AuthGuard';
 
 function RootRouter() {
   return (
     <HashRouter>
       <Routes>
-        <Route path={ERoutePath.SignIn} element={<SignInPage />} />
+        <Route path={ERoutePathName.Auth} element={<AuthPage />}>
+          <Route path={ERoutePathName.SignIn} element={<SignInForm />} />
+          <Route path={ERoutePathName.SignUp} element={<SignUpForm />} />
+          <Route
+            path={ERoutePathName.ForgotPassword}
+            element={<ForgotPasswordForm />}
+          />
+        </Route>
         <Route
           path={ERoutePath.Root}
           element={
             <AuthGuard>
-              <MainLayout />
+              <RootPage />
             </AuthGuard>
           }>
           <Route index element={<HomePage />} />
-          <Route path={ERoutePathName.Workspace}>
-            <Route index element={<WorkspacePage />} />
+          <Route path={ERoutePathName.Workspace} element={<WorkspacePage />}>
             <Route
               path={ERoutePathName.Create}
               element={<CreateWorkspaceView />}
             />
             <Route
-              path={ERoutePathName.Id}
-              element={<CurrentWorkspaceView />}
+              path={ERoutePathName.WorkspaceId}
+              element={<WorkspaceInstanceView />}
             />
           </Route>
           <Route path={ERoutePathName.Setting} element={<SettingPage />} />
-          <Route path={ERoutePathName.Project}>
+          {/* <Route path={ERoutePathName.Project}>
             <Route path={ERoutePathName.Id} element={<ProjectPage />} />
-          </Route>
+          </Route> */}
         </Route>
       </Routes>
     </HashRouter>

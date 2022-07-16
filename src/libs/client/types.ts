@@ -24,6 +24,12 @@ export interface IUser {
   mainWorkspace?: string;
 }
 
+export interface IUserProfile {
+  user: IUser;
+  workspaces: IWorkspace[];
+  projects: IProject[];
+}
+
 export interface IMember {
   users: string[];
 }

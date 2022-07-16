@@ -1,6 +1,6 @@
 import { IntlMessageFormat } from 'intl-messageformat';
 import allMessages from './messages';
-import { ELanguage, ILocalMessages } from './types';
+import { ELanguage, ILocalMessage } from './types';
 
 export const messages = allMessages;
 export const defaultLanguage = ELanguage.EN_US;
@@ -8,7 +8,7 @@ export const defaultLocalMessages = messages[defaultLanguage];
 
 export function formatMessage(
   language: ELanguage,
-  id: keyof ILocalMessages,
+  id: ILocalMessage,
   values?: any
 ) {
   const localMessages = messages[language];

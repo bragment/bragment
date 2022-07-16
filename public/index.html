@@ -16,7 +16,14 @@
       sizes="16x16"
       href="%PUBLIC_URL%/favicon-16x16.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
+    <meta
+      name="theme-color"
+      content="#f2f2f2"
+      media="(prefers-color-scheme: light)" />
+    <meta
+      name="theme-color"
+      content="#242933"
+      media="(prefers-color-scheme: dark)" />
     <meta name="description" content="Bragment Web App" />
     <link
       rel="apple-touch-icon"
@@ -38,21 +45,21 @@
     -->
     <title>Bragment</title>
     <style>
+      html {
+        --app-bg: #f2f2f2;
+      }
+      @media (prefers-color-scheme: dark) {
+        html {
+          --app-bg: #242933;
+        }
+      }
       html,
       body,
       #root,
       #overture {
         width: 100%;
         height: 100%;
-      }
-      body,
-      #overture {
-        background-image: linear-gradient(
-          to top,
-          #f3e7e9 0%,
-          #e3eeff 99%,
-          #e3eeff 100%
-        );
+        background-color: var(--app-bg);
       }
       #overture {
         position: fixed;

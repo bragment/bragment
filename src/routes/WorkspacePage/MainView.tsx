@@ -15,7 +15,7 @@ function MainView(props: IMainViewProps) {
   return (
     <Layout.Content className={styles.mainView}>
       <Scrollbars autoHide>
-        <ProjectListView workspace={workspace} />
+        <ProjectListView />
       </Scrollbars>
     </Layout.Content>
   );

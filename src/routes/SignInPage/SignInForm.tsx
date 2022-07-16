@@ -6,7 +6,7 @@ import { useFormatMessage } from '../../components/hooks';
 import { resetFormFieldError, setFormFieldError } from '../../libs/antd';
 import { parseApiErrorMessage } from '../../libs/client';
 import { EApiErrorMessage, IUser } from '../../libs/client/types';
-import { useUserSignInMutation } from '../../libs/react-query';
+import { useAuthSignInMutation } from '../../libs/react-query';
 
 interface ISignInFormData {
   username: string;
@@ -23,7 +23,7 @@ function SignInForm(props: ISignInFormProps) {
   const { onFinish, gotoSignUp, gotoForgotPassword } = props;
   const [form] = Form.useForm<ISignInFormData>();
   const [submitting, setSubmitting] = useState(false);
-  const signInMutation = useUserSignInMutation();
+  const signInMutation = useAuthSignInMutation();
   const f = useFormatMessage();
 
   const handleSubmit = async () => {

@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useUserStore } from '../../components/hooks';
 import { ERoutePath } from '../types';
 
@@ -10,13 +10,12 @@ interface IAuthGuardProps {
 function AuthGuard(props: IAuthGuardProps) {
   const { children } = props;
   const { signedIn } = useUserStore();
-  const location = useLocation();
 
-  return signedIn ? (
-    children
-  ) : (
-    <Navigate to={ERoutePath.SignIn} state={{ from: location }} replace />
-  );
+  if (!signedIn) {
+    return <Navigate to={ERoutePath.AuthSignIn} replace />;
+  }
+
+  return children;
 }
 
 export default observer(AuthGuard);

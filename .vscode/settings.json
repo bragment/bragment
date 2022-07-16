@@ -6,7 +6,9 @@
     "bragment",
     "browserslist",
     "commitlint",
-    "craco"
+    "craco",
+    "daisyui",
+    "tailwindcss"
   ],
   "editor.formatOnSave": true,
   "editor.tabSize": 2,

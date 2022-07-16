@@ -5,7 +5,7 @@ import { useFormatMessage } from '../../components/hooks';
 import { resetFormFieldError, setFormFieldError } from '../../libs/antd';
 import { parseApiErrorMessage } from '../../libs/client';
 import { EApiErrorMessage, IUser } from '../../libs/client/types';
-import { useUserSignUpMutation } from '../../libs/react-query';
+import { useAuthSignUpMutation } from '../../libs/react-query';
 
 interface ISignUpFormData {
   email: string;
@@ -23,7 +23,7 @@ function SignUpForm(props: ISignUpFormProps) {
   const [form] = Form.useForm<ISignUpFormData>();
   const [submitting, setSubmitting] = useState(false);
   const f = useFormatMessage();
-  const signUpMutation = useUserSignUpMutation();
+  const signUpMutation = useAuthSignUpMutation();
   const handleSubmit = async () => {
     if (submitting) {
       return;
@@ -42,6 +42,9 @@ function SignUpForm(props: ISignUpFormProps) {
           setFormFieldError(form, 'username', f('existingUsername'));
           break;
         case EApiErrorMessage.EmailTaken:
+          setFormFieldError(form, 'email', f('existingEmail'));
+          break;
+        case EApiErrorMessage.UsernameAndEmailTaken:
           setFormFieldError(form, 'email', f('existingEmail'));
           break;
         default:

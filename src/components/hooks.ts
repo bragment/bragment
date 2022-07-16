@@ -2,10 +2,10 @@ import { message } from 'antd';
 import type { PrimitiveType } from 'intl-messageformat';
 import { useCallback, useContext } from 'react';
 import { useIntl } from 'react-intl';
-import type { ILocalMessages } from '../i18n/types';
+import type { ILocalMessage } from '../i18n/types';
 import { parseApiErrorMessage } from '../libs/client';
 import { EApiErrorMessage, IApiError } from '../libs/client/types';
-import { useUserSignOutMutation } from '../libs/react-query';
+import { useAuthSignOutMutation } from '../libs/react-query';
 import { AppContext } from '../stores';
 
 export function useAppContext() {
@@ -29,7 +29,7 @@ export function useUserStore() {
 }
 
 export function useFormatMessage(): (
-  id: keyof ILocalMessages,
+  id: ILocalMessage,
   values?: Record<string, PrimitiveType>
 ) => string {
   const intl = useIntl();
@@ -40,7 +40,7 @@ export function useFormatMessage(): (
 }
 
 export function useUserSignOut() {
-  const singOutMutation = useUserSignOutMutation();
+  const singOutMutation = useAuthSignOutMutation();
   const { setCurrent } = useUserStore();
   return useCallback(() => {
     setCurrent(null);

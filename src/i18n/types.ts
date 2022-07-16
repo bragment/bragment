@@ -11,3 +11,4 @@ export enum ELanguage {
 }
 
 export type ILocalMessages = typeof enUS;
+export type ILocalMessage = keyof ILocalMessages;

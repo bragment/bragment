@@ -1,8 +1,8 @@
 import { memo } from 'react';
-import CurrentWorkspaceView from './CurrentWorkspaceView';
+import { Outlet } from 'react-router-dom';
 
 function WorkspacePage() {
-  return <CurrentWorkspaceView />;
+  return <Outlet />;
 }
 
 export default memo(WorkspacePage);
