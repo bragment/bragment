@@ -5,28 +5,29 @@ import { HiCog, HiHome, HiUserGroup } from 'react-icons/hi';
 import { NavLink } from 'react-router-dom';
 import { useUserStore } from '../../components/hooks';
 import UserAvatar from '../../components/UserAvatar';
+import WorkspaceAvatar from '../../components/WorkspaceAvatar';
 import { IWorkspace } from '../../libs/client/types';
 import { useCurrentWorkspaceListQuery } from '../../libs/react-query';
 import { getWorkspaceInstancePath } from '../helpers';
 import { ERoutePath, ERoutePathName } from '../types';
 
 function Navigator() {
-  const { current: currentUser, mainWorkspaceId } = useUserStore();
-  const { data: workspaces } = useCurrentWorkspaceListQuery(!!currentUser);
+  const { me, myMainWorkspaceId } = useUserStore();
+  const { data: workspaces } = useCurrentWorkspaceListQuery(!!me);
   const [mainWorkspace, setMainWorkspace] = useState<IWorkspace | null>(null);
 
   useEffect(() => {
-    const main = currentUser
-      ? workspaces?.find((workspace) => workspace._id === mainWorkspaceId)
+    const main = me
+      ? workspaces?.find((workspace) => workspace._id === myMainWorkspaceId)
       : undefined;
     setMainWorkspace(main || null);
-  }, [currentUser, workspaces, mainWorkspaceId]);
+  }, [me, workspaces, myMainWorkspaceId]);
 
   const workspaceLink = mainWorkspace ? (
     <NavLink
       to={getWorkspaceInstancePath(mainWorkspace._id)}
       className={({ isActive }) => (isActive ? 'active' : undefined)}>
-      <HiUserGroup />
+      <WorkspaceAvatar title={mainWorkspace.title} className="w-6 text-lg" />
     </NavLink>
   ) : (
     <NavLink

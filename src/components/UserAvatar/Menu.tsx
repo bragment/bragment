@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
 import { HiOutlineLogout } from 'react-icons/hi';
-import { useFormatMessage, useUserSignOut } from '../hooks';
+import { useAuthSignOut, useFormatMessage } from '../hooks';
 
 interface IUserAvatarMenuProps {
   className?: string;
@@ -10,7 +10,7 @@ interface IUserAvatarMenuProps {
 const UserAvatarMenu = (props: IUserAvatarMenuProps) => {
   const { className } = props;
   const f = useFormatMessage();
-  const singOut = useUserSignOut();
+  const singOut = useAuthSignOut();
 
   const handleSignOut = () => {
     setTimeout(() => {

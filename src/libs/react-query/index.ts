@@ -12,6 +12,6 @@ export function createQueryClient() {
 }
 
 export * from './auth';
-export * from './user';
+export * from './my';
 export * from './workspace';
 export * from './project';

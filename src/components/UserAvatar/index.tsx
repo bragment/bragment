@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
 import { useEffect } from 'react';
-import { useUserProfileQuery } from '../../libs/react-query';
+import { useMyProfileQuery } from '../../libs/react-query';
 import { getFirstChar } from '../../utils';
 import { useHandleServerApiError, useUserStore } from '../hooks';
 import UserAvatarMenu from './Menu';
@@ -13,9 +13,9 @@ interface IUserAvatarProps {
 
 const UserAvatar = (props: IUserAvatarProps) => {
   const { className, menuClassName } = props;
-  const { current, signedIn, setCurrent } = useUserStore();
+  const { me, signedIn, setMe } = useUserStore();
   const handleServerApiError = useHandleServerApiError();
-  const { data, error } = useUserProfileQuery(signedIn);
+  const { data, error } = useMyProfileQuery(signedIn);
 
   useEffect(() => {
     if (error) {
@@ -25,9 +25,9 @@ const UserAvatar = (props: IUserAvatarProps) => {
 
   useEffect(() => {
     if (data) {
-      setCurrent(data.user);
+      setMe(data.user);
     }
-  }, [data, setCurrent]);
+  }, [data, setMe]);
 
   return (
     <div className={classNames('dropdown', className)}>
@@ -38,7 +38,7 @@ const UserAvatar = (props: IUserAvatarProps) => {
             'w-8 rounded-full cursor-pointer'
           )}>
           <span className="text-xl font-bold capitalize">
-            {getFirstChar(current?.username || '')}
+            {getFirstChar(me?.username || '')}
           </span>
         </div>
       </label>

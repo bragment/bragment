@@ -14,27 +14,27 @@ function setLocalSignedIn(signedIn: boolean) {
 }
 
 class UserStore {
-  public current: IUser | null = null;
+  public me: IUser | null = null;
   public currentProject: IProject | null = null;
   public signedIn = getLocalSignedIn();
 
-  get mainWorkspaceId() {
-    return this.current?.mainWorkspace;
+  get myMainWorkspaceId() {
+    return this.me?.mainWorkspace;
   }
 
   constructor() {
-    makeAutoObservable(this, { mainWorkspaceId: computed });
+    makeAutoObservable(this, { myMainWorkspaceId: computed });
   }
 
-  public setCurrent = (user: IUser | null) => {
-    this.current = user;
+  public setMe = (user: IUser | null) => {
+    this.me = user;
     this.setSignedIn(!!user);
     this.setCurrentProject(null);
   };
 
-  public updateCurrent = (user: Partial<IUser>) => {
-    if (this.current) {
-      this.setCurrent({ ...this.current, ...user });
+  public updateMe = (user: Partial<IUser>) => {
+    if (this.me) {
+      this.setMe({ ...this.me, ...user });
     }
   };
 
@@ -42,8 +42,8 @@ class UserStore {
     this.currentProject = project;
   };
 
-  public setMainWorkspaceId = (workspaceId: string) => {
-    this.updateCurrent({ mainWorkspace: workspaceId });
+  public setMyMainWorkspaceId = (workspaceId: string) => {
+    this.updateMe({ mainWorkspace: workspaceId });
   };
 
   public setSignedIn = (signedIn: boolean) => {

@@ -12,12 +12,12 @@ import styles from './index.module.scss';
 function CurrentProjectView() {
   const params = useParams();
   const [search] = useSearchParams();
-  const { current: currentUser } = useUserStore();
+  const { me } = useUserStore();
   const projectId = params.id || '';
   const workspaceId = search.get('workspaceId') || undefined;
   const { data: project } = useProjectQuery(
     projectId,
-    !!(projectId && currentUser),
+    !!(me && projectId),
     workspaceId
   );
   const background = project?.background;

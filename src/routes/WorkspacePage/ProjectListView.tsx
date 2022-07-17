@@ -17,19 +17,19 @@ import {
 } from '../../libs/react-query';
 
 function ProjectListView() {
-  const { current: currentUser } = useUserStore();
+  const { me } = useUserStore();
   const { workspaceId = '' } = useParams();
   const { data: workspace } = useWorkspaceQuery(
     workspaceId,
-    !!(currentUser && workspaceId)
+    !!(me && workspaceId)
   );
   const { data: projects, isLoading } = useWorkspaceProjectListQuery(
     workspaceId,
-    !!(currentUser && workspaceId)
+    !!(me && workspaceId)
   );
   const { setCreateProjectDialogVisible } = useDialogStore();
   const f = useFormatMessage();
-  const isOwner = !!workspace?.owner.users.includes(currentUser?._id || '');
+  const isOwner = !!workspace?.owner.users.includes(me?._id || '');
 
   const handelCreateNewProject = useCallback(() => {
     setCreateProjectDialogVisible(true);

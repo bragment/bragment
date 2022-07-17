@@ -39,17 +39,17 @@ export function useFormatMessage(): (
   );
 }
 
-export function useUserSignOut() {
+export function useAuthSignOut() {
   const singOutMutation = useAuthSignOutMutation();
-  const { setCurrent } = useUserStore();
+  const { setMe } = useUserStore();
   return useCallback(() => {
-    setCurrent(null);
+    setMe(null);
     singOutMutation.mutate();
-  }, [setCurrent, singOutMutation]);
+  }, [setMe, singOutMutation]);
 }
 
 export function useHandleServerApiError() {
-  const userSignOut = useUserSignOut();
+  const userSignOut = useAuthSignOut();
   const f = useFormatMessage();
   return useCallback(
     (error: IApiError) => {

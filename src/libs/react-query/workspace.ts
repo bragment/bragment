@@ -4,7 +4,6 @@ import {
   useQuery,
   useQueryClient,
 } from 'react-query';
-import { fetchMyWorkspaces } from '../client';
 import { IApiError, IProject, IWorkspace } from '../client/types';
 import {
   createWorkspace,
@@ -27,16 +26,6 @@ export function useWorkspaceProjectListQuery(id: string, enabled: boolean) {
   return useQuery<IProject[], IApiError>(
     [EQueryKey.WorkspaceProjects, id],
     fetchProjectListFn,
-    {
-      enabled,
-    }
-  );
-}
-
-export function useCurrentWorkspaceListQuery(enabled: boolean) {
-  return useQuery<IWorkspace[], IApiError>(
-    EQueryKey.MyWorkspaces,
-    fetchMyWorkspaces,
     {
       enabled,
     }

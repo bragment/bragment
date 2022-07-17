@@ -11,7 +11,7 @@ import { ERoutePath } from '../types';
 
 function SignInForm() {
   const f = useFormatMessage();
-  const { setCurrent } = useUserStore();
+  const { setMe } = useUserStore();
   const [errorMessage, setErrorMessage] = useState<ILocalMessage | undefined>();
   const signInMutation = useAuthSignInMutation();
 
@@ -29,7 +29,7 @@ function SignInForm() {
       };
       try {
         const { user } = await signInMutation.mutateAsync(fields);
-        setCurrent(user);
+        setMe(user);
       } catch (error: any) {
         const message = parseApiErrorMessage(error);
         if (message === EApiErrorMessage.InvalidPassword) {
@@ -39,7 +39,7 @@ function SignInForm() {
         }
       }
     },
-    [signInMutation, setCurrent]
+    [signInMutation, setMe]
   );
 
   return (

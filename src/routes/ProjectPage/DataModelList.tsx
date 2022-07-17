@@ -19,8 +19,8 @@ function SideView(props: ISideViewProps) {
   const { projectId } = props;
   const [createDataModelInputVisible, setCreateDataModelInputVisible] =
     useState(false);
-  const { current: currentUser } = useUserStore();
-  const { data: project } = useProjectQuery(projectId, !!currentUser);
+  const { me } = useUserStore();
+  const { data: project } = useProjectQuery(projectId, !!me);
   const f = useFormatMessage();
   const showCreateModelInput = () => setCreateDataModelInputVisible(true);
   const hideCreateModelInput = () => setCreateDataModelInputVisible(false);

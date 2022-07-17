@@ -11,7 +11,7 @@ import { ERoutePath } from '../types';
 
 function SignUpForm() {
   const f = useFormatMessage();
-  const { setCurrent } = useUserStore();
+  const { setMe } = useUserStore();
   const [errorMessage, setErrorMessage] = useState<ILocalMessage | undefined>();
   const [invalidUsername, setInvalidUsername] = useState(false);
   const [invalidEmail, setInvalidEmail] = useState(false);
@@ -33,7 +33,7 @@ function SignUpForm() {
       };
       try {
         const { user } = await signUpMutation.mutateAsync(fields);
-        setCurrent(user);
+        setMe(user);
       } catch (error: any) {
         switch (parseApiErrorMessage(error)) {
           case EApiErrorMessage.UsernameTaken:
@@ -55,7 +55,7 @@ function SignUpForm() {
         }
       }
     },
-    [signUpMutation, setCurrent]
+    [signUpMutation, setMe]
   );
 
   return (

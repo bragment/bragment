@@ -3,6 +3,7 @@ import { observer } from 'mobx-react';
 import { HiDotsVertical } from 'react-icons/hi';
 import { useParams } from 'react-router-dom';
 import { useUserStore } from '../../components/hooks';
+import WorkspaceAvatar from '../../components/WorkspaceAvatar';
 import { useWorkspaceQuery } from '../../libs/react-query';
 
 interface INavBarProps {
@@ -12,11 +13,11 @@ interface INavBarProps {
 
 function WorkspaceInstanceView(props: INavBarProps) {
   const { className, prefix } = props;
-  const { current: currentUser } = useUserStore();
+  const { me } = useUserStore();
   const { workspaceId = '' } = useParams();
   const { data: workspace } = useWorkspaceQuery(
     workspaceId,
-    !!(currentUser && workspaceId)
+    !!(me && workspaceId)
   );
   const title = workspace?.title || (
     <div
@@ -29,7 +30,12 @@ function WorkspaceInstanceView(props: INavBarProps) {
   return (
     <header className={classNames('navbar', 'gap-3 z-30', className)}>
       <div className="flex-none">{prefix}</div>
-      <div className="flex-auto font-bold text-2xl capitalize">{title}</div>
+      <div className="flex-auto font-bold text-xl capitalize">
+        {workspace?.title && (
+          <WorkspaceAvatar title={workspace.title} className="mr-3" />
+        )}
+        {title}
+      </div>
       <div className="flex-none">
         <button className="btn btn-square btn-ghost">
           <HiDotsVertical className="text-xl" />

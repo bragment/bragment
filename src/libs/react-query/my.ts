@@ -4,8 +4,8 @@ import {
   useQuery,
   useQueryClient,
 } from 'react-query';
-import { fetchMyProfile, updateMyData } from '../client';
-import { IApiError, IUser, IUserProfile } from '../client/types';
+import { fetchMyProfile, fetchMyWorkspaces, updateMyData } from '../client';
+import { IApiError, IUser, IUserProfile, IWorkspace } from '../client/types';
 import { setUserProfileQueryData } from './auth';
 import { EQueryKey } from './types';
 
@@ -18,7 +18,7 @@ function updateUserCurrentQueryData(
   );
 }
 
-export function useUserUpdateMutation() {
+export function useUpdateMyDataMutation() {
   const queryClient = useQueryClient();
   return useMutation('update', updateMyData, {
     onSuccess: (user) => {
@@ -27,7 +27,7 @@ export function useUserUpdateMutation() {
   });
 }
 
-export function useUserProfileQuery(enabled: boolean) {
+export function useMyProfileQuery(enabled: boolean) {
   const queryClient = useQueryClient();
   return useQuery<IUserProfile, IApiError>(
     EQueryKey.MyProfile,
@@ -37,6 +37,16 @@ export function useUserProfileQuery(enabled: boolean) {
       onSuccess: (profile) => {
         setUserProfileQueryData(queryClient, profile);
       },
+    }
+  );
+}
+
+export function useCurrentWorkspaceListQuery(enabled: boolean) {
+  return useQuery<IWorkspace[], IApiError>(
+    EQueryKey.MyWorkspaces,
+    fetchMyWorkspaces,
+    {
+      enabled,
     }
   );
 }

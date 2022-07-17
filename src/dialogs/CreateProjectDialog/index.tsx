@@ -35,7 +35,7 @@ function CreateProjectDialog() {
     toggleCreateProjectDialogVisible,
   } = useDialogStore();
   const { workspaceId } = useParams<'workspaceId'>();
-  const { mainWorkspaceId } = useUserStore();
+  const { myMainWorkspaceId } = useUserStore();
   const {
     selectedBuiltinColor,
     selectedUnsplashPhoto,
@@ -115,7 +115,7 @@ function CreateProjectDialog() {
               {f('workspace.createProject')}
             </h3>
             <CreateProjectForm
-              defaultWorkspaceId={workspaceId || mainWorkspaceId}
+              defaultWorkspaceId={workspaceId || myMainWorkspaceId}
               onFinish={handleFinish}
             />
           </div>

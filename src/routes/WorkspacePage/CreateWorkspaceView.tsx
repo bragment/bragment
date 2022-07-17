@@ -3,29 +3,28 @@ import { observer } from 'mobx-react';
 import { useCallback } from 'react';
 import { useFormatMessage, useUserStore } from '../../components/hooks';
 import { IWorkspace } from '../../libs/client/types';
-import { useUserUpdateMutation } from '../../libs/react-query';
+import { useUpdateMyDataMutation } from '../../libs/react-query';
 import { useNavigateWorkspaceInstancePage } from '../hooks';
 import CreateWorkspaceForm from './CreateWorkspaceForm';
 
 function CreateWorkspaceView() {
   const f = useFormatMessage();
-  const { current: currentUser, updateCurrent: updateCurrentUser } =
-    useUserStore();
-  const userUpdateMutation = useUserUpdateMutation();
+  const { me, updateMe } = useUserStore();
+  const userUpdateMutation = useUpdateMyDataMutation();
   const navigate = useNavigateWorkspaceInstancePage();
 
   const handleFinish = useCallback(
     async (workspace: IWorkspace) => {
       const id = workspace._id;
       navigate(id, { replace: true });
-      if (!currentUser?.mainWorkspace) {
+      if (!me?.mainWorkspace) {
         const user = await userUpdateMutation.mutateAsync({
           mainWorkspace: id,
         });
-        updateCurrentUser(user);
+        updateMe(user);
       }
     },
-    [currentUser, userUpdateMutation, navigate, updateCurrentUser]
+    [me, userUpdateMutation, navigate, updateMe]
   );
 
   return (

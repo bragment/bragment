@@ -2,7 +2,7 @@ import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import RootRouter from './routes/RootRouter';
+import MainRouter from './routes/MainRouter';
 
 import './styles/index.scss';
 
@@ -26,7 +26,7 @@ const handleAppMount = () => {
 root.render(
   <StrictMode>
     <App onMount={handleAppMount}>
-      <RootRouter />
+      <MainRouter />
     </App>
   </StrictMode>
 );
