@@ -1,9 +1,11 @@
-import { Modal } from 'antd';
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { HiOutlineX } from 'react-icons/hi';
+import { useParams } from 'react-router-dom';
 import {
   useDialogStore,
+  useFormatMessage,
   useProjectStore,
   useUserStore,
 } from '../../components/hooks';
@@ -21,11 +23,18 @@ import {
   resetSelectedUnsplashPhoto,
 } from '../../stores/project/actions';
 import CreateProjectForm from './CreateProjectForm';
-import styles from './index.module.scss';
+import './index.scss';
+
+const DIALOG_ID = 'CREATE_PROJECT_DIALOG';
 
 function CreateProjectDialog() {
-  const { createProjectDialogVisible, setCreateProjectDialogVisible } =
-    useDialogStore();
+  const f = useFormatMessage();
+  const {
+    createProjectDialogVisible,
+    setCreateProjectDialogVisible,
+    toggleCreateProjectDialogVisible,
+  } = useDialogStore();
+  const { workspaceId } = useParams<'workspaceId'>();
   const { mainWorkspaceId } = useUserStore();
   const {
     selectedBuiltinColor,
@@ -67,27 +76,60 @@ function CreateProjectDialog() {
     }
     return bg;
   }, [selectedBuiltinColor, selectedUnsplashPhoto]);
-  const hasBackground = !!backgroundData.image || !!backgroundData.color;
 
   return (
-    <Modal
+    <div
       className={classNames(
-        styles.wrapper,
-        hasBackground && styles.withoutContentBackground
-      )}
-      centered
-      footer={null}
-      maskClosable={false}
-      visible={createProjectDialogVisible}
-      onCancel={handleClose}>
-      <ProgressiveBackground {...backgroundData} />
-      <div className={styles.foreground}>
-        <CreateProjectForm
-          defaultWorkspaceId={mainWorkspaceId}
-          onFinish={handleFinish}
-        />
-      </div>
-    </Modal>
+        !createProjectDialogVisible && 'content-visibility-hidden'
+      )}>
+      <input
+        type="checkbox"
+        className="modal-toggle"
+        id={DIALOG_ID}
+        checked={createProjectDialogVisible}
+        onChange={toggleCreateProjectDialogVisible}
+      />
+      <label
+        htmlFor={DIALOG_ID}
+        className={classNames('modal', 'cursor-pointer')}>
+        <label
+          className={classNames('modal-box', 'relative pb-16 overflow-visible')}
+          htmlFor="">
+          <div
+            className={classNames(
+              'w-full h-full absolute top-0 left-0 z-0 rounded-2xl overflow-hidden',
+              'project-dialog-background'
+            )}>
+            <ProgressiveBackground {...backgroundData} />
+          </div>
+          <div
+            className={classNames(
+              'w-full h-full relative z-1',
+              'project-dialog-foreground'
+            )}>
+            <h3
+              className={classNames(
+                'text-primary-content',
+                'text-lg font-bold'
+              )}>
+              {f('workspace.createProject')}
+            </h3>
+            <CreateProjectForm
+              defaultWorkspaceId={workspaceId || mainWorkspaceId}
+              onFinish={handleFinish}
+            />
+          </div>
+          <label
+            htmlFor={DIALOG_ID}
+            className={classNames(
+              'btn btn-sm btn-circle',
+              'absolute right-4 top-4 z-2'
+            )}>
+            <HiOutlineX className="text-lg" />
+          </label>
+        </label>
+      </label>
+    </div>
   );
 }
 

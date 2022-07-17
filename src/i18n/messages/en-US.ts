@@ -43,6 +43,8 @@ export default {
   password: 'Password',
   private: 'Private',
   privateProjects: 'Private projects',
+  'project.description': 'Project Description',
+  'project.title': 'Project Title',
   projectDescription: 'Project Description',
   projectList: 'Project List',
   projectTitle: 'Project Title',

@@ -23,6 +23,10 @@ body {
     @include _svgMark(url(../assets/feature-mark.svg));
   }
 
+  .content-visibility-hidden {
+    content-visibility: hidden;
+  }
+
   // NOTE: override daisyui
   .checkbox-accent,
   .btn-accent {

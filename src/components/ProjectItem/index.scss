@@ -1,4 +1,7 @@
 .project-card-hover {
+  figure > div {
+    border-radius: 17px;
+  }
   &:hover {
     figure > div {
       transform: scale(1.3);

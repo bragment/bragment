@@ -1,155 +1,97 @@
-import {
-  AlignLeftOutlined,
-  FormOutlined,
-  GlobalOutlined,
-  LockOutlined,
-  PictureOutlined,
-} from '@ant-design/icons';
-import { Button, Form, Input, Select } from 'antd';
 import classNames from 'classnames';
-import { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { useFormatMessage } from '../../components/hooks';
+import { ILocalMessage } from '../../i18n/types';
 import {
   EProjectVisibility,
+  IProject,
   IProjectBackground,
 } from '../../libs/client/types';
 import { useCreateProjectMutation } from '../../libs/react-query';
-import BackgroundPopover from './BackgroundPopover';
-import styles from './index.module.scss';
-
-interface ICreateProjectFormData {
-  workspace: string;
-  title: string;
-  description: string;
-  visibility: EProjectVisibility;
-  background: IProjectBackground;
-}
+import BackgroundDropdown from './BackgroundDropdown';
 
 interface ICreateProjectFormProps {
   defaultWorkspaceId?: string;
-  onFinish?: () => void;
+  onFinish?: (project: IProject) => void;
 }
 
 function CreateProjectForm(props: ICreateProjectFormProps) {
   const { defaultWorkspaceId, onFinish } = props;
   const f = useFormatMessage();
-  const [bgPopoverVisible, setBgPopoverVisible] = useState(false);
-  const [form] = Form.useForm<ICreateProjectFormData>();
-  const initialFormValues = useMemo<ICreateProjectFormData>(
-    () => ({
-      workspace: defaultWorkspaceId || '',
-      title: '',
-      description: '',
-      visibility: EProjectVisibility.Private,
-      background: {
-        image: '',
-        color: '',
-      },
-    }),
-    [defaultWorkspaceId]
-  );
+  const [errorMessage, setErrorMessage] = useState<ILocalMessage | undefined>();
+  const [background, setBackground] = useState<IProjectBackground>({});
   const mutation = useCreateProjectMutation();
 
-  const handleBgPopoverVisibleChange = useCallback((visible: boolean) => {
-    setBgPopoverVisible(visible);
-  }, []);
   const handleBgChange = useCallback(
-    (background: IProjectBackground) => form.setFieldsValue({ background }),
-    [form]
+    (value: IProjectBackground) => setBackground(value),
+    []
   );
 
-  const handleSubmit = async () => {
-    const fields = await form.validateFields();
-    await mutation.mutateAsync(fields);
-    form.resetFields();
-    if (onFinish) {
-      onFinish();
-    }
-  };
+  const handleSubmit = useCallback(
+    async (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      if (mutation.isLoading) {
+        return;
+      }
+      const form = event.target as HTMLFormElement;
+      const formData = new FormData(form);
+      const fields = {
+        title: formData.get('title')?.toString().trim() || '',
+        description: formData.get('description')?.toString().trim() || '',
+        workspace: defaultWorkspaceId,
+        visibility: EProjectVisibility.Private,
+        background,
+      };
 
-  useEffect(() => {
-    form.setFieldsValue({ workspace: defaultWorkspaceId });
-  }, [defaultWorkspaceId, form]);
+      try {
+        const project = await mutation.mutateAsync(fields);
+        if (onFinish) {
+          onFinish(project);
+          form.reset();
+        }
+      } catch (error: any) {
+        // TODO: handle error
+        setErrorMessage('networkError');
+      }
+    },
+    [mutation, background, defaultWorkspaceId, onFinish]
+  );
 
   return (
-    <Form
-      name="CreateProjectForm"
-      form={form}
-      initialValues={initialFormValues}>
-      <Form.Item hidden name="workspace">
-        <input />
-      </Form.Item>
-      <Form.Item hidden name={['background', 'image']}>
-        <input />
-      </Form.Item>
-      <Form.Item hidden name={['background', 'color']}>
-        <input />
-      </Form.Item>
-      <Form.Item
-        required
-        name="title"
-        rules={[{ required: true, message: f('requiredProjectTitle') }]}>
-        <Input
+    <form
+      className={classNames('form-control', 'space-y-4')}
+      onSubmit={handleSubmit}>
+      <label className={classNames('label text-error', 'pt-0 pb-0 h-6')}>
+        {errorMessage && f(errorMessage)}
+      </label>
+      <div className="input-group">
+        <input
+          name="title"
+          type="text"
           autoComplete="off"
           autoFocus
-          bordered={false}
-          className={classNames(
-            styles.fieldInput,
-            styles.titleField,
-            bgPopoverVisible && styles.withBgPopover,
-            'middle-input-with-prefix-and-suffix'
-          )}
-          prefix={<FormOutlined />}
-          suffix={
-            <BackgroundPopover
-              onChange={handleBgChange}
-              onVisibleChange={handleBgPopoverVisibleChange}>
-              <PictureOutlined />
-            </BackgroundPopover>
-          }
-          placeholder={f('projectTitle')}
-          size="middle"
+          required
+          placeholder={f('project.title')}
+          className={classNames('input input-bordered', 'w-full')}
         />
-      </Form.Item>
-      <Form.Item name="description">
-        <Input
-          autoComplete="off"
-          bordered={false}
-          className={classNames(
-            styles.fieldInput,
-            'middle-input-with-prefix-and-suffix'
-          )}
-          prefix={<AlignLeftOutlined />}
-          placeholder={f('projectDescription')}
-          size="middle"
-        />
-      </Form.Item>
-      <Form.Item name="visibility">
-        <Select
-          bordered={false}
-          className={styles.fieldSelect}
-          dropdownClassName={styles.fieldDropdown}>
-          <Select.Option value={EProjectVisibility.Private}>
-            <LockOutlined />
-            {f('private')}
-          </Select.Option>
-          <Select.Option value={EProjectVisibility.Public}>
-            <GlobalOutlined />
-            {f('public')}
-          </Select.Option>
-        </Select>
-      </Form.Item>
-      <Form.Item className={styles.formActions}>
-        <Button
-          type="primary"
-          htmlType="submit"
-          onClick={handleSubmit}
-          loading={mutation.isLoading}
-          size="middle">
-          {f('createProject')}
-        </Button>
-      </Form.Item>
-    </Form>
+        <BackgroundDropdown onChange={handleBgChange} />
+      </div>
+      <input
+        name="description"
+        type="text"
+        autoComplete="off"
+        placeholder={f('project.description')}
+        className={classNames('input input-bordered', 'w-full')}
+      />
+      <button
+        type="submit"
+        className={classNames(
+          'btn btn-primary btn-block',
+          mutation.isLoading && 'loading'
+        )}>
+        {f('auth.signIn')}
+      </button>
+    </form>
   );
 }
 

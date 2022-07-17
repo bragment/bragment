@@ -1,6 +1,7 @@
-import { Popover, PopoverProps } from 'antd';
+import classNames from 'classnames';
 import { observer } from 'mobx-react';
 import { useEffect } from 'react';
+import { HiOutlinePhotograph } from 'react-icons/hi';
 import BackgroundSelect, {
   IBackgroundOption,
 } from '../../components/BackgroundSelect';
@@ -11,12 +12,13 @@ import {
   getMainImageUrl,
   getThumbImageUrl,
 } from '../../libs/unsplash';
+import './index.scss';
 
-export interface IBackgroundPopoverProps extends PopoverProps {
+export interface IBackgroundDropdownProps {
   onChange?: (bg: IProjectBackground) => void;
 }
 
-function BackgroundPopover(props: IBackgroundPopoverProps) {
+function BackgroundDropdown(props: IBackgroundDropdownProps) {
   const { onChange } = props;
   const {
     standByBuiltinColors,
@@ -83,18 +85,28 @@ function BackgroundPopover(props: IBackgroundPopoverProps) {
   }, [selectedBuiltinColor, selectedUnsplashPhoto, onChange]);
 
   return (
-    <Popover
-      {...props}
-      trigger="click"
-      content={
+    <div
+      className={classNames(
+        'dropdown dropdown-end',
+        'project-background-dropdown'
+      )}>
+      <label tabIndex={0} className="btn btn-square">
+        <HiOutlinePhotograph className="text-xl" />
+      </label>
+      <div
+        tabIndex={-1}
+        className={classNames(
+          'dropdown-content bg-base-200 rounded-btn',
+          'w-60 p-4 shadow-xl mt-1'
+        )}>
         <BackgroundSelect
           options={backgroundOptions}
           current={backgroundIndex}
           onChange={handleBackgroundChange}
         />
-      }
-    />
+      </div>
+    </div>
   );
 }
 
-export default observer(BackgroundPopover);
+export default observer(BackgroundDropdown);

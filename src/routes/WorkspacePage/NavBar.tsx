@@ -27,7 +27,7 @@ function WorkspaceInstanceView(props: INavBarProps) {
     />
   );
   return (
-    <header className={classNames('navbar', 'gap-3', className)}>
+    <header className={classNames('navbar', 'gap-3 z-30', className)}>
       <div className="flex-none">{prefix}</div>
       <div className="flex-auto font-bold text-2xl capitalize">{title}</div>
       <div className="flex-none">

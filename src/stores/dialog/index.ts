@@ -12,8 +12,16 @@ class DialogStore {
     this.createWorkspaceDialogVisible = visible;
   };
 
+  public toggleCreateWorkspaceDialogVisible = () => {
+    this.createWorkspaceDialogVisible = !this.createWorkspaceDialogVisible;
+  };
+
   public setCreateProjectDialogVisible = (visible: boolean) => {
     this.createProjectDialogVisible = visible;
+  };
+
+  public toggleCreateProjectDialogVisible = () => {
+    this.createProjectDialogVisible = !this.createProjectDialogVisible;
   };
 }
 

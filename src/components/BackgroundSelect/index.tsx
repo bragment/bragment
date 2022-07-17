@@ -1,27 +1,26 @@
-import { CheckOutlined } from '@ant-design/icons';
-import { Card as AntCard, Col, Row } from 'antd';
 import classNames from 'classnames';
 import { memo, MouseEvent as ReactMouseEvent } from 'react';
-import styles from './index.module.scss';
+import { HiOutlineCheck } from 'react-icons/hi';
 
 export type IBackgroundOption =
   | { type: 'color'; color: string }
   | { type: 'photo'; image: string; color?: string };
 
 export interface IBackgroundSelectProps {
-  size?: 'small' | 'large';
   options: IBackgroundOption[];
   current: number;
   onChange: (index: number) => void;
 }
 
 function BackgroundSelect(props: IBackgroundSelectProps) {
-  const { current, options, size = 'small', onChange } = props;
+  const { current, options, onChange } = props;
 
   const handleClick = (event: ReactMouseEvent) => {
     const { target } = event;
     const div =
-      target instanceof Element ? target.closest('.' + styles.option) : null;
+      target instanceof Element
+        ? target.closest('.text-primary-content')
+        : null;
 
     if (
       !(div instanceof HTMLElement) ||
@@ -43,41 +42,38 @@ function BackgroundSelect(props: IBackgroundSelectProps) {
   };
 
   return (
-    <div
-      className={classNames(styles.wrapper, styles[size])}
-      onClick={handleClick}>
-      <Row gutter={[12, 12]}>
-        {options.map((option, index) => {
-          const selected = index === current;
-          let key;
-          let backgroundColor;
-          let backgroundImage;
-          if (option.type === 'color') {
-            key = option.color;
-            backgroundColor = option.color;
-          } else {
-            key = option.image;
-            backgroundColor = option.color;
-            backgroundImage = `url(${option.image})`;
-          }
-          return (
-            <Col span={6} key={key}>
-              <AntCard
-                className={styles.option}
-                data-index={index}
-                data-selected={selected || undefined}
-                bordered={false}
-                hoverable={!selected}
-                style={{
-                  backgroundColor,
-                  backgroundImage,
-                }}>
-                {selected && <CheckOutlined />}
-              </AntCard>
-            </Col>
-          );
-        })}
-      </Row>
+    <div className={classNames('grid grid-cols-4 gap-4')} onClick={handleClick}>
+      {options.map((option, index) => {
+        const selected = index === current;
+        let key;
+        let backgroundColor;
+        let backgroundImage;
+        if (option.type === 'color') {
+          key = option.color;
+          backgroundColor = option.color;
+        } else {
+          key = option.image;
+          backgroundColor = option.color;
+          backgroundImage = `url(${option.image})`;
+        }
+        return (
+          <div key={key} className={classNames('w-full h-10 cursor-pointer')}>
+            <div
+              className={classNames(
+                'text-primary-content',
+                'w-10 h-10 flex items-center justify-center rounded bg-cover bg-center bg-no-repeat hover:shadow-xl'
+              )}
+              data-index={index}
+              data-selected={selected || undefined}
+              style={{
+                backgroundColor,
+                backgroundImage,
+              }}>
+              {selected && <HiOutlineCheck className="text-2xl" />}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }

@@ -22,7 +22,8 @@ function CreateWorkspaceForm(props: ICreateWorkspaceFormProps) {
       if (mutation.isLoading) {
         return;
       }
-      const formData = new FormData(event.target as HTMLFormElement);
+      const form = event.target as HTMLFormElement;
+      const formData = new FormData(form);
       const fields = {
         title: formData.get('title')?.toString() || '',
       };
@@ -30,6 +31,7 @@ function CreateWorkspaceForm(props: ICreateWorkspaceFormProps) {
         const workspace = await mutation.mutateAsync(fields);
         if (onFinish) {
           onFinish(workspace);
+          form.reset();
         }
       } catch (error: any) {
         // TODO: handle error
