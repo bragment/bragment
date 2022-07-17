@@ -10,6 +10,7 @@ import SettingPage from '../SettingPage';
 import { ERoutePath, ERoutePathName } from '../types';
 import WorkspacePage from '../WorkspacePage';
 import CreateWorkspaceView from '../WorkspacePage/CreateWorkspaceView';
+import ProjectListView from '../WorkspacePage/ProjectListView';
 import WorkspaceInstanceView from '../WorkspacePage/WorkspaceInstanceView';
 import AuthGuard from './AuthGuard';
 
@@ -40,8 +41,9 @@ function RootRouter() {
             />
             <Route
               path={ERoutePathName.WorkspaceId}
-              element={<WorkspaceInstanceView />}
-            />
+              element={<WorkspaceInstanceView />}>
+              <Route index element={<ProjectListView />} />
+            </Route>
           </Route>
           <Route path={ERoutePathName.Setting} element={<SettingPage />} />
           {/* <Route path={ERoutePathName.Project}>

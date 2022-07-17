@@ -1,102 +1,88 @@
-import {
-  GlobalOutlined,
-  LoadingOutlined,
-  LockOutlined,
-  PlusOutlined,
-} from '@ant-design/icons';
-import { Button, Empty } from 'antd';
 import { observer } from 'mobx-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useMemo } from 'react';
+import { HiOutlinePlus, HiOutlineViewGrid } from 'react-icons/hi';
+import { useParams } from 'react-router-dom';
 import {
   useDialogStore,
   useFormatMessage,
   useUserStore,
 } from '../../components/hooks';
+import ProjectItem from '../../components/ProjectItem';
+import ProjectItemSkeleton from '../../components/ProjectItem/Skeleton';
 import ProjectList from '../../components/ProjectList';
+import { IProject } from '../../libs/client/types';
 import {
-  EProjectVisibility,
-  IProject,
-  IWorkspace,
-} from '../../libs/client/types';
-import { useWorkspaceProjectListQuery } from '../../libs/react-query';
-import styles from './index.module.scss';
+  useWorkspaceProjectListQuery,
+  useWorkspaceQuery,
+} from '../../libs/react-query';
 
-interface IProjectListViewProps {
-  workspace: IWorkspace;
-  isOwner?: boolean;
-}
-
-function ProjectListView(props: IProjectListViewProps) {
-  const { workspace } = props;
-  const { setCreateProjectDialogVisible } = useDialogStore();
+function ProjectListView() {
   const { current: currentUser } = useUserStore();
-  const isOwner = workspace.owner.users.includes(currentUser?._id || '');
-
-  const [privateProjects, setPrivateProjects] = useState<IProject[]>([]);
-  const [publicProjects, setPublicProjects] = useState<IProject[]>([]);
-  const { data: projects, isLoading } = useWorkspaceProjectListQuery(
-    workspace._id,
-    !!currentUser
+  const { workspaceId = '' } = useParams();
+  const { data: workspace } = useWorkspaceQuery(
+    workspaceId,
+    !!(currentUser && workspaceId)
   );
+  const { data: projects, isLoading } = useWorkspaceProjectListQuery(
+    workspaceId,
+    !!(currentUser && workspaceId)
+  );
+  const { setCreateProjectDialogVisible } = useDialogStore();
   const f = useFormatMessage();
+  const isOwner = !!workspace?.owner.users.includes(currentUser?._id || '');
 
-  const handelCreateNewProject = () => {
+  const handelCreateNewProject = useCallback(() => {
     setCreateProjectDialogVisible(true);
-  };
+  }, [setCreateProjectDialogVisible]);
+  const renderProject = useCallback(
+    (project: IProject) => <ProjectItem key={project._id} project={project} />,
+    []
+  );
+  const renderProjectSkeleton = useCallback(
+    (_: IProject, i: number) => <ProjectItemSkeleton key={i} />,
+    []
+  );
 
-  useEffect(() => {
-    const privateList: IProject[] = [];
-    const publicList: IProject[] = [];
-    projects?.forEach((project) => {
-      if (project.visibility === EProjectVisibility.Private) {
-        privateList.push(project);
-      } else if (project.visibility === EProjectVisibility.Public) {
-        publicList.push(project);
-      }
-    });
-    setPrivateProjects(privateList);
-    setPublicProjects(publicList);
-  }, [projects]);
-
-  if (projects?.length === 0) {
-    return (
-      <div className={styles.projectListEmpty}>
-        <Empty description={f('haveNoProject')}>
-          {isOwner && (
-            <Button
-              type="primary"
-              size="large"
-              icon={<PlusOutlined />}
+  const actions = useMemo(
+    () =>
+      isOwner
+        ? [
+            <button
+              key="createProject"
+              className="btn btn-ghost"
               onClick={handelCreateNewProject}>
-              {f('createProject')}
-            </Button>
-          )}
-        </Empty>
-      </div>
+              <HiOutlinePlus className="text-xl" />
+            </button>,
+          ]
+        : [],
+    [isOwner, handelCreateNewProject]
+  );
+
+  if (isLoading || !projects) {
+    return (
+      <ProjectList
+        title={f('workspace.AllProject')}
+        icon={<HiOutlineViewGrid className="text-primary text-xl" />}
+        projects={Array(4).fill({})}
+        renderProject={renderProjectSkeleton}
+      />
     );
   }
 
-  return (
-    <div className={styles.projectListView}>
-      {isLoading && (
-        <ProjectList loading icon={<LoadingOutlined />} title={f('loading')} />
-      )}
-      {!!privateProjects.length && (
-        <ProjectList
-          icon={<LockOutlined />}
-          title={f('privateProjects')}
-          projects={privateProjects}
-        />
-      )}
-      {!!publicProjects.length && (
-        <ProjectList
-          icon={<GlobalOutlined />}
-          title={f('publicProjects')}
-          projects={publicProjects}
-        />
-      )}
-    </div>
-  );
+  if (projects?.length) {
+    return (
+      <ProjectList
+        title={f('workspace.AllProject')}
+        icon={<HiOutlineViewGrid className="text-primary text-xl" />}
+        actions={actions}
+        projects={projects}
+        renderProject={renderProject}
+      />
+    );
+  } else {
+    // TODO: empty state view
+    return null;
+  }
 }
 
 export default observer(ProjectListView);

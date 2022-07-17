@@ -37,7 +37,7 @@ const UserAvatar = (props: IUserAvatarProps) => {
             'ring ring-offset-base-100 ring-offset-2 bg-accent-focus text-accent-content',
             'w-8 rounded-full cursor-pointer'
           )}>
-          <span className="text-xl font-bold">
+          <span className="text-xl font-bold capitalize">
             {getFirstChar(current?.username || '')}
           </span>
         </div>

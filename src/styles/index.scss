@@ -11,6 +11,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
+  *:not(input) {
+    user-select: none;
+  }
+
   .logo-text-mark {
     @include _svgMark(url(../assets/text-mark.svg));
   }
@@ -23,5 +27,36 @@ body {
   .checkbox-accent,
   .btn-accent {
     --ac: 0 0% 100%;
+  }
+  @media (min-width: 768px) {
+    .drawer-mobile {
+      grid-auto-columns: max-content auto;
+      & > .drawer-toggle {
+        & ~ .drawer-content {
+          @apply h-auto md:col-start-2;
+        }
+        & ~ .drawer-side {
+          @apply overflow-y-auto;
+          & > .drawer-overlay {
+            @apply md:visible;
+          }
+          & > .drawer-overlay + * {
+            @apply md:translate-x-0;
+          }
+        }
+      }
+    }
+  }
+  .clickable {
+    animation: button-pop var(--animation-btn, 0.25s) ease-out;
+    text-transform: var(--btn-text-case, uppercase);
+    &:active:hover,
+    &:active:focus {
+      animation: none;
+    }
+    &:active:hover,
+    &:active:focus {
+      transform: scale(var(--btn-focus-scale, 0.95));
+    }
   }
 }

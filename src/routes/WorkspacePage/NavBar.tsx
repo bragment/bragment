@@ -18,20 +18,24 @@ function WorkspaceInstanceView(props: INavBarProps) {
     workspaceId,
     !!(currentUser && workspaceId)
   );
-
+  const title = workspace?.title || (
+    <div
+      className={classNames(
+        'bg-base-content',
+        'w-48 h-8 rounded animate-pulse'
+      )}
+    />
+  );
   return (
-    <div className={classNames('navbar', className)}>
+    <header className={classNames('navbar', 'gap-3', className)}>
       <div className="flex-none">{prefix}</div>
-
-      <div className="flex-auto font-bold text-2xl pl-4">
-        {workspace?.title}
-      </div>
+      <div className="flex-auto font-bold text-2xl capitalize">{title}</div>
       <div className="flex-none">
         <button className="btn btn-square btn-ghost">
           <HiDotsVertical className="text-xl" />
         </button>
       </div>
-    </div>
+    </header>
   );
 }
 

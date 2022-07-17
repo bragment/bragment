@@ -16,7 +16,7 @@ function AuthPage() {
       <div
         className={classNames(
           'bg-base-200 text-base-content',
-          'h-full min-h-[36rem] flex justify-center items-center'
+          'h-full min-h-[36rem] flex items-center justify-center'
         )}>
         <div className={classNames('card bg-base-100', 'w-96 mx-3 shadow-xl')}>
           <div className="h-36 px-12 py-12 pb-0">

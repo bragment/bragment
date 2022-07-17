@@ -19,7 +19,10 @@ function WorkspaceInstanceView() {
       <div className="drawer-content bg-base-100 text-base-content">
         <Scrollbars autoHide>
           <NavBar
-            className={classNames('bg-base-200 text-base-content', 'md:hidden')}
+            className={classNames(
+              'bg-base-200 text-base-content',
+              'sticky top-0 md:hidden'
+            )}
             prefix={
               <label htmlFor={TOGGLE_ID} className="btn btn-ghost">
                 <HiMenu className="text-xl" />

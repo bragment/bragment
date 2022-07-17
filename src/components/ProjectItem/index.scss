@@ -1,0 +1,7 @@
+.project-card-hover {
+  &:hover {
+    figure > div {
+      transform: scale(1.3);
+    }
+  }
+}

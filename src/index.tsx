@@ -12,6 +12,9 @@ const root = ReactDOM.createRoot(
 
 const handleAppMount = () => {
   const overture = document.getElementById('overture');
+  if (process.env.NODE_ENV === 'development') {
+    overture?.remove();
+  }
   setTimeout(() => {
     overture?.classList.add('loaded');
     setTimeout(() => {

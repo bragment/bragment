@@ -39,7 +39,7 @@ function CurrentWorkspaceView() {
     return (
       <Layout className={styles.wrapper}>
         <SideView workspace={targetWorkspace} />
-        <MainView workspace={targetWorkspace} />
+        <MainView />
       </Layout>
     );
   }

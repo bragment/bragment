@@ -1,9 +1,9 @@
-import { Card, List } from 'antd';
+import classNames from 'classnames';
 import { memo } from 'react';
 import { IProject } from '../../libs/client/types';
 import { getSmallImageUrl } from '../../libs/unsplash';
 import ProgressiveBackground from '../ProgressiveBackground';
-import styles from './index.module.scss';
+import './index.scss';
 
 export interface IProjectItemProps {
   project: IProject;
@@ -14,18 +14,23 @@ function ProjectItem(props: IProjectItemProps) {
   const { title, background: { image, color } = {} } = project;
 
   return (
-    <List.Item>
-      <Card className={styles.wrapper} bordered={false} hoverable>
+    <div
+      className={classNames(
+        'card bg-base-100',
+        'w-full h-[7rem] cursor-pointer hover:shadow-xl image-full',
+        'clickable',
+        'project-card-hover'
+      )}>
+      <figure>
         <ProgressiveBackground
-          className={styles.background}
           color={color}
           image={image ? getSmallImageUrl(image) : undefined}
         />
-        <div className={styles.foreground}>
-          <p className={styles.title}>{title}</p>
-        </div>
-      </Card>
-    </List.Item>
+      </figure>
+      <div className={classNames('card-body', 'h-full p-4')}>
+        <h2 className={classNames('card-title', 'capitalize')}>{title}</h2>
+      </div>
+    </div>
   );
 }
 

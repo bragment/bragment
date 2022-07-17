@@ -43,7 +43,9 @@ function SignInForm() {
   );
 
   return (
-    <form className="flex flex-col space-y-4" onSubmit={handleSubmit}>
+    <form
+      className={classNames('form-control', 'space-y-4')}
+      onSubmit={handleSubmit}>
       <label className={classNames('label text-error', 'pt-0 pb-0 h-6')}>
         {errorMessage && f(errorMessage)}
       </label>
