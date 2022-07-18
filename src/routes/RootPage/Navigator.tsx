@@ -33,7 +33,7 @@ function Navigator() {
     <NavLink
       to={ERoutePath.WorkspaceCreate}
       className={({ isActive }) => (isActive ? 'active' : undefined)}>
-      <HiUserGroup />
+      <HiUserGroup className="text-2xl" />
     </NavLink>
   );
 
@@ -50,13 +50,13 @@ function Navigator() {
         <ul
           className={classNames(
             'menu menu-horizontal md:menu-vertical',
-            'p-3 text-xl space-x-4 md:space-x-0 md:space-y-4'
+            'p-3 space-x-4 md:space-x-0 md:space-y-4'
           )}>
           <li>
             <NavLink
               to={ERoutePathName.Home}
               className={({ isActive }) => (isActive ? 'active' : undefined)}>
-              <HiHome />
+              <HiHome className="text-2xl" />
             </NavLink>
           </li>
           <li>{workspaceLink}</li>
@@ -64,7 +64,7 @@ function Navigator() {
             <NavLink
               to={ERoutePathName.Setting}
               className={({ isActive }) => (isActive ? 'active' : undefined)}>
-              <HiCog />
+              <HiCog className="text-2xl" />
             </NavLink>
           </li>
         </ul>

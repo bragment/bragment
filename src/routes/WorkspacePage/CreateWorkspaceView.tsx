@@ -34,7 +34,9 @@ function CreateWorkspaceView() {
         'w-full h-full min-h-[36rem] flex items-center justify-center'
       )}>
       <div className="w-96 mx-3 pb-16">
-        <label className="font-bold text-3xl">{f('createYourWorkspace')}</label>
+        <label className="font-bold text-3xl">
+          {f('workspace.createWorkspace')}
+        </label>
         <CreateWorkspaceForm onFinish={handleFinish} />
       </div>
     </div>

@@ -43,12 +43,6 @@ function CreateProjectDialog() {
     setSelectedUnsplashPhoto,
   } = useProjectStore();
   const hasFetchedRef = useRef(false);
-  const handleClose = () => setCreateProjectDialogVisible(false);
-  const handleFinish = async () => {
-    handleClose();
-    setSelectedBuiltinColor(null);
-    await fetchUnsplashPhotos();
-  };
 
   const fetchUnsplashPhotos = useCallback(
     () =>
@@ -57,6 +51,16 @@ function CreateProjectDialog() {
         .catch(() => setSelectedUnsplashPhoto(null)),
     [setSelectedUnsplashPhoto]
   );
+
+  const handleFinish = useCallback(async () => {
+    setCreateProjectDialogVisible(false);
+    setSelectedBuiltinColor(null);
+    await fetchUnsplashPhotos();
+  }, [
+    fetchUnsplashPhotos,
+    setCreateProjectDialogVisible,
+    setSelectedBuiltinColor,
+  ]);
 
   useEffect(() => {
     if (createProjectDialogVisible && !hasFetchedRef.current) {

@@ -6,15 +6,16 @@ import {
   useDialogStore,
   useFormatMessage,
   useUserStore,
-} from '../../components/hooks';
-import ProjectItem from '../../components/ProjectItem';
-import ProjectItemSkeleton from '../../components/ProjectItem/Skeleton';
-import ProjectList from '../../components/ProjectList';
-import { IProject } from '../../libs/client/types';
+} from '../../../components/hooks';
+import ProjectItem from '../../../components/ProjectItem';
+import ProjectList from '../../../components/ProjectList';
+import { IProject } from '../../../libs/client/types';
 import {
   useWorkspaceProjectListQuery,
   useWorkspaceQuery,
-} from '../../libs/react-query';
+} from '../../../libs/react-query';
+import EmptyView from './EmptyView';
+import LoadingView from './LoadingView';
 
 function ProjectListView() {
   const { me } = useUserStore();
@@ -38,10 +39,6 @@ function ProjectListView() {
     (project: IProject) => <ProjectItem key={project._id} project={project} />,
     []
   );
-  const renderProjectSkeleton = useCallback(
-    (_: IProject, i: number) => <ProjectItemSkeleton key={i} />,
-    []
-  );
 
   const actions = useMemo(
     () =>
@@ -59,30 +56,20 @@ function ProjectListView() {
   );
 
   if (isLoading || !projects) {
-    return (
-      <ProjectList
-        title={f('workspace.AllProject')}
-        icon={<HiOutlineViewGrid className="text-primary text-xl" />}
-        projects={Array(4).fill({})}
-        renderProject={renderProjectSkeleton}
-      />
-    );
+    return <LoadingView />;
   }
-
-  if (projects?.length) {
-    return (
-      <ProjectList
-        title={f('workspace.AllProject')}
-        icon={<HiOutlineViewGrid className="text-primary text-xl" />}
-        actions={actions}
-        projects={projects}
-        renderProject={renderProject}
-      />
-    );
-  } else {
-    // TODO: empty state view
-    return null;
+  if (projects.length === 0) {
+    return <EmptyView creatable={isOwner} />;
   }
+  return (
+    <ProjectList
+      title={f('workspace.allProject')}
+      icon={<HiOutlineViewGrid className="text-primary text-xl" />}
+      actions={actions}
+      projects={projects}
+      renderProject={renderProject}
+    />
+  );
 }
 
 export default observer(ProjectListView);
