@@ -5,6 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import MainRouter from './routes/MainRouter';
 
 import './styles/index.scss';
+import { checkIfSafari } from './utils';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -22,6 +23,10 @@ const handleAppMount = () => {
     }, 600);
   }, 2100);
 };
+
+if (checkIfSafari()) {
+  document.body.classList.add('safari');
+}
 
 root.render(
   <StrictMode>

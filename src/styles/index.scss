@@ -28,6 +28,12 @@ body {
   }
 
   // NOTE: override daisyui
+  &.safari {
+    input,
+    btn {
+      outline: none !important;
+    }
+  }
   .checkbox-accent,
   .btn-accent {
     --ac: 0 0% 100%;

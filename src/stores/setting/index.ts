@@ -4,8 +4,7 @@ import { ELanguage } from '../../i18n/types';
 
 const APP_LANGUAGE = 'APP_LANGUAGE';
 function getLocalAppLanguage() {
-  const language =
-    window.localStorage.getItem(APP_LANGUAGE) || navigator.language;
+  const language = localStorage.getItem(APP_LANGUAGE) || navigator.language;
   // NOTE: Keys of ELanguage are uppercase. see `src/i18n/types.ts`
   if (language.toUpperCase().replace(/-/g, '_') in ELanguage) {
     return language as ELanguage;
@@ -13,7 +12,7 @@ function getLocalAppLanguage() {
   return defaultLanguage;
 }
 function setLocalAppLanguage(language: ELanguage) {
-  return window.localStorage.setItem(APP_LANGUAGE, language);
+  return localStorage.setItem(APP_LANGUAGE, language);
 }
 
 class SettingStore {
