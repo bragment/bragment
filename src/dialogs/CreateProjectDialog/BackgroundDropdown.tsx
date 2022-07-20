@@ -12,7 +12,7 @@ import {
   getMainImageUrl,
   getThumbImageUrl,
 } from '../../libs/unsplash';
-import './index.scss';
+import styles from './index.module.scss';
 
 export interface IBackgroundDropdownProps {
   onChange?: (bg: IProjectBackground) => void;
@@ -85,11 +85,7 @@ function BackgroundDropdown(props: IBackgroundDropdownProps) {
   }, [selectedBuiltinColor, selectedUnsplashPhoto, onChange]);
 
   return (
-    <div
-      className={classNames(
-        'dropdown dropdown-end',
-        'project-background-dropdown'
-      )}>
+    <div className={classNames('dropdown dropdown-end', styles.dropdown)}>
       <label tabIndex={0} className="btn btn-square">
         <HiOutlinePhotograph className="text-xl" />
       </label>

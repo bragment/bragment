@@ -3,7 +3,7 @@ import { memo } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
 import { IProject } from '../../libs/client/types';
 
-import DataModelList from './DataModelList';
+import DataModelList from './DataModelListOld';
 import styles from './index.module.scss';
 
 interface ISideViewProps {

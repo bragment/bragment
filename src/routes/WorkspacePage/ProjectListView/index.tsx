@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 import { useCallback, useMemo } from 'react';
 import { HiOutlinePlus, HiOutlineViewGrid } from 'react-icons/hi';
-import { useParams } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import {
   useDialogStore,
   useFormatMessage,
@@ -14,6 +14,7 @@ import {
   useWorkspaceProjectListQuery,
   useWorkspaceQuery,
 } from '../../../libs/react-query';
+import { getProjectInstancePath } from '../../helpers';
 import EmptyView from './EmptyView';
 import LoadingView from './LoadingView';
 
@@ -24,7 +25,7 @@ function ProjectListView() {
     workspaceId,
     !!(me && workspaceId)
   );
-  const { data: projects, isLoading } = useWorkspaceProjectListQuery(
+  const { data: projects, isError } = useWorkspaceProjectListQuery(
     workspaceId,
     !!(me && workspaceId)
   );
@@ -36,7 +37,11 @@ function ProjectListView() {
     setCreateProjectDialogVisible(true);
   }, [setCreateProjectDialogVisible]);
   const renderProject = useCallback(
-    (project: IProject) => <ProjectItem key={project._id} project={project} />,
+    (project: IProject) => (
+      <NavLink key={project._id} to={getProjectInstancePath(project._id)}>
+        <ProjectItem project={project} />
+      </NavLink>
+    ),
     []
   );
 
@@ -55,10 +60,10 @@ function ProjectListView() {
     [isOwner, handelCreateNewProject]
   );
 
-  if (isLoading || !projects) {
+  if (!projects && !isError) {
     return <LoadingView />;
   }
-  if (projects.length === 0) {
+  if (projects?.length === 0) {
     return <EmptyView creatable={isOwner} />;
   }
   return (

@@ -2,9 +2,8 @@ import classNames from 'classnames';
 import { observer } from 'mobx-react';
 import { HiDotsVertical } from 'react-icons/hi';
 import { useParams } from 'react-router-dom';
-import { useUserStore } from '../../components/hooks';
-import WorkspaceAvatar from '../../components/WorkspaceAvatar';
-import { useWorkspaceQuery } from '../../libs/react-query';
+import { useUserStore } from '../../../components/hooks';
+import { useProjectQuery } from '../../../libs/react-query';
 
 interface INavBarProps {
   className?: string;
@@ -14,16 +13,10 @@ interface INavBarProps {
 function WorkspaceInstanceView(props: INavBarProps) {
   const { className, prefix } = props;
   const { me } = useUserStore();
-  const { workspaceId = '' } = useParams();
-  const { data: workspace } = useWorkspaceQuery(
-    workspaceId,
-    !!(me && workspaceId)
-  );
-  const title = workspace ? (
-    <>
-      <WorkspaceAvatar title={workspace.title} className="mr-3" />
-      {workspace.title}
-    </>
+  const { projectId = '' } = useParams();
+  const { data: project } = useProjectQuery(projectId, !!(me && projectId));
+  const title = project ? (
+    project.title
   ) : (
     <div
       className={classNames(

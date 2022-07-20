@@ -42,6 +42,8 @@ export default {
   password: '密码',
   private: '私有的',
   privateProjects: '私有的项目',
+  'project.dataModel': '数据源',
+  'project.dataModelTitle': '数据源名称',
   'project.description': '项目描述',
   'project.title': '项目名称',
   projectDescription: '项目描述',

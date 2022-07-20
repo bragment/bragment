@@ -38,6 +38,37 @@ body {
   .btn-accent {
     --ac: 0 0% 100%;
   }
+  .form-single-input {
+    &.loading {
+      position: relative;
+      &,
+      &:hover {
+        @apply pointer-events-none;
+      }
+      &::after {
+        @apply mr-2 h-4 w-4 rounded-full border-2;
+        animation: spin 2s linear infinite;
+        border-top-color: transparent;
+        border-left-color: transparent;
+        border-bottom-color: currentColor;
+        border-right-color: currentColor;
+        content: '';
+        position: absolute;
+      }
+    }
+  }
+  .clickable {
+    animation: button-pop var(--animation-btn, 0.25s) ease-out;
+    text-transform: var(--btn-text-case, uppercase);
+    &:active:hover,
+    &:active:focus {
+      animation: none;
+    }
+    &:active:hover,
+    &:active:focus {
+      transform: scale(var(--btn-focus-scale, 0.95));
+    }
+  }
   @media (min-width: 768px) {
     .drawer-mobile {
       grid-auto-columns: max-content auto;
@@ -55,18 +86,6 @@ body {
           }
         }
       }
-    }
-  }
-  .clickable {
-    animation: button-pop var(--animation-btn, 0.25s) ease-out;
-    text-transform: var(--btn-text-case, uppercase);
-    &:active:hover,
-    &:active:focus {
-      animation: none;
-    }
-    &:active:hover,
-    &:active:focus {
-      transform: scale(var(--btn-focus-scale, 0.95));
     }
   }
 }

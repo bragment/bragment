@@ -1,4 +1,4 @@
-.project-card-hover {
+.card {
   figure > div {
     border-radius: 17px;
   }
@@ -9,8 +9,8 @@
   }
 }
 
-.safari {
-  .project-card-hover:hover {
+:global(.safari) {
+  .card:hover {
     figure > div {
       transform: scale(1) !important;
     }

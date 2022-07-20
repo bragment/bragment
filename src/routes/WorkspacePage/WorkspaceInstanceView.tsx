@@ -29,16 +29,16 @@ function WorkspaceInstanceView() {
               </label>
             }
           />
-          <section className="">
+          <section>
             <Outlet />
           </section>
         </Scrollbars>
       </div>
-      <div className={classNames('drawer-side')}>
+      <div className="drawer-side">
         <label htmlFor={TOGGLE_ID} className="drawer-overlay" />
         <aside className={classNames('bg-base-200 text-base-content', 'w-80')}>
           <NavBar className="hidden md:flex" />
-          <ul className={classNames('menu', 'm-4  p-2')}>
+          <ul className={classNames('menu', 'm-4 p-2')}>
             <li>
               <NavLink
                 to={getWorkspaceInstancePath(workspaceId)}

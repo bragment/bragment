@@ -1,0 +1,31 @@
+.collapse {
+  :global {
+    .collapse-title {
+      &::after {
+        top: 1.6rem !important;
+        left: 1rem;
+      }
+      padding-left: 2.5rem;
+    }
+    .collapse-content {
+      padding: 0 !important;
+    }
+  }
+}
+
+.modelFormWrapper {
+  :global {
+    .input {
+      height: 2.5rem;
+      padding-left: 12px;
+      padding-right: 12px;
+      font-size: 16px;
+    }
+    .form-single-input {
+      &::after {
+        right: 0.5rem;
+        top: 0.75rem;
+      }
+    }
+  }
+}

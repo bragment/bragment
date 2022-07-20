@@ -1,6 +1,5 @@
 import classNames from 'classnames';
-import { observer } from 'mobx-react';
-import { useCallback, useState } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { useFormatMessage } from '../../components/hooks';
 import { ILocalMessage } from '../../i18n/types';
 import { IWorkspace } from '../../libs/client/types';
@@ -70,4 +69,4 @@ function CreateWorkspaceForm(props: ICreateWorkspaceFormProps) {
   );
 }
 
-export default observer(CreateWorkspaceForm);
+export default memo(CreateWorkspaceForm);

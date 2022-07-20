@@ -1,0 +1,8 @@
+.wrapper {
+  > aside {
+    transition-property: width;
+    transition-timing-function: ease-in-out;
+    transition-duration: 0.4s;
+    transition-delay: 0.1s;
+  }
+}

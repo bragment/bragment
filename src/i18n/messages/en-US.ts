@@ -42,6 +42,8 @@ export default {
   password: 'Password',
   private: 'Private',
   privateProjects: 'Private projects',
+  'project.dataModel': 'Data Source',
+  'project.dataModelTitle': 'Data Source Title',
   'project.description': 'Project Description',
   'project.title': 'Project Title',
   projectDescription: 'Project Description',

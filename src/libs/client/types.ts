@@ -62,6 +62,7 @@ export enum EProjectVisibility {
 }
 
 export interface IProjectDataModel {
+  _id: string;
   title: string;
   createdAt: string;
 }

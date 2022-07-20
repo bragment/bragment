@@ -14,7 +14,7 @@ function EmptyView(props: IEmptyViewProps) {
   const handleCreate = () => setCreateProjectDialogVisible(true);
 
   return (
-    <div className={classNames('hero', 'min-h-screen')}>
+    <div className={classNames('hero', 'min-h-[36rem]')}>
       <div className={classNames('hero-content', 'text-center')}>
         <div className="max-w-md flex flex-col items-center justify-center gap-3">
           <HiOutlineViewGrid className="text-6xl font-bold text-primary" />

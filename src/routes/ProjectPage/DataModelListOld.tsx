@@ -8,7 +8,7 @@ import { memo, useState } from 'react';
 import { useFormatMessage, useUserStore } from '../../components/hooks';
 import MenuOption from '../../components/MenuOption';
 import { useProjectQuery } from '../../libs/react-query';
-import CreateDataModelForm from './CreateDataModelForm';
+import CreateDataModelForm from './DataModelList/CreateDataModelForm';
 import styles from './index.module.scss';
 
 interface ISideViewProps {

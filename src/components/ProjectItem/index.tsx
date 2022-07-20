@@ -3,7 +3,7 @@ import { memo } from 'react';
 import { IProject } from '../../libs/client/types';
 import { getSmallImageUrl } from '../../libs/unsplash';
 import ProgressiveBackground from '../ProgressiveBackground';
-import './index.scss';
+import styles from './index.module.scss';
 
 export interface IProjectItemProps {
   project: IProject;
@@ -19,7 +19,7 @@ function ProjectItem(props: IProjectItemProps) {
         'card bg-base-100',
         'w-full h-[7rem] cursor-pointer hover:shadow-xl image-full',
         'clickable',
-        'project-card-hover'
+        styles.card
       )}>
       <figure>
         <ProgressiveBackground

@@ -5,6 +5,8 @@ import ForgotPasswordForm from '../AuthPage/ForgotPasswordForm';
 import SignInForm from '../AuthPage/SignInForm';
 import SignUpForm from '../AuthPage/SignUpForm';
 import HomePage from '../HomePage';
+import ProjectPage from '../ProjectPage';
+import ProjectInstanceView from '../ProjectPage/ProjectInstanceView';
 import RootPage from '../RootPage';
 import SettingPage from '../SettingPage';
 import { ERoutePath, ERoutePathName } from '../types';
@@ -34,6 +36,7 @@ function RootRouter() {
             </AuthGuard>
           }>
           <Route index element={<HomePage />} />
+          <Route path={ERoutePathName.Setting} element={<SettingPage />} />
           <Route path={ERoutePathName.Workspace} element={<WorkspacePage />}>
             <Route
               path={ERoutePathName.Create}
@@ -45,10 +48,12 @@ function RootRouter() {
               <Route index element={<ProjectListView />} />
             </Route>
           </Route>
-          <Route path={ERoutePathName.Setting} element={<SettingPage />} />
-          {/* <Route path={ERoutePathName.Project}>
-            <Route path={ERoutePathName.Id} element={<ProjectPage />} />
-          </Route> */}
+          <Route path={ERoutePathName.Project} element={<ProjectPage />}>
+            <Route
+              path={ERoutePathName.ProjectId}
+              element={<ProjectInstanceView />}
+            />
+          </Route>
         </Route>
       </Routes>
     </HashRouter>

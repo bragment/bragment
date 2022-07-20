@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { HiCog, HiHome, HiUserGroup } from 'react-icons/hi';
 import { NavLink } from 'react-router-dom';
 import { useUserStore } from '../../components/hooks';
@@ -16,26 +16,29 @@ function Navigator() {
   const { data: workspaces } = useCurrentWorkspaceListQuery(!!me);
   const [mainWorkspace, setMainWorkspace] = useState<IWorkspace | null>(null);
 
+  const getActiveClassName = useCallback(
+    ({ isActive }: { isActive: boolean }) => (isActive ? 'active' : undefined),
+    []
+  );
+
+  const workspaceLink = mainWorkspace ? (
+    <NavLink
+      to={getWorkspaceInstancePath(mainWorkspace._id)}
+      className={getActiveClassName}>
+      <WorkspaceAvatar title={mainWorkspace.title} className="w-6 text-lg" />
+    </NavLink>
+  ) : (
+    <NavLink to={ERoutePath.WorkspaceCreate} className={getActiveClassName}>
+      <HiUserGroup className="text-2xl" />
+    </NavLink>
+  );
+
   useEffect(() => {
     const main = me
       ? workspaces?.find((workspace) => workspace._id === myMainWorkspaceId)
       : undefined;
     setMainWorkspace(main || null);
   }, [me, workspaces, myMainWorkspaceId]);
-
-  const workspaceLink = mainWorkspace ? (
-    <NavLink
-      to={getWorkspaceInstancePath(mainWorkspace._id)}
-      className={({ isActive }) => (isActive ? 'active' : undefined)}>
-      <WorkspaceAvatar title={mainWorkspace.title} className="w-6 text-lg" />
-    </NavLink>
-  ) : (
-    <NavLink
-      to={ERoutePath.WorkspaceCreate}
-      className={({ isActive }) => (isActive ? 'active' : undefined)}>
-      <HiUserGroup className="text-2xl" />
-    </NavLink>
-  );
 
   return (
     <div
@@ -53,17 +56,13 @@ function Navigator() {
             'p-3 space-x-4 md:space-x-0 md:space-y-4'
           )}>
           <li>
-            <NavLink
-              to={ERoutePathName.Home}
-              className={({ isActive }) => (isActive ? 'active' : undefined)}>
+            <NavLink to={ERoutePathName.Home} className={getActiveClassName}>
               <HiHome className="text-2xl" />
             </NavLink>
           </li>
           <li>{workspaceLink}</li>
           <li>
-            <NavLink
-              to={ERoutePathName.Setting}
-              className={({ isActive }) => (isActive ? 'active' : undefined)}>
+            <NavLink to={ERoutePathName.Setting} className={getActiveClassName}>
               <HiCog className="text-2xl" />
             </NavLink>
           </li>

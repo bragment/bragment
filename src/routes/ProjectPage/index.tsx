@@ -1,8 +1,8 @@
 import { memo } from 'react';
-import CurrentProjectView from './CurrentProjectView';
+import { Outlet } from 'react-router-dom';
 
 function ProjectPage() {
-  return <CurrentProjectView />;
+  return <Outlet />;
 }
 
 export default memo(ProjectPage);

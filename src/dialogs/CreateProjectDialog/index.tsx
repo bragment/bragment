@@ -23,7 +23,7 @@ import {
   resetSelectedUnsplashPhoto,
 } from '../../stores/project/actions';
 import CreateProjectForm from './CreateProjectForm';
-import './index.scss';
+import styles from './index.module.scss';
 
 const DIALOG_ID = 'CREATE_PROJECT_DIALOG';
 
@@ -102,7 +102,7 @@ function CreateProjectDialog() {
           <div
             className={classNames(
               'w-full h-full absolute top-0 left-0 z-0 rounded-2xl overflow-hidden',
-              'project-dialog-background'
+              styles.background
             )}>
             <ProgressiveBackground {...backgroundData} />
           </div>
