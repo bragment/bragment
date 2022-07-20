@@ -1,4 +1,3 @@
-import { message } from 'antd';
 import type { PrimitiveType } from 'intl-messageformat';
 import { useCallback, useContext } from 'react';
 import { useIntl } from 'react-intl';
@@ -59,8 +58,9 @@ export function useHandleServerApiError() {
           userSignOut();
           break;
         default:
-          message.destroy();
-          message.error(f('common.networkError'));
+          // TODO: toast error message
+          alert(f('common.networkError'));
+          break;
       }
     },
     [f, userSignOut]
