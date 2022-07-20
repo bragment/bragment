@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDialogStore, useFormatMessage } from '../../components/hooks';
 import { IWorkspace } from '../../libs/client/types';
 import { ERoutePath } from '../../routes/types';
-import CreateWorkspaceForm from '../../routes/WorkspacePage/CreateWorkspaceForm';
+import CreateWorkspaceForm from '../../routes/WorkspacePage/CreateWorkspaceView/CreateWorkspaceForm';
 
 const DIALOG_ID = 'CREATE_WORKSPACE_DIALOG';
 

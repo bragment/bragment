@@ -10,27 +10,27 @@ test('RootRouter Render', async () => {
     </App>
   );
   const goToForgotPassword = await screen.findByText(
-    formatMessage(defaultLanguage, 'forgotPassword'),
+    formatMessage(defaultLanguage, 'auth.forgotPassword'),
     {
-      selector: 'span',
+      selector: 'button',
     }
   );
   expect(goToForgotPassword).toBeVisible();
 
   fireEvent(goToForgotPassword, new MouseEvent('click', { bubbles: true }));
   const backToSingIn = await screen.findByText(
-    formatMessage(defaultLanguage, 'backToSignIn'),
+    formatMessage(defaultLanguage, 'auth.backToSignIn'),
     {
-      selector: 'span',
+      selector: 'button',
     }
   );
   expect(backToSingIn).toBeVisible();
 
   fireEvent(backToSingIn, new MouseEvent('click', { bubbles: true }));
   const goToSignUp = await screen.findByText(
-    formatMessage(defaultLanguage, 'notHaveAnAccount'),
+    formatMessage(defaultLanguage, 'auth.notHaveAnAccount'),
     {
-      selector: 'span',
+      selector: 'button',
     }
   );
   expect(goToSignUp).toBeVisible();

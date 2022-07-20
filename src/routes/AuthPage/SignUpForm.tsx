@@ -50,7 +50,7 @@ function SignUpForm() {
             setInvalidEmail(true);
             break;
           default:
-            setErrorMessage('networkError');
+            setErrorMessage('common.networkError');
             break;
         }
       }

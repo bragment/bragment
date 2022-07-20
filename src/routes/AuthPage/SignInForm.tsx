@@ -35,7 +35,7 @@ function SignInForm() {
         if (message === EApiErrorMessage.InvalidPassword) {
           setErrorMessage('auth.invalidUsernameOrPassword');
         } else {
-          setErrorMessage('networkError');
+          setErrorMessage('common.networkError');
         }
       }
     },

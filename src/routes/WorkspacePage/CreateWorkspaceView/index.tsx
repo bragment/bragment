@@ -1,10 +1,10 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
 import { useCallback } from 'react';
-import { useFormatMessage, useUserStore } from '../../components/hooks';
-import { IWorkspace } from '../../libs/client/types';
-import { useUpdateMyDataMutation } from '../../libs/react-query';
-import { useNavigateWorkspaceInstancePage } from '../hooks';
+import { useFormatMessage, useUserStore } from '../../../components/hooks';
+import { IWorkspace } from '../../../libs/client/types';
+import { useUpdateMyDataMutation } from '../../../libs/react-query';
+import { useNavigateWorkspaceInstancePage } from '../../hooks';
 import CreateWorkspaceForm from './CreateWorkspaceForm';
 
 function CreateWorkspaceView() {

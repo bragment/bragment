@@ -29,7 +29,7 @@ const UserAvatarMenu = (props: IUserAvatarMenuProps) => {
       <li onClick={handleSignOut}>
         <span>
           <HiOutlineLogout className="text-xl" />
-          {f('signOut')}
+          {f('auth.signOut')}
         </span>
       </li>
     </ul>

@@ -2,9 +2,9 @@ import classNames from 'classnames';
 import { observer } from 'mobx-react';
 import { HiDotsVertical } from 'react-icons/hi';
 import { useParams } from 'react-router-dom';
-import { useUserStore } from '../../components/hooks';
-import WorkspaceAvatar from '../../components/WorkspaceAvatar';
-import { useWorkspaceQuery } from '../../libs/react-query';
+import { useUserStore } from '../../../components/hooks';
+import WorkspaceAvatar from '../../../components/WorkspaceAvatar';
+import { useWorkspaceQuery } from '../../../libs/react-query';
 
 interface INavBarProps {
   className?: string;

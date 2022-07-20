@@ -3,8 +3,8 @@ import { observer } from 'mobx-react';
 import Scrollbars from 'react-custom-scrollbars-2';
 import { HiMenu, HiViewGrid } from 'react-icons/hi';
 import { NavLink, Outlet, useParams } from 'react-router-dom';
-import { useFormatMessage } from '../../components/hooks';
-import { getWorkspaceInstancePath } from '../helpers';
+import { useFormatMessage } from '../../../components/hooks';
+import { getWorkspaceInstancePath } from '../../helpers';
 import NavBar from './NavBar';
 
 const TOGGLE_ID = 'WORKSPACE_INSTANCE_VIEW_TOGGLE';

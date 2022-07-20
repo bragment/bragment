@@ -51,7 +51,7 @@ function CreateProjectForm(props: ICreateProjectFormProps) {
         }
       } catch (error: any) {
         // TODO: handle error
-        setErrorMessage('networkError');
+        setErrorMessage('common.networkError');
       }
     },
     [mutation, background, defaultWorkspaceId, onFinish]

@@ -1,9 +1,9 @@
 import classNames from 'classnames';
 import { memo, useCallback, useState } from 'react';
-import { useFormatMessage } from '../../components/hooks';
-import { ILocalMessage } from '../../i18n/types';
-import { IWorkspace } from '../../libs/client/types';
-import { useCreateWorkspaceMutation } from '../../libs/react-query';
+import { useFormatMessage } from '../../../components/hooks';
+import { ILocalMessage } from '../../../i18n/types';
+import { IWorkspace } from '../../../libs/client/types';
+import { useCreateWorkspaceMutation } from '../../../libs/react-query';
 
 interface ICreateWorkspaceFormProps {
   onFinish?: (workspace: IWorkspace) => void;
@@ -34,7 +34,7 @@ function CreateWorkspaceForm(props: ICreateWorkspaceFormProps) {
         }
       } catch (error: any) {
         // TODO: handle error
-        setErrorMessage('networkError');
+        setErrorMessage('common.networkError');
       }
     },
     [mutation, onFinish]

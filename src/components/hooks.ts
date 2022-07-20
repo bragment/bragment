@@ -60,7 +60,7 @@ export function useHandleServerApiError() {
           break;
         default:
           message.destroy();
-          message.error(f('networkError'));
+          message.error(f('common.networkError'));
       }
     },
     [f, userSignOut]
