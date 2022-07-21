@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { memo, useCallback, useRef } from 'react';
-import { useFormatMessage } from '../../../components/hooks';
+import { useDialogStore, useFormatMessage } from '../../../components/hooks';
 import { IProject } from '../../../libs/client/types';
 import { useCreateProjectDataModelMutation } from '../../../libs/react-query';
 
@@ -13,6 +13,7 @@ interface ICreateDataModelFormProps {
 function CreateDataModelForm(props: ICreateDataModelFormProps) {
   const { projectId, onFinish, onCancel } = props;
   const composingRef = useRef(false);
+  const { toastError } = useDialogStore();
   const mutation = useCreateProjectDataModelMutation();
 
   const f = useFormatMessage();
@@ -37,28 +38,29 @@ function CreateDataModelForm(props: ICreateDataModelFormProps) {
         }
       } catch (error) {
         // TODO: handle error
+        toastError(f('common.networkError'));
       }
     },
-    [projectId, mutation, onFinish]
+    [projectId, mutation, f, onFinish, toastError]
   );
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLInputElement>) => {
-      if (composingRef.current) {
+      if (mutation.isLoading || composingRef.current) {
         return;
       }
       if (event.key === 'Escape' && onCancel) {
         onCancel();
       }
     },
-    [onCancel]
+    [mutation, onCancel]
   );
 
   const handleBlur = useCallback(() => {
-    if (onCancel) {
+    if (!mutation.isLoading && onCancel) {
       onCancel();
     }
-  }, [onCancel]);
+  }, [mutation, onCancel]);
 
   const handleCompositionStart = useCallback(
     () => (composingRef.current = true),

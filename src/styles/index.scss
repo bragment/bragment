@@ -38,6 +38,9 @@ body {
   .btn-accent {
     --ac: 0 0% 100%;
   }
+  .alert {
+    animation: button-pop var(--animation-btn, 0.25s) ease-out;
+  }
   .form-single-input {
     &.loading {
       position: relative;

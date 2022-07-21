@@ -13,7 +13,7 @@ import { ERoutePath, ERoutePathName } from '../types';
 import WorkspacePage from '../WorkspacePage';
 import CreateWorkspaceView from '../WorkspacePage/CreateWorkspaceView';
 import ProjectListView from '../WorkspacePage/ProjectListView';
-import WorkspaceInstanceView from '../WorkspacePage/WorkspaceInstanceView/WorkspaceInstanceView';
+import WorkspaceInstanceView from '../WorkspacePage/WorkspaceInstanceView';
 import AuthGuard from './AuthGuard';
 
 function RootRouter() {

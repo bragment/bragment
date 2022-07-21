@@ -20,7 +20,12 @@ function DataModelList() {
   );
 
   return (
-    <ul className={classNames('menu rounded-box', 'p-2 pt-0')}>
+    <ul
+      className={classNames(
+        'menu rounded-box',
+        'pt-0',
+        project?.models?.length === 0 || 'p-2'
+      )}>
       {!isError && !project
         ? Array(3)
             .fill(0)
@@ -36,15 +41,18 @@ function DataModelList() {
                 </div>
               </li>
             ))
-        : project?.models?.reverse().map((model) => (
-            <li key={model._id}>
-              <NavLink
-                to={getProjectDataModelPath(projectId, model._id)}
-                className={getActiveClassName}>
-                {model.title}
-              </NavLink>
-            </li>
-          ))}
+        : project?.models
+            ?.slice()
+            .reverse()
+            .map((model) => (
+              <li key={model._id}>
+                <NavLink
+                  to={getProjectDataModelPath(projectId, model._id)}
+                  className={getActiveClassName}>
+                  {model.title}
+                </NavLink>
+              </li>
+            ))}
     </ul>
   );
 }

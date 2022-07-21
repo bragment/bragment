@@ -34,6 +34,7 @@ function ProjectInstanceView() {
           <div className="p-4">
             <DataModelList />
           </div>
+          <div className="from-base-200 pointer-events-none sticky bottom-0 flex h-20 bg-gradient-to-t to-transparent" />
         </Scrollbars>
         <label
           className={classNames(

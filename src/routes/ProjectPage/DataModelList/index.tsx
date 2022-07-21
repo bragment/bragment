@@ -31,8 +31,8 @@ function DataModelList() {
   return (
     <div
       className={classNames(
-        'collapse collapse-arrow border-base-300 bg-base-100 rounded-box',
-        'border',
+        'collapse collapse-arrow rounded-box',
+        'border border-base-300 bg-base-100',
         styles.collapse
       )}>
       <input

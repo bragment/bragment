@@ -49,6 +49,7 @@ export function useAuthSignOut() {
 
 export function useHandleServerApiError() {
   const userSignOut = useAuthSignOut();
+  const { toastError } = useDialogStore();
   const f = useFormatMessage();
   return useCallback(
     (error: IApiError) => {
@@ -58,11 +59,10 @@ export function useHandleServerApiError() {
           userSignOut();
           break;
         default:
-          // TODO: toast error message
-          alert(f('common.networkError'));
+          toastError(f('common.networkError'));
           break;
       }
     },
-    [f, userSignOut]
+    [f, toastError, userSignOut]
   );
 }
