@@ -1,5 +1,6 @@
 import classNames from 'classnames';
-import { memo, useCallback, useRef } from 'react';
+import { observer } from 'mobx-react';
+import { useCallback, useRef } from 'react';
 import { useDialogStore, useFormatMessage } from '../../../components/hooks';
 import { IProject } from '../../../libs/client/types';
 import { useCreateProjectDataModelMutation } from '../../../libs/react-query';
@@ -37,7 +38,7 @@ function CreateDataModelForm(props: ICreateDataModelFormProps) {
           form.reset();
         }
       } catch (error) {
-        // TODO: handle error
+        // TODO: handle request error
         toastError(f('common.networkError'));
       }
     },
@@ -97,4 +98,4 @@ function CreateDataModelForm(props: ICreateDataModelFormProps) {
   );
 }
 
-export default memo(CreateDataModelForm);
+export default observer(CreateDataModelForm);

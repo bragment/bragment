@@ -1,6 +1,5 @@
 import classNames from 'classnames';
-import { observer } from 'mobx-react';
-import { useCallback, useEffect, useState } from 'react';
+import { memo, useCallback, useState } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
 import { HiLogin, HiLogout } from 'react-icons/hi';
 import { Outlet } from 'react-router-dom';
@@ -10,18 +9,15 @@ import styles from './index.module.scss';
 
 function ProjectInstanceView() {
   const [checked, setChecked] = useState(true);
-  const [expanded, setExpanded] = useState(true);
+  const expanded = checked;
   const handleCheckboxChange = useCallback(() => setChecked((old) => !old), []);
-  useEffect(() => {
-    setExpanded(checked);
-  }, [checked]);
 
   return (
     <div className={classNames('w-full h-full flex', styles.wrapper)}>
       <aside
         className={classNames(
           'bg-base-200 text-base-content',
-          'flex-none relative',
+          'flex-none relative border-r border-base-300',
           expanded ? 'w-80' : 'w-0'
         )}>
         <Scrollbars autoHide style={{ overflowX: 'hidden' }}>
@@ -43,7 +39,7 @@ function ProjectInstanceView() {
           )}>
           <input
             type="checkbox"
-            defaultChecked={expanded}
+            checked={expanded}
             onChange={handleCheckboxChange}
           />
           <HiLogin className={classNames('swap-on')} />
@@ -60,4 +56,4 @@ function ProjectInstanceView() {
   );
 }
 
-export default observer(ProjectInstanceView);
+export default memo(ProjectInstanceView);

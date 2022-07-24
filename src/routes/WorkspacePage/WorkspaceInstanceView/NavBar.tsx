@@ -11,7 +11,7 @@ interface INavBarProps {
   prefix?: JSX.Element;
 }
 
-function WorkspaceInstanceView(props: INavBarProps) {
+function NavBar(props: INavBarProps) {
   const { className, prefix } = props;
   const { me } = useUserStore();
   const { workspaceId = '' } = useParams();
@@ -28,7 +28,7 @@ function WorkspaceInstanceView(props: INavBarProps) {
     <div
       className={classNames(
         'bg-base-content',
-        'w-48 h-8 rounded animate-pulse'
+        'w-48 h-7 rounded animate-pulse'
       )}
     />
   );
@@ -46,4 +46,4 @@ function WorkspaceInstanceView(props: INavBarProps) {
   );
 }
 
-export default observer(WorkspaceInstanceView);
+export default observer(NavBar);

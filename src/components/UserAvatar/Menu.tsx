@@ -22,8 +22,8 @@ const UserAvatarMenu = (props: IUserAvatarMenuProps) => {
     <ul
       tabIndex={0}
       className={classNames(
-        'dropdown-content menu bg-base-200 md:bg-base-100',
-        'w-52 p-2 shadow rounded-box',
+        'dropdown-content menu border-base-300 bg-base-200 md:bg-base-100',
+        'w-52 p-2 shadow border rounded-box',
         className
       )}>
       <li onClick={handleSignOut}>

@@ -1,9 +1,9 @@
 export enum EQueryKey {
-  MyProfile = 'MyProfile',
-  MyData = 'MyData',
-  MyWorkspaces = 'MyWorkspaces',
-  MyProjects = 'MyProjects',
-  WorkspaceProjects = 'WorkspaceProjects',
-  Workspace = 'Workspace',
-  Project = 'Project',
+  MyProfile = 'MY_PROFILE',
+  MyData = 'MY_DATA',
+  MyWorkspaces = 'MY_WORKSPACES',
+  MyProjects = 'MY_PROJECTS',
+  WorkspaceProjects = 'WORKSPACE_PROJECTS',
+  Workspace = 'WORKSPACE',
+  Project = 'PROJECT',
 }

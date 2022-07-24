@@ -1,8 +1,8 @@
 export enum EToastType {
-  Info = 'Info',
-  Error = 'Error',
-  Success = 'Success',
-  Warning = 'Warning',
+  Info = 'INFO',
+  Error = 'ERROR',
+  Success = 'SUCCESS',
+  Warning = 'WARNING',
 }
 
 export interface IToast {

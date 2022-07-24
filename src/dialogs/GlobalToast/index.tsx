@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
-import { useCallback } from 'react';
+import { useMemo } from 'react';
 import {
   HiOutlineCheckCircle,
   HiOutlineExclamationCircle,
@@ -13,31 +13,25 @@ import { EToastType } from '../../stores/types';
 function GlobalToast() {
   const { toastList } = useDialogStore();
 
-  const getToastIconByType = useCallback((type: EToastType) => {
-    switch (type) {
-      case EToastType.Error:
-        return <HiOutlineXCircle />;
-      case EToastType.Success:
-        return <HiOutlineCheckCircle />;
-      case EToastType.Warning:
-        return <HiOutlineExclamationCircle />;
-      default:
-        return <HiOutlineInformationCircle className="text-info" />;
-    }
-  }, []);
+  const toastIconRecord = useMemo(
+    () => ({
+      [EToastType.Error]: <HiOutlineXCircle />,
+      [EToastType.Info]: <HiOutlineInformationCircle className="text-info" />,
+      [EToastType.Success]: <HiOutlineCheckCircle />,
+      [EToastType.Warning]: <HiOutlineExclamationCircle />,
+    }),
+    []
+  );
 
-  const getToastClassName = useCallback((type: EToastType) => {
-    switch (type) {
-      case EToastType.Error:
-        return 'alert-error';
-      case EToastType.Success:
-        return 'alert-success';
-      case EToastType.Warning:
-        return 'alert-warning';
-      default:
-        return 'border border-base-300';
-    }
-  }, []);
+  const toastClassNameRecord = useMemo(
+    () => ({
+      [EToastType.Error]: 'alert-error',
+      [EToastType.Info]: 'border border-base-300',
+      [EToastType.Success]: 'alert-success',
+      [EToastType.Warning]: 'alert-warning',
+    }),
+    []
+  );
 
   return (
     <div className="toast toast-top toast-center items-center">
@@ -46,11 +40,11 @@ function GlobalToast() {
           className={classNames(
             'alert shadow-lg',
             'w-auto',
-            getToastClassName(type)
+            toastClassNameRecord[type]
           )}
           key={key}>
           <div>
-            <span className="text-2xl">{getToastIconByType(type)}</span>
+            <span className="text-2xl">{toastIconRecord[type]}</span>
             <span>{content}</span>
           </div>
         </div>

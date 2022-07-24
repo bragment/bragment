@@ -48,6 +48,7 @@ export interface IProject {
   workspace: string;
   owner: IMember;
   models: IProjectDataModel[];
+  views: IProjectDataView[];
 }
 
 export interface IProjectBackground {
@@ -61,8 +62,23 @@ export enum EProjectVisibility {
   Private = 'PRIVATE',
 }
 
+export enum EDataViewType {
+  List = 'LIST',
+  Board = 'BOARD',
+  Table = 'TABLE',
+  Gallery = 'GALLERY',
+}
+
 export interface IProjectDataModel {
   _id: string;
   title: string;
+  createdAt: string;
+}
+
+export interface IProjectDataView {
+  _id: string;
+  model: string;
+  title: string;
+  type: EDataViewType;
   createdAt: string;
 }

@@ -1,7 +1,8 @@
 export enum ERoutePathName {
   Any = '*',
-  Auth = 'Auth',
+  Auth = 'auth',
   Create = 'create',
+  modelId = ':modelId',
   ForgotPassword = 'forgotPassword',
   Home = '',
   Project = 'project',
@@ -10,6 +11,7 @@ export enum ERoutePathName {
   Setting = 'setting',
   SignIn = 'signIn',
   SignUp = 'signUp',
+  ViewId = ':viewId',
   Workspace = 'workspace',
   WorkspaceId = ':workspaceId',
 }
@@ -21,6 +23,7 @@ export enum ERoutePath {
   Home = '/',
   ProjectInstance = '/project/:projectId',
   ProjectDataModel = '/project/:projectId/:modelId',
+  ProjectDataView = '/project/:projectId/:modelId/:viewId',
   Root = '/',
   SignIn = '/signIn',
   Setting = '/setting',

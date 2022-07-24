@@ -1,6 +1,5 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
-import { HiDotsVertical } from 'react-icons/hi';
 import { useParams } from 'react-router-dom';
 import { useUserStore } from '../../../components/hooks';
 import { useProjectQuery } from '../../../libs/react-query';
@@ -10,7 +9,7 @@ interface INavBarProps {
   prefix?: JSX.Element;
 }
 
-function WorkspaceInstanceView(props: INavBarProps) {
+function NavBar(props: INavBarProps) {
   const { className, prefix } = props;
   const { me } = useUserStore();
   const { projectId = '' } = useParams();
@@ -21,7 +20,7 @@ function WorkspaceInstanceView(props: INavBarProps) {
     <div
       className={classNames(
         'bg-base-content',
-        'w-48 h-8 rounded animate-pulse'
+        'w-48 h-7 rounded animate-pulse'
       )}
     />
   );
@@ -30,13 +29,8 @@ function WorkspaceInstanceView(props: INavBarProps) {
     <header className={classNames('navbar', 'gap-3 z-30', className)}>
       <div className="flex-none">{prefix}</div>
       <div className="flex-auto font-bold text-xl capitalize">{title}</div>
-      <div className="flex-none">
-        <button className="btn btn-square btn-ghost">
-          <HiDotsVertical className="text-xl" />
-        </button>
-      </div>
     </header>
   );
 }
 
-export default observer(WorkspaceInstanceView);
+export default observer(NavBar);

@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { memo } from 'react';
-import { HiOutlinePlus, HiOutlineViewGrid } from 'react-icons/hi';
+import { HiOutlineFolderAdd, HiOutlinePlus } from 'react-icons/hi';
 import { useDialogStore, useFormatMessage } from '../../../components/hooks';
 
 interface IEmptyViewProps {
@@ -17,7 +17,7 @@ function EmptyView(props: IEmptyViewProps) {
     <div className={classNames('hero', 'min-h-[36rem]')}>
       <div className={classNames('hero-content', 'text-center')}>
         <div className="max-w-md flex flex-col items-center justify-center gap-3">
-          <HiOutlineViewGrid className="text-6xl font-bold text-primary" />
+          <HiOutlineFolderAdd className="text-8xl font-bold text-primary" />
           <h1 className="text-2xl font-bold">{f('workspace.noProjects')}</h1>
           <p>{f('workspace.getProjectStarted')}</p>
           {creatable && (

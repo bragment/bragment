@@ -4,7 +4,12 @@ import {
   useQuery,
   useQueryClient,
 } from 'react-query';
-import { createProject, createProjectDataModel, fetchProject } from '../client';
+import {
+  createProject,
+  createProjectDataModel,
+  createProjectDataView,
+  fetchProject,
+} from '../client';
 import { IApiError, IProject } from '../client/types';
 
 import { EQueryKey } from './types';
@@ -58,7 +63,26 @@ export function useCreateProjectDataModelMutation() {
         [EQueryKey.Project, project._id],
         (cached) =>
           cached
-            ? { ...cached, models: [...cached.models, ...project.models] }
+            ? {
+                ...cached,
+                models: [...cached.models, ...project.models],
+                views: [...cached.views, ...project.views],
+              }
+            : undefined
+      );
+    },
+  });
+}
+
+export function useCreateProjectDataViewMutation() {
+  const queryClient = useQueryClient();
+  return useMutation(createProjectDataView, {
+    onSuccess: (project) => {
+      queryClient.setQueryData<IProject | undefined>(
+        [EQueryKey.Project, project._id],
+        (cached) =>
+          cached
+            ? { ...cached, views: [...cached.views, ...project.views] }
             : undefined
       );
     },

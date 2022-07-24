@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react';
 import { useCallback, useMemo } from 'react';
-import { HiOutlinePlus, HiOutlineViewGrid } from 'react-icons/hi';
+import { HiOutlineFolder, HiOutlinePlus } from 'react-icons/hi';
 import { NavLink, useParams } from 'react-router-dom';
 import {
   useDialogStore,
@@ -19,6 +19,8 @@ import EmptyView from './EmptyView';
 import LoadingView from './LoadingView';
 
 function ProjectListView() {
+  const { setCreateProjectDialogVisible } = useDialogStore();
+  const f = useFormatMessage();
   const { me } = useUserStore();
   const { workspaceId = '' } = useParams();
   const { data: workspace } = useWorkspaceQuery(
@@ -29,8 +31,6 @@ function ProjectListView() {
     workspaceId,
     !!(me && workspaceId)
   );
-  const { setCreateProjectDialogVisible } = useDialogStore();
-  const f = useFormatMessage();
   const isOwner = !!workspace?.owner.users.includes(me?._id || '');
 
   const handelCreateNewProject = useCallback(() => {
@@ -69,7 +69,7 @@ function ProjectListView() {
   return (
     <ProjectList
       title={f('workspace.allProject')}
-      icon={<HiOutlineViewGrid className="text-primary text-xl" />}
+      icon={<HiOutlineFolder className="text-primary text-xl" />}
       actions={actions}
       projects={projects}
       renderProject={renderProject}

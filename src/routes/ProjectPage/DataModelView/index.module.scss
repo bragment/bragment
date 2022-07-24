@@ -1,0 +1,26 @@
+.tabsWrapper {
+  display: block;
+  > * {
+    vertical-align: middle;
+  }
+  overflow-y: hidden;
+  &::-webkit-scrollbar {
+    background-color: transparent;
+    height: 5px;
+  }
+  &::-webkit-scrollbar-thumb {
+    --tw-bg-opacity: 1;
+    background-color: hsl(var(--b3, var(--b2)) / var(--tw-bg-opacity));
+  }
+}
+
+.createButton {
+  :global {
+    .action {
+      &::after {
+        right: 0.75rem;
+        top: 1rem;
+      }
+    }
+  }
+}

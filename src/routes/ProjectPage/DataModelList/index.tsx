@@ -1,8 +1,13 @@
 import classNames from 'classnames';
-import { memo, useCallback, useState } from 'react';
+import { observer } from 'mobx-react';
+import { useCallback, useEffect, useState } from 'react';
 import { HiPlus } from 'react-icons/hi';
-import { useParams } from 'react-router-dom';
-import { useFormatMessage } from '../../../components/hooks';
+import { useMatch, useParams } from 'react-router-dom';
+import { useFormatMessage, useUserStore } from '../../../components/hooks';
+import { IProject } from '../../../libs/client/types';
+import { useProjectQuery } from '../../../libs/react-query';
+import { getProjectInstancePath } from '../../helpers';
+import { useNavigateProjectModelPage } from '../../hooks';
 import CreateDataModelForm from './CreateDataModelForm';
 import DataModelMenu from './DataModelMenu';
 
@@ -10,7 +15,15 @@ import styles from './index.module.scss';
 
 function DataModelList() {
   const f = useFormatMessage();
-  const { projectId = '' } = useParams();
+  const navigate = useNavigateProjectModelPage();
+  const { me } = useUserStore();
+  const { projectId = '', modelId = '' } = useParams();
+  const isProjectPath = useMatch(getProjectInstancePath(projectId));
+  const { data: project, isError } = useProjectQuery(
+    projectId,
+    !!(me && projectId)
+  );
+  const models = project?.models?.slice().reverse();
   const [checked, setChecked] = useState(true);
   const [creating, setCreating] = useState(false);
 
@@ -24,9 +37,24 @@ function DataModelList() {
   const handleFormCancel = useCallback(() => {
     setCreating(false);
   }, []);
-  const handleFormFinish = useCallback(() => {
-    setCreating(false);
-  }, []);
+  const handleFormFinish = useCallback(
+    (data: IProject) => {
+      const model = data.models[0];
+      setCreating(false);
+      if (model) {
+        navigate(projectId, model._id);
+      }
+    },
+    [navigate, projectId]
+  );
+
+  useEffect(() => {
+    if (isProjectPath && !modelId && models?.length) {
+      navigate(projectId, models[0]._id, {
+        replace: true,
+      });
+    }
+  }, [navigate, isProjectPath, projectId, modelId, models]);
 
   return (
     <div
@@ -38,7 +66,7 @@ function DataModelList() {
       <input
         type="checkbox"
         className="peer"
-        defaultChecked={checked}
+        checked={checked}
         onChange={handleCheckboxChange}
       />
       <div
@@ -55,7 +83,8 @@ function DataModelList() {
           <HiPlus className="text-xl" />
         </button>
         {creating && (
-          <div className={classNames('mx-3 my-1', styles.modelFormWrapper)}>
+          <div
+            className={classNames('mx-3 mt-1 mb-3', styles.modelFormWrapper)}>
             <CreateDataModelForm
               projectId={projectId}
               onCancel={handleFormCancel}
@@ -63,10 +92,10 @@ function DataModelList() {
             />
           </div>
         )}
-        <DataModelMenu />
+        <DataModelMenu loading={!isError && !project} models={models} />
       </div>
     </div>
   );
 }
 
-export default memo(DataModelList);
+export default observer(DataModelList);

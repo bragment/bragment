@@ -1,5 +1,5 @@
 import { memo, useCallback } from 'react';
-import { HiOutlineViewGrid } from 'react-icons/hi';
+import { HiOutlineFolder } from 'react-icons/hi';
 import { useFormatMessage } from '../../../components/hooks';
 import ProjectItemSkeleton from '../../../components/ProjectItem/Skeleton';
 import ProjectList from '../../../components/ProjectList';
@@ -14,7 +14,7 @@ function LoadingView() {
   return (
     <ProjectList
       title={f('workspace.allProject')}
-      icon={<HiOutlineViewGrid className="text-primary text-xl" />}
+      icon={<HiOutlineFolder className="text-primary text-xl" />}
       projects={Array(4).fill({})}
       renderProject={renderProjectSkeleton}
     />

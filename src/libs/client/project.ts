@@ -1,5 +1,5 @@
 import { baseRequest, mainServerApi } from './http';
-import { IProject, IProjectDataModel } from './types';
+import { IProject, IProjectDataModel, IProjectDataView } from './types';
 
 export async function createProject(project: Partial<IProject>) {
   return baseRequest<IProject>(mainServerApi, 'POST', '/project', project);
@@ -17,5 +17,16 @@ export async function createProjectDataModel(
     'POST',
     `/project/${model.projectId}/model`,
     model
+  );
+}
+
+export async function createProjectDataView(
+  view: Partial<IProjectDataView> & { projectId: string }
+) {
+  return baseRequest<IProject>(
+    mainServerApi,
+    'POST',
+    `/project/${view.projectId}/view`,
+    view
   );
 }

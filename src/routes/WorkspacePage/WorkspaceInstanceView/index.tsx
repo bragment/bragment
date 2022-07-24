@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
 import Scrollbars from 'react-custom-scrollbars-2';
-import { HiMenu, HiViewGrid } from 'react-icons/hi';
+import { HiFolder, HiMenu } from 'react-icons/hi';
 import { NavLink, Outlet, useParams } from 'react-router-dom';
 import { useFormatMessage } from '../../../components/hooks';
 import { getWorkspaceInstancePath } from '../../helpers';
@@ -44,7 +44,7 @@ function WorkspaceInstanceView() {
               <NavLink
                 to={getWorkspaceInstancePath(workspaceId)}
                 className={({ isActive }) => (isActive ? 'active' : undefined)}>
-                <HiViewGrid className="text-lg" />
+                <HiFolder className="text-lg" />
                 {f('workspace.projectList')}
               </NavLink>
             </li>

@@ -33,7 +33,7 @@ function CreateWorkspaceForm(props: ICreateWorkspaceFormProps) {
           form.reset();
         }
       } catch (error: any) {
-        // TODO: handle error
+        // TODO: handle request error
         setErrorMessage('common.networkError');
       }
     },

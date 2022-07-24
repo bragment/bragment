@@ -1,18 +1,17 @@
 import classNames from 'classnames';
-import { observer } from 'mobx-react';
-import { useCallback } from 'react';
+import { memo, useCallback } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
-import { useUserStore } from '../../../components/hooks';
-import { useProjectQuery } from '../../../libs/react-query';
+import { IProjectDataModel } from '../../../libs/client/types';
 import { getProjectDataModelPath } from '../../helpers';
 
-function DataModelList() {
-  const { me } = useUserStore();
+interface IDataModelMenuProps {
+  models?: IProjectDataModel[];
+  loading: boolean;
+}
+
+function DataModelMenu(props: IDataModelMenuProps) {
+  const { models, loading } = props;
   const { projectId = '' } = useParams();
-  const { data: project, isError } = useProjectQuery(
-    projectId,
-    !!(me && projectId)
-  );
 
   const getActiveClassName = useCallback(
     ({ isActive }: { isActive: boolean }) => (isActive ? 'active' : undefined),
@@ -24,9 +23,9 @@ function DataModelList() {
       className={classNames(
         'menu rounded-box',
         'pt-0',
-        project?.models?.length === 0 || 'p-2'
+        models?.length === 0 || 'p-2'
       )}>
-      {!isError && !project
+      {loading
         ? Array(3)
             .fill(0)
             .map((_, i) => (
@@ -41,20 +40,17 @@ function DataModelList() {
                 </div>
               </li>
             ))
-        : project?.models
-            ?.slice()
-            .reverse()
-            .map((model) => (
-              <li key={model._id}>
-                <NavLink
-                  to={getProjectDataModelPath(projectId, model._id)}
-                  className={getActiveClassName}>
-                  {model.title}
-                </NavLink>
-              </li>
-            ))}
+        : models?.map((model) => (
+            <li key={model._id}>
+              <NavLink
+                to={getProjectDataModelPath(projectId, model._id)}
+                className={getActiveClassName}>
+                {model.title}
+              </NavLink>
+            </li>
+          ))}
     </ul>
   );
 }
 
-export default observer(DataModelList);
+export default memo(DataModelMenu);

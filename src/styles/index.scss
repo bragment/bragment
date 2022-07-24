@@ -41,25 +41,25 @@ body {
   .alert {
     animation: button-pop var(--animation-btn, 0.25s) ease-out;
   }
-  .form-single-input {
-    &.loading {
-      position: relative;
-      &,
-      &:hover {
-        @apply pointer-events-none;
-      }
-      &::after {
-        @apply mr-2 h-4 w-4 rounded-full border-2;
-        animation: spin 2s linear infinite;
-        border-top-color: transparent;
-        border-left-color: transparent;
-        border-bottom-color: currentColor;
-        border-right-color: currentColor;
-        content: '';
-        position: absolute;
-      }
+  .form-single-input.loading,
+  ul li > .action.loading {
+    position: relative;
+    &,
+    &:hover {
+      @apply pointer-events-none;
+    }
+    &::after {
+      @apply mr-2 h-4 w-4 rounded-full border-2;
+      animation: spin 2s linear infinite;
+      border-top-color: transparent;
+      border-left-color: transparent;
+      border-bottom-color: currentColor;
+      border-right-color: currentColor;
+      content: '';
+      position: absolute;
     }
   }
+
   .clickable {
     animation: button-pop var(--animation-btn, 0.25s) ease-out;
     text-transform: var(--btn-text-case, uppercase);

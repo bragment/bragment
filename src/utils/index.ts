@@ -13,3 +13,14 @@ export function checkIfSafari() {
   }
   return false;
 }
+
+export function getAvailableTitle(prefix: string, existing?: string[]) {
+  const existingSet = new Set(existing || []);
+  let i = 0;
+  while (++i) {
+    const title = `${prefix}${i}`;
+    if (!existingSet.has(title)) {
+      return title;
+    }
+  }
+}
