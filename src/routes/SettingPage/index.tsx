@@ -12,7 +12,7 @@ function SettingPage() {
         <div
           className={classNames('text-base-content', 'max-w-lg my-20 mx-auto')}>
           <div
-            className="h-80 bg-contain"
+            className="h-80 bg-contain bg-no-repeat"
             style={{ backgroundImage: `url(${image})` }}
           />
           <h1 className="text-3xl font-blob text-center mt-10">

@@ -89,7 +89,7 @@ function CreateProjectForm(props: ICreateProjectFormProps) {
           'btn btn-primary btn-block',
           mutation.isLoading && 'loading'
         )}>
-        {f('auth.signIn')}
+        {f('common.confirm')}
       </button>
     </form>
   );
