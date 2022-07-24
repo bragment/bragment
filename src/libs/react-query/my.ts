@@ -41,7 +41,7 @@ export function useMyProfileQuery(enabled: boolean) {
   );
 }
 
-export function useCurrentWorkspaceListQuery(enabled: boolean) {
+export function useMyWorkspaceListQuery(enabled: boolean) {
   return useQuery<IWorkspace[], IApiError>(
     EQueryKey.MyWorkspaces,
     fetchMyWorkspaces,

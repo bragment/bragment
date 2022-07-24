@@ -10,7 +10,7 @@ import CreateWorkspaceForm from './CreateWorkspaceForm';
 function CreateWorkspaceView() {
   const f = useFormatMessage();
   const { me, updateMe } = useUserStore();
-  const userUpdateMutation = useUpdateMyDataMutation();
+  const mutation = useUpdateMyDataMutation();
   const navigate = useNavigateWorkspaceInstancePage();
 
   const handleFinish = useCallback(
@@ -18,13 +18,13 @@ function CreateWorkspaceView() {
       const id = workspace._id;
       navigate(id, { replace: true });
       if (!me?.mainWorkspace) {
-        const user = await userUpdateMutation.mutateAsync({
+        const user = await mutation.mutateAsync({
           mainWorkspace: id,
         });
         updateMe(user);
       }
     },
-    [me, userUpdateMutation, navigate, updateMe]
+    [me, mutation, navigate, updateMe]
   );
 
   return (

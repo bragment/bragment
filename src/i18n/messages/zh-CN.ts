@@ -36,5 +36,7 @@ export default {
   'workspace.memberList': '成员列表',
   'workspace.noProjects': '暂无项目',
   'workspace.projectList': '项目列表',
+  'workspace.setAsMainWorkspace': '设置为主工作区',
+  'workspace.switchTo': '切换到',
   'workspace.title': '工作区名称',
 };

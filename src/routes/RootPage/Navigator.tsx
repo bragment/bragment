@@ -7,13 +7,13 @@ import { useUserStore } from '../../components/hooks';
 import UserAvatar from '../../components/UserAvatar';
 import WorkspaceAvatar from '../../components/WorkspaceAvatar';
 import { IWorkspace } from '../../libs/client/types';
-import { useCurrentWorkspaceListQuery } from '../../libs/react-query';
+import { useMyWorkspaceListQuery } from '../../libs/react-query';
 import { getWorkspaceInstancePath } from '../helpers';
 import { ERoutePath, ERoutePathName } from '../types';
 
 function Navigator() {
   const { me, myMainWorkspaceId } = useUserStore();
-  const { data: workspaces } = useCurrentWorkspaceListQuery(!!me);
+  const { data: workspaces } = useMyWorkspaceListQuery(!!me);
   const [mainWorkspace, setMainWorkspace] = useState<IWorkspace | null>(null);
 
   const getActiveClassName = useCallback(

@@ -1,0 +1,11 @@
+.menuWrapper {
+  :global {
+    li {
+      display: block;
+      .action::after {
+        right: 0.75rem;
+        top: 1rem;
+      }
+    }
+  }
+}

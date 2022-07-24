@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import { useUserStore } from '../../../components/hooks';
 import WorkspaceAvatar from '../../../components/WorkspaceAvatar';
 import { useWorkspaceQuery } from '../../../libs/react-query';
+import WorkspaceMenu from './WorkspaceMenu';
 
 interface INavBarProps {
   className?: string;
@@ -38,9 +39,12 @@ function NavBar(props: INavBarProps) {
       <div className="flex-none">{prefix}</div>
       <div className="flex-auto font-bold text-xl capitalize">{title}</div>
       <div className="flex-none">
-        <button className="btn btn-square btn-ghost">
-          <HiDotsVertical className="text-xl" />
-        </button>
+        <div className={classNames('dropdown dropdown-end')}>
+          <label tabIndex={0} className="btn btn-square btn-ghost">
+            <HiDotsVertical className="text-xl" />
+          </label>
+          <WorkspaceMenu tabIndex={0} className={'dropdown-content'} />
+        </div>
       </div>
     </header>
   );

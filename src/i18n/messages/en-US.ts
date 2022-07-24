@@ -36,5 +36,7 @@ export default {
   'workspace.memberList': 'Member List',
   'workspace.noProjects': 'No Projects',
   'workspace.projectList': 'Project List',
+  'workspace.setAsMainWorkspace': 'Set as main workspace',
+  'workspace.switchTo': 'Switch to',
   'workspace.title': 'Workspace Title',
 };

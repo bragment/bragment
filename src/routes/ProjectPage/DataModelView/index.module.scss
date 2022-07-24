@@ -16,11 +16,9 @@
 
 .createButton {
   :global {
-    .action {
-      &::after {
-        right: 0.75rem;
-        top: 1rem;
-      }
+    .action::after {
+      right: 0.75rem;
+      top: 1rem;
     }
   }
 }
