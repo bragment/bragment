@@ -1,5 +1,6 @@
 import { computed, makeAutoObservable } from 'mobx';
 import { IUser } from '../../libs/client/types';
+import { setSentryUser, unsetSentryUser } from '../../libs/sentry';
 
 const SIGNED_IN = 'SIGNED_IN';
 function getLocalSignedIn() {
@@ -28,6 +29,15 @@ class UserStore {
   public setMe = (user: IUser | null) => {
     this.me = user;
     this.setSignedIn(!!user);
+    if (user) {
+      setSentryUser({
+        id: user._id,
+        email: user.email,
+        username: user.username,
+      });
+    } else {
+      unsetSentryUser();
+    }
   };
 
   public updateMe = (user: Partial<IUser>) => {
