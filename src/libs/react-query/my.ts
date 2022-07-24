@@ -4,8 +4,19 @@ import {
   useQuery,
   useQueryClient,
 } from 'react-query';
-import { fetchMyProfile, fetchMyWorkspaces, updateMyData } from '../client';
-import { IApiError, IUser, IUserProfile, IWorkspace } from '../client/types';
+import {
+  fetchMyProfile,
+  fetchMyProjects,
+  fetchMyWorkspaces,
+  updateMyData,
+} from '../client';
+import {
+  IApiError,
+  IProject,
+  IUser,
+  IUserProfile,
+  IWorkspace,
+} from '../client/types';
 import { setUserProfileQueryData } from './auth';
 import { EQueryKey } from './types';
 
@@ -45,6 +56,16 @@ export function useMyWorkspaceListQuery(enabled: boolean) {
   return useQuery<IWorkspace[], IApiError>(
     EQueryKey.MyWorkspaces,
     fetchMyWorkspaces,
+    {
+      enabled,
+    }
+  );
+}
+
+export function useMyProjectListQuery(enabled: boolean) {
+  return useQuery<IProject[], IApiError>(
+    EQueryKey.MyProjects,
+    fetchMyProjects,
     {
       enabled,
     }

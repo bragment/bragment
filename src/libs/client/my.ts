@@ -1,5 +1,5 @@
 import { baseRequest, mainServerApi } from './http';
-import { IUser, IUserProfile, IWorkspace } from './types';
+import { IProject, IUser, IUserProfile, IWorkspace } from './types';
 
 interface IUserUpdateInput {
   mainWorkspace: string;
@@ -15,4 +15,8 @@ export function fetchMyProfile() {
 
 export function fetchMyWorkspaces() {
   return baseRequest<IWorkspace[]>(mainServerApi, 'GET', '/my/workspaces');
+}
+
+export function fetchMyProjects() {
+  return baseRequest<IProject[]>(mainServerApi, 'GET', '/my/projects');
 }

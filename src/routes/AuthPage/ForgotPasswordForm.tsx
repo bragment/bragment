@@ -7,12 +7,13 @@ import { ERoutePath } from '../types';
 
 function ForgotPasswordForm() {
   const f = useFormatMessage();
-  const [errorMessage] = useState<ILocalMessage | undefined>();
+  const [errorMessage, setErrorMessage] = useState<ILocalMessage | undefined>();
 
   const handleSubmit = useCallback(
     async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       // TODO: request reset password
+      setErrorMessage('common.underConstruction');
     },
     []
   );

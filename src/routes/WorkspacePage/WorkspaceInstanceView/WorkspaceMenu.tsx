@@ -99,7 +99,7 @@ function WorkspaceMenu(props: IWorkspaceMenuProps) {
                   title={workspace.title}
                   className="flex-none w-6 text-base"
                 />
-                <span className="flex-auto text-ellipsis overflow-hidden whitespace-nowrap font-bold text-lg">
+                <span className="flex-auto overflow-hidden text-ellipsis whitespace-nowrap font-bold text-lg">
                   {workspace.title}
                 </span>
               </div>
