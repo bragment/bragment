@@ -1,0 +1,49 @@
+name: Node.js Package
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  publish-npm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - name: use cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+          key: ${{runner.OS}}-yarn-caches-${{ hashFiles('yarn.lock') }}
+      - name: build bragment-web
+        env:
+          SENTRY_DSN: ${{secrets.SENTRY_DSN}}
+          UNSPLASH_ACCESS_KEY: ${{secrets.UNSPLASH_ACCESS_KEY}}
+          PUBLIC_URL: https://cdn.jsdelivr.net/
+        run: |
+          export PACKAGE_VERSION=`yarn run --silent echo:version`
+          export PUBLIC_URL="https://cdn.jsdelivr.net/npm/bragment-web@$PACKAGE_VERSION/build/"
+          yarn
+          yarn build
+      - name: upload to sentry
+        env:
+          SENTRY_ORG: ${{secrets.SENTRY_ORG}}
+          SENTRY_PROJECT: ${{secrets.SENTRY_PROJECT}}
+          SENTRY_AUTH_TOKEN: ${{secrets.SENTRY_AUTH_TOKEN}}
+        run: |
+          export PACKAGE_VERSION=`yarn run --silent echo:version`
+          yarn sentry-cli releases files $PACKAGE_VERSION upload-sourcemaps --rewrite --validate --url-prefix="~/npm/bragment-web@$PACKAGE_VERSION/build/static/js" "./build/static/js"
+          find ./build -name "*.map" -exec rm -f {} \;
+          find ./build -name "*.map.gz" -exec rm -f {} \;
+      - name: publish bragment-web
+        env:
+          NPM_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
+          NPM_ALWAYS_AUTH: true
+        run: |
+          export PACKAGE_VERSION=`yarn run --silent echo:version`
+          cp -R build packages/web
+          cd packages/web
+          yarn publish --no-git-tag-version --new-version $PACKAGE_VERSION --access public
