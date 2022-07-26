@@ -1,23 +1,25 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useDialogStore, useFormatMessage } from '../../../components/hooks';
+import { ILocalMessage } from '../../../i18n/types';
 import { IProject } from '../../../libs/client/types';
 import { useCreateProjectDataModelMutation } from '../../../libs/react-query';
 
 interface ICreateDataModelFormProps {
+  singleInput?: boolean;
   projectId: string;
   onFinish?: (project: IProject) => void;
   onCancel?: () => void;
 }
 
 function CreateDataModelForm(props: ICreateDataModelFormProps) {
-  const { projectId, onFinish, onCancel } = props;
+  const { singleInput, projectId, onFinish, onCancel } = props;
+  const f = useFormatMessage();
   const composingRef = useRef(false);
   const { toastError } = useDialogStore();
+  const [errorMessage, setErrorMessage] = useState<ILocalMessage | undefined>();
   const mutation = useCreateProjectDataModelMutation();
-
-  const f = useFormatMessage();
 
   const handleSubmit = useCallback(
     async (event: React.FormEvent<HTMLFormElement>) => {
@@ -39,10 +41,14 @@ function CreateDataModelForm(props: ICreateDataModelFormProps) {
         }
       } catch (error) {
         // TODO: handle request error
-        toastError(f('common.networkError'));
+        if (singleInput) {
+          toastError(f('common.networkError'));
+        } else {
+          setErrorMessage('common.networkError');
+        }
       }
     },
-    [projectId, mutation, f, onFinish, toastError]
+    [projectId, mutation, singleInput, f, onFinish, setErrorMessage, toastError]
   );
 
   const handleKeyDown = useCallback(
@@ -50,18 +56,18 @@ function CreateDataModelForm(props: ICreateDataModelFormProps) {
       if (mutation.isLoading || composingRef.current) {
         return;
       }
-      if (event.key === 'Escape' && onCancel) {
+      if (event.key === 'Escape' && singleInput && onCancel) {
         onCancel();
       }
     },
-    [mutation, onCancel]
+    [mutation, singleInput, onCancel]
   );
 
   const handleBlur = useCallback(() => {
-    if (!mutation.isLoading && onCancel) {
+    if (!mutation.isLoading && singleInput && onCancel) {
       onCancel();
     }
-  }, [mutation, onCancel]);
+  }, [mutation, singleInput, onCancel]);
 
   const handleCompositionStart = useCallback(
     () => (composingRef.current = true),
@@ -77,10 +83,15 @@ function CreateDataModelForm(props: ICreateDataModelFormProps) {
       className={classNames(
         'form-control',
         'space-y-4',
-        'form-single-input',
+        singleInput && 'form-single-input',
         mutation.isLoading && 'loading'
       )}
       onSubmit={handleSubmit}>
+      {!singleInput && (
+        <label className={classNames('label text-error', 'pt-0 pb-0 h-6')}>
+          {errorMessage && f(errorMessage)}
+        </label>
+      )}
       <input
         name="title"
         type="text"
@@ -94,6 +105,17 @@ function CreateDataModelForm(props: ICreateDataModelFormProps) {
         onKeyDown={handleKeyDown}
         onBlur={handleBlur}
       />
+      {!singleInput && (
+        <button
+          type="submit"
+          className={classNames(
+            'btn btn-primary',
+            'w-full',
+            mutation.isLoading && 'loading'
+          )}>
+          {f('common.confirm')}
+        </button>
+      )}
     </form>
   );
 }

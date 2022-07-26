@@ -1,13 +1,13 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
 import { useCallback, useEffect, useState } from 'react';
-import { HiPlus } from 'react-icons/hi';
+import { HiOutlineDatabase, HiPlus } from 'react-icons/hi';
 import { useMatch, useParams } from 'react-router-dom';
 import { useFormatMessage, useUserStore } from '../../../components/hooks';
 import { IProject } from '../../../libs/client/types';
 import { useProjectQuery } from '../../../libs/react-query';
 import { getProjectInstancePath } from '../../helpers';
-import { useNavigateProjectModelPage } from '../../hooks';
+import { useNavigateProjectDataModelPage } from '../../hooks';
 import CreateDataModelForm from './CreateDataModelForm';
 import DataModelMenu from './DataModelMenu';
 
@@ -15,7 +15,7 @@ import styles from './index.module.scss';
 
 function DataModelList() {
   const f = useFormatMessage();
-  const navigate = useNavigateProjectModelPage();
+  const navigate = useNavigateProjectDataModelPage();
   const { me } = useUserStore();
   const { projectId = '', modelId = '' } = useParams();
   const isProjectPath = useMatch(getProjectInstancePath(projectId));
@@ -72,9 +72,10 @@ function DataModelList() {
       <div
         className={classNames(
           'collapse-title',
-          'h-16 leading-8 text-lg font-medium'
+          'h-16 leading-8 text-lg font-medium text-ellipsis whitespace-nowrap'
         )}>
-        {f('project.dataModel')}
+        <HiOutlineDatabase className="inline-block text-2xl text-warning align-middle mr-1" />
+        <span className="align-middle">{f('project.dataModel')}</span>
       </div>
       <div className="collapse-content bg-base-100">
         <button
@@ -86,6 +87,7 @@ function DataModelList() {
           <div
             className={classNames('mx-3 mt-1 mb-3', styles.modelFormWrapper)}>
             <CreateDataModelForm
+              singleInput
               projectId={projectId}
               onCancel={handleFormCancel}
               onFinish={handleFormFinish}

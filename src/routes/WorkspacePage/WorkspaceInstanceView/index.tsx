@@ -29,9 +29,9 @@ function WorkspaceInstanceView() {
               </label>
             }
           />
-          <section>
+          <main>
             <Outlet />
-          </section>
+          </main>
           <div className="from-base-100 pointer-events-none sticky bottom-0 flex h-20 bg-gradient-to-t to-transparent" />
         </Scrollbars>
       </div>

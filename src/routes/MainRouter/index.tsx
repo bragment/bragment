@@ -4,10 +4,11 @@ import AuthPage from '../AuthPage';
 import ForgotPasswordForm from '../AuthPage/ForgotPasswordForm';
 import SignInForm from '../AuthPage/SignInForm';
 import SignUpForm from '../AuthPage/SignUpForm';
+import DataModelPage from '../DataModelPage';
 import HomePage from '../HomePage';
 import ProjectPage from '../ProjectPage';
-import DataModelView from '../ProjectPage/DataModelView';
 import ProjectInstanceView from '../ProjectPage/ProjectInstanceView';
+import DefaultView from '../ProjectPage/ProjectInstanceView/DefaultView';
 import RootPage from '../RootPage';
 import SettingPage from '../SettingPage';
 import { ERoutePath, ERoutePathName } from '../types';
@@ -53,7 +54,8 @@ function RootRouter() {
             <Route
               path={ERoutePathName.ProjectId}
               element={<ProjectInstanceView />}>
-              <Route path={ERoutePathName.ModelId} element={<DataModelView />}>
+              <Route index element={<DefaultView />} />
+              <Route path={ERoutePathName.ModelId} element={<DataModelPage />}>
                 <Route path={ERoutePathName.ViewId} element={<div />} />
               </Route>
             </Route>

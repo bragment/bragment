@@ -7,8 +7,8 @@ import {
   HiOutlineViewList,
 } from 'react-icons/hi';
 import { NavLink, useParams } from 'react-router-dom';
-import { EDataViewType, IProjectDataView } from '../../../libs/client/types';
-import { getProjectDataViewPath } from '../../helpers';
+import { EDataViewType, IProjectDataView } from '../../libs/client/types';
+import { getProjectDataViewPath } from '../helpers';
 
 interface IDataViewTabsProps {
   views?: IProjectDataView[];
