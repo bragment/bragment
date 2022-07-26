@@ -2,41 +2,44 @@ import classNames from 'classnames';
 import { observer } from 'mobx-react';
 import { useCallback } from 'react';
 import { HiOutlineX } from 'react-icons/hi';
+import { useParams } from 'react-router-dom';
 import { useDialogStore, useFormatMessage } from '../../components/hooks';
-import { IWorkspace } from '../../libs/client/types';
-import { useNavigateWorkspaceInstancePage } from '../../routes/hooks';
-import CreateWorkspaceForm from '../../routes/WorkspacePage/CreateWorkspaceView/CreateWorkspaceForm';
+import { IProject } from '../../libs/client/types';
+import { useNavigateProjectDataModelPage } from '../../routes/hooks';
+import CreateDataModelForm from '../../routes/ProjectPage/DataModelList/CreateDataModelForm';
 
-const DIALOG_ID = 'CREATE_WORKSPACE_DIALOG';
+const DIALOG_ID = 'CREATE_DATA_MODEL_DIALOG';
 
-function CreateWorkspaceDialog() {
+function CreateDataModelDialog() {
   const f = useFormatMessage();
-  const navigate = useNavigateWorkspaceInstancePage();
+  const { projectId = '' } = useParams();
+  const navigate = useNavigateProjectDataModelPage();
   const {
-    createWorkspaceDialogVisible,
-    setCreateWorkspaceDialogVisible,
-    toggleCreateWorkspaceDialogVisible,
+    createDataModelDialogVisible,
+    setCreateDataModelDialogVisible,
+    toggleCreateDataModelDialogVisible,
   } = useDialogStore();
 
   const handleFinish = useCallback(
-    async (workspace: IWorkspace) => {
-      setCreateWorkspaceDialogVisible(false);
-      navigate(workspace._id);
+    async (project: IProject) => {
+      setCreateDataModelDialogVisible(false);
+      const model = project.models[0];
+      navigate(projectId, model._id, { replace: true });
     },
-    [setCreateWorkspaceDialogVisible, navigate]
+    [projectId, setCreateDataModelDialogVisible, navigate]
   );
 
   return (
     <div
       className={classNames(
-        !createWorkspaceDialogVisible && 'content-visibility-hidden'
+        !createDataModelDialogVisible && 'content-visibility-hidden'
       )}>
       <input
         type="checkbox"
         className="modal-toggle"
         id={DIALOG_ID}
-        checked={createWorkspaceDialogVisible}
-        onChange={toggleCreateWorkspaceDialogVisible}
+        checked={createDataModelDialogVisible}
+        onChange={toggleCreateDataModelDialogVisible}
       />
       <label
         htmlFor={DIALOG_ID}
@@ -50,9 +53,13 @@ function CreateWorkspaceDialog() {
                 'text-primary-content',
                 'text-lg font-bold'
               )}>
-              {f('workspace.createWorkspace')}
+              {f('project.createDataModel')}
             </h3>
-            <CreateWorkspaceForm onFinish={handleFinish} />
+            <CreateDataModelForm
+              singleInput={false}
+              projectId={projectId}
+              onFinish={handleFinish}
+            />
           </div>
           <label
             htmlFor={DIALOG_ID}
@@ -68,4 +75,4 @@ function CreateWorkspaceDialog() {
   );
 }
 
-export default observer(CreateWorkspaceDialog);
+export default observer(CreateDataModelDialog);

@@ -1,9 +1,9 @@
 import classNames from 'classnames';
-import { observer } from 'mobx-react';
+import { memo } from 'react';
 import { Outlet } from 'react-router-dom';
 import NavBar from './NavBar';
 
-function DataModelView() {
+function DataModelPage() {
   return (
     <div className={classNames('w-full h-full')}>
       <NavBar />
@@ -12,4 +12,4 @@ function DataModelView() {
   );
 }
 
-export default observer(DataModelView);
+export default memo(DataModelPage);

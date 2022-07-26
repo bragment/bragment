@@ -27,7 +27,7 @@ export function useNavigateProjectInstancePage() {
   );
 }
 
-export function useNavigateProjectModelPage() {
+export function useNavigateProjectDataModelPage() {
   const navigate = useNavigate();
   return useCallback(
     (projectId: string, modelId: string, options?: NavigateOptions) => {

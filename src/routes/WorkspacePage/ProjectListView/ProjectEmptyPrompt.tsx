@@ -3,11 +3,11 @@ import { memo } from 'react';
 import { HiOutlineFolderAdd, HiOutlinePlus } from 'react-icons/hi';
 import { useDialogStore, useFormatMessage } from '../../../components/hooks';
 
-interface IEmptyViewProps {
+interface IProjectEmptyPromptProps {
   creatable?: boolean;
 }
 
-function EmptyView(props: IEmptyViewProps) {
+function ProjectEmptyPrompt(props: IProjectEmptyPromptProps) {
   const { creatable } = props;
   const f = useFormatMessage();
   const { setCreateProjectDialogVisible } = useDialogStore();
@@ -32,4 +32,4 @@ function EmptyView(props: IEmptyViewProps) {
   );
 }
 
-export default memo(EmptyView);
+export default memo(ProjectEmptyPrompt);

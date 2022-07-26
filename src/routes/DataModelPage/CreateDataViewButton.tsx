@@ -4,14 +4,14 @@ import { useCallback, useMemo, useRef } from 'react';
 import { HiOutlineTable, HiOutlineViewBoards, HiPlus } from 'react-icons/hi';
 import type { IconType } from 'react-icons/lib';
 import { useParams } from 'react-router-dom';
-import { useDialogStore, useFormatMessage } from '../../../components/hooks';
+import { useDialogStore, useFormatMessage } from '../../components/hooks';
 import {
   EDataViewType,
   IProject,
   IProjectDataView,
-} from '../../../libs/client/types';
-import { useCreateProjectDataViewMutation } from '../../../libs/react-query';
-import { getAvailableTitle } from '../../../utils';
+} from '../../libs/client/types';
+import { useCreateProjectDataViewMutation } from '../../libs/react-query';
+import { getAvailableTitle } from '../../utils';
 import styles from './index.module.scss';
 
 interface IDataViewTypeItem {

@@ -8,6 +8,7 @@ function generateToastKey() {
 class DialogStore {
   public createWorkspaceDialogVisible = false;
   public createProjectDialogVisible = false;
+  public createDataModelDialogVisible = false;
   public toastList: IToast[] = [];
 
   constructor() {
@@ -28,6 +29,14 @@ class DialogStore {
 
   public toggleCreateProjectDialogVisible = () => {
     this.createProjectDialogVisible = !this.createProjectDialogVisible;
+  };
+
+  public setCreateDataModelDialogVisible = (visible: boolean) => {
+    this.createDataModelDialogVisible = visible;
+  };
+
+  public toggleCreateDataModelDialogVisible = () => {
+    this.createDataModelDialogVisible = !this.createDataModelDialogVisible;
   };
 
   public setToastList = (list: IToast[]) => {

@@ -28,7 +28,7 @@ function WorkspaceMenu(props: IWorkspaceMenuProps) {
   const scrollBar = useRef<Scrollbars>(null);
   const { workspaceId = '' } = useParams();
   const mutation = useUpdateMyDataMutation();
-  const { toastError } = useDialogStore();
+  const { setCreateWorkspaceDialogVisible, toastError } = useDialogStore();
   const { me, myMainWorkspaceId, updateMe } = useUserStore();
   const { data: allWorkspaces } = useMyWorkspaceListQuery(!!me);
   const workspaces = allWorkspaces?.filter(
@@ -41,6 +41,10 @@ function WorkspaceMenu(props: IWorkspaceMenuProps) {
       scrollBar.current?.scrollToTop();
     }, 100);
   }, []);
+
+  const handleCreateWorkspace = useCallback(() => {
+    setCreateWorkspaceDialogVisible(true);
+  }, [setCreateWorkspaceDialogVisible]);
 
   const handleSetMainWorkspace = useCallback(
     async (event: React.MouseEvent<HTMLDivElement>) => {
@@ -71,41 +75,48 @@ function WorkspaceMenu(props: IWorkspaceMenuProps) {
       tabIndex={tabIndex}
       className={classNames(
         'menu border-base-300 bg-base-100 rounded-box',
-        'w-56 mt-2 p-2 border shadow',
+        'w-56 mt-2 p-2 px-0 border shadow',
         className,
         styles.menuWrapper
       )}>
-      <Scrollbars ref={scrollBar} autoHide autoHeight>
-        {workspaceId && workspaceId !== myMainWorkspaceId && (
+      <Scrollbars ref={scrollBar} autoHide autoHeight autoHeightMin={300}>
+        <div className="px-2">
+          {workspaceId && workspaceId !== myMainWorkspaceId && (
+            <li>
+              <div
+                className={classNames(
+                  'action',
+                  mutation.isLoading && 'active loading'
+                )}
+                onClick={handleSetMainWorkspace}>
+                {f('workspace.setAsMainWorkspace')}
+              </div>
+            </li>
+          )}
           <li>
-            <div
-              className={classNames(
-                'action',
-                mutation.isLoading && 'active loading'
-              )}
-              onClick={handleSetMainWorkspace}>
-              {f('workspace.setAsMainWorkspace')}
+            <div onClick={handleCreateWorkspace}>
+              {f('workspace.createWorkspace')}
             </div>
           </li>
-        )}
-        {workspaces?.map((workspace) => (
-          <li key={workspace._id}>
-            <NavLink to={getWorkspaceInstancePath(workspace._id)}>
-              <div className="w-full flex items-center gap-2">
-                <span className="flex-none text-xs text-accent">
-                  {f('workspace.switchTo')}
-                </span>
-                <WorkspaceAvatar
-                  title={workspace.title}
-                  className="flex-none w-6 text-base"
-                />
-                <span className="flex-auto overflow-hidden text-ellipsis whitespace-nowrap font-bold text-lg">
-                  {workspace.title}
-                </span>
-              </div>
-            </NavLink>
-          </li>
-        ))}
+          {workspaces?.map((workspace) => (
+            <li key={workspace._id}>
+              <NavLink to={getWorkspaceInstancePath(workspace._id)}>
+                <div className="w-full flex items-center gap-2">
+                  <span className="flex-none text-xs text-accent">
+                    {f('workspace.switchTo')}
+                  </span>
+                  <WorkspaceAvatar
+                    title={workspace.title}
+                    className="flex-none w-6 text-base"
+                  />
+                  <span className="flex-auto overflow-hidden text-ellipsis whitespace-nowrap font-bold text-lg">
+                    {workspace.title}
+                  </span>
+                </div>
+              </NavLink>
+            </li>
+          ))}
+        </div>
         <div className="from-base-100 pointer-events-none sticky bottom-0 flex h-12 bg-gradient-to-t to-transparent" />
       </Scrollbars>
     </ul>

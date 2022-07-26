@@ -15,8 +15,8 @@ import {
   useWorkspaceQuery,
 } from '../../../libs/react-query';
 import { getProjectInstancePath } from '../../helpers';
-import EmptyView from './EmptyView';
 import LoadingView from './LoadingView';
+import ProjectEmptyPrompt from './ProjectEmptyPrompt';
 
 function ProjectListView() {
   const { setCreateProjectDialogVisible } = useDialogStore();
@@ -64,7 +64,7 @@ function ProjectListView() {
     return <LoadingView />;
   }
   if (projects?.length === 0) {
-    return <EmptyView creatable={isOwner} />;
+    return <ProjectEmptyPrompt creatable={isOwner} />;
   }
   return (
     <ProjectList
