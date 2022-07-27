@@ -3,7 +3,7 @@ import { signIn, signOut, signUp } from '../client';
 import { IUserProfile } from '../client/types';
 import { EQueryKey } from './types';
 
-export function setUserProfileQueryData(
+export function setMyProfileQueryData(
   queryClient: QueryClient,
   profile: IUserProfile | undefined
 ) {
@@ -13,15 +13,15 @@ export function setUserProfileQueryData(
   queryClient.setQueryData(EQueryKey.MyProjects, profile?.projects);
 }
 
-function unsetUserProfileQueryData(queryClient: QueryClient) {
-  setUserProfileQueryData(queryClient, undefined);
+function unsetMyProfileQueryData(queryClient: QueryClient) {
+  setMyProfileQueryData(queryClient, undefined);
 }
 
 export function useAuthSignInMutation() {
   const queryClient = useQueryClient();
   return useMutation('signIn', signIn, {
     onSuccess: (profile) => {
-      setUserProfileQueryData(queryClient, profile);
+      setMyProfileQueryData(queryClient, profile);
     },
   });
 }
@@ -30,7 +30,7 @@ export function useAuthSignUpMutation() {
   const queryClient = useQueryClient();
   return useMutation('signUp', signUp, {
     onSuccess: (profile) => {
-      setUserProfileQueryData(queryClient, profile);
+      setMyProfileQueryData(queryClient, profile);
     },
   });
 }
@@ -39,7 +39,7 @@ export function useAuthSignOutMutation() {
   const queryClient = useQueryClient();
   return useMutation('signOut', signOut, {
     onMutate: () => {
-      unsetUserProfileQueryData(queryClient);
+      unsetMyProfileQueryData(queryClient);
     },
     onSettled: () => {
       queryClient.clear();

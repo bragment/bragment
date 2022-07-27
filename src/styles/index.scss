@@ -67,7 +67,6 @@ body {
       position: absolute;
     }
   }
-
   .clickable {
     animation: button-pop var(--animation-btn, 0.25s) ease-out;
     text-transform: var(--btn-text-case, uppercase);
@@ -80,6 +79,25 @@ body {
       transform: scale(var(--btn-focus-scale, 0.95));
     }
   }
+  // HACK: make dropdown working inside dropdown
+  .dropdown.dropdown-open,
+  .dropdown.dropdown-hover:hover,
+  .dropdown:not(.dropdown-hover):focus,
+  .dropdown:not(.dropdown-hover):focus-within {
+    .dropdown-content {
+      visibility: hidden;
+      opacity: 0;
+      --tw-scale-x: 0.95;
+      --tw-scale-y: 0.95;
+    }
+    > .dropdown-content {
+      visibility: visible;
+      opacity: 1;
+      --tw-scale-x: 1;
+      --tw-scale-y: 1;
+    }
+  }
+  // HACK: make drawer-mobile working at md screen
   @media (min-width: 768px) {
     .drawer-mobile {
       grid-auto-columns: max-content auto;

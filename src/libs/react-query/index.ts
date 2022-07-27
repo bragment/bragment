@@ -9,7 +9,7 @@ export function createQueryClient() {
         staleTime: 60 * 1000,
         retry: (failureCount, error) => {
           const status = (error as AxiosError)?.response?.status;
-          if (status === 401 || failureCount >= 4) {
+          if ((status && status >= 400) || failureCount >= 4) {
             return false;
           }
           return true;

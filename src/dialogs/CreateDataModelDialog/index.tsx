@@ -49,10 +49,7 @@ function CreateDataModelDialog() {
           htmlFor="">
           <div className={classNames('w-full h-full relative z-1')}>
             <h3
-              className={classNames(
-                'text-primary-content',
-                'text-lg font-bold'
-              )}>
+              className={classNames('text-base-content', 'text-lg font-bold')}>
               {f('project.createDataModel')}
             </h3>
             <CreateDataModelForm

@@ -49,6 +49,7 @@ export interface IProject {
   owner: IMember;
   models: IProjectDataModel[];
   views: IProjectDataView[];
+  fields: IProjectDataField[];
 }
 
 export interface IProjectBackground {
@@ -69,9 +70,18 @@ export enum EDataViewType {
   Gallery = 'GALLERY',
 }
 
+export enum EDataFieldType {
+  DateTime = 'DATE_TIME',
+  MultiLineText = 'MULTI_LINE_TEXT',
+  Number = 'NUMBER',
+  SingleLineText = 'SINGLE_LINE_TEXT',
+  HttpLink = 'HTTP_LINK',
+}
+
 export interface IProjectDataModel {
   _id: string;
   title: string;
+  mainField: string;
   createdAt: string;
 }
 
@@ -80,5 +90,13 @@ export interface IProjectDataView {
   model: string;
   title: string;
   type: EDataViewType;
+  hiddenFields: string[];
   createdAt: string;
+}
+
+export interface IProjectDataField {
+  _id: string;
+  model: string;
+  title: string;
+  type: EDataFieldType;
 }

@@ -1,17 +1,19 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
 import { useCallback, useEffect, useRef } from 'react';
+import { HiPlus } from 'react-icons/hi';
 import { useMatch, useParams } from 'react-router-dom';
-import { useUserStore } from '../../components/hooks';
+import CreateDataViewButton from '../../components/CreateDataViewButton';
+import { useFormatMessage, useUserStore } from '../../components/hooks';
 import { IProject } from '../../libs/client/types';
 import { useProjectQuery } from '../../libs/react-query';
 import { getProjectDataModelPath } from '../helpers';
 import { useNavigateProjectViewPage } from '../hooks';
-import CreateDataViewButton from './CreateDataViewButton';
 import DataViewTabs from './DataViewTabs';
 import styles from './index.module.scss';
 
 function WorkspaceInstanceView() {
+  const f = useFormatMessage();
   const navigate = useNavigateProjectViewPage();
   const tabsWrapperRef = useRef<HTMLDivElement>(null);
   const { me } = useUserStore();
@@ -35,7 +37,7 @@ function WorkspaceInstanceView() {
   // TODO: or be workspace owner
   const isOwner = !!project?.owner.users.includes(me?._id || '');
 
-  const handleCreateFinish = useCallback(
+  const handleCreateViewFinish = useCallback(
     (data: IProject) => {
       const view = data.views[0];
       const div = tabsWrapperRef.current;
@@ -73,15 +75,24 @@ function WorkspaceInstanceView() {
           styles.tabsWrapper
         )}>
         <span className="inline-block from-base-200 pointer-events-none sticky top-0 left-0 h-16 w-8 bg-gradient-to-r to-transparent z-10" />
-        <DataViewTabs views={views} />
+        {views?.length === 0 ? (
+          <div className="inline-block opacity-50">{f('project.noViews')}</div>
+        ) : (
+          <DataViewTabs views={views} />
+        )}
         <span className="inline-block from-base-200 pointer-events-none sticky top-0 right-0 h-16 w-8 bg-gradient-to-l to-transparent" />
       </div>
       {isOwner && (
         <div className="flex-none">
           <CreateDataViewButton
-            existingView={views}
-            onFinish={handleCreateFinish}
-          />
+            projectId={projectId}
+            modelId={modelId}
+            existingViews={views}
+            className={styles.createViewButton}
+            onFinish={handleCreateViewFinish}>
+            <HiPlus className="text-xl" />
+            {f('project.addView')}
+          </CreateDataViewButton>
         </div>
       )}
     </header>

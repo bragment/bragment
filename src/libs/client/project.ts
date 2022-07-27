@@ -1,5 +1,10 @@
 import { baseRequest, mainServerApi } from './http';
-import { IProject, IProjectDataModel, IProjectDataView } from './types';
+import {
+  IProject,
+  IProjectDataField,
+  IProjectDataModel,
+  IProjectDataView,
+} from './types';
 
 export async function createProject(project: Partial<IProject>) {
   return baseRequest<IProject>(mainServerApi, 'POST', '/project', project);
@@ -28,5 +33,28 @@ export async function createProjectDataView(
     'POST',
     `/project/${view.projectId}/view`,
     view
+  );
+}
+
+export async function createProjectDataField(
+  field: Partial<IProjectDataField> & { projectId: string }
+) {
+  return baseRequest<IProject>(
+    mainServerApi,
+    'POST',
+    `/project/${field.projectId}/field`,
+    field
+  );
+}
+
+export function updateProjectDataModel(
+  input: Partial<IProjectDataModel> & { projectId: string; modelId: string }
+) {
+  const { modelId, projectId } = input;
+  return baseRequest<IProject>(
+    mainServerApi,
+    'PUT',
+    `/project/${projectId}/model/${modelId}`,
+    input
   );
 }
