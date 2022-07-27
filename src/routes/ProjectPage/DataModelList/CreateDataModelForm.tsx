@@ -98,7 +98,7 @@ function CreateDataModelForm(props: ICreateDataModelFormProps) {
         autoComplete="off"
         autoFocus
         required
-        placeholder={f('project.dataModelTitle')}
+        placeholder={f('project.modelTitle')}
         className={classNames('input input-bordered', 'w-full text-md')}
         onCompositionStart={handleCompositionStart}
         onCompositionEnd={handleCompositionEnd}

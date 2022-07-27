@@ -5,6 +5,7 @@ import ForgotPasswordForm from '../AuthPage/ForgotPasswordForm';
 import SignInForm from '../AuthPage/SignInForm';
 import SignUpForm from '../AuthPage/SignUpForm';
 import DataModelPage from '../DataModelPage';
+import DataViewPage from '../DataViewPage';
 import HomePage from '../HomePage';
 import ProjectPage from '../ProjectPage';
 import ProjectInstanceView from '../ProjectPage/ProjectInstanceView';
@@ -56,7 +57,10 @@ function RootRouter() {
               element={<ProjectInstanceView />}>
               <Route index element={<DefaultView />} />
               <Route path={ERoutePathName.ModelId} element={<DataModelPage />}>
-                <Route path={ERoutePathName.ViewId} element={<div />} />
+                <Route
+                  path={ERoutePathName.ViewId}
+                  element={<DataViewPage />}
+                />
               </Route>
             </Route>
           </Route>

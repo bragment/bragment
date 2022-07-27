@@ -1,0 +1,36 @@
+import classNames from 'classnames';
+import { memo } from 'react';
+import { IProject, IProjectDataField } from '../../libs/client/types';
+import Dropdown from './Dropdown';
+
+interface ICreateDataViewButtonProps {
+  projectId: string;
+  modelId: string;
+  children?: string | JSX.Element | (string | JSX.Element)[];
+  className?: string;
+  existingFields?: IProjectDataField[];
+  onFinish?: (project: IProject) => void;
+}
+
+function CreateDataViewButton(props: ICreateDataViewButtonProps) {
+  const { projectId, modelId, className, children, existingFields, onFinish } =
+    props;
+
+  return (
+    <div className={classNames('dropdown dropdown-end', className)}>
+      <label
+        tabIndex={0}
+        className={classNames('btn btn-ghost btn-sm', 'h-10 gap-2')}>
+        {children}
+      </label>
+      <Dropdown
+        projectId={projectId}
+        modelId={modelId}
+        existingFields={existingFields}
+        onFinish={onFinish}
+      />
+    </div>
+  );
+}
+
+export default memo(CreateDataViewButton);

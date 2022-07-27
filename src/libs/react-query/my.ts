@@ -17,13 +17,10 @@ import {
   IUserProfile,
   IWorkspace,
 } from '../client/types';
-import { setUserProfileQueryData } from './auth';
+import { setMyProfileQueryData } from './auth';
 import { EQueryKey } from './types';
 
-function updateUserCurrentQueryData(
-  queryClient: QueryClient,
-  user: Partial<IUser>
-) {
+function updateMyDataQueryData(queryClient: QueryClient, user: Partial<IUser>) {
   queryClient.setQueryData<IUser | undefined>(EQueryKey.MyData, (old) =>
     old ? { ...old, ...user } : undefined
   );
@@ -33,7 +30,7 @@ export function useUpdateMyDataMutation() {
   const queryClient = useQueryClient();
   return useMutation('update', updateMyData, {
     onSuccess: (user) => {
-      updateUserCurrentQueryData(queryClient, user);
+      updateMyDataQueryData(queryClient, user);
     },
   });
 }
@@ -46,7 +43,7 @@ export function useMyProfileQuery(enabled: boolean) {
     {
       enabled,
       onSuccess: (profile) => {
-        setUserProfileQueryData(queryClient, profile);
+        setMyProfileQueryData(queryClient, profile);
       },
     }
   );

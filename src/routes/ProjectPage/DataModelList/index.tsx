@@ -75,7 +75,7 @@ function DataModelList() {
           'h-16 leading-8 text-lg font-medium text-ellipsis whitespace-nowrap'
         )}>
         <HiOutlineDatabase className="inline-block text-2xl text-warning align-middle mr-1" />
-        <span className="align-middle">{f('project.dataModel')}</span>
+        <span className="align-middle">{f('project.model')}</span>
       </div>
       <div className="collapse-content bg-base-100">
         <button
