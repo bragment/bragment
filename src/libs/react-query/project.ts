@@ -8,6 +8,7 @@ import {
   createProject,
   createProjectDataField,
   createProjectDataModel,
+  createProjectDataRecord,
   createProjectDataView,
   fetchProject,
   updateProjectDataModel,
@@ -103,6 +104,14 @@ export function useCreateProjectDataFieldMutation() {
             ? { ...cached, fields: [...cached.fields, ...project.fields] }
             : undefined
       );
+    },
+  });
+}
+
+export function useCreateProjectDataRecordMutation() {
+  return useMutation(createProjectDataRecord, {
+    onSuccess: () => {
+      // TODO: cache record
     },
   });
 }

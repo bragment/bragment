@@ -100,3 +100,10 @@ export interface IProjectDataField {
   title: string;
   type: EDataFieldType;
 }
+
+export interface IProjectDataRecord {
+  _id: string;
+  project: string;
+  model: string;
+  data: Record<string, { value: string; updatedBy?: string }>;
+}

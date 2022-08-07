@@ -3,6 +3,7 @@ import {
   IProject,
   IProjectDataField,
   IProjectDataModel,
+  IProjectDataRecord,
   IProjectDataView,
 } from './types';
 
@@ -44,6 +45,17 @@ export async function createProjectDataField(
     'POST',
     `/project/${field.projectId}/field`,
     field
+  );
+}
+
+export async function createProjectDataRecord(
+  record: Partial<IProjectDataRecord> & { projectId: string }
+) {
+  return baseRequest<IProjectDataRecord>(
+    mainServerApi,
+    'POST',
+    `/project/${record.projectId}/record`,
+    record
   );
 }
 
