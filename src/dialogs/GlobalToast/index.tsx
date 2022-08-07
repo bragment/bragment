@@ -34,7 +34,7 @@ function GlobalToast() {
   );
 
   return (
-    <div className="toast toast-top toast-center items-center">
+    <div className="toast toast-top toast-center items-center z-50">
       {toastList.map(({ content, key, type }) => (
         <div
           className={classNames(

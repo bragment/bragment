@@ -5,6 +5,8 @@
   }
   overflow-y: hidden;
   &::-webkit-scrollbar {
+    // TODO: hide scrollbar temporary
+    display: none;
     background-color: transparent;
     height: 5px;
   }

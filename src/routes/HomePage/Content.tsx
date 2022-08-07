@@ -68,7 +68,7 @@ function Content() {
     <>
       {projects && projects.length > 0 && (
         <ProjectList
-          title={f('project.relatedProjects')}
+          title={f('project.myProjects')}
           icon={<HiOutlineFolder className="text-primary text-xl" />}
           projects={projects}
           renderProject={renderProject}
@@ -76,7 +76,7 @@ function Content() {
       )}
       {workspaces && workspaces.length > 0 && (
         <WorkspaceList
-          title={f('workspace.relatedWorkspaces')}
+          title={f('workspace.myWorkspaces')}
           icon={<HiOutlineUserGroup className="text-secondary text-xl" />}
           workspaces={workspaces}
           renderWorkspace={renderWorkspace}

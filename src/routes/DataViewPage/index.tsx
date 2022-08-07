@@ -11,9 +11,12 @@ function DataViewPage() {
   const { data: project } = useProjectQuery(projectId, !!(me && projectId));
   const view = project?.views.find((el) => el._id === viewId);
   const model = project?.models.find((el) => el._id === view?.model);
+  const fields = project?.fields.filter((field) => field.model === view?.model);
 
-  if (project && model && view && view.type === EDataViewType.Table) {
-    return <TableView project={project} model={model} view={view} />;
+  if (project && model && view && fields && view.type === EDataViewType.Table) {
+    return (
+      <TableView project={project} model={model} view={view} fields={fields} />
+    );
   }
   return null;
 }

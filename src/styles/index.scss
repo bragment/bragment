@@ -36,6 +36,9 @@ body {
   }
 
   // NOTE: override daisyui
+  .text-base-content-opacity {
+    color: hsla(var(--bc) / 0.5);
+  }
   &.safari {
     input,
     btn {

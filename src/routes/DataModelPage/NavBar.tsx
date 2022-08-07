@@ -60,12 +60,12 @@ function WorkspaceInstanceView() {
   }, [navigate, isProjectModelPath, projectId, modelId, viewId, views]);
 
   return (
-    <header
-      className={classNames(
-        'navbar bg-base-200 border-base-300',
-        'h-16 py-0 gap-3 z-30'
-      )}>
-      <div className="flex-none font-bold text-xl capitalize pl-[4.5rem]">
+    <header className={classNames('navbar bg-base-200', 'h-16 py-0 z-30')}>
+      <div
+        className={classNames(
+          'border-base-200 border-r-2 z-10', // FIXED: safari sticky issue
+          'flex-none h-full font-bold text-xl capitalize pr-3 pl-[4.5rem]'
+        )}>
         {title}
       </div>
       <div
@@ -74,16 +74,19 @@ function WorkspaceInstanceView() {
           'h-16 basis-auto grow-0 shrink overflow-x-scroll whitespace-nowrap',
           styles.tabsWrapper
         )}>
-        <span className="inline-block from-base-200 pointer-events-none sticky top-0 left-0 h-16 w-8 bg-gradient-to-r to-transparent z-10" />
+        <div className="inline-block from-base-200 pointer-events-none sticky top-0 left-0 h-16 w-8 bg-gradient-to-r to-transparent z-10" />
         {views?.length === 0 ? (
-          <div className="inline-block opacity-50">{f('project.noViews')}</div>
+          <div
+            className={classNames('inline-block', 'text-base-content-opacity')}>
+            {f('project.noViews')}
+          </div>
         ) : (
           <DataViewTabs views={views} />
         )}
-        <span className="inline-block from-base-200 pointer-events-none sticky top-0 right-0 h-16 w-8 bg-gradient-to-l to-transparent" />
+        <div className="inline-block from-base-200 pointer-events-none sticky top-0 right-0 h-16 w-8 bg-gradient-to-l to-transparent" />
       </div>
       {isOwner && (
-        <div className="flex-none">
+        <div className="flex-none h-full pl-3">
           <CreateDataViewButton
             projectId={projectId}
             modelId={modelId}

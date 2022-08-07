@@ -4,13 +4,64 @@
     height: 100%;
   }
   .fieldList {
-    min-width: 12.5rem;
-    > .item {
-      flex: 0 0 auto;
-      line-height: 2rem;
-      font-size: 1rem;
-      font-weight: bold;
-      padding: 0.5rem 0.75rem;
+    min-width: 13rem;
+  }
+  .item {
+    flex: 0 0 auto;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+  }
+  .mainBadge {
+    position: relative;
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-color: hsl(var(--in)) hsl(var(--in)) transparent transparent;
+      border-width: 0.375rem;
     }
+  }
+}
+
+.recordFormWrapper {
+  :global {
+    .form-single-input {
+      &::after {
+        right: 0.5rem;
+        top: 0.75rem;
+      }
+      .input {
+        padding-right: 3rem;
+      }
+    }
+  }
+}
+
+.scrollableLeft {
+  &::after {
+    content: '';
+    position: absolute;
+    width: calc(1rem - 1px);
+    height: 100%;
+    top: 0;
+    right: -1rem;
+    background-image: linear-gradient(to right, hsl(var(--b2)), transparent);
+  }
+}
+
+.scrollableRight {
+  &::before {
+    content: '';
+    position: absolute;
+    width: calc(1rem - 1px);
+    height: 100%;
+    top: 0;
+    left: -1rem;
+    background-image: linear-gradient(to left, hsl(var(--b2)), transparent);
   }
 }
