@@ -1,5 +1,14 @@
 import classNames from 'classnames';
-import React, { memo, useCallback, useState } from 'react';
+import React, {
+  forwardRef,
+  memo,
+  Ref,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 import {
   IProjectDataField,
   IProjectDataRecord,
@@ -7,16 +16,25 @@ import {
 import { useCreateProjectDataRecordMutation } from '../../../libs/react-query';
 import { useDialogStore, useFormatMessage } from '../../hooks';
 
+export interface ICreateDataRecordFormRef {
+  focus: () => void;
+}
+
 export interface ICreateDataRecordFormProps {
   projectId: string;
   modelId: string;
   mainField: IProjectDataField;
   onFinish?: (record: IProjectDataRecord) => void;
+  onLoadingChange?: (loading: boolean) => void;
 }
 
-function CreateDataRecordForm(props: ICreateDataRecordFormProps) {
-  const { projectId, modelId, mainField, onFinish } = props;
+function CreateDataRecordForm(
+  props: ICreateDataRecordFormProps,
+  ref: Ref<ICreateDataRecordFormRef>
+) {
+  const { projectId, modelId, mainField, onFinish, onLoadingChange } = props;
   const f = useFormatMessage();
+  const inputRef = useRef<HTMLInputElement>(null);
   const { toastError } = useDialogStore();
   const mutation = useCreateProjectDataRecordMutation();
   const [data, setData] = useState<Record<string, { value: string }>>({});
@@ -66,18 +84,34 @@ function CreateDataRecordForm(props: ICreateDataRecordFormProps) {
     []
   );
 
+  useEffect(() => {
+    if (onLoadingChange) {
+      onLoadingChange(mutation.isLoading);
+    }
+  }, [mutation.isLoading, onLoadingChange]);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      focus: () => {
+        inputRef.current?.focus();
+      },
+    }),
+    []
+  );
+
   return (
     <form
       className={classNames(
         'form-control',
-        'form-single-input',
-        mutation.isLoading && 'loading'
+        mutation.isLoading && 'pointer-events-none'
       )}
       onSubmit={handleSubmit}>
       <input type="hidden" name="projectId" value={projectId} />
       <input type="hidden" name="project" value={projectId} />
       <input type="hidden" name="model" value={modelId} />
       <input
+        ref={inputRef}
         type="text"
         name={mainField._id}
         autoComplete="off"
@@ -94,4 +128,4 @@ function CreateDataRecordForm(props: ICreateDataRecordFormProps) {
   );
 }
 
-export default memo(CreateDataRecordForm);
+export default memo(forwardRef(CreateDataRecordForm));

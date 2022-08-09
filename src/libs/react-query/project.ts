@@ -11,9 +11,10 @@ import {
   createProjectDataRecord,
   createProjectDataView,
   fetchProject,
+  fetchProjectDataRecords,
   updateProjectDataModel,
 } from '../client';
-import { IApiError, IProject } from '../client/types';
+import { IApiError, IProject, IProjectDataRecord } from '../client/types';
 
 import { EQueryKey } from './types';
 
@@ -22,26 +23,17 @@ function fetchProjectFn(context: QueryFunctionContext) {
   return fetchProject(id);
 }
 
-export function useProjectQuery(
-  id: string,
-  enabled: boolean,
-  workspaceId?: string
-) {
-  const queryClient = useQueryClient();
+function fetchProjectDataRecordsFn(context: QueryFunctionContext) {
+  const [_key, projectId] = context.queryKey as [string, string];
+  return fetchProjectDataRecords(projectId);
+}
+
+export function useProjectQuery(id: string, enabled: boolean) {
   return useQuery<IProject, IApiError>(
     [EQueryKey.Project, id],
     fetchProjectFn,
     {
       enabled,
-      initialData: !workspaceId
-        ? undefined
-        : () =>
-            queryClient
-              .getQueryData<IProject[]>([
-                EQueryKey.WorkspaceProjects,
-                workspaceId,
-              ])
-              ?.find((project) => project._id === id),
     }
   );
 }
@@ -109,11 +101,25 @@ export function useCreateProjectDataFieldMutation() {
 }
 
 export function useCreateProjectDataRecordMutation() {
+  const queryClient = useQueryClient();
   return useMutation(createProjectDataRecord, {
-    onSuccess: () => {
-      // TODO: cache record
+    onSuccess: (record) => {
+      queryClient.setQueryData<IProjectDataRecord[] | undefined>(
+        [EQueryKey.ProjectDataRecords, record.project],
+        (cached) => (cached ? [...cached, record] : undefined)
+      );
     },
   });
+}
+
+export function useProjectDataRecordQuery(projectId: string, enabled: boolean) {
+  return useQuery<IProjectDataRecord[], IApiError>(
+    [EQueryKey.ProjectDataRecords, projectId],
+    fetchProjectDataRecordsFn,
+    {
+      enabled,
+    }
+  );
 }
 
 export function useUpdateProjectDataModelMutation() {

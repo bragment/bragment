@@ -52,6 +52,7 @@ body {
   .alert {
     animation: button-pop var(--animation-btn, 0.25s) ease-out;
   }
+  .icon.loading,
   .form-single-input.loading,
   ul li > .action.loading {
     position: relative;
@@ -68,6 +69,12 @@ body {
       border-right-color: currentColor;
       content: '';
       position: absolute;
+    }
+  }
+  .icon.loading {
+    @apply h-4 w-4;
+    &::after {
+      @apply mr-0 h-full w-full;
     }
   }
   .clickable {

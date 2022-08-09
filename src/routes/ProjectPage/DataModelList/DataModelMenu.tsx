@@ -14,7 +14,11 @@ function DataModelMenu(props: IDataModelMenuProps) {
   const { projectId = '' } = useParams();
 
   const getActiveClassName = useCallback(
-    ({ isActive }: { isActive: boolean }) => (isActive ? 'active' : undefined),
+    ({ isActive }: { isActive: boolean }) =>
+      classNames(
+        'inline-block w-full text-ellipsis overflow-hidden',
+        isActive && 'active'
+      ),
     []
   );
 
