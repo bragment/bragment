@@ -4,7 +4,7 @@ export enum EQueryKey {
   MyProjects = 'MY_PROJECTS',
   MyWorkspaces = 'MY_WORKSPACES',
   Project = 'PROJECT',
-  ProjectDataModel = 'PROJECT_DATA_MODEL',
+  ProjectDataRecords = 'PROJECT_DATA_RECORDS',
   WorkspaceProjects = 'WORKSPACE_PROJECTS',
   Workspace = 'WORKSPACE',
 }

@@ -17,7 +17,7 @@ function Navigator() {
   const [mainWorkspace, setMainWorkspace] = useState<IWorkspace | null>(null);
 
   const getActiveClassName = useCallback(
-    ({ isActive }: { isActive: boolean }) => (isActive ? 'active' : undefined),
+    ({ isActive }: { isActive: boolean }) => classNames(isActive && 'active'),
     []
   );
 

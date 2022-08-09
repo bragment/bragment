@@ -66,7 +66,9 @@ function WorkspaceInstanceView() {
           'border-base-200 border-r-2 z-10', // FIXED: safari sticky issue
           'flex-none h-full font-bold text-xl capitalize pr-3 pl-[4.5rem]'
         )}>
-        {title}
+        <div className="max-w-[12rem] text-ellipsis overflow-hidden">
+          {title}
+        </div>
       </div>
       <div
         ref={tabsWrapperRef}

@@ -79,7 +79,7 @@ function Dropdown(props: IDropdownProps) {
                 'active loading'
             )}
             data-type={type}
-            data-title={title}>
+            data-title={f(title)}>
             <Icon className="text-xl" />
             {f(title)}
           </span>

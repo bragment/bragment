@@ -59,6 +59,14 @@ export async function createProjectDataRecord(
   );
 }
 
+export function fetchProjectDataRecords(projectId: string) {
+  return baseRequest<IProjectDataRecord[]>(
+    mainServerApi,
+    'GET',
+    `/project/${projectId}/records`
+  );
+}
+
 export function updateProjectDataModel(
   input: Partial<IProjectDataModel> & { projectId: string; modelId: string }
 ) {

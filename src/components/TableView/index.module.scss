@@ -1,67 +1,49 @@
-.header {
-  height: 3rem;
-  > div {
-    height: 100%;
-  }
-  .fieldList {
-    min-width: 13rem;
-  }
-  .item {
-    flex: 0 0 auto;
-    font-size: 1rem;
-    font-weight: bold;
-    padding: 0.5rem 1rem;
-  }
-  .mainBadge {
-    position: relative;
-    &::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 0;
-      height: 0;
-      border-style: solid;
-      border-color: hsl(var(--in)) hsl(var(--in)) transparent transparent;
-      border-width: 0.375rem;
-    }
+.headRow,
+.bodyRow,
+.tailRow {
+  @apply bg-base-200 border-base-300 text-base-content;
+  @apply h-12;
+  @apply flex items-center;
+  .cell {
+    @apply bg-base-200 border-base-300;
+    @apply h-full py-0;
+    @apply flex items-center;
   }
 }
 
-.recordFormWrapper {
-  :global {
-    .form-single-input {
-      &::after {
-        right: 0.5rem;
-        top: 0.75rem;
-      }
-      .input {
-        padding-right: 3rem;
-      }
-    }
+.bodyRow {
+  @apply bg-base-100;
+  .cell {
+    @apply bg-base-100;
   }
+}
+
+.tailRow {
+  @apply h-auto min-h-12;
 }
 
 .scrollableLeft {
+  $bgColor: hsl(var(--b2));
   &::after {
     content: '';
     position: absolute;
-    width: calc(1rem - 1px);
+    width: calc(1rem);
     height: 100%;
     top: 0;
     right: -1rem;
-    background-image: linear-gradient(to right, hsl(var(--b2)), transparent);
+    background-image: linear-gradient(to right, $bgColor, transparent);
   }
 }
 
 .scrollableRight {
+  $bgColor: hsl(var(--b2));
   &::before {
     content: '';
     position: absolute;
-    width: calc(1rem - 1px);
+    width: calc(1rem);
     height: 100%;
     top: 0;
     left: -1rem;
-    background-image: linear-gradient(to left, hsl(var(--b2)), transparent);
+    background-image: linear-gradient(to left, $bgColor, transparent);
   }
 }
