@@ -3,7 +3,7 @@ import {
   useMutation,
   useQuery,
   useQueryClient,
-} from 'react-query';
+} from '@tanstack/react-query';
 import {
   createProject,
   createProjectDataField,
@@ -15,8 +15,7 @@ import {
   updateProjectDataModel,
 } from '../client';
 import { IApiError, IProject, IProjectDataRecord } from '../client/types';
-
-import { EQueryKey } from './types';
+import { EMutationKey, EQueryKey } from './types';
 
 function fetchProjectFn(context: QueryFunctionContext) {
   const [_key, id] = context.queryKey as [string, string];
@@ -124,23 +123,27 @@ export function useProjectDataRecordQuery(projectId: string, enabled: boolean) {
 
 export function useUpdateProjectDataModelMutation() {
   const queryClient = useQueryClient();
-  return useMutation('update', updateProjectDataModel, {
-    onSuccess: (project) => {
-      const model = project?.models[0];
-      if (model) {
-        queryClient.setQueryData<IProject | undefined>(
-          [EQueryKey.Project, project._id],
-          (cached) =>
-            cached
-              ? {
-                  ...cached,
-                  models: cached.models.map((el) =>
-                    el._id === model._id ? model : el
-                  ),
-                }
-              : undefined
-        );
-      }
-    },
-  });
+  return useMutation(
+    [EMutationKey.UpdateProjectDataModel],
+    updateProjectDataModel,
+    {
+      onSuccess: (project) => {
+        const model = project?.models[0];
+        if (model) {
+          queryClient.setQueryData<IProject | undefined>(
+            [EQueryKey.Project, project._id],
+            (cached) =>
+              cached
+                ? {
+                    ...cached,
+                    models: cached.models.map((el) =>
+                      el._id === model._id ? model : el
+                    ),
+                  }
+                : undefined
+          );
+        }
+      },
+    }
+  );
 }

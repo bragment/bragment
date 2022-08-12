@@ -3,7 +3,7 @@ import {
   useMutation,
   useQuery,
   useQueryClient,
-} from 'react-query';
+} from '@tanstack/react-query';
 import {
   fetchMyProfile,
   fetchMyProjects,
@@ -18,17 +18,17 @@ import {
   IWorkspace,
 } from '../client/types';
 import { setMyProfileQueryData } from './auth';
-import { EQueryKey } from './types';
+import { EMutationKey, EQueryKey } from './types';
 
 function updateMyDataQueryData(queryClient: QueryClient, user: Partial<IUser>) {
-  queryClient.setQueryData<IUser | undefined>(EQueryKey.MyData, (old) =>
+  queryClient.setQueryData<IUser | undefined>([EQueryKey.MyData], (old) =>
     old ? { ...old, ...user } : undefined
   );
 }
 
 export function useUpdateMyDataMutation() {
   const queryClient = useQueryClient();
-  return useMutation('update', updateMyData, {
+  return useMutation([EMutationKey.UpdateMyData], updateMyData, {
     onSuccess: (user) => {
       updateMyDataQueryData(queryClient, user);
     },
@@ -38,7 +38,7 @@ export function useUpdateMyDataMutation() {
 export function useMyProfileQuery(enabled: boolean) {
   const queryClient = useQueryClient();
   return useQuery<IUserProfile, IApiError>(
-    EQueryKey.MyProfile,
+    [EQueryKey.MyProfile],
     fetchMyProfile,
     {
       enabled,
@@ -51,7 +51,7 @@ export function useMyProfileQuery(enabled: boolean) {
 
 export function useMyWorkspaceListQuery(enabled: boolean) {
   return useQuery<IWorkspace[], IApiError>(
-    EQueryKey.MyWorkspaces,
+    [EQueryKey.MyWorkspaces],
     fetchMyWorkspaces,
     {
       enabled,
@@ -61,7 +61,7 @@ export function useMyWorkspaceListQuery(enabled: boolean) {
 
 export function useMyProjectListQuery(enabled: boolean) {
   return useQuery<IProject[], IApiError>(
-    EQueryKey.MyProjects,
+    [EQueryKey.MyProjects],
     fetchMyProjects,
     {
       enabled,
