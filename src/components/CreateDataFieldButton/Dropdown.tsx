@@ -12,7 +12,7 @@ function Dropdown(props: ICreateDataFieldFormProps) {
       tabIndex={0}
       className={classNames(
         'dropdown-content menu border-base-300 bg-base-100 rounded-box',
-        'w-80 mt-2 p-6 pb-16 border shadow'
+        'w-80 mt-1 p-6 pb-16 border shadow'
       )}>
       <div>
         <h3 className={classNames('text-base-content', 'text-lg font-bold')}>

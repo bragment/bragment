@@ -3,6 +3,7 @@ import { observer } from 'mobx-react';
 import { useCallback, useEffect, useRef } from 'react';
 import { HiPlus } from 'react-icons/hi';
 import { useMatch, useParams } from 'react-router-dom';
+import AnimatePing from '../../components/AnimatePing';
 import CreateDataViewButton from '../../components/CreateDataViewButton';
 import { useFormatMessage, useUserStore } from '../../components/hooks';
 import { IProject } from '../../libs/client/types';
@@ -60,7 +61,7 @@ function WorkspaceInstanceView() {
   }, [navigate, isProjectModelPath, projectId, modelId, viewId, views]);
 
   return (
-    <header className={classNames('navbar bg-base-200', 'h-16 py-0 z-30')}>
+    <header className={classNames('navbar bg-base-200', 'h-16 py-0')}>
       <div
         className={classNames(
           'border-base-200 border-r-2 z-10', // FIXED: safari sticky issue
@@ -89,15 +90,17 @@ function WorkspaceInstanceView() {
       </div>
       {isOwner && (
         <div className="flex-none h-full pl-3">
-          <CreateDataViewButton
-            projectId={projectId}
-            modelId={modelId}
-            existingViews={views}
-            className={styles.createViewButton}
-            onFinish={handleCreateViewFinish}>
-            <HiPlus className="text-xl" />
-            {f('project.addView')}
-          </CreateDataViewButton>
+          <AnimatePing ping={views?.length === 0}>
+            <CreateDataViewButton
+              projectId={projectId}
+              modelId={modelId}
+              existingViews={views}
+              className={styles.createViewButton}
+              onFinish={handleCreateViewFinish}>
+              <HiPlus className="text-xl" />
+              {f('project.addView')}
+            </CreateDataViewButton>
+          </AnimatePing>
         </div>
       )}
     </header>

@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import { memo } from 'react';
 import { HiHashtag, HiPlus } from 'react-icons/hi';
 import { IProject, IProjectDataField } from '../../../libs/client/types';
+import AnimatePing from '../../AnimatePing';
 import CreateDataFieldButton from '../../CreateDataFieldButton';
 import { useFormatMessage } from '../../hooks';
 import Cell from './Cell';
@@ -27,6 +28,7 @@ function HeadRow(props: IHeadRowProps) {
     onCreateDateFieldFinish,
   } = props;
 
+  const hasNoField = !mainField && visibleFields.length === 0;
   return (
     <div
       className={classNames(
@@ -53,7 +55,7 @@ function HeadRow(props: IHeadRowProps) {
       {visibleFields.map((field) => (
         <Cell key={field._id} field={field} />
       ))}
-      {!mainField && (
+      {hasNoField && (
         <div className={classNames('w-52', 'justify-center', styles.cell)}>
           {f('project.noFields')}
         </div>
@@ -66,13 +68,15 @@ function HeadRow(props: IHeadRowProps) {
           styles.cell,
           styles.scrollableRight
         )}>
-        <CreateDataFieldButton
-          projectId={projectId}
-          modelId={modelId}
-          existingFields={fields}
-          onFinish={onCreateDateFieldFinish}>
-          <HiPlus className="text-lg" />
-        </CreateDataFieldButton>
+        <AnimatePing ping={hasNoField}>
+          <CreateDataFieldButton
+            projectId={projectId}
+            modelId={modelId}
+            existingFields={fields}
+            onFinish={onCreateDateFieldFinish}>
+            <HiPlus className="text-lg" />
+          </CreateDataFieldButton>
+        </AnimatePing>
       </div>
     </div>
   );
