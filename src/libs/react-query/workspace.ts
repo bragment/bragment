@@ -3,7 +3,7 @@ import {
   useMutation,
   useQuery,
   useQueryClient,
-} from 'react-query';
+} from '@tanstack/react-query';
 import { IApiError, IProject, IWorkspace } from '../client/types';
 import {
   createWorkspace,
@@ -52,7 +52,7 @@ export function useCreateWorkspaceMutation() {
   return useMutation(createWorkspace, {
     onSuccess: (workspace) => {
       queryClient.setQueryData<IWorkspace[]>(
-        EQueryKey.MyWorkspaces,
+        [EQueryKey.MyWorkspaces],
         (workspaces) => [...(workspaces || []), workspace]
       );
     },

@@ -1,7 +1,7 @@
+import { QueryClientProvider } from '@tanstack/react-query';
 import { observer } from 'mobx-react';
 import { useEffect, useMemo } from 'react';
 import { IntlProvider } from 'react-intl';
-import { QueryClientProvider } from 'react-query';
 import { useSettingStore } from './components/hooks';
 import { createQueryClient } from './libs/react-query';
 import stores, { AppContext } from './stores';

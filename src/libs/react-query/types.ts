@@ -8,3 +8,11 @@ export enum EQueryKey {
   WorkspaceProjects = 'WORKSPACE_PROJECTS',
   Workspace = 'WORKSPACE',
 }
+
+export enum EMutationKey {
+  UpdateProjectDataModel = 'UPDATE_PROJECT_DATA_MODEL',
+  UpdateMyData = 'UPDATE_MY_DATA',
+  SignIn = 'SIGN_IN',
+  SignUp = 'SIGN_UP',
+  SignOut = 'SIGN_OUT',
+}
