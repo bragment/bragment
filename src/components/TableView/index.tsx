@@ -1,5 +1,6 @@
+import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { observer } from 'mobx-react';
-import { useCallback, useLayoutEffect, useRef } from 'react';
+import { useCallback, useLayoutEffect, useMemo, useRef } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
 import {
   IProject,
@@ -11,6 +12,7 @@ import {
 import { useUpdateProjectDataModelMutation } from '../../libs/react-query';
 import BodyRow from './BodyRow';
 import HeadRow from './HeadRow';
+import { createColumns } from './helpers';
 import TailRow from './TailRow';
 
 interface ITableViewProps {
@@ -26,12 +28,14 @@ function TableView(props: ITableViewProps) {
   const scrollBarRef = useRef<Scrollbars>(null);
   const updateModelMutation = useUpdateProjectDataModelMutation();
   const mainFieldId = model.mainField || fields[0]?._id;
-  const mainField = fields.find((field) => field._id === mainFieldId);
-  const visibleFields = fields.filter(
-    (field) =>
-      !view.hiddenFields.includes(field._id) && field._id !== mainField?._id
+  const modelFields = useMemo(
+    () => fields.filter((field) => field.model === model._id),
+    [fields, model]
   );
-  const visibleRecords = records.filter((record) => record.model === model._id);
+  const modelRecords = useMemo(
+    () => records.filter((record) => record.model === model._id),
+    [records, model]
+  );
 
   const handleCreateDateFieldFinish = useCallback(
     (data: IProject) => {
@@ -57,34 +61,49 @@ function TableView(props: ITableViewProps) {
     scrollBarRef.current?.scrollToLeft();
   }, [view._id]);
 
+  const columns = useMemo(
+    () => createColumns(fields, mainFieldId),
+    [fields, mainFieldId]
+  );
+
+  const table = useReactTable({
+    data: modelRecords,
+    columns,
+    state: {
+      columnPinning: { left: [mainFieldId] },
+    },
+    getCoreRowModel: getCoreRowModel(),
+  });
+  const headerGroups = table.getHeaderGroups();
+  const rowModel = table.getRowModel();
   return (
     <Scrollbars ref={scrollBarRef}>
-      <HeadRow
-        projectId={project._id}
-        modelId={model._id}
-        fields={fields}
-        mainField={mainField}
-        visibleFields={visibleFields}
-        onCreateDateFieldFinish={handleCreateDateFieldFinish}
-      />
-      {mainField &&
-        visibleRecords.map((record, i) => (
-          <BodyRow
-            key={record._id}
-            index={i}
-            record={record}
-            mainField={mainField}
-            visibleFields={visibleFields}
-            borderedBottom={i < visibleRecords.length - 1}
-          />
-        ))}
-      {mainField && (
+      {headerGroups.map((headerGroup) => (
+        <HeadRow
+          key={view._id}
+          headerGroup={headerGroup}
+          projectId={project._id}
+          modelId={model._id}
+          modelFields={modelFields}
+          onCreateDateFieldFinish={handleCreateDateFieldFinish}
+        />
+      ))}
+      {rowModel.rows.map((row) => (
+        <BodyRow
+          key={row.id}
+          index={row.index}
+          row={row}
+          borderedBottom={row.index < rowModel.rows.length - 1}
+        />
+      ))}
+
+      {modelFields && (
         <TailRow
           projectId={project._id}
           modelId={model._id}
-          mainField={mainField}
-          fields={fields}
-          borderedTop={visibleRecords.length > 0}
+          mainFieldId={mainFieldId}
+          modelFields={modelFields}
+          borderedTop={rowModel.rows.length > 0}
           borderedBottom
         />
       )}

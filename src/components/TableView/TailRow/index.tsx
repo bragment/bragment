@@ -10,14 +10,22 @@ import styles from '../index.module.scss';
 interface ITailRowProps {
   projectId: string;
   modelId: string;
-  fields: IProjectDataField[];
-  mainField: IProjectDataField;
+  mainFieldId: string;
+  modelFields: IProjectDataField[];
   borderedTop?: boolean;
   borderedBottom?: boolean;
 }
 
 function TailRow(props: ITailRowProps) {
-  const { projectId, modelId, mainField, borderedTop, borderedBottom } = props;
+  const {
+    projectId,
+    modelId,
+    mainFieldId,
+    modelFields,
+    borderedTop,
+    borderedBottom,
+  } = props;
+  const mainField = modelFields.find((field) => field._id === mainFieldId);
   const [loading, setLoading] = useState(false);
   const formRef = useRef<ICreateDataRecordFormRef>(null);
 
@@ -51,13 +59,15 @@ function TailRow(props: ITailRowProps) {
         )}
       </div>
       <div className={classNames('flex-auto py-1')}>
-        <CreateDataRecordForm
-          ref={formRef}
-          projectId={projectId}
-          modelId={modelId}
-          mainField={mainField}
-          onLoadingChange={handleLoadingChange}
-        />
+        {mainField && (
+          <CreateDataRecordForm
+            ref={formRef}
+            projectId={projectId}
+            modelId={modelId}
+            mainField={mainField}
+            onLoadingChange={handleLoadingChange}
+          />
+        )}
       </div>
     </div>
   );

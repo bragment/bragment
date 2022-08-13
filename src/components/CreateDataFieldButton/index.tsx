@@ -6,7 +6,7 @@ import Dropdown from './Dropdown';
 interface ICreateDataViewButtonProps {
   projectId: string;
   modelId: string;
-  children?: string | JSX.Element | (string | JSX.Element)[];
+  children?: React.ReactNode;
   className?: string;
   existingFields?: IProjectDataField[];
   onFinish?: (project: IProject) => void;

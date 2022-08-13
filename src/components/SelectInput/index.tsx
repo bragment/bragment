@@ -4,7 +4,7 @@ import { memo, useCallback, useLayoutEffect, useRef, useState } from 'react';
 export interface ISelectInputOption {
   value: string;
   content: string;
-  node?: JSX.Element;
+  node?: React.ReactNode;
 }
 
 export interface ISelectInputProps {

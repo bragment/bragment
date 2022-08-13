@@ -9,7 +9,7 @@ import WorkspaceMenu from './WorkspaceMenu';
 
 interface INavBarProps {
   className?: string;
-  prefix?: JSX.Element;
+  prefix?: React.ReactNode;
 }
 
 function NavBar(props: INavBarProps) {

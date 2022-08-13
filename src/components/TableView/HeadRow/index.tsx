@@ -1,19 +1,22 @@
+import { HeaderGroup } from '@tanstack/react-table';
 import classNames from 'classnames';
 import { memo } from 'react';
 import { HiHashtag, HiPlus } from 'react-icons/hi';
-import { IProject, IProjectDataField } from '../../../libs/client/types';
+import {
+  IProject,
+  IProjectDataField,
+  IProjectDataRecord,
+} from '../../../libs/client/types';
 import AnimatePing from '../../AnimatePing';
 import CreateDataFieldButton from '../../CreateDataFieldButton';
 import { useFormatMessage } from '../../hooks';
-import Cell from './Cell';
 import styles from '../index.module.scss';
 
 interface IHeadRowProps {
   projectId: string;
   modelId: string;
-  fields: IProjectDataField[];
-  visibleFields: IProjectDataField[];
-  mainField?: IProjectDataField;
+  modelFields: IProjectDataField[];
+  headerGroup: HeaderGroup<IProjectDataRecord>;
   onCreateDateFieldFinish: (project: IProject) => void;
 }
 
@@ -22,13 +25,13 @@ function HeadRow(props: IHeadRowProps) {
   const {
     projectId,
     modelId,
-    fields,
-    visibleFields,
-    mainField,
+    modelFields,
+    headerGroup,
     onCreateDateFieldFinish,
   } = props;
 
-  const hasNoField = !mainField && visibleFields.length === 0;
+  const hasNoField = headerGroup.headers.length === 0;
+
   return (
     <div
       className={classNames(
@@ -45,16 +48,10 @@ function HeadRow(props: IHeadRowProps) {
         )}>
         <HiHashtag className="text-lg" />
       </div>
-      {mainField && (
-        <Cell
-          className={classNames('sticky left-16', styles.scrollableLeft)}
-          field={mainField}
-          main
-        />
-      )}
-      {visibleFields.map((field) => (
-        <Cell key={field._id} field={field} />
-      ))}
+      {headerGroup.headers.map((header) => {
+        const Header = header.column.columnDef.header;
+        return Header && <Header key={header.id} {...header.getContext()} />;
+      })}
       {hasNoField && (
         <div className={classNames('w-52', 'justify-center', styles.cell)}>
           {f('project.noFields')}
@@ -72,7 +69,7 @@ function HeadRow(props: IHeadRowProps) {
           <CreateDataFieldButton
             projectId={projectId}
             modelId={modelId}
-            existingFields={fields}
+            existingFields={modelFields}
             onFinish={onCreateDateFieldFinish}>
             <HiPlus className="text-lg" />
           </CreateDataFieldButton>

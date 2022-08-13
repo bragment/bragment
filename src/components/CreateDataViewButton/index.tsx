@@ -3,7 +3,7 @@ import { memo } from 'react';
 import Dropdown, { IDropdownProps } from './Dropdown';
 
 interface ICreateDataViewButtonProps extends IDropdownProps {
-  children?: string | JSX.Element | (string | JSX.Element)[];
+  children?: React.ReactNode;
   className?: string;
 }
 
