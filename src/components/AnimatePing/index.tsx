@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { memo } from 'react';
 
 export interface IAnimatePingProps {
-  children: JSX.Element;
+  children: React.ReactNode;
   ping?: boolean;
 }
 
@@ -19,13 +19,13 @@ function AnimatePing(props: IAnimatePingProps) {
           )}>
           <span
             className={classNames(
-              'bg-secondary',
+              'bg-secondary-focus',
               'animate-ping absolute inline-flex h-full w-full rounded-full opacity-75'
             )}
           />
           <span
             className={classNames(
-              'bg-secondary-focus',
+              'bg-secondary',
               'relative inline-flex rounded-full h-3 w-3'
             )}
           />

@@ -2,11 +2,11 @@ import { memo } from 'react';
 import { IWorkspace } from '../../libs/client/types';
 
 interface IWorkspaceListProps {
-  title?: string | JSX.Element;
+  title?: React.ReactNode;
   workspaces?: IWorkspace[];
-  icon?: JSX.Element;
-  actions?: JSX.Element[];
-  renderWorkspace: (project: IWorkspace, index: number) => JSX.Element;
+  icon?: React.ReactNode;
+  actions?: React.ReactNode;
+  renderWorkspace: (project: IWorkspace, index: number) => React.ReactNode;
 }
 
 function WorkspaceList(props: IWorkspaceListProps) {

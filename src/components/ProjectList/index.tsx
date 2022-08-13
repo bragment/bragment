@@ -2,11 +2,11 @@ import { memo } from 'react';
 import { IProject } from '../../libs/client/types';
 
 interface IProjectListProps {
-  title?: string | JSX.Element;
+  title?: React.ReactNode;
   projects?: IProject[];
-  icon?: JSX.Element;
-  actions?: JSX.Element[];
-  renderProject: (project: IProject, index: number) => JSX.Element;
+  icon?: React.ReactNode;
+  actions?: React.ReactNode;
+  renderProject: (project: IProject, index: number) => React.ReactNode;
 }
 
 function ProjectList(props: IProjectListProps) {

@@ -7,7 +7,7 @@ import { createQueryClient } from './libs/react-query';
 import stores, { AppContext } from './stores';
 
 interface IAppProps {
-  children: JSX.Element;
+  children: React.ReactNode;
   onMount?: () => void;
 }
 
