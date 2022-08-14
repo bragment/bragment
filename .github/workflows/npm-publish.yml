@@ -22,10 +22,9 @@ jobs:
         env:
           SENTRY_DSN: ${{secrets.SENTRY_DSN}}
           UNSPLASH_ACCESS_KEY: ${{secrets.UNSPLASH_ACCESS_KEY}}
-          PUBLIC_URL: https://cdn.jsdelivr.net/
         run: |
           export PACKAGE_VERSION=`yarn run --silent echo:version`
-          export PUBLIC_URL="https://cdn.jsdelivr.net/npm/bragment-web@$PACKAGE_VERSION/build/"
+          export PUBLIC_URL="/"
           yarn
           yarn build
       - name: upload to sentry
@@ -35,7 +34,7 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{secrets.SENTRY_AUTH_TOKEN}}
         run: |
           export PACKAGE_VERSION=`yarn run --silent echo:version`
-          yarn sentry-cli releases files $PACKAGE_VERSION upload-sourcemaps --rewrite --validate --url-prefix="~/npm/bragment-web@$PACKAGE_VERSION/build/static/js" "./build/static/js"
+          yarn sentry-cli releases files $PACKAGE_VERSION upload-sourcemaps --rewrite --validate --url-prefix="~/static/js" "./build/static/js"
           find ./build -name "*.map" -exec rm -f {} \;
           find ./build -name "*.map.gz" -exec rm -f {} \;
       - name: publish bragment-web
