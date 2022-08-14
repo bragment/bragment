@@ -84,12 +84,6 @@ function CreateDataRecordForm(
     []
   );
 
-  useEffect(() => {
-    if (onLoadingChange) {
-      onLoadingChange(mutation.isLoading);
-    }
-  }, [mutation.isLoading, onLoadingChange]);
-
   useImperativeHandle(
     ref,
     () => ({
@@ -99,6 +93,12 @@ function CreateDataRecordForm(
     }),
     []
   );
+
+  useEffect(() => {
+    if (onLoadingChange) {
+      onLoadingChange(mutation.isLoading);
+    }
+  }, [mutation.isLoading, onLoadingChange]);
 
   return (
     <form

@@ -1,4 +1,5 @@
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import classNames from 'classnames';
 import { observer } from 'mobx-react';
 import { useCallback, useLayoutEffect, useMemo, useRef } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
@@ -10,10 +11,12 @@ import {
   IProjectDataView,
 } from '../../libs/client/types';
 import { useUpdateProjectDataModelMutation } from '../../libs/react-query';
+import ScrollContainer from '../ScrollContainer';
 import BodyRow from './BodyRow';
 import HeadRow from './HeadRow';
 import { createColumns } from './helpers';
 import TailRow from './TailRow';
+import styles from './index.module.scss';
 
 interface ITableViewProps {
   project: IProject;
@@ -78,7 +81,7 @@ function TableView(props: ITableViewProps) {
   const rowModel = table.getRowModel();
 
   return (
-    <Scrollbars ref={scrollBarRef}>
+    <ScrollContainer className={classNames(styles.wrapper)} ref={scrollBarRef}>
       {headerGroups.map((headerGroup) => (
         <HeadRow
           key={view._id}
@@ -108,7 +111,7 @@ function TableView(props: ITableViewProps) {
           borderedBottom
         />
       )}
-    </Scrollbars>
+    </ScrollContainer>
   );
 }
 export default observer(TableView);
