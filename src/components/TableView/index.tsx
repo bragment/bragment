@@ -76,12 +76,13 @@ function TableView(props: ITableViewProps) {
   });
   const headerGroups = table.getHeaderGroups();
   const rowModel = table.getRowModel();
+
   return (
     <Scrollbars ref={scrollBarRef}>
       {headerGroups.map((headerGroup) => (
         <HeadRow
           key={view._id}
-          headerGroup={headerGroup}
+          headers={headerGroup.headers}
           projectId={project._id}
           modelId={model._id}
           modelFields={modelFields}
@@ -92,12 +93,12 @@ function TableView(props: ITableViewProps) {
         <BodyRow
           key={row.id}
           index={row.index}
-          row={row}
+          cells={row.getVisibleCells()}
           borderedBottom={row.index < rowModel.rows.length - 1}
         />
       ))}
 
-      {modelFields && (
+      {modelFields.length > 0 && (
         <TailRow
           projectId={project._id}
           modelId={model._id}

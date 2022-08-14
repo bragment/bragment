@@ -1,18 +1,35 @@
 import classNames from 'classnames';
-import { memo } from 'react';
-import { EDataFieldType, IRecordFieldData } from '../../../libs/client/types';
+import { memo, useCallback, useState } from 'react';
+import {
+  IProjectDataField,
+  IProjectDataRecord,
+  IRecordFieldData,
+} from '../../../libs/client/types';
+import UpdateRecordFieldDataForm from './UpdateRecordFieldDataForm';
 import styles from '../index.module.scss';
 
 interface IItermProps {
-  data?: IRecordFieldData;
-  type: EDataFieldType;
+  field: IProjectDataField;
+  record: IProjectDataRecord;
+  data: IRecordFieldData;
   borderedLeft?: boolean;
   borderedRight?: boolean;
   className?: string;
 }
 
 function Cell(props: IItermProps) {
-  const { data, borderedLeft, borderedRight, className } = props;
+  const { field, record, data, borderedLeft, borderedRight, className } = props;
+  const [editing, setEditing] = useState(false);
+
+  const handleDoubleClick = useCallback(() => {
+    setEditing(true);
+  }, []);
+
+  const handleCancel = useCallback(() => {
+    setEditing(false);
+  }, []);
+
+  const value = data?.value || '';
 
   return (
     <div
@@ -22,8 +39,26 @@ function Cell(props: IItermProps) {
         borderedRight && 'border-r',
         className,
         styles.cell
-      )}>
+      )}
+      onDoubleClick={handleDoubleClick}>
       <div className="text-ellipsis overflow-hidden">{data?.value || ''}</div>
+      {editing && (
+        <div
+          className={classNames(
+            'bg-base-100',
+            'absolute top-0 left-0 z-20',
+            'w-full h-full',
+            'flex items-center'
+          )}>
+          <UpdateRecordFieldDataForm
+            projectId={record.project}
+            recordId={record._id}
+            fieldId={field._id}
+            defaultValue={value}
+            onCancel={handleCancel}
+          />
+        </div>
+      )}
     </div>
   );
 }

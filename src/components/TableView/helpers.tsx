@@ -15,18 +15,19 @@ export function createColumns(
 ) {
   const columnHelper = createColumnHelper<IProjectDataRecord>();
   return fields.map((field) => {
-    const { _id: id, type } = field;
+    const id = field._id;
     const main = id === mainFieldId;
     return columnHelper.accessor(createFieldDataAccessor(field), {
       id,
       cell: (info) => (
         <BodyCell
           className={classNames(
-            main && 'sticky left-16',
+            main ? 'sticky left-16 z-10' : 'relative',
             main && styles.scrollableLeft
           )}
+          record={info.row.original}
+          field={field}
           data={info.getValue()}
-          type={type}
         />
       ),
       header: () => (
@@ -39,7 +40,6 @@ export function createColumns(
           main={main}
         />
       ),
-      // footer: (info) => info.column.id,
     });
   });
 }

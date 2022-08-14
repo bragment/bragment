@@ -1,4 +1,4 @@
-import { Row } from '@tanstack/react-table';
+import { Cell } from '@tanstack/react-table';
 import classNames from 'classnames';
 import { memo } from 'react';
 import { IProjectDataRecord } from '../../../libs/client/types';
@@ -6,13 +6,13 @@ import styles from '../index.module.scss';
 
 interface IBodyRowProps {
   index: number;
-  row: Row<IProjectDataRecord>;
+  cells: Cell<IProjectDataRecord, unknown>[];
   borderedTop?: boolean;
   borderedBottom?: boolean;
 }
 
 function BodyRow(props: IBodyRowProps) {
-  const { index, row, borderedTop, borderedBottom } = props;
+  const { index, cells, borderedTop, borderedBottom } = props;
   return (
     <div
       className={classNames(
@@ -23,16 +23,20 @@ function BodyRow(props: IBodyRowProps) {
       )}>
       <div
         className={classNames(
-          'sticky left-0',
+          'sticky left-0 z-10',
           'w-16',
           'justify-center',
           styles.cell
         )}>
         {index + 1}
       </div>
-      {row.getVisibleCells().map((cell) => {
-        const Cell = cell.column.columnDef.cell;
-        return Cell && <Cell key={cell.id} {...cell.getContext()} />;
+      {cells.map((cell) => {
+        const CellComponent = cell.column.columnDef.cell;
+        return (
+          CellComponent && (
+            <CellComponent key={cell.id} {...cell.getContext()} />
+          )
+        );
       })}
       <div
         className={classNames(
