@@ -34,12 +34,12 @@ function GlobalToast() {
   );
 
   return (
-    <div className="toast toast-top toast-center items-center z-50">
+    <div className={classNames('toast toast-top toast-center', 'z-50')}>
       {toastList.map(({ content, key, type }) => (
         <div
           className={classNames(
             'alert shadow-lg',
-            'w-auto',
+            'w-auto whitespace-nowrap',
             toastClassNameRecord[type]
           )}
           key={key}>

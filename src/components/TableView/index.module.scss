@@ -15,6 +15,7 @@
   @apply bg-base-100;
   .cell {
     @apply bg-base-100;
+    --bgColor: hsl(var(--b1));
   }
 }
 
@@ -22,28 +23,25 @@
   @apply h-auto min-h-12;
 }
 
-.scrollableLeft {
-  $bgColor: hsl(var(--b2));
-  &::after {
+.cell {
+  --bgColor: hsl(var(--b2));
+  &.scrollableLeft::after {
     content: '';
     position: absolute;
     width: calc(1rem);
     height: 100%;
     top: 0;
     right: -1rem;
-    background-image: linear-gradient(to right, $bgColor, transparent);
+    background-image: linear-gradient(to right, var(--bgColor), transparent);
   }
-}
 
-.scrollableRight {
-  $bgColor: hsl(var(--b2));
-  &::before {
+  &.scrollableRight::before {
     content: '';
     position: absolute;
     width: calc(1rem);
     height: 100%;
     top: 0;
     left: -1rem;
-    background-image: linear-gradient(to left, $bgColor, transparent);
+    background-image: linear-gradient(to left, var(--bgColor), transparent);
   }
 }

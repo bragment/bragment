@@ -13,6 +13,7 @@ import {
   fetchProject,
   fetchProjectDataRecords,
   updateProjectDataModel,
+  updateProjectDataRecord,
 } from '../client';
 import { IApiError, IProject, IProjectDataRecord } from '../client/types';
 import { EMutationKey, EQueryKey } from './types';
@@ -140,6 +141,27 @@ export function useUpdateProjectDataModelMutation() {
                       el._id === model._id ? model : el
                     ),
                   }
+                : undefined
+          );
+        }
+      },
+    }
+  );
+}
+
+export function useUpdateProjectDataRecordMutation() {
+  const queryClient = useQueryClient();
+  return useMutation(
+    [EMutationKey.UpdateProjectDataModel],
+    updateProjectDataRecord,
+    {
+      onSuccess: (record) => {
+        if (record) {
+          queryClient.setQueryData<IProjectDataRecord[] | undefined>(
+            [EQueryKey.ProjectDataRecords, record.project],
+            (cached) =>
+              cached
+                ? cached.map((el) => (el._id === record._id ? record : el))
                 : undefined
           );
         }

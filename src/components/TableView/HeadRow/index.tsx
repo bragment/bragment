@@ -1,4 +1,4 @@
-import { HeaderGroup } from '@tanstack/react-table';
+import { Header } from '@tanstack/react-table';
 import classNames from 'classnames';
 import { memo } from 'react';
 import { HiHashtag, HiPlus } from 'react-icons/hi';
@@ -16,21 +16,15 @@ interface IHeadRowProps {
   projectId: string;
   modelId: string;
   modelFields: IProjectDataField[];
-  headerGroup: HeaderGroup<IProjectDataRecord>;
+  headers: Header<IProjectDataRecord, unknown>[];
   onCreateDateFieldFinish: (project: IProject) => void;
 }
 
 function HeadRow(props: IHeadRowProps) {
   const f = useFormatMessage();
-  const {
-    projectId,
-    modelId,
-    modelFields,
-    headerGroup,
-    onCreateDateFieldFinish,
-  } = props;
-
-  const hasNoField = headerGroup.headers.length === 0;
+  const { projectId, modelId, modelFields, headers, onCreateDateFieldFinish } =
+    props;
+  const hasNoField = headers.length === 0;
 
   return (
     <div
@@ -48,9 +42,13 @@ function HeadRow(props: IHeadRowProps) {
         )}>
         <HiHashtag className="text-lg" />
       </div>
-      {headerGroup.headers.map((header) => {
-        const Header = header.column.columnDef.header;
-        return Header && <Header key={header.id} {...header.getContext()} />;
+      {headers.map((header) => {
+        const HeaderComponent = header.column.columnDef.header;
+        return (
+          HeaderComponent && (
+            <HeaderComponent key={header.id} {...header.getContext()} />
+          )
+        );
       })}
       {hasNoField && (
         <div className={classNames('w-52', 'justify-center', styles.cell)}>
