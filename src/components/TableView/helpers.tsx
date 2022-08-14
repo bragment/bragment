@@ -10,11 +10,12 @@ export function createFieldDataAccessor(field: IProjectDataField) {
 }
 
 export function createColumns(
-  fields: IProjectDataField[],
-  mainFieldId: string
+  projectId: string,
+  mainFieldId: string,
+  modelFields: IProjectDataField[]
 ) {
   const columnHelper = createColumnHelper<IProjectDataRecord>();
-  return fields.map((field) => {
+  return modelFields.map((field) => {
     const id = field._id;
     const main = id === mainFieldId;
     return columnHelper.accessor(createFieldDataAccessor(field), {
@@ -25,6 +26,7 @@ export function createColumns(
             main ? 'sticky left-16 z-10' : 'relative',
             main && styles.scrollableLeft
           )}
+          projectId={projectId}
           record={info.row.original}
           field={field}
           data={info.getValue()}
@@ -33,9 +35,11 @@ export function createColumns(
       header: () => (
         <HeadCell
           className={classNames(
-            main && 'sticky left-16',
+            main ? 'sticky left-16 z-10' : 'relative',
             main && styles.scrollableLeft
           )}
+          projectId={projectId}
+          existingFields={modelFields}
           field={field}
           main={main}
         />

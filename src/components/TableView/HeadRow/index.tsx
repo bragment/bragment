@@ -35,7 +35,7 @@ function HeadRow(props: IHeadRowProps) {
       )}>
       <div
         className={classNames(
-          'sticky left-0',
+          'sticky left-0 z-10',
           'w-16',
           'justify-center',
           styles.cell

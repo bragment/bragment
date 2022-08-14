@@ -12,6 +12,7 @@ import {
   createProjectDataView,
   fetchProject,
   fetchProjectDataRecords,
+  updateProjectDataField,
   updateProjectDataModel,
   updateProjectDataRecord,
 } from '../client';
@@ -139,6 +140,33 @@ export function useUpdateProjectDataModelMutation() {
                     ...cached,
                     models: cached.models.map((el) =>
                       el._id === model._id ? model : el
+                    ),
+                  }
+                : undefined
+          );
+        }
+      },
+    }
+  );
+}
+
+export function useUpdateProjectDataFieldMutation() {
+  const queryClient = useQueryClient();
+  return useMutation(
+    [EMutationKey.UpdateProjectDataField],
+    updateProjectDataField,
+    {
+      onSuccess: (project) => {
+        const field = project?.fields[0];
+        if (field) {
+          queryClient.setQueryData<IProject | undefined>(
+            [EQueryKey.Project, project._id],
+            (cached) =>
+              cached
+                ? {
+                    ...cached,
+                    fields: cached.fields.map((el) =>
+                      el._id === field._id ? field : el
                     ),
                   }
                 : undefined

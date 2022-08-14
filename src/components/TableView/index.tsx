@@ -30,6 +30,7 @@ function TableView(props: ITableViewProps) {
   const { project, model, view, fields, records } = props;
   const scrollBarRef = useRef<Scrollbars>(null);
   const updateModelMutation = useUpdateProjectDataModelMutation();
+  const projectId = project._id;
   const mainFieldId = model.mainField || fields[0]?._id;
   const modelFields = useMemo(
     () => fields.filter((field) => field.model === model._id),
@@ -65,8 +66,8 @@ function TableView(props: ITableViewProps) {
   }, [view._id]);
 
   const columns = useMemo(
-    () => createColumns(fields, mainFieldId),
-    [fields, mainFieldId]
+    () => createColumns(projectId, mainFieldId, modelFields),
+    [projectId, mainFieldId, modelFields]
   );
 
   const table = useReactTable({
