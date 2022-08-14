@@ -1,11 +1,14 @@
 import classNames from 'classnames';
-import { memo } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { IProjectDataField } from '../../../libs/client/types';
 import { dataFieldTypeRecord } from '../../DataFieldTypeSelect/config';
+import UpdateDataFieldTitleForm from './UpdateDataFieldTitleForm';
 import styles from '../index.module.scss';
 
 interface IItermProps {
+  projectId: string;
   field: IProjectDataField;
+  existingFields?: IProjectDataField[];
   main?: boolean;
   borderedLeft?: boolean;
   borderedRight?: boolean;
@@ -13,9 +16,27 @@ interface IItermProps {
 }
 
 function Cell(props: IItermProps) {
-  const { field, main, borderedLeft, borderedRight, className } = props;
-
+  const {
+    projectId,
+    field,
+    existingFields,
+    main,
+    borderedLeft,
+    borderedRight,
+    className,
+  } = props;
+  const [editing, setEditing] = useState(false);
+  const { title = '' } = field;
   const Icon = dataFieldTypeRecord[field.type]?.Icon;
+
+  const handleDoubleClick = useCallback(() => {
+    setEditing(true);
+  }, []);
+
+  const handleCancel = useCallback(() => {
+    setEditing(false);
+  }, []);
+
   return (
     <div
       className={classNames(
@@ -26,18 +47,35 @@ function Cell(props: IItermProps) {
         main ? 'text-info' : 'text-base-content',
         className,
         styles.cell
-      )}>
-      <div>
-        {Icon && (
-          <Icon
-            className={classNames(
-              'mr-2 text-lg',
-              main ? 'text-info-opacity' : 'text-base-content-opacity'
-            )}
-          />
-        )}
-      </div>
+      )}
+      onDoubleClick={handleDoubleClick}>
+      {Icon && (
+        <Icon
+          className={classNames(
+            'mr-2 text-lg',
+            editing && 'relative z-30',
+            main ? 'text-info-opacity' : 'text-base-content-opacity'
+          )}
+        />
+      )}
       <div className="text-ellipsis overflow-hidden">{field.title}</div>
+      {editing && (
+        <div
+          className={classNames(
+            'bg-base-200',
+            'absolute top-0 left-0 z-20',
+            'h-full',
+            'flex items-center'
+          )}>
+          <UpdateDataFieldTitleForm
+            projectId={projectId}
+            fieldId={field._id}
+            title={title}
+            existingFields={existingFields}
+            onCancel={handleCancel}
+          />
+        </div>
+      )}
     </div>
   );
 }

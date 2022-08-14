@@ -32,8 +32,11 @@ function UpdateRecordFieldDataForm(props: IUpdateRecordFieldDataFormProps) {
         return;
       }
       const value = valueRef.current.trim();
-      if (value === defaultValue && onFinish) {
-        onFinish();
+      if (value === defaultValue) {
+        if (onCancel) {
+          onCancel();
+        }
+        return;
       }
       const fields = {
         projectId,
@@ -58,6 +61,7 @@ function UpdateRecordFieldDataForm(props: IUpdateRecordFieldDataFormProps) {
       fieldId,
       recordId,
       defaultValue,
+      onCancel,
       onFinish,
       f,
       toastError,

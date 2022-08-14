@@ -18,7 +18,7 @@ function DataViewPage() {
   );
   const view = project?.views.find((el) => el._id === viewId);
   const model = project?.models.find((el) => el._id === view?.model);
-  const fields = project?.fields.filter((field) => field.model === view?.model);
+  const fields = project?.fields;
 
   if (project && model && view && fields && records) {
     if (view.type === EDataViewType.Table) {

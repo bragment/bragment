@@ -9,6 +9,7 @@ import UpdateRecordFieldDataForm from './UpdateRecordFieldDataForm';
 import styles from '../index.module.scss';
 
 interface IItermProps {
+  projectId: string;
   field: IProjectDataField;
   record: IProjectDataRecord;
   data: IRecordFieldData;
@@ -18,8 +19,17 @@ interface IItermProps {
 }
 
 function Cell(props: IItermProps) {
-  const { field, record, data, borderedLeft, borderedRight, className } = props;
+  const {
+    projectId,
+    field,
+    record,
+    data,
+    borderedLeft,
+    borderedRight,
+    className,
+  } = props;
   const [editing, setEditing] = useState(false);
+  const value = data?.value || '';
 
   const handleDoubleClick = useCallback(() => {
     setEditing(true);
@@ -28,8 +38,6 @@ function Cell(props: IItermProps) {
   const handleCancel = useCallback(() => {
     setEditing(false);
   }, []);
-
-  const value = data?.value || '';
 
   return (
     <div
@@ -51,7 +59,7 @@ function Cell(props: IItermProps) {
             'flex items-center'
           )}>
           <UpdateRecordFieldDataForm
-            projectId={record.project}
+            projectId={projectId}
             recordId={record._id}
             fieldId={field._id}
             defaultValue={value}

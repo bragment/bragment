@@ -31,18 +31,18 @@ function CreateDataFieldForm(props: ICreateDataFieldFormProps) {
       }
       const form = event.target as HTMLFormElement;
       const formData = new FormData(form);
-      const fields = {
+      const data = {
         projectId: formData.get('projectId')?.toString().trim() || '',
         model: formData.get('model')?.toString().trim() || '',
         title: formData.get('title')?.toString().trim() || '',
         type: formData.get('type')?.toString() as EDataFieldType,
       };
-      if (existingFields?.some((el) => el.title === fields.title)) {
+      if (existingFields?.some((el) => el.title === data.title)) {
         setErrorMessage('project.existingFieldTitle');
         return;
       }
       try {
-        const project = await mutation.mutateAsync(fields);
+        const project = await mutation.mutateAsync(data);
         if (onFinish) {
           onFinish(project);
         }
