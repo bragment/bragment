@@ -39,6 +39,10 @@ function Cell(props: IItermProps) {
     setEditing(false);
   }, []);
 
+  const handleFinish = useCallback(() => {
+    setEditing(false);
+  }, []);
+
   return (
     <div
       className={classNames(
@@ -64,6 +68,7 @@ function Cell(props: IItermProps) {
             fieldId={field._id}
             defaultValue={value}
             onCancel={handleCancel}
+            onFinish={handleFinish}
           />
         </div>
       )}

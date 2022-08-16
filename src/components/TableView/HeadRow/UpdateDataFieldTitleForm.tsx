@@ -80,11 +80,16 @@ function UpdateDataFieldTitleForm(props: IUpdateDataFieldTitleFormProps) {
   );
 
   return (
-    <form className="form-control" onSubmit={handleSubmit}>
+    <form
+      className={classNames(
+        'form-control form-single-input',
+        mutation.isLoading && 'loading'
+      )}
+      onSubmit={handleSubmit}>
       <input
         className={classNames(
           'input input-bordered',
-          'w-full h-10 pl-[2.625rem] text-base outline-none active:outline-none focus:outline-none'
+          'w-full h-10 pl-[2.625rem] pr-8 text-base outline-none active:outline-none focus:outline-none'
         )}
         name="title"
         autoComplete="off"

@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { memo, useCallback, useRef } from 'react';
 import { IProjectDataRecord } from '../../../libs/client/types';
 import { useUpdateProjectDataRecordMutation } from '../../../libs/react-query';
@@ -69,10 +70,16 @@ function UpdateRecordFieldDataForm(props: IUpdateRecordFieldDataFormProps) {
   );
 
   return (
-    <form className="form-control" onSubmit={handleSubmit}>
+    <form
+      className={classNames(
+        'form-control form-single-input',
+        mutation.isLoading && 'loading'
+      )}
+      onSubmit={handleSubmit}>
       <UniversalInput
         name={fieldId}
         defaultValue={defaultValue}
+        className="pr-8"
         onBlur={onCancel}
         onChange={handleChange}
       />
