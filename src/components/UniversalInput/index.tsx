@@ -4,13 +4,14 @@ import React, { memo, useCallback, useRef } from 'react';
 interface IUniversalInputProps {
   name: string;
   defaultValue: string;
+  className?: string;
   onBlur?: () => void;
   onChange?: (value: string) => void;
   onEnter?: () => void;
 }
 
 function UniversalInput(props: IUniversalInputProps) {
-  const { name, defaultValue, onBlur, onChange, onEnter } = props;
+  const { name, defaultValue, className, onBlur, onChange, onEnter } = props;
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleChange = useCallback(() => {
@@ -38,7 +39,8 @@ function UniversalInput(props: IUniversalInputProps) {
       name={name}
       className={classNames(
         'input input-bordered',
-        'w-full h-10 text-base outline-none active:outline-none focus:outline-none'
+        'w-full h-10 text-base outline-none active:outline-none focus:outline-none',
+        className
       )}
       autoFocus
       autoComplete="off"

@@ -22,6 +22,11 @@
     @apply h-full py-0;
     @apply flex items-center;
   }
+
+  :global(.form-single-input::after) {
+    top: 0.75rem;
+    right: 0;
+  }
 }
 
 .bodyRow {

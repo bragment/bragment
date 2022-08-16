@@ -37,6 +37,10 @@ function Cell(props: IItermProps) {
     setEditing(false);
   }, []);
 
+  const handleFinish = useCallback(() => {
+    setEditing(false);
+  }, []);
+
   return (
     <div
       className={classNames(
@@ -52,7 +56,7 @@ function Cell(props: IItermProps) {
       {Icon && (
         <Icon
           className={classNames(
-            'mr-2 text-lg',
+            'flex-none mr-2 text-lg',
             editing && 'relative z-30',
             main ? 'text-info-opacity' : 'text-base-content-opacity'
           )}
@@ -73,6 +77,7 @@ function Cell(props: IItermProps) {
             title={title}
             existingFields={existingFields}
             onCancel={handleCancel}
+            onFinish={handleFinish}
           />
         </div>
       )}
