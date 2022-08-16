@@ -40,7 +40,7 @@ function BodyRow(props: IBodyRowProps) {
       })}
       <div
         className={classNames(
-          'sticky right-0',
+          'sticky right-0 z-10',
           'w-16',
           'justify-center',
           styles.cell,
