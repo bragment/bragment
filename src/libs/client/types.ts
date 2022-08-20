@@ -10,11 +10,9 @@ export type IApiError = AxiosError<IApiErrorResponseData>;
 
 export enum EApiErrorMessage {
   // NOTE: for user
+  InvalidEmail = 'Invalid Email',
+  InvalidPasscode = 'Invalid Passcode',
   Unauthorized = 'Unauthorized',
-  UsernameTaken = 'Username Taken',
-  EmailTaken = 'Email Taken',
-  UsernameAndEmailTaken = 'Username and Email Taken',
-  InvalidPassword = 'Invalid Password',
 }
 
 export interface IUser {

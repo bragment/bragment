@@ -11,7 +11,7 @@ interface IUserAvatarProps {
   menuClassName?: string;
 }
 
-const UserAvatar = (props: IUserAvatarProps) => {
+function UserAvatar(props: IUserAvatarProps) {
   const { className, menuClassName } = props;
   const { me, signedIn, setMe } = useUserStore();
   const handleServerApiError = useHandleServerApiError();
@@ -45,6 +45,6 @@ const UserAvatar = (props: IUserAvatarProps) => {
       <UserAvatarMenu className={menuClassName} />
     </div>
   );
-};
+}
 
 export default observer(UserAvatar);

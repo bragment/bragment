@@ -18,7 +18,7 @@ export function createQueryClient() {
       mutations: {
         retry: (failureCount, error) => {
           const status = (error as AxiosError)?.response?.status;
-          if (status === 400 || status === 401 || failureCount >= 3) {
+          if ((status && status >= 400) || failureCount >= 3) {
             return false;
           }
           return true;

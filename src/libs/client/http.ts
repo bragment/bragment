@@ -26,6 +26,7 @@ export async function baseRequest<ReturnData = any, InputData = any>(
     method,
     url,
     data,
+    params: method === 'GET' ? data : undefined,
   });
   return response.data;
 }
