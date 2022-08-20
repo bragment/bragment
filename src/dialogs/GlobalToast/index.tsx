@@ -39,13 +39,13 @@ function GlobalToast() {
         <div
           className={classNames(
             'alert shadow-lg',
-            'w-auto whitespace-nowrap',
+            'w-auto',
             toastClassNameRecord[type]
           )}
           key={key}>
           <div>
-            <span className="text-2xl">{toastIconRecord[type]}</span>
-            <span>{content}</span>
+            <div className="text-2xl">{toastIconRecord[type]}</div>
+            <div className="max-w-xs whitespace-pre">{content}</div>
           </div>
         </div>
       ))}

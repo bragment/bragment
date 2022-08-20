@@ -37,6 +37,15 @@ export function signIn(input: IUserSignInInput) {
   );
 }
 
+export function githubLogin(input: { code: string }) {
+  return baseRequest<IUserProfile>(
+    mainServerApi,
+    'POST',
+    '/auth/github/login',
+    input
+  );
+}
+
 export function signOut() {
   return baseRequest<void>(mainServerApi, 'POST', '/auth/signOut');
 }

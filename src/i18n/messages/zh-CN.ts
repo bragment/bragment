@@ -1,5 +1,6 @@
 export default {
   'auth.backToSignIn': '返回登录？',
+  'auth.continueWithGithub': 'GitHub 登录',
   'auth.email': '邮箱',
   'auth.existingEmail': '邮箱已被占用',
   'auth.existingUsername': '用户名已被占用',
@@ -7,8 +8,10 @@ export default {
   'auth.forgotPassword': '忘记密码？',
   'auth.getPasscode': '获取验证码',
   'auth.getPasscodeFirst': '请先获取验证码',
+  'auth.githubEmailTakenTips': '该 GitHub 帐号邮箱已注册，\n请用邮箱登录',
   'auth.haveAnAccount': '已有账号？',
   'auth.invalidEmail': '邮箱无效',
+  'auth.invalidGithubCode': 'GitHub 授权码无效',
   'auth.invalidPasscode': '验证码无效',
   'auth.invalidUsernameOrPassword': '无效的用户名或密码',
   'auth.notHaveAnAccount': '还没帐号？',

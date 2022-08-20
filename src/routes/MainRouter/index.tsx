@@ -1,8 +1,9 @@
 import { memo } from 'react';
-import { HashRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import GlobalToast from '../../dialogs/GlobalToast';
 import AuthPage from '../AuthPage';
 import ForgotPasswordForm from '../AuthPage/ForgotPasswordForm';
+import GithubForm from '../AuthPage/GithubForm';
 import SignInForm from '../AuthPage/SignInForm';
 import SignUpForm from '../AuthPage/SignUpForm';
 import DataModelPage from '../DataModelPage';
@@ -22,10 +23,11 @@ import AuthGuard from './AuthGuard';
 
 function RootRouter() {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <Routes>
         <Route path={ERoutePathName.Auth} element={<AuthPage />}>
           <Route path={ERoutePathName.SignIn} element={<SignInForm />} />
+          <Route path={ERoutePathName.Github} element={<GithubForm />} />
           <Route path={ERoutePathName.SignUp} element={<SignUpForm />} />
           <Route
             path={ERoutePathName.ForgotPassword}
@@ -68,7 +70,7 @@ function RootRouter() {
         </Route>
       </Routes>
       <GlobalToast />
-    </HashRouter>
+    </BrowserRouter>
   );
 }
 
