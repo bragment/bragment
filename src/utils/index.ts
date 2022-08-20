@@ -4,6 +4,10 @@ export function getFirstChar(str: string, upperCase = true) {
   }
 }
 
+export function verifyEmail(email: string) {
+  return /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(email);
+}
+
 export function checkIfSafari() {
   const isChrome = navigator.userAgent.indexOf('Chrome') > -1;
   const isSafari = navigator.userAgent.indexOf('Safari') > -1;

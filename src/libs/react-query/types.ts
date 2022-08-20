@@ -17,4 +17,5 @@ export enum EMutationKey {
   SignIn = 'SIGN_IN',
   SignUp = 'SIGN_UP',
   SignOut = 'SIGN_OUT',
+  EMailPasscode = 'EMAIL_PASSCODE',
 }

@@ -55,7 +55,7 @@ export function useHandleServerApiError() {
     (error: IApiError) => {
       switch (parseApiErrorMessage(error)) {
         case EApiErrorMessage.Unauthorized:
-        case EApiErrorMessage.InvalidPassword:
+        case EApiErrorMessage.InvalidPasscode:
           userSignOut();
           break;
         default:

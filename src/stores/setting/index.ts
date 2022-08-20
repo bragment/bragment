@@ -6,8 +6,9 @@ const APP_LANGUAGE = 'APP_LANGUAGE';
 function getLocalAppLanguage() {
   const language = localStorage.getItem(APP_LANGUAGE) || navigator.language;
   // NOTE: Keys of ELanguage are uppercase. see `src/i18n/types.ts`
-  if (language.toUpperCase().replace(/-/g, '_') in ELanguage) {
-    return language as ELanguage;
+  const key = language.toUpperCase().replace(/-/g, '_');
+  if (key in ELanguage) {
+    return (ELanguage as { [key: string]: ELanguage })[key];
   }
   return defaultLanguage;
 }

@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import { useFormatMessage, useUserStore } from '../../components/hooks';
 import { ILocalMessage } from '../../i18n/types';
 import { parseApiErrorMessage } from '../../libs/client';
-import { EApiErrorMessage } from '../../libs/client/types';
 import { useAuthSignUpMutation } from '../../libs/react-query';
 import { ERoutePath } from '../types';
 
@@ -36,19 +35,6 @@ function SignUpForm() {
         setMe(user);
       } catch (error: any) {
         switch (parseApiErrorMessage(error)) {
-          case EApiErrorMessage.UsernameTaken:
-            setErrorMessage('auth.existingUsername');
-            setInvalidUsername(true);
-            break;
-          case EApiErrorMessage.EmailTaken:
-            setErrorMessage('auth.existingEmail');
-            setInvalidEmail(true);
-            break;
-          case EApiErrorMessage.UsernameAndEmailTaken:
-            setErrorMessage('auth.existingUsernameAndEmail');
-            setInvalidUsername(true);
-            setInvalidEmail(true);
-            break;
           default:
             setErrorMessage('common.networkError');
             break;

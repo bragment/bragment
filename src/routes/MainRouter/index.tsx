@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { HashRouter, Route, Routes } from 'react-router-dom';
+import GlobalToast from '../../dialogs/GlobalToast';
 import AuthPage from '../AuthPage';
 import ForgotPasswordForm from '../AuthPage/ForgotPasswordForm';
 import SignInForm from '../AuthPage/SignInForm';
@@ -66,6 +67,7 @@ function RootRouter() {
           </Route>
         </Route>
       </Routes>
+      <GlobalToast />
     </HashRouter>
   );
 }

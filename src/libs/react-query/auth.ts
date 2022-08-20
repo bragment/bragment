@@ -3,7 +3,7 @@ import {
   useMutation,
   useQueryClient,
 } from '@tanstack/react-query';
-import { signIn, signOut, signUp } from '../client';
+import { requestEmailPasscode, signIn, signOut, signUp } from '../client';
 import { IUserProfile } from '../client/types';
 import { EMutationKey, EQueryKey } from './types';
 
@@ -49,4 +49,8 @@ export function useAuthSignOutMutation() {
       queryClient.clear();
     },
   });
+}
+
+export function useAuthEmailPasscodeMutation() {
+  return useMutation([EMutationKey.EMailPasscode], requestEmailPasscode);
 }

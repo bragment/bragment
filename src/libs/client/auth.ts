@@ -1,10 +1,11 @@
+import { ELanguage } from '../../i18n/types';
 import { baseRequest, mainServerApi } from './http';
 import { IUserProfile } from './types';
 
 interface IUserSignInInput {
-  username: string;
-  password: string;
-  isEmail?: boolean;
+  token: string;
+  email: string;
+  passcode: string;
   remember?: boolean;
 }
 
@@ -42,4 +43,16 @@ export function signOut() {
 
 export function requestPasswordReset(input: IUserResetPasswordInput) {
   return baseRequest<void>(mainServerApi, 'POST', '/auth/resetPassword', input);
+}
+
+export function requestEmailPasscode(query: {
+  email: string;
+  language: ELanguage;
+}) {
+  return baseRequest<{ token: string }>(
+    mainServerApi,
+    'GET',
+    '/auth/emailPasscode',
+    query
+  );
 }
