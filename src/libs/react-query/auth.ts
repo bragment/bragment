@@ -3,7 +3,13 @@ import {
   useMutation,
   useQueryClient,
 } from '@tanstack/react-query';
-import { requestEmailPasscode, signIn, signOut, signUp } from '../client';
+import {
+  githubLogin,
+  requestEmailPasscode,
+  signIn,
+  signOut,
+  signUp,
+} from '../client';
 import { IUserProfile } from '../client/types';
 import { EMutationKey, EQueryKey } from './types';
 
@@ -24,6 +30,15 @@ function unsetMyProfileQueryData(queryClient: QueryClient) {
 export function useAuthSignInMutation() {
   const queryClient = useQueryClient();
   return useMutation([EMutationKey.SignIn], signIn, {
+    onSuccess: (profile) => {
+      setMyProfileQueryData(queryClient, profile);
+    },
+  });
+}
+
+export function useAuthGithubLoginMutation() {
+  const queryClient = useQueryClient();
+  return useMutation([EMutationKey.GithubLogin], githubLogin, {
     onSuccess: (profile) => {
       setMyProfileQueryData(queryClient, profile);
     },

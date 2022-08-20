@@ -1,5 +1,6 @@
 export default {
   'auth.backToSignIn': 'Back to sign in?',
+  'auth.continueWithGithub': 'Continue with GitHub',
   'auth.email': 'Email',
   'auth.existingEmail': 'Email already exists.',
   'auth.existingUsername': 'Username already exists.',
@@ -7,8 +8,11 @@ export default {
   'auth.forgotPassword': 'Forgot password?',
   'auth.getPasscode': 'Get Passcode',
   'auth.getPasscodeFirst': 'Please get passcode first.',
+  'auth.githubEmailTakenTips':
+    "This GitHub account's email has been signed-up.\nPlease sign in with email.",
   'auth.haveAnAccount': 'Already have an account?',
   'auth.invalidEmail': 'Invalid email.',
+  'auth.invalidGithubCode': 'Invalid GitHub Code',
   'auth.invalidPasscode': 'Invalid passcode.',
   'auth.invalidUsernameOrPassword': 'Invalid username/password.',
   'auth.notHaveAnAccount': "Don't have an account?",

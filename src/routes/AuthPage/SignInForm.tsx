@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { AiFillGithub } from 'react-icons/ai';
 import {
   useDialogStore,
   useFormatMessage,
@@ -10,6 +11,7 @@ import {
 import { ILocalMessage } from '../../i18n/types';
 import { parseApiErrorMessage } from '../../libs/client';
 import { EApiErrorMessage } from '../../libs/client/types';
+import { getOauthUrl } from '../../libs/github';
 import {
   useAuthEmailPasscodeMutation,
   useAuthSignInMutation,
@@ -159,7 +161,10 @@ function SignInForm() {
         )}>
         {f('auth.signInOrSignUp')}
       </button>
-      <br />
+      <a className="btn" href={getOauthUrl()}>
+        <AiFillGithub className="text-xl mr-1" />
+        {f('auth.continueWithGithub')}
+      </a>
     </form>
   );
 }
