@@ -9,7 +9,11 @@ function getConnectionSpeed() {
 
 export function sendToVercelAnalytics(metric: Metric) {
   const analyticsId = getAnalyticsId();
-  if (!analyticsId || analyticsId === '__ANALYTICS_ID__') {
+  if (
+    !analyticsId ||
+    analyticsId === '__ANALYTICS_ID__' ||
+    analyticsId === 'undefined'
+  ) {
     return;
   }
 

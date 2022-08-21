@@ -28,3 +28,19 @@ export function getAvailableTitle(prefix: string, existing?: string[]) {
     }
   }
 }
+
+export function getCurrentSearchParam(name: string) {
+  const url = new URL(window.location.href);
+  if (url.searchParams) {
+    return url.searchParams.get(name);
+  }
+  const search = url.search.slice(1);
+  const item = search
+    .split('&')
+    .map((el) => el.split('='))
+    .find((el) => el[0] === name);
+  if (item) {
+    return decodeURI(item[1]);
+  }
+  return null;
+}
