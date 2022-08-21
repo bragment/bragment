@@ -1,18 +1,17 @@
 import classNames from 'classnames';
 import { memo, useCallback, useEffect, useRef } from 'react';
 import { AiFillGithub } from 'react-icons/ai';
-import { useSearchParams } from 'react-router-dom';
 import { useUserStore } from '../../components/hooks';
 import { parseApiErrorMessage } from '../../libs/client';
 import { useAuthGithubLoginMutation } from '../../libs/react-query';
+import { getCurrentSearchParam } from '../../utils';
 import { AUTHENTICATED, THIRD_PARTY_AUTH } from './types';
 
 function GithubForm() {
   const ranRef = useRef(false);
-  const [params] = useSearchParams();
-  const code = params.get('code');
   const { setMe } = useUserStore();
   const mutation = useAuthGithubLoginMutation();
+  const code = getCurrentSearchParam('code');
 
   const handleSubmit = useCallback(async () => {
     if (mutation.isLoading || !code) {

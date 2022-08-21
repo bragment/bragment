@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { BrowserRouter, HashRouter, Route, Routes } from 'react-router-dom';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 import GlobalToast from '../../dialogs/GlobalToast';
 import AuthPage from '../AuthPage';
 import GithubForm from '../AuthPage/GithubForm';
@@ -20,10 +20,8 @@ import WorkspaceInstanceView from '../WorkspacePage/WorkspaceInstanceView';
 import AuthGuard from './AuthGuard';
 
 function RootRouter() {
-  const Router = process.env.NODE_ENV === 'test' ? HashRouter : BrowserRouter;
-
   return (
-    <Router>
+    <HashRouter>
       <Routes>
         <Route path={ERoutePathName.Auth} element={<AuthPage />}>
           <Route path={ERoutePathName.SignIn} element={<SignInForm />} />
@@ -65,7 +63,7 @@ function RootRouter() {
         </Route>
       </Routes>
       <GlobalToast />
-    </Router>
+    </HashRouter>
   );
 }
 
