@@ -41,7 +41,7 @@ function TailRow(props: ITailRowProps) {
   return (
     <div
       className={classNames(
-        'sticky bottom-0 left-0',
+        'sticky bottom-0 left-0 z-20',
         'min-w-full',
         borderedTop && 'border-t',
         borderedBottom && 'border-b',

@@ -1,4 +1,6 @@
-export function getOauthUrl(
+export const githubClientId = process.env.GITHUB_CLIENT_ID;
+
+export function getGithubOauthUrl(
   clientId = process.env.GITHUB_CLIENT_ID,
   scope = 'user:email'
 ) {

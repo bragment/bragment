@@ -28,7 +28,9 @@ function BodyRow(props: IBodyRowProps) {
           'justify-center',
           styles.cell
         )}>
-        {index + 1}
+        <div className={classNames('justify-center', styles.content)}>
+          {index + 1}
+        </div>
       </div>
       {cells.map((cell) => {
         const CellComponent = cell.column.columnDef.cell;
@@ -45,8 +47,9 @@ function BodyRow(props: IBodyRowProps) {
           'justify-center',
           styles.cell,
           styles.scrollableRight
-        )}
-      />
+        )}>
+        <div className={styles.content} />
+      </div>
     </div>
   );
 }

@@ -48,7 +48,7 @@ export interface IProject {
   title: string;
   background: IProjectBackground;
   visibility: EProjectVisibility;
-  workspace: string;
+  workspace: string | IWorkspace;
   owner: IMember;
   models: IProjectDataModel[];
   views: IProjectDataView[];
