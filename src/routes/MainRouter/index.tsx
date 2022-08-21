@@ -1,11 +1,9 @@
 import { memo } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, HashRouter, Route, Routes } from 'react-router-dom';
 import GlobalToast from '../../dialogs/GlobalToast';
 import AuthPage from '../AuthPage';
-import ForgotPasswordForm from '../AuthPage/ForgotPasswordForm';
 import GithubForm from '../AuthPage/GithubForm';
 import SignInForm from '../AuthPage/SignInForm';
-import SignUpForm from '../AuthPage/SignUpForm';
 import DataModelPage from '../DataModelPage';
 import DataViewPage from '../DataViewPage';
 import HomePage from '../HomePage';
@@ -22,17 +20,14 @@ import WorkspaceInstanceView from '../WorkspacePage/WorkspaceInstanceView';
 import AuthGuard from './AuthGuard';
 
 function RootRouter() {
+  const Router = process.env.NODE_ENV === 'test' ? HashRouter : BrowserRouter;
+
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
         <Route path={ERoutePathName.Auth} element={<AuthPage />}>
           <Route path={ERoutePathName.SignIn} element={<SignInForm />} />
           <Route path={ERoutePathName.Github} element={<GithubForm />} />
-          <Route path={ERoutePathName.SignUp} element={<SignUpForm />} />
-          <Route
-            path={ERoutePathName.ForgotPassword}
-            element={<ForgotPasswordForm />}
-          />
         </Route>
         <Route
           path={ERoutePath.Root}
@@ -70,7 +65,7 @@ function RootRouter() {
         </Route>
       </Routes>
       <GlobalToast />
-    </BrowserRouter>
+    </Router>
   );
 }
 

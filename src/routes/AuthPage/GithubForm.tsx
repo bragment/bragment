@@ -1,62 +1,42 @@
 import classNames from 'classnames';
 import { memo, useCallback, useEffect, useRef } from 'react';
 import { AiFillGithub } from 'react-icons/ai';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import {
-  useDialogStore,
-  useFormatMessage,
-  useUserStore,
-} from '../../components/hooks';
+import { useSearchParams } from 'react-router-dom';
+import { useUserStore } from '../../components/hooks';
 import { parseApiErrorMessage } from '../../libs/client';
-import { EApiErrorMessage } from '../../libs/client/types';
 import { useAuthGithubLoginMutation } from '../../libs/react-query';
-import { ERoutePath } from '../types';
+import { AUTHENTICATED, THIRD_PARTY_AUTH } from './types';
 
 function GithubForm() {
-  const flagRef = useRef(false);
+  const ranRef = useRef(false);
   const [params] = useSearchParams();
   const code = params.get('code');
-  const { toastError } = useDialogStore();
   const { setMe } = useUserStore();
-  const f = useFormatMessage();
-  const navigate = useNavigate();
   const mutation = useAuthGithubLoginMutation();
 
   const handleSubmit = useCallback(async () => {
     if (mutation.isLoading || !code) {
       return;
     }
+    let message: string | undefined;
     try {
-      const { user } = await mutation.mutateAsync({ code });
+      const user = await mutation.mutateAsync({ code });
+      message = AUTHENTICATED;
       setMe(user);
     } catch (error: any) {
-      const message = parseApiErrorMessage(error);
-      if (message === EApiErrorMessage.InvalidGithubCode) {
-        toastError(f('auth.invalidGithubCode'));
-      } else if (message === EApiErrorMessage.EmailTaken) {
-        toastError(f('auth.githubEmailTakenTips'));
-      } else {
-        toastError(f('common.networkError'));
-      }
-      setTimeout(() => {
-        navigate(ERoutePath.AuthSignIn, { replace: true });
-      }, 2000);
+      message = parseApiErrorMessage(error);
     }
-  }, [code, mutation, f, navigate, setMe, toastError]);
+    window.opener.postMessage({ message, name: THIRD_PARTY_AUTH });
+  }, [code, mutation, setMe]);
 
   useEffect(() => {
     // NOTE: skip the second time render in strict mode
-    if (flagRef.current) {
+    if (ranRef.current) {
       return;
     }
-    flagRef.current = true;
-    if (code) {
-      handleSubmit();
-    } else {
-      navigate(ERoutePath.AuthSignIn, { replace: true });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    ranRef.current = true;
+    handleSubmit();
+  }, [handleSubmit]);
 
   return (
     <div className="w-full h-20 mt-7 mb-4 flex items-center justify-center">

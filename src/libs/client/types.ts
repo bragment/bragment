@@ -10,9 +10,9 @@ export type IApiError = AxiosError<IApiErrorResponseData>;
 
 export enum EApiErrorMessage {
   // NOTE: for user
-  EmailTaken = 'Email Taken',
+  GithubEmailTaken = 'GitHub Email Taken',
   InvalidEmail = 'Invalid Email',
-  InvalidGithubCode = 'Invalid Github Code',
+  InvalidGithubCode = 'Invalid GitHub Code',
   InvalidPasscode = 'Invalid Passcode',
   Unauthorized = 'Unauthorized',
 }

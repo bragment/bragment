@@ -17,6 +17,7 @@ import {
   useAuthSignInMutation,
 } from '../../libs/react-query';
 import { verifyEmail } from '../../utils';
+import ThirdPartyButton from './ThirdPartyButton';
 
 function SignInForm() {
   const f = useFormatMessage();
@@ -161,10 +162,11 @@ function SignInForm() {
         )}>
         {f('auth.signInOrSignUp')}
       </button>
-      <a className="btn" href={getOauthUrl()}>
-        <AiFillGithub className="text-xl mr-1" />
-        {f('auth.continueWithGithub')}
-      </a>
+      <ThirdPartyButton
+        oauthUrl={getOauthUrl()}
+        title={f('auth.continueWithGithub')}
+        icon={<AiFillGithub className="text-xl mr-1" />}
+      />
     </form>
   );
 }

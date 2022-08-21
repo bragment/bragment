@@ -1,6 +1,6 @@
 import { ELanguage } from '../../i18n/types';
 import { baseRequest, mainServerApi } from './http';
-import { IUserProfile } from './types';
+import { IUser, IUserProfile } from './types';
 
 interface IUserSignInInput {
   token: string;
@@ -38,12 +38,7 @@ export function signIn(input: IUserSignInInput) {
 }
 
 export function githubLogin(input: { code: string }) {
-  return baseRequest<IUserProfile>(
-    mainServerApi,
-    'POST',
-    '/auth/github/login',
-    input
-  );
+  return baseRequest<IUser>(mainServerApi, 'POST', '/auth/github/login', input);
 }
 
 export function signOut() {

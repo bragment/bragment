@@ -37,12 +37,7 @@ export function useAuthSignInMutation() {
 }
 
 export function useAuthGithubLoginMutation() {
-  const queryClient = useQueryClient();
-  return useMutation([EMutationKey.GithubLogin], githubLogin, {
-    onSuccess: (profile) => {
-      setMyProfileQueryData(queryClient, profile);
-    },
-  });
+  return useMutation([EMutationKey.GithubLogin], githubLogin);
 }
 
 export function useAuthSignUpMutation() {
