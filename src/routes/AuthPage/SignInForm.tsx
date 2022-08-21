@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { AiFillGithub } from 'react-icons/ai';
 import {
   useDialogStore,
@@ -11,7 +11,7 @@ import {
 import { ILocalMessage } from '../../i18n/types';
 import { parseApiErrorMessage } from '../../libs/client';
 import { EApiErrorMessage } from '../../libs/client/types';
-import { getOauthUrl } from '../../libs/github';
+import { getGithubOauthUrl, githubClientId } from '../../libs/github';
 import {
   useAuthEmailPasscodeMutation,
   useAuthSignInMutation,
@@ -23,6 +23,7 @@ function SignInForm() {
   const f = useFormatMessage();
   const { setMe } = useUserStore();
   const emailInputRef = useRef<HTMLInputElement>(null);
+  const passcodeInputRef = useRef<HTMLInputElement>(null);
   const tokenRef = useRef('');
   const { toastSuccess, toastWarning } = useDialogStore();
   const [errorMessage, setErrorMessage] = useState<ILocalMessage | undefined>();
@@ -33,7 +34,8 @@ function SignInForm() {
   const { language } = useSettingStore();
 
   const getPasscode = useCallback(async () => {
-    if (passcodeMutation.isLoading) {
+    passcodeInputRef.current?.focus();
+    if (passcodeMutation.isLoading || isWaiting) {
       return;
     }
     const email = emailInputRef.current?.value.trim();
@@ -57,7 +59,7 @@ function SignInForm() {
         setErrorMessage('common.networkError');
       }
     }
-  }, [language, passcodeMutation, f, toastSuccess, toastWarning]);
+  }, [isWaiting, language, passcodeMutation, f, toastSuccess, toastWarning]);
 
   const handleSubmit = useCallback(
     async (event: React.FormEvent<HTMLFormElement>) => {
@@ -94,6 +96,15 @@ function SignInForm() {
     [signInMutation, f, setMe, toastWarning]
   );
 
+  const handleEmailInputKeyDown = useCallback(
+    (event: React.KeyboardEvent) => {
+      if (event.key === 'Enter') {
+        getPasscode();
+      }
+    },
+    [getPasscode]
+  );
+
   useEffect(() => {
     if (waitingSeconds > 0) {
       setTimeout(() => {
@@ -118,9 +129,11 @@ function SignInForm() {
         maxLength={64}
         placeholder={f('auth.yourEmail')}
         className={classNames('input input-bordered', 'w-full')}
+        onKeyDown={handleEmailInputKeyDown}
       />
       <div className="relative flex justify-between items-center">
         <input
+          ref={passcodeInputRef}
           required
           name="passcode"
           type="text"
@@ -162,11 +175,13 @@ function SignInForm() {
         )}>
         {f('auth.signInOrSignUp')}
       </button>
-      <ThirdPartyButton
-        oauthUrl={getOauthUrl()}
-        title={f('auth.continueWithGithub')}
-        icon={<AiFillGithub className="text-xl mr-1" />}
-      />
+      {githubClientId && (
+        <ThirdPartyButton
+          oauthUrl={getGithubOauthUrl()}
+          title={f('auth.continueWithGithub')}
+          icon={<AiFillGithub className="text-xl mr-1" />}
+        />
+      )}
     </form>
   );
 }

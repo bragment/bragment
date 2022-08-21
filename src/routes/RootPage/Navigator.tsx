@@ -2,12 +2,15 @@ import classNames from 'classnames';
 import { observer } from 'mobx-react';
 import { useCallback, useEffect, useState } from 'react';
 import { HiCog, HiHome, HiUserGroup } from 'react-icons/hi';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import { useUserStore } from '../../components/hooks';
 import UserAvatar from '../../components/UserAvatar';
 import WorkspaceAvatar from '../../components/WorkspaceAvatar';
 import { IWorkspace } from '../../libs/client/types';
-import { useMyWorkspaceListQuery } from '../../libs/react-query';
+import {
+  useMyWorkspaceListQuery,
+  useProjectQuery,
+} from '../../libs/react-query';
 import { getWorkspaceInstancePath } from '../helpers';
 import { ERoutePath, ERoutePathName } from '../types';
 
@@ -15,16 +18,31 @@ function Navigator() {
   const { me, myMainWorkspaceId } = useUserStore();
   const { data: workspaces } = useMyWorkspaceListQuery(!!me);
   const [mainWorkspace, setMainWorkspace] = useState<IWorkspace | null>(null);
+  const { projectId = '' } = useParams();
+  const { data: project } = useProjectQuery(projectId, !!(me && projectId));
 
   const getActiveClassName = useCallback(
     ({ isActive }: { isActive: boolean }) => classNames(isActive && 'active'),
     []
   );
 
+  const getWorkspaceActiveClassName = useCallback(
+    ({ isActive }: { isActive: boolean }) =>
+      classNames(
+        (isActive ||
+          (mainWorkspace?._id &&
+            mainWorkspace._id ===
+              ((project?.workspace as IWorkspace)?._id ||
+                project?.workspace))) &&
+          'active'
+      ),
+    [project, mainWorkspace]
+  );
+
   const workspaceLink = mainWorkspace ? (
     <NavLink
       to={getWorkspaceInstancePath(mainWorkspace._id)}
-      className={getActiveClassName}>
+      className={getWorkspaceActiveClassName}>
       <WorkspaceAvatar title={mainWorkspace.title} className="w-7 text-lg" />
     </NavLink>
   ) : (

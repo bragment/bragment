@@ -17,7 +17,8 @@ function DataModelMenu(props: IDataModelMenuProps) {
     ({ isActive }: { isActive: boolean }) =>
       classNames(
         'inline-block w-full text-ellipsis overflow-hidden',
-        isActive && 'active'
+        isActive && 'active',
+        isActive && 'pointer-events-none'
       ),
     []
   );

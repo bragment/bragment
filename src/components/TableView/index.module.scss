@@ -35,6 +35,23 @@
     @apply bg-base-100;
     --bgColor: hsl(var(--b2));
   }
+  .content {
+    @apply w-full h-full flex items-center px-4 py-0;
+  }
+  &:hover,
+  &:focus-within {
+    .cell {
+      --bgColor: hsl(var(--bc) / 0.1);
+    }
+    .content {
+      background: hsl(var(--bc) / 0.1);
+    }
+    @media (prefers-color-scheme: dark) {
+      .cell {
+        --bgColor: hsl(var(--b2));
+      }
+    }
+  }
 }
 
 .tailRow {

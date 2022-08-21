@@ -46,32 +46,33 @@ function Cell(props: IItermProps) {
   return (
     <div
       className={classNames(
-        'w-52 py-0 px-4',
+        'w-52 p-0',
         borderedLeft && 'border-l',
         borderedRight && 'border-r',
         className,
         styles.cell
       )}
       onDoubleClick={handleDoubleClick}>
-      <div className="text-ellipsis overflow-hidden">{data?.value || ''}</div>
-      {editing && (
-        <div
-          className={classNames(
-            'bg-base-100',
-            'absolute top-0 left-0 z-20',
-            'w-full h-full',
-            'flex items-center'
-          )}>
-          <UpdateRecordFieldDataForm
-            projectId={projectId}
-            recordId={record._id}
-            fieldId={field._id}
-            defaultValue={value}
-            onCancel={handleCancel}
-            onFinish={handleFinish}
-          />
-        </div>
-      )}
+      <div className={styles.content}>
+        <div className="text-ellipsis overflow-hidden">{data?.value || ''}</div>
+        {editing && (
+          <div
+            className={classNames(
+              'absolute top-0 left-0 z-20',
+              'w-full h-full',
+              'flex items-center'
+            )}>
+            <UpdateRecordFieldDataForm
+              projectId={projectId}
+              recordId={record._id}
+              fieldId={field._id}
+              defaultValue={value}
+              onCancel={handleCancel}
+              onFinish={handleFinish}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -56,7 +56,7 @@ export function requestEmailPasscode(query: {
   return baseRequest<{ token: string }>(
     mainServerApi,
     'GET',
-    '/auth/emailPasscode',
+    '/auth/passcode/email',
     query
   );
 }

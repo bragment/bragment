@@ -66,7 +66,6 @@ function Cell(props: IItermProps) {
       {editing && (
         <div
           className={classNames(
-            'bg-base-200',
             'absolute top-0 left-0 z-20',
             'h-full',
             'flex items-center'
