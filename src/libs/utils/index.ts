@@ -6,3 +6,7 @@ export function getMetaValue(name: string) {
 export function getEnvironment() {
   return getMetaValue('environment');
 }
+
+export function getAnalyticsId() {
+  return getMetaValue('analytics-id');
+}
