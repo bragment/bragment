@@ -22,6 +22,7 @@ jobs:
         env:
           SENTRY_DSN: ${{secrets.SENTRY_DSN}}
           UNSPLASH_ACCESS_KEY: ${{secrets.UNSPLASH_ACCESS_KEY}}
+          THE_GITHUB_CLIENT_ID: ${{secrets.THE_GITHUB_CLIENT_ID}}
         run: |
           export PACKAGE_VERSION=`yarn run --silent echo:version`
           export PUBLIC_URL="/"

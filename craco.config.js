@@ -16,7 +16,9 @@ const environmentVariablesWebpackPlugin = new DefinePlugin({
   'process.env.UNSPLASH_ACCESS_KEY': JSON.stringify(
     process.env.UNSPLASH_ACCESS_KEY
   ),
-  'process.env.GITHUB_CLIENT_ID': JSON.stringify(process.env.GITHUB_CLIENT_ID),
+  'process.env.GITHUB_CLIENT_ID': JSON.stringify(
+    process.env.THE_GITHUB_CLIENT_ID || process.env.GITHUB_CLIENT_ID
+  ),
 });
 
 const webpackConfig = { plugins: [environmentVariablesWebpackPlugin] };
