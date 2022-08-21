@@ -63,7 +63,8 @@
     "standard-version": "^9.5.0",
     "typescript": "4.7.4",
     "typescript-plugin-css-modules": "^3.4.0",
-    "unsplash-js": "^7.0.15"
+    "unsplash-js": "^7.0.15",
+    "web-vitals": "^2.1.4"
   },
   "browserslist": {
     "production": [
