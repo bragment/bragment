@@ -4,12 +4,18 @@ import Scrollbars from 'react-custom-scrollbars-2';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useUserStore } from '../../components/hooks';
 import { ERoutePath } from '../types';
+import { getTheRoutePathBeforeSignIn } from './helpers';
 
 function AuthPage() {
   const { signedIn } = useUserStore();
 
   if (signedIn) {
-    return <Navigate to={ERoutePath.Root} replace />;
+    return (
+      <Navigate
+        to={getTheRoutePathBeforeSignIn(true) || ERoutePath.Root}
+        replace
+      />
+    );
   }
   return (
     <Scrollbars autoHide>

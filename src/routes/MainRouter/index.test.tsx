@@ -9,29 +9,28 @@ test('RootRouter Render', async () => {
       <RootRouter />
     </App>
   );
-  const goToForgotPassword = await screen.findByText(
-    formatMessage(defaultLanguage, 'auth.forgotPassword'),
+  const signInButton = await screen.findByText(
+    formatMessage(defaultLanguage, 'auth.signInOrSignUp'),
     {
       selector: 'button',
     }
   );
-  expect(goToForgotPassword).toBeVisible();
+  expect(signInButton).toBeVisible();
 
-  fireEvent(goToForgotPassword, new MouseEvent('click', { bubbles: true }));
-  const backToSingIn = await screen.findByText(
-    formatMessage(defaultLanguage, 'auth.backToSignIn'),
+  const getPasscodeButton = await screen.findByText(
+    formatMessage(defaultLanguage, 'auth.getPasscode'),
     {
       selector: 'button',
+    }
+  );
+  expect(getPasscodeButton).toBeVisible();
+
+  fireEvent(getPasscodeButton, new MouseEvent('click', { bubbles: true }));
+  const backToSingIn = await screen.findByText(
+    formatMessage(defaultLanguage, 'auth.requiredEmail'),
+    {
+      selector: 'div',
     }
   );
   expect(backToSingIn).toBeVisible();
-
-  fireEvent(backToSingIn, new MouseEvent('click', { bubbles: true }));
-  const goToSignUp = await screen.findByText(
-    formatMessage(defaultLanguage, 'auth.notHaveAnAccount'),
-    {
-      selector: 'button',
-    }
-  );
-  expect(goToSignUp).toBeVisible();
 });

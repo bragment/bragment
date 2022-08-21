@@ -25,7 +25,7 @@ function Navigator() {
     <NavLink
       to={getWorkspaceInstancePath(mainWorkspace._id)}
       className={getActiveClassName}>
-      <WorkspaceAvatar title={mainWorkspace.title} className="w-6 text-lg" />
+      <WorkspaceAvatar title={mainWorkspace.title} className="w-7 text-lg" />
     </NavLink>
   ) : (
     <NavLink to={ERoutePath.WorkspaceCreate} className={getActiveClassName}>
@@ -71,7 +71,7 @@ function Navigator() {
         <UserAvatar
           className={classNames(
             'dropdown-end dropdown-left md:dropdown-right',
-            'ml-4 md:ml-0'
+            'flex ml-4 md:ml-0'
           )}
           menuClassName="-translate-y-9"
         />
