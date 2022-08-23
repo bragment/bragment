@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { useCallback, useEffect, useState } from 'react';
 import { HiCog, HiHome, HiUserGroup } from 'react-icons/hi';
 import { NavLink, useParams } from 'react-router-dom';
-import { useUserStore } from '../../components/hooks';
+import { useFormatMessage, useUserStore } from '../../components/hooks';
 import UserAvatar from '../../components/UserAvatar';
 import WorkspaceAvatar from '../../components/WorkspaceAvatar';
 import { IWorkspace } from '../../libs/client/types';
@@ -15,6 +15,7 @@ import { getWorkspaceInstancePath } from '../helpers';
 import { ERoutePath, ERoutePathName } from '../types';
 
 function Navigator() {
+  const f = useFormatMessage();
   const { me, myMainWorkspaceId } = useUserStore();
   const { data: workspaces } = useMyWorkspaceListQuery(!!me);
   const [mainWorkspace, setMainWorkspace] = useState<IWorkspace | null>(null);
@@ -29,6 +30,7 @@ function Navigator() {
   const getWorkspaceActiveClassName = useCallback(
     ({ isActive }: { isActive: boolean }) =>
       classNames(
+        'px-3.5 py-2.5',
         (isActive ||
           (mainWorkspace?._id &&
             mainWorkspace._id ===
@@ -74,13 +76,19 @@ function Navigator() {
             'p-3 space-x-4 md:space-x-0 md:space-y-4'
           )}>
           <li>
-            <NavLink to={ERoutePathName.Home} className={getActiveClassName}>
+            <NavLink
+              aria-label={f('common.home')}
+              to={ERoutePathName.Home}
+              className={getActiveClassName}>
               <HiHome className="text-2xl" />
             </NavLink>
           </li>
           <li>{workspaceLink}</li>
           <li>
-            <NavLink to={ERoutePathName.Setting} className={getActiveClassName}>
+            <NavLink
+              aria-label={f('common.setting')}
+              to={ERoutePathName.Setting}
+              className={getActiveClassName}>
               <HiCog className="text-2xl" />
             </NavLink>
           </li>

@@ -113,7 +113,10 @@ export function useCreateProjectDataRecordMutation() {
   });
 }
 
-export function useProjectDataRecordQuery(projectId: string, enabled: boolean) {
+export function useProjectDataRecordListQuery(
+  projectId: string,
+  enabled: boolean
+) {
   return useQuery<IProjectDataRecord[], IApiError>(
     [EQueryKey.ProjectDataRecords, projectId],
     fetchProjectDataRecordsFn,

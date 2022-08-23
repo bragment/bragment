@@ -16,7 +16,9 @@ function WorkspaceInstanceView() {
   return (
     <div className={classNames('drawer drawer-mobile', 'w-full h-full')}>
       <input id={TOGGLE_ID} type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content bg-base-100 text-base-content">
+      <label
+        htmlFor={TOGGLE_ID}
+        className="drawer-content bg-base-100 text-base-content">
         <Scrollbars autoHide>
           <NavBar
             className={classNames(
@@ -34,7 +36,7 @@ function WorkspaceInstanceView() {
           </main>
           <div className="from-base-100 pointer-events-none sticky bottom-0 flex h-20 bg-gradient-to-t to-transparent" />
         </Scrollbars>
-      </div>
+      </label>
       <div className="drawer-side">
         <label htmlFor={TOGGLE_ID} className="drawer-overlay" />
         <aside className={classNames('bg-base-200 text-base-content', 'w-80')}>

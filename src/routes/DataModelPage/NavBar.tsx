@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
 import { useCallback, useEffect, useRef } from 'react';
-import { HiPlus } from 'react-icons/hi';
+import { HiOutlinePlus } from 'react-icons/hi';
 import { useMatch, useParams } from 'react-router-dom';
 import AnimatePing from '../../components/AnimatePing';
 import CreateDataViewButton from '../../components/CreateDataViewButton';
@@ -97,7 +97,7 @@ function WorkspaceInstanceView() {
               existingViews={views}
               className={styles.createViewButton}
               onFinish={handleCreateViewFinish}>
-              <HiPlus className="text-xl" />
+              <HiOutlinePlus className="text-xl" />
               {f('project.addView')}
             </CreateDataViewButton>
           </AnimatePing>
