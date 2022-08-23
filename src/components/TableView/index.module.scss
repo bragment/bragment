@@ -40,11 +40,12 @@
   }
   &:hover,
   &:focus-within {
+    background-color: hsl(var(--bc) / 0.1);
     .cell {
       --bgColor: hsl(var(--bc) / 0.1);
     }
     .content {
-      background: hsl(var(--bc) / 0.1);
+      background-color: hsl(var(--bc) / 0.1);
     }
     @media (prefers-color-scheme: dark) {
       .cell {

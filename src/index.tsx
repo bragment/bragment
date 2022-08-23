@@ -24,7 +24,7 @@ const handleAppMount = () => {
     setTimeout(() => {
       overture?.remove();
     }, 600);
-  }, 2100);
+  }, 900);
 };
 
 if (checkIfSafari()) {

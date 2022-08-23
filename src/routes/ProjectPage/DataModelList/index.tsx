@@ -13,6 +13,8 @@ import DataModelMenu from './DataModelMenu';
 
 import styles from './index.module.scss';
 
+const TOGGLE_ID = 'DATA_MODEL_LIST_TOGGLE';
+
 function DataModelList() {
   const f = useFormatMessage();
   const navigate = useNavigateProjectDataModelPage();
@@ -64,21 +66,24 @@ function DataModelList() {
         styles.collapse
       )}>
       <input
+        id={TOGGLE_ID}
         type="checkbox"
         className="peer"
         checked={checked}
         onChange={handleCheckboxChange}
       />
-      <div
+      <label
+        htmlFor={TOGGLE_ID}
         className={classNames(
           'collapse-title',
           'h-16 leading-8 text-lg font-medium text-ellipsis whitespace-nowrap'
         )}>
         <HiOutlineDatabase className="inline-block text-2xl text-warning align-middle mr-1" />
         <span className="align-middle">{f('project.model')}</span>
-      </div>
+      </label>
       <div className="collapse-content bg-base-100">
         <button
+          aria-label={f('project.createModel')}
           className={classNames('btn btn-ghost top-2 right-2', 'absolute')}
           onClick={handleButtonClick}>
           <HiPlus className="text-xl" />

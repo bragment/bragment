@@ -25,7 +25,7 @@ function DataModelEmptyPrompt(props: IDataModelEmptyPromptProps) {
           {creatable && (
             <button className="btn btn-primary" onClick={handleCreate}>
               <HiOutlinePlus className="text-lg mr-3" />
-              {f('project.createDataModel')}
+              {f('project.createModel')}
             </button>
           )}
         </div>

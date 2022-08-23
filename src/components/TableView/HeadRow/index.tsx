@@ -29,7 +29,7 @@ function HeadRow(props: IHeadRowProps) {
   return (
     <div
       className={classNames(
-        'sticky top-0 z-20',
+        'sticky top-0 z-30',
         'w-fit min-w-full border-t border-b',
         styles.headRow
       )}>
@@ -69,7 +69,7 @@ function HeadRow(props: IHeadRowProps) {
             modelId={modelId}
             existingFields={modelFields}
             onFinish={onCreateDateFieldFinish}>
-            <HiPlus className="text-lg" />
+            <HiPlus aria-label={f('project.addField')} className="text-lg" />
           </CreateDataFieldButton>
         </AnimatePing>
       </div>

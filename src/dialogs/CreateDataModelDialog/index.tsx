@@ -50,7 +50,7 @@ function CreateDataModelDialog() {
           <div className={classNames('w-full h-full relative z-1')}>
             <h3
               className={classNames('text-base-content', 'text-lg font-bold')}>
-              {f('project.createDataModel')}
+              {f('project.createModel')}
             </h3>
             <CreateDataModelForm
               singleInput={false}

@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import { memo, useCallback, useRef, useState } from 'react';
 import { HiPlus } from 'react-icons/hi';
 import { IProjectDataField } from '../../../libs/client/types';
+import { useFormatMessage } from '../../hooks';
 import CreateDataRecordForm, {
   ICreateDataRecordFormRef,
 } from './CreateDataRecordForm';
@@ -25,6 +26,7 @@ function TailRow(props: ITailRowProps) {
     borderedTop,
     borderedBottom,
   } = props;
+  const f = useFormatMessage();
   const mainField = modelFields.find((field) => field._id === mainFieldId);
   const [loading, setLoading] = useState(false);
   const formRef = useRef<ICreateDataRecordFormRef>(null);
@@ -53,6 +55,7 @@ function TailRow(props: ITailRowProps) {
           <div className="icon loading" />
         ) : (
           <HiPlus
+            aria-label={f('project.addData')}
             className="text-lg cursor-pointer"
             onClick={handlePlusClick}
           />

@@ -1,7 +1,11 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
-import { useCallback } from 'react';
-import { HiDotsVertical } from 'react-icons/hi';
+import React, { useCallback } from 'react';
+import {
+  HiDotsVertical,
+  HiOutlineOfficeBuilding,
+  HiOutlinePlus,
+} from 'react-icons/hi';
 import { useParams } from 'react-router-dom';
 import {
   useDialogStore,
@@ -28,8 +32,7 @@ function NavBar(props: INavBarProps) {
   const { me, myMainWorkspaceId, updateMe } = useUserStore();
   const { setCreateWorkspaceDialogVisible, toastError } = useDialogStore();
   const { workspaceId = '' } = useParams();
-  const { data: allWorkspaces } = useMyWorkspaceListQuery(!!me);
-  const otherWorkspaces = allWorkspaces?.filter((el) => el._id !== workspaceId);
+  const { data: workspaces } = useMyWorkspaceListQuery(!!me);
   const { data: workspace } = useWorkspaceQuery(
     workspaceId,
     !!(me && workspaceId)
@@ -48,9 +51,15 @@ function NavBar(props: INavBarProps) {
     />
   );
 
-  const handleCreateWorkspace = useCallback(() => {
-    setCreateWorkspaceDialogVisible(true);
-  }, [setCreateWorkspaceDialogVisible]);
+  const handleCreateWorkspace = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      const target = e.target as Element;
+      const button = target.closest('button');
+      button?.blur();
+      setCreateWorkspaceDialogVisible(true);
+    },
+    [setCreateWorkspaceDialogVisible]
+  );
 
   const handleSetMainWorkspace = useCallback(async () => {
     if (mutation.isLoading) {
@@ -85,22 +94,24 @@ function NavBar(props: INavBarProps) {
             {workspaceId && workspaceId !== myMainWorkspaceId && (
               <button
                 className={classNames(
-                  'btn btn-secondary',
-                  'w-full mb-2',
+                  'btn btn-ghost',
+                  'w-full mb-2 justify-start',
                   mutation.isLoading && 'active loading'
                 )}
                 onClick={handleSetMainWorkspace}>
+                <HiOutlineOfficeBuilding className="text-lg mr-2" />
                 {f('workspace.setAsMainWorkspace')}
               </button>
             )}
-            <button
-              className={classNames('btn', 'w-full')}
-              onClick={handleCreateWorkspace}>
-              {f('workspace.createWorkspace')}
-            </button>
-            {!!otherWorkspaces?.length && (
-              <WorkspaceMenu workspaces={otherWorkspaces} />
+            {workspaces && workspaces.length < 3 && (
+              <button
+                className={classNames('btn btn-ghost', 'w-full justify-start')}
+                onClick={handleCreateWorkspace}>
+                <HiOutlinePlus className="text-lg mr-2" />
+                {f('workspace.createWorkspace')}
+              </button>
             )}
+            {workspaces && <WorkspaceMenu workspaces={workspaces} />}
           </div>
         </div>
       </div>

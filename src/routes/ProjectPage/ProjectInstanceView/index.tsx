@@ -24,6 +24,7 @@ function ProjectInstanceView() {
           <NavBar
             className={classNames(
               'bg-base-200 text-base-content',
+              'bg-opacity-70 backdrop-blur',
               'sticky top-0'
             )}
           />
