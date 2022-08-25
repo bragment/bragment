@@ -22,6 +22,12 @@ function Skeleton() {
           'w-full h-32 mt-4 rounded animate-pulse'
         )}
       />
+      <div
+        className={classNames(
+          'bg-primary-content',
+          'w-full h-8 mt-4 rounded animate-pulse'
+        )}
+      />
     </div>
   );
 }

@@ -18,7 +18,9 @@ function CreateDataViewButton(props: ICreateDataViewButtonProps) {
 
   return (
     <div className={classNames('dropdown dropdown-end', className)}>
-      <label tabIndex={0} className="btn btn-ghost btn-sm">
+      <label
+        tabIndex={0}
+        className={classNames('btn btn-ghost btn-sm', 'h-10')}>
         {children}
       </label>
       <Dropdown

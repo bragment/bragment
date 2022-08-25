@@ -27,6 +27,7 @@ export default {
   'dataField.number': 'Number',
   'dataField.singleLineText': 'Single Line Text',
   'dataView.board': 'Board',
+  'dataView.search': 'Search...',
   'dataView.table': 'Table',
   'project.addData': 'Add Data',
   'project.addField': 'Add Field',

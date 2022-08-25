@@ -26,6 +26,7 @@ export default {
   'dataField.number': '数字',
   'dataField.singleLineText': '单行文本',
   'dataView.board': '看板',
+  'dataView.search': '搜索...',
   'dataView.table': '表格',
   'project.addData': '添加数据',
   'project.addField': '添加字段',

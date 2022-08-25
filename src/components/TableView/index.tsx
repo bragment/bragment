@@ -1,7 +1,11 @@
-import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import {
+  getCoreRowModel,
+  getFilteredRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
-import { useCallback, useLayoutEffect, useMemo, useRef } from 'react';
+import { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
 import {
   IProject,
@@ -13,9 +17,15 @@ import {
 import { useUpdateProjectDataModelMutation } from '../../libs/react-query';
 import ScrollContainer from '../ScrollContainer';
 import BodyRow from './BodyRow';
+import { ControlRow } from './ControlRow';
 import HeadRow from './HeadRow';
-import { createColumns } from './helpers';
+import {
+  createColumns,
+  getColumnCanGlobalFilter,
+  globalFilterFn,
+} from './helpers';
 import TailRow from './TailRow';
+import { IGlobalFilter } from './types';
 import styles from './index.module.scss';
 
 interface ITableViewProps {
@@ -28,6 +38,10 @@ interface ITableViewProps {
 
 function TableView(props: ITableViewProps) {
   const { project, model, view, fields, records } = props;
+  const [globalFilter, setGlobalFilter] = useState<IGlobalFilter>({
+    updatedAt: new Date().toISOString(),
+    keywords: [],
+  });
   const scrollBarRef = useRef<Scrollbars>(null);
   const updateModelMutation = useUpdateProjectDataModelMutation();
   const projectId = project._id;
@@ -60,6 +74,16 @@ function TableView(props: ITableViewProps) {
     [project, model, updateModelMutation]
   );
 
+  const handleSearchInputChange = useCallback((value: string) => {
+    setGlobalFilter({
+      updatedAt: new Date().toISOString(),
+      keywords: value
+        .split(' ')
+        .map((el) => el.trim().toLowerCase())
+        .filter((el) => !!el),
+    });
+  }, []);
+
   useLayoutEffect(() => {
     scrollBarRef.current?.scrollToTop();
     scrollBarRef.current?.scrollToLeft();
@@ -75,14 +99,22 @@ function TableView(props: ITableViewProps) {
     columns,
     state: {
       columnPinning: { left: [mainFieldId] },
+      globalFilter,
     },
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getColumnCanGlobalFilter,
+    globalFilterFn,
+    debugTable: true,
+    debugHeaders: true,
+    debugColumns: true,
   });
   const headerGroups = table.getHeaderGroups();
   const rowModel = table.getRowModel();
 
   return (
     <ScrollContainer className={classNames(styles.wrapper)} ref={scrollBarRef}>
+      <ControlRow onSearchInputChange={handleSearchInputChange} />
       {headerGroups.map((headerGroup) => (
         <HeadRow
           key={view._id}
