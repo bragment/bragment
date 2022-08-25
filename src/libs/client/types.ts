@@ -114,4 +114,5 @@ export interface IProjectDataRecord {
   project: string;
   model: string;
   data: Record<string, IRecordFieldData>;
+  updatedAt: string;
 }

@@ -12,7 +12,7 @@ interface IItermProps {
   projectId: string;
   field: IProjectDataField;
   record: IProjectDataRecord;
-  data: IRecordFieldData;
+  data?: IRecordFieldData;
   borderedLeft?: boolean;
   borderedRight?: boolean;
   className?: string;

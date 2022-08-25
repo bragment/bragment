@@ -29,7 +29,7 @@ function HeadRow(props: IHeadRowProps) {
   return (
     <div
       className={classNames(
-        'sticky top-0 z-30',
+        'sticky top-12 z-30',
         'w-fit min-w-full border-t border-b',
         styles.headRow
       )}>

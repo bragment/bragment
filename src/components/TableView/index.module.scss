@@ -85,3 +85,15 @@
     transition: opacity 0.2s;
   }
 }
+
+.searchInput {
+  &:hover,
+  &:focus-within {
+    .action {
+      display: block;
+    }
+  }
+  .action {
+    display: none;
+  }
+}
