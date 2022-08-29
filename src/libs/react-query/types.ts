@@ -11,6 +11,7 @@ export enum EQueryKey {
 
 export enum EMutationKey {
   UpdateProjectDataModel = 'UPDATE_PROJECT_DATA_MODEL',
+  UpdateProjectDataView = 'UPDATE_PROJECT_DATA_VIEW',
   UpdateProjectDataField = 'UPDATE_PROJECT_DATA_FIELD',
   UpdateProjectDataRecord = 'UPDATE_PROJECT_DATA_RECORD',
   UpdateMyData = 'UPDATE_MY_DATA',

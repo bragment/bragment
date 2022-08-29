@@ -97,7 +97,7 @@ function WorkspaceInstanceView() {
               existingViews={views}
               className={styles.createViewButton}
               onFinish={handleCreateViewFinish}>
-              <HiOutlinePlus className="text-xl" />
+              <HiOutlinePlus className="text-xl mr-2" />
               {f('project.addView')}
             </CreateDataViewButton>
           </AnimatePing>

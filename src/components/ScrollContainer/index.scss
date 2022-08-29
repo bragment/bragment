@@ -1,0 +1,66 @@
+.scroll-container {
+  --bgColor: white;
+  --shadowSize: 2rem;
+
+  &.top-scrollable > div > .top-shadow,
+  &.bottom-scrollable > div > .bottom-shadow,
+  &.left-scrollable > div > .left-shadow,
+  &.right-scrollable > div > .right-shadow {
+    &::after {
+      opacity: 1;
+    }
+  }
+
+  .top-shadow,
+  .bottom-shadow,
+  .left-shadow,
+  .right-shadow {
+    pointer-events: none;
+    position: sticky;
+    z-index: 2;
+    &::after {
+      opacity: 0;
+      transition: opacity 0.2s;
+      content: '';
+      position: absolute;
+    }
+  }
+  .top-shadow {
+    top: 0;
+    width: 100%;
+    &::after {
+      top: 0;
+      width: 100%;
+      height: var(--shadowSize);
+      background-image: linear-gradient(to bottom, var(--bgColor), transparent);
+    }
+  }
+  .bottom-shadow {
+    bottom: 0;
+    width: 100%;
+    &::after {
+      bottom: 0;
+      width: 100%;
+      height: var(--shadowSize);
+      background-image: linear-gradient(to top, var(--bgColor), transparent);
+    }
+  }
+  .left-shadow {
+    left: 0;
+    width: var(--shadowSize);
+    height: 100%;
+    &::after {
+      left: 0;
+      background-image: linear-gradient(to right, var(--bgColor), transparent);
+    }
+  }
+  .right-shadow {
+    right: 0;
+    width: var(--shadowSize);
+    height: 100%;
+    &::after {
+      right: 0;
+      background-image: linear-gradient(to left, var(--bgColor), transparent);
+    }
+  }
+}

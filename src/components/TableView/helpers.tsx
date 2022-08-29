@@ -37,7 +37,7 @@ export function createColumns(
         <BodyCell
           className={classNames(
             main ? 'sticky left-16 z-10' : 'relative',
-            main && styles.scrollableLeft
+            main && styles.leftScrollable
           )}
           projectId={projectId}
           record={info.row.original}
@@ -49,7 +49,7 @@ export function createColumns(
         <HeadCell
           className={classNames(
             main ? 'sticky left-16 z-10' : 'relative',
-            main && styles.scrollableLeft
+            main && styles.leftScrollable
           )}
           projectId={projectId}
           existingFields={modelFields}
@@ -59,6 +59,20 @@ export function createColumns(
       ),
     });
   });
+}
+
+export function createColumnVisibility(allIds: string[], visibleIds: string[]) {
+  const flag = visibleIds.length === 0;
+  const record = allIds.reduce<Record<string, boolean>>((prev, el) => {
+    prev[el] = flag;
+    return prev;
+  }, {});
+  if (!flag) {
+    visibleIds.forEach((el) => {
+      record[el] = true;
+    });
+  }
+  return record;
 }
 
 export const globalFilterFn: FilterFnOption<IProjectDataRecord> = (

@@ -46,7 +46,7 @@ function BodyRow(props: IBodyRowProps) {
           'w-16',
           'justify-center',
           styles.cell,
-          styles.scrollableRight
+          styles.rightScrollable
         )}>
         <div className={styles.content} />
       </div>

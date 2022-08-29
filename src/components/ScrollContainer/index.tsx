@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import {
   forwardRef,
   memo,
@@ -6,12 +7,12 @@ import {
   useEffect,
   useImperativeHandle,
   useRef,
-  useState,
 } from 'react';
 import Scrollbars, { ScrollbarProps } from 'react-custom-scrollbars-2';
+import './index.scss';
 
 interface IScrollContainerProps extends ScrollbarProps {
-  className?: string;
+  withShadow?: boolean;
   onScroll?: React.UIEventHandler<any>;
 }
 
@@ -19,35 +20,41 @@ function ScrollContainer(
   props: IScrollContainerProps,
   ref: Ref<Scrollbars | null>
 ) {
-  const { className = '', onScroll, ...otherProps } = props;
+  const { className, children, withShadow, onScroll, ...otherProps } = props;
   const scrollBarRef = useRef<Scrollbars>(null);
-  const [innerClassName, setInnerClassName] = useState(className);
 
   const updateScrollable = useCallback(() => {
     const scrollBar = scrollBarRef.current;
-    if (scrollBar) {
-      const classes = [className];
+    const container = scrollBar?.container;
+    if (scrollBar && container) {
       if (scrollBar.getScrollTop() > 0) {
-        classes.push('topScrollable');
+        container.classList.add('top-scrollable');
+      } else {
+        container.classList.remove('top-scrollable');
+      }
+      if (scrollBar.getScrollLeft() > 0) {
+        container.classList.add('left-scrollable');
+      } else {
+        container.classList.remove('left-scrollable');
       }
       if (
         scrollBar.getScrollTop() + scrollBar.getClientHeight() <
         scrollBar.getScrollHeight()
       ) {
-        classes.push('bottomScrollable');
-      }
-      if (scrollBar.getScrollLeft() > 0) {
-        classes.push('leftScrollable');
+        container.classList.add('bottom-scrollable');
+      } else {
+        container.classList.remove('bottom-scrollable');
       }
       if (
         scrollBar.getScrollLeft() + scrollBar.getClientWidth() <
         scrollBar.getScrollWidth()
       ) {
-        classes.push('rightScrollable');
+        container.classList.add('right-scrollable');
+      } else {
+        container.classList.remove('right-scrollable');
       }
-      setInnerClassName(classes.join(' '));
     }
-  }, [className]);
+  }, []);
 
   const handleScroll = useCallback<React.UIEventHandler<any>>(
     (event) => {
@@ -61,15 +68,20 @@ function ScrollContainer(
 
   useImperativeHandle(ref, () => scrollBarRef.current, []);
 
-  useEffect(() => updateScrollable(), [updateScrollable]);
+  useEffect(() => updateScrollable());
 
   return (
     <Scrollbars
       {...otherProps}
+      className={classNames(className, 'scroll-container')}
       ref={scrollBarRef}
-      className={innerClassName}
-      onScroll={handleScroll}
-    />
+      onScroll={handleScroll}>
+      {withShadow && <div className="top-shadow" />}
+      {withShadow && <div className="left-shadow" />}
+      {children}
+      {withShadow && <div className="right-shadow" />}
+      {withShadow && <div className="bottom-shadow" />}
+    </Scrollbars>
   );
 }
 

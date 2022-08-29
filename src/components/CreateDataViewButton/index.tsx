@@ -13,7 +13,7 @@ function CreateDataViewButton(props: ICreateDataViewButtonProps) {
 
   return (
     <div className={classNames('dropdown dropdown-end', className)}>
-      <label tabIndex={0} className={classNames('btn btn-sm', 'h-10 gap-2')}>
+      <label tabIndex={0} className={classNames('btn btn-sm', 'h-10')}>
         {children}
       </label>
       <Dropdown

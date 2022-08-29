@@ -15,6 +15,7 @@ import {
   updateProjectDataField,
   updateProjectDataModel,
   updateProjectDataRecord,
+  updateProjectDataView,
 } from '../client';
 import { IApiError, IProject, IProjectDataRecord } from '../client/types';
 import { EMutationKey, EQueryKey } from './types';
@@ -143,6 +144,33 @@ export function useUpdateProjectDataModelMutation() {
                     ...cached,
                     models: cached.models.map((el) =>
                       el._id === model._id ? model : el
+                    ),
+                  }
+                : undefined
+          );
+        }
+      },
+    }
+  );
+}
+
+export function useUpdateProjectDataViewMutation() {
+  const queryClient = useQueryClient();
+  return useMutation(
+    [EMutationKey.UpdateProjectDataView],
+    updateProjectDataView,
+    {
+      onSuccess: (project) => {
+        const view = project?.views[0];
+        if (view) {
+          queryClient.setQueryData<IProject | undefined>(
+            [EQueryKey.Project, project._id],
+            (cached) =>
+              cached
+                ? {
+                    ...cached,
+                    views: cached.views.map((el) =>
+                      el._id === view._id ? view : el
                     ),
                   }
                 : undefined

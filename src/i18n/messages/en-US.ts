@@ -38,6 +38,7 @@ export default {
   'project.field': 'Field',
   'project.fieldTitle': 'Field Title',
   'project.getModelStarted': 'Get started by creating a new data source.',
+  'project.mainField': 'Main Field',
   'project.model': 'Data Source',
   'project.modelTitle': 'Data Source Title',
   'project.myProjects': 'My Projects',

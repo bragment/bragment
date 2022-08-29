@@ -37,6 +37,7 @@ export default {
   'project.field': '字段',
   'project.fieldTitle': '字段名称',
   'project.getModelStarted': '从创建一个新的数据源开始吧！',
+  'project.mainField': '主字段',
   'project.model': '数据源',
   'project.modelTitle': '数据源名称',
   'project.myProjects': '我的项目',
