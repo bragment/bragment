@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AiFillGithub } from 'react-icons/ai';
 import {
   useDialogStore,
@@ -27,15 +27,17 @@ function SignInForm() {
   const tokenRef = useRef('');
   const { toastSuccess, toastWarning } = useDialogStore();
   const [errorMessage, setErrorMessage] = useState<ILocalMessage | undefined>();
-  const signInMutation = useAuthSignInMutation();
-  const passcodeMutation = useAuthEmailPasscodeMutation();
+  const { isLoading: signInLoading, mutateAsync: signInMutateAsync } =
+    useAuthSignInMutation();
+  const { isLoading: passcodeLoading, mutateAsync: passcodeMutateAsync } =
+    useAuthEmailPasscodeMutation();
   const [waitingSeconds, setWaitingSeconds] = useState(0);
   const isWaiting = waitingSeconds > 0;
   const { language } = useSettingStore();
 
-  const getPasscode = useCallback(async () => {
+  const getPasscode = async () => {
     passcodeInputRef.current?.focus();
-    if (passcodeMutation.isLoading || isWaiting) {
+    if (passcodeLoading || isWaiting) {
       return;
     }
     const email = emailInputRef.current?.value.trim();
@@ -47,7 +49,7 @@ function SignInForm() {
     }
     setErrorMessage(undefined);
     try {
-      const { token } = await passcodeMutation.mutateAsync({ email, language });
+      const { token } = await passcodeMutateAsync({ email, language });
       tokenRef.current = token;
       toastSuccess(f('auth.passcodeMailSent'));
       setWaitingSeconds(60);
@@ -59,51 +61,45 @@ function SignInForm() {
         setErrorMessage('common.networkError');
       }
     }
-  }, [isWaiting, language, passcodeMutation, f, toastSuccess, toastWarning]);
+  };
 
-  const handleSubmit = useCallback(
-    async (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      if (signInMutation.isLoading) {
-        return;
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (signInLoading) {
+      return;
+    }
+    const token = tokenRef.current;
+    if (!token) {
+      return toastWarning(f('auth.getPasscodeFirst'));
+    }
+    setErrorMessage(undefined);
+    const formData = new FormData(event.target as HTMLFormElement);
+    const fields = {
+      token,
+      email: formData.get('email')?.toString() || '',
+      passcode: formData.get('passcode')?.toString() || '',
+      remember: formData.get('remember')?.toString() === 'on' ? true : false,
+    };
+    try {
+      const { user } = await signInMutateAsync(fields);
+      setMe(user);
+    } catch (error: any) {
+      const message = parseApiErrorMessage(error);
+      if (message === EApiErrorMessage.InvalidEmail) {
+        setErrorMessage('auth.invalidEmail');
+      } else if (message === EApiErrorMessage.InvalidPasscode) {
+        setErrorMessage('auth.invalidPasscode');
+      } else {
+        setErrorMessage('common.networkError');
       }
-      const token = tokenRef.current;
-      if (!token) {
-        return toastWarning(f('auth.getPasscodeFirst'));
-      }
-      setErrorMessage(undefined);
-      const formData = new FormData(event.target as HTMLFormElement);
-      const fields = {
-        token,
-        email: formData.get('email')?.toString() || '',
-        passcode: formData.get('passcode')?.toString() || '',
-        remember: formData.get('remember')?.toString() === 'on' ? true : false,
-      };
-      try {
-        const { user } = await signInMutation.mutateAsync(fields);
-        setMe(user);
-      } catch (error: any) {
-        const message = parseApiErrorMessage(error);
-        if (message === EApiErrorMessage.InvalidEmail) {
-          setErrorMessage('auth.invalidEmail');
-        } else if (message === EApiErrorMessage.InvalidPasscode) {
-          setErrorMessage('auth.invalidPasscode');
-        } else {
-          setErrorMessage('common.networkError');
-        }
-      }
-    },
-    [signInMutation, f, setMe, toastWarning]
-  );
+    }
+  };
 
-  const handleEmailInputKeyDown = useCallback(
-    (event: React.KeyboardEvent) => {
-      if (event.key === 'Enter') {
-        getPasscode();
-      }
-    },
-    [getPasscode]
-  );
+  const handleEmailInputKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      getPasscode();
+    }
+  };
 
   useEffect(() => {
     if (waitingSeconds > 0) {
@@ -145,11 +141,7 @@ function SignInForm() {
         <button
           type="button"
           disabled={isWaiting}
-          className={classNames(
-            'btn',
-            'ml-4',
-            passcodeMutation.isLoading && 'loading'
-          )}
+          className={classNames('btn', 'ml-4', passcodeLoading && 'loading')}
           onClick={getPasscode}>
           {isWaiting
             ? f('auth.waitingSeconds', { seconds: waitingSeconds })
@@ -171,7 +163,7 @@ function SignInForm() {
         type="submit"
         className={classNames(
           'btn btn-primary btn-block',
-          signInMutation.isLoading && 'loading'
+          signInLoading && 'loading'
         )}>
         {f('auth.signInOrSignUp')}
       </button>

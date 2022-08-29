@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { memo, useCallback, useRef } from 'react';
+import { memo, useRef } from 'react';
 
 interface IUniversalInputProps {
   name: string;
@@ -14,24 +14,21 @@ function UniversalInput(props: IUniversalInputProps) {
   const { name, defaultValue, className, onBlur, onChange, onEnter } = props;
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleChange = useCallback(() => {
+  const handleChange = () => {
     const input = inputRef.current;
     if (input && onChange) {
       onChange(input.value);
     }
-  }, [onChange]);
+  };
 
-  const handleKeyDown = useCallback(
-    (event: React.KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        inputRef.current?.blur();
-      }
-      if (event.key === 'Enter' && onEnter) {
-        onEnter();
-      }
-    },
-    [onEnter]
-  );
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      inputRef.current?.blur();
+    }
+    if (event.key === 'Enter' && onEnter) {
+      onEnter();
+    }
+  };
 
   return (
     <input

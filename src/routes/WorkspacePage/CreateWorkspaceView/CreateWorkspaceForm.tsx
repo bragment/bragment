@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { memo, useCallback, useState } from 'react';
+import { memo, useState } from 'react';
 import { useFormatMessage } from '../../../components/hooks';
 import { ILocalMessage } from '../../../i18n/types';
 import { IWorkspace } from '../../../libs/client/types';
@@ -13,32 +13,29 @@ function CreateWorkspaceForm(props: ICreateWorkspaceFormProps) {
   const { onFinish } = props;
   const f = useFormatMessage();
   const [errorMessage, setErrorMessage] = useState<ILocalMessage | undefined>();
-  const mutation = useCreateWorkspaceMutation();
+  const { isLoading, mutateAsync } = useCreateWorkspaceMutation();
 
-  const handleSubmit = useCallback(
-    async (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      if (mutation.isLoading) {
-        return;
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (isLoading) {
+      return;
+    }
+    const form = event.target as HTMLFormElement;
+    const formData = new FormData(form);
+    const fields = {
+      title: formData.get('title')?.toString() || '',
+    };
+    try {
+      const workspace = await mutateAsync(fields);
+      if (onFinish) {
+        onFinish(workspace);
+        form.reset();
       }
-      const form = event.target as HTMLFormElement;
-      const formData = new FormData(form);
-      const fields = {
-        title: formData.get('title')?.toString() || '',
-      };
-      try {
-        const workspace = await mutation.mutateAsync(fields);
-        if (onFinish) {
-          onFinish(workspace);
-          form.reset();
-        }
-      } catch (error: any) {
-        // TODO: handle request error
-        setErrorMessage('common.networkError');
-      }
-    },
-    [mutation, onFinish]
-  );
+    } catch (error: any) {
+      // TODO: handle request error
+      setErrorMessage('common.networkError');
+    }
+  };
 
   return (
     <form
@@ -61,7 +58,7 @@ function CreateWorkspaceForm(props: ICreateWorkspaceFormProps) {
         className={classNames(
           'btn btn-primary',
           'w-full',
-          mutation.isLoading && 'loading'
+          isLoading && 'loading'
         )}>
         {f('common.confirm')}
       </button>

@@ -29,13 +29,13 @@ function DataModelList() {
   const [checked, setChecked] = useState(true);
   const [creating, setCreating] = useState(false);
 
-  const handleCheckboxChange = useCallback(() => {
+  const handleCheckboxChange = () => {
     setChecked((old) => !old);
-  }, []);
-  const handleButtonClick = useCallback(() => {
+  };
+  const handleButtonClick = () => {
     setChecked(true);
     setCreating(true);
-  }, []);
+  };
   const handleFormCancel = useCallback(() => {
     setCreating(false);
   }, []);

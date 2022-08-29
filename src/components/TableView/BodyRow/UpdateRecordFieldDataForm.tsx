@@ -19,61 +19,48 @@ function UpdateRecordFieldDataForm(props: IUpdateRecordFieldDataFormProps) {
     props;
   const { toastError } = useDialogStore();
   const f = useFormatMessage();
-  const mutation = useUpdateProjectDataRecordMutation();
+  const { isLoading, mutateAsync } = useUpdateProjectDataRecordMutation();
   const valueRef = useRef(defaultValue);
 
   const handleChange = useCallback((value: string) => {
     valueRef.current = value;
   }, []);
 
-  const handleSubmit = useCallback(
-    async (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      if (mutation.isLoading) {
-        return;
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (isLoading) {
+      return;
+    }
+    const value = valueRef.current.trim();
+    if (value === defaultValue) {
+      if (onCancel) {
+        onCancel();
       }
-      const value = valueRef.current.trim();
-      if (value === defaultValue) {
-        if (onCancel) {
-          onCancel();
-        }
-        return;
-      }
-      const fields = {
-        projectId,
-        recordId,
-        data: {
-          [fieldId]: { value },
-        },
-      };
-      try {
-        const record = await mutation.mutateAsync(fields);
-        if (onFinish) {
-          onFinish(record);
-        }
-      } catch (error: any) {
-        // TODO: handle request error
-        toastError(f('common.networkError'));
-      }
-    },
-    [
-      mutation,
+      return;
+    }
+    const fields = {
       projectId,
-      fieldId,
       recordId,
-      defaultValue,
-      onCancel,
-      onFinish,
-      f,
-      toastError,
-    ]
-  );
+      data: {
+        [fieldId]: { value },
+      },
+    };
+    try {
+      const record = await mutateAsync(fields);
+      if (onFinish) {
+        onFinish(record);
+      }
+    } catch (error: any) {
+      // TODO: handle request error
+      toastError(f('common.networkError'));
+    }
+  };
 
   return (
     <form
       className={classNames(
         'form-control form-single-input',
-        mutation.isLoading && 'loading'
+        isLoading && 'loading'
       )}
       onSubmit={handleSubmit}>
       <UniversalInput

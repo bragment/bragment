@@ -10,23 +10,23 @@ import { AUTHENTICATED, THIRD_PARTY_AUTH } from './types';
 function GithubForm() {
   const ranRef = useRef(false);
   const { setMe } = useUserStore();
-  const mutation = useAuthGithubLoginMutation();
+  const { isLoading, mutateAsync } = useAuthGithubLoginMutation();
   const code = getCurrentSearchParam('code');
 
   const handleSubmit = useCallback(async () => {
-    if (mutation.isLoading || !code) {
+    if (isLoading || !code) {
       return;
     }
     let message: string | undefined;
     try {
-      const user = await mutation.mutateAsync({ code });
+      const user = await mutateAsync({ code });
       message = AUTHENTICATED;
       setMe(user);
     } catch (error: any) {
       message = parseApiErrorMessage(error);
     }
     window.opener.postMessage({ message, name: THIRD_PARTY_AUTH });
-  }, [code, mutation, setMe]);
+  }, [code, isLoading, mutateAsync, setMe]);
 
   useEffect(() => {
     // NOTE: skip the second time render in strict mode

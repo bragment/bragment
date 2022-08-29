@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { memo, useCallback, useLayoutEffect, useRef, useState } from 'react';
+import { memo, useLayoutEffect, useRef, useState } from 'react';
 
 export interface ISelectInputOption {
   value: string;
@@ -27,34 +27,31 @@ function SelectInput(props: ISelectInputProps) {
   const selectedNode = selectedOption?.node;
   const selectedContent = selectedOption?.content;
 
-  const handleClick = useCallback(
-    (event: React.MouseEvent<Element>) => {
-      const span = (event.target as Element).closest<HTMLSpanElement>(
-        'span.action'
+  const handleClick = (event: React.MouseEvent<Element>) => {
+    const span = (event.target as Element).closest<HTMLSpanElement>(
+      'span.action'
+    );
+    const newValue = span?.dataset.value;
+    if (!newValue || !options?.some((option) => option.value === newValue)) {
+      return;
+    }
+    const dropdownParent =
+      ulRef.current?.parentElement?.closest<HTMLUListElement>(
+        '.dropdown-content'
       );
-      const newValue = span?.dataset.value;
-      if (!newValue || !options?.some((option) => option.value === newValue)) {
-        return;
-      }
-      const dropdownParent =
-        ulRef.current?.parentElement?.closest<HTMLUListElement>(
-          '.dropdown-content'
-        );
-      if (dropdownParent) {
-        dropdownParent.focus();
-      } else {
-        ulRef.current?.blur();
-      }
+    if (dropdownParent) {
+      dropdownParent.focus();
+    } else {
+      ulRef.current?.blur();
+    }
 
-      if (!controlledRef.current) {
-        setSelectedValue(newValue);
-      }
-      if (onChange) {
-        onChange(newValue);
-      }
-    },
-    [options, onChange]
-  );
+    if (!controlledRef.current) {
+      setSelectedValue(newValue);
+    }
+    if (onChange) {
+      onChange(newValue);
+    }
+  };
 
   useLayoutEffect(() => {
     if (controlledRef.current) {

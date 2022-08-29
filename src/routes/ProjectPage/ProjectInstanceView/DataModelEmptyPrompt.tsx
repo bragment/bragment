@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { memo, useCallback } from 'react';
+import { memo } from 'react';
 import { HiOutlineDatabase, HiOutlinePlus } from 'react-icons/hi';
 import { useDialogStore, useFormatMessage } from '../../../components/hooks';
 
@@ -11,9 +11,7 @@ function DataModelEmptyPrompt(props: IDataModelEmptyPromptProps) {
   const { creatable } = props;
   const f = useFormatMessage();
   const { setCreateDataModelDialogVisible } = useDialogStore();
-  const handleCreate = useCallback(() => {
-    setCreateDataModelDialogVisible(true);
-  }, [setCreateDataModelDialogVisible]);
+  const handleCreate = () => setCreateDataModelDialogVisible(true);
 
   return (
     <div className={classNames('hero', 'min-h-[36rem]')}>

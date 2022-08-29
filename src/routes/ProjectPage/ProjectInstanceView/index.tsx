@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { memo, useCallback, useState } from 'react';
+import { memo, useState } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
 import { HiLogin, HiLogout } from 'react-icons/hi';
 import { Outlet } from 'react-router-dom';
@@ -10,7 +10,7 @@ import styles from './index.module.scss';
 function ProjectInstanceView() {
   const [checked, setChecked] = useState(true);
   const expanded = checked;
-  const handleCheckboxChange = useCallback(() => setChecked((old) => !old), []);
+  const handleCheckboxChange = () => setChecked((old) => !old);
 
   return (
     <div className={classNames('w-full h-full flex', styles.wrapper)}>

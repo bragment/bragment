@@ -31,9 +31,7 @@ function Cell(props: IItermProps) {
   const [editing, setEditing] = useState(false);
   const value = data?.value || '';
 
-  const handleDoubleClick = useCallback(() => {
-    setEditing(true);
-  }, []);
+  const handleDoubleClick = () => setEditing(true);
 
   const handleCancel = useCallback(() => {
     setEditing(false);
