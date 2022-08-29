@@ -56,12 +56,12 @@ export function useNestedState<S>(
 }
 
 export function useAuthSignOut() {
-  const singOutMutation = useAuthSignOutMutation();
+  const { mutate } = useAuthSignOutMutation();
   const { setMe } = useUserStore();
   return useCallback(() => {
     setMe(null);
-    singOutMutation.mutate();
-  }, [setMe, singOutMutation]);
+    mutate();
+  }, [setMe, mutate]);
 }
 
 export function useHandleServerApiError() {

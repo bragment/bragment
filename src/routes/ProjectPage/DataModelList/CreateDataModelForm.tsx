@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
-import { useCallback, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useDialogStore, useFormatMessage } from '../../../components/hooks';
 import { ILocalMessage } from '../../../i18n/types';
 import { IProject } from '../../../libs/client/types';
@@ -19,64 +19,52 @@ function CreateDataModelForm(props: ICreateDataModelFormProps) {
   const composingRef = useRef(false);
   const { toastError } = useDialogStore();
   const [errorMessage, setErrorMessage] = useState<ILocalMessage | undefined>();
-  const mutation = useCreateProjectDataModelMutation();
+  const { isLoading, mutateAsync } = useCreateProjectDataModelMutation();
 
-  const handleSubmit = useCallback(
-    async (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      if (mutation.isLoading) {
-        return;
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (isLoading) {
+      return;
+    }
+    const form = event.target as HTMLFormElement;
+    const formData = new FormData(form);
+    const fields = {
+      title: formData.get('title')?.toString() || '',
+      projectId,
+    };
+    try {
+      const project = await mutateAsync(fields);
+      if (onFinish) {
+        onFinish(project);
+        form.reset();
       }
-      const form = event.target as HTMLFormElement;
-      const formData = new FormData(form);
-      const fields = {
-        title: formData.get('title')?.toString() || '',
-        projectId,
-      };
-      try {
-        const project = await mutation.mutateAsync(fields);
-        if (onFinish) {
-          onFinish(project);
-          form.reset();
-        }
-      } catch (error) {
-        // TODO: handle request error
-        if (singleInput) {
-          toastError(f('common.networkError'));
-        } else {
-          setErrorMessage('common.networkError');
-        }
+    } catch (error) {
+      // TODO: handle request error
+      if (singleInput) {
+        toastError(f('common.networkError'));
+      } else {
+        setErrorMessage('common.networkError');
       }
-    },
-    [projectId, mutation, singleInput, f, onFinish, setErrorMessage, toastError]
-  );
+    }
+  };
 
-  const handleKeyDown = useCallback(
-    (event: React.KeyboardEvent<HTMLInputElement>) => {
-      if (mutation.isLoading || composingRef.current) {
-        return;
-      }
-      if (event.key === 'Escape' && singleInput && onCancel) {
-        onCancel();
-      }
-    },
-    [mutation, singleInput, onCancel]
-  );
-
-  const handleBlur = useCallback(() => {
-    if (!mutation.isLoading && singleInput && onCancel) {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (isLoading || composingRef.current) {
+      return;
+    }
+    if (event.key === 'Escape' && singleInput && onCancel) {
       onCancel();
     }
-  }, [mutation, singleInput, onCancel]);
+  };
 
-  const handleCompositionStart = useCallback(
-    () => (composingRef.current = true),
-    []
-  );
-  const handleCompositionEnd = useCallback(
-    () => (composingRef.current = false),
-    []
-  );
+  const handleBlur = () => {
+    if (!isLoading && singleInput && onCancel) {
+      onCancel();
+    }
+  };
+
+  const handleCompositionStart = () => (composingRef.current = true);
+  const handleCompositionEnd = () => (composingRef.current = false);
 
   return (
     <form
@@ -84,7 +72,7 @@ function CreateDataModelForm(props: ICreateDataModelFormProps) {
         'form-control',
         'space-y-4',
         singleInput && 'form-single-input',
-        mutation.isLoading && 'loading'
+        isLoading && 'loading'
       )}
       onSubmit={handleSubmit}>
       {!singleInput && (
@@ -111,7 +99,7 @@ function CreateDataModelForm(props: ICreateDataModelFormProps) {
           className={classNames(
             'btn btn-primary',
             'w-full',
-            mutation.isLoading && 'loading'
+            isLoading && 'loading'
           )}>
           {f('common.confirm')}
         </button>

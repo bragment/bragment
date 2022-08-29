@@ -29,9 +29,9 @@ function Cell(props: IItermProps) {
   const { title = '' } = field;
   const Icon = dataFieldTypeRecord[field.type]?.Icon;
 
-  const handleDoubleClick = useCallback(() => {
+  const handleDoubleClick = () => {
     setEditing(true);
-  }, []);
+  };
 
   const handleCancel = useCallback(() => {
     setEditing(false);

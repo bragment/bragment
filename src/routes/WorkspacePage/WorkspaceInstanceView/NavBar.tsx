@@ -1,6 +1,5 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
-import React, { useCallback } from 'react';
 import {
   HiDotsVertical,
   HiOutlineOfficeBuilding,
@@ -28,7 +27,7 @@ interface INavBarProps {
 function NavBar(props: INavBarProps) {
   const { className, prefix } = props;
   const f = useFormatMessage();
-  const mutation = useUpdateMyDataMutation();
+  const { isLoading, mutateAsync } = useUpdateMyDataMutation();
   const { me, myMainWorkspaceId, updateMe } = useUserStore();
   const { setCreateWorkspaceDialogVisible, toastError } = useDialogStore();
   const { workspaceId = '' } = useParams();
@@ -51,22 +50,19 @@ function NavBar(props: INavBarProps) {
     />
   );
 
-  const handleCreateWorkspace = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>) => {
-      const target = e.target as Element;
-      const button = target.closest('button');
-      button?.blur();
-      setCreateWorkspaceDialogVisible(true);
-    },
-    [setCreateWorkspaceDialogVisible]
-  );
+  const handleCreateWorkspace = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const target = e.target as Element;
+    const button = target.closest('button');
+    button?.blur();
+    setCreateWorkspaceDialogVisible(true);
+  };
 
-  const handleSetMainWorkspace = useCallback(async () => {
-    if (mutation.isLoading) {
+  const handleSetMainWorkspace = async () => {
+    if (isLoading) {
       return;
     }
     try {
-      const user = await mutation.mutateAsync({
+      const user = await mutateAsync({
         mainWorkspace: workspaceId,
       });
       updateMe(user);
@@ -74,7 +70,7 @@ function NavBar(props: INavBarProps) {
       // TODO: handle request error
       toastError(f('common.networkError'));
     }
-  }, [mutation, workspaceId, f, toastError, updateMe]);
+  };
 
   return (
     <header className={classNames('navbar', 'gap-3 z-30', className)}>
@@ -96,7 +92,7 @@ function NavBar(props: INavBarProps) {
                 className={classNames(
                   'btn btn-ghost',
                   'w-full mb-2 justify-start',
-                  mutation.isLoading && 'active loading'
+                  isLoading && 'active loading'
                 )}
                 onClick={handleSetMainWorkspace}>
                 <HiOutlineOfficeBuilding className="text-lg mr-2" />

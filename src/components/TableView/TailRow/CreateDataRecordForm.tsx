@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, {
+import {
   forwardRef,
   memo,
   Ref,
@@ -36,39 +36,36 @@ function CreateDataRecordForm(
   const f = useFormatMessage();
   const inputRef = useRef<HTMLInputElement>(null);
   const { toastError } = useDialogStore();
-  const mutation = useCreateProjectDataRecordMutation();
+  const { isLoading, mutateAsync } = useCreateProjectDataRecordMutation();
   const [data, setData] = useState<Record<string, { value: string }>>({});
 
-  const handleSubmit = useCallback(
-    async (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      if (mutation.isLoading) {
-        return;
-      }
-      const form = event.target as HTMLFormElement;
-      const formData = new FormData(form);
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (isLoading) {
+      return;
+    }
+    const form = event.target as HTMLFormElement;
+    const formData = new FormData(form);
 
-      const fields = {
-        projectId: formData.get('projectId')?.toString().trim() || '',
-        project: formData.get('project')?.toString().trim() || '',
-        model: formData.get('model')?.toString().trim() || '',
-        data,
-      };
+    const fields = {
+      projectId: formData.get('projectId')?.toString().trim() || '',
+      project: formData.get('project')?.toString().trim() || '',
+      model: formData.get('model')?.toString().trim() || '',
+      data,
+    };
 
-      try {
-        const record = await mutation.mutateAsync(fields);
-        if (onFinish) {
-          onFinish(record);
-        }
-        form.reset();
-        setData({});
-      } catch (error: any) {
-        // TODO: handle request error
-        toastError(f('common.networkError'));
+    try {
+      const record = await mutateAsync(fields);
+      if (onFinish) {
+        onFinish(record);
       }
-    },
-    [mutation, data, onFinish, f, toastError]
-  );
+      form.reset();
+      setData({});
+    } catch (error: any) {
+      // TODO: handle request error
+      toastError(f('common.networkError'));
+    }
+  };
 
   const handleInputChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -96,16 +93,13 @@ function CreateDataRecordForm(
 
   useEffect(() => {
     if (onLoadingChange) {
-      onLoadingChange(mutation.isLoading);
+      onLoadingChange(isLoading);
     }
-  }, [mutation.isLoading, onLoadingChange]);
+  }, [isLoading, onLoadingChange]);
 
   return (
     <form
-      className={classNames(
-        'form-control',
-        mutation.isLoading && 'pointer-events-none'
-      )}
+      className={classNames('form-control', isLoading && 'pointer-events-none')}
       onSubmit={handleSubmit}>
       <input type="hidden" name="projectId" value={projectId} />
       <input type="hidden" name="project" value={projectId} />

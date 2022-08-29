@@ -1,6 +1,5 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
-import { useCallback } from 'react';
 import { HiOutlineSwitchHorizontal } from 'react-icons/hi';
 import { NavLink } from 'react-router-dom';
 import WorkspaceAvatar from '../../../components/WorkspaceAvatar';
@@ -15,23 +14,20 @@ interface IWorkspaceMenuProps {
 function WorkspaceMenu(props: IWorkspaceMenuProps) {
   const { workspaces } = props;
 
-  const getActiveClassName = useCallback(
-    ({ isActive }: { isActive: boolean }) =>
-      classNames(
-        'w-full',
-        isActive && 'active',
-        isActive && 'pointer-events-none',
-        isActive && styles.active
-      ),
-    []
-  );
+  const getActiveClassName = ({ isActive }: { isActive: boolean }) =>
+    classNames(
+      'w-full',
+      isActive && 'active',
+      isActive && 'pointer-events-none',
+      isActive && styles.active
+    );
 
-  const handleClick = useCallback(() => {
+  const handleClick = () => {
     const el = document.activeElement;
     if (el instanceof HTMLElement) {
       el.blur();
     }
-  }, []);
+  };
 
   return (
     <ul

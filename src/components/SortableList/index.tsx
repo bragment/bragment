@@ -30,7 +30,9 @@ function SortableList<T>(props: ISortableListProps<T>) {
     renderItem,
     onChange,
   } = props;
+
   const offsetDiff = useRef({ x: 0, y: 0 });
+
   const handleDragEnd: OnDragEndResponder = useCallback(
     (result) => {
       const from = result.source.index;
@@ -45,6 +47,7 @@ function SortableList<T>(props: ISortableListProps<T>) {
     },
     [list, onChange]
   );
+
   const handleBeforeDragStart = useCallback(() => {
     const container = containerRef?.current;
     if (container) {
@@ -55,6 +58,7 @@ function SortableList<T>(props: ISortableListProps<T>) {
       };
     }
   }, [containerRef]);
+
   return (
     <DragDropContext
       onBeforeDragStart={handleBeforeDragStart}

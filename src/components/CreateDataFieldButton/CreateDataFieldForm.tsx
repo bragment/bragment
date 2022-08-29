@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { memo, useCallback, useState } from 'react';
+import { memo, useState } from 'react';
 import { ILocalMessage } from '../../i18n/types';
 import {
   EDataFieldType,
@@ -21,39 +21,36 @@ function CreateDataFieldForm(props: ICreateDataFieldFormProps) {
   const { projectId, modelId, existingFields, onFinish } = props;
   const f = useFormatMessage();
   const [errorMessage, setErrorMessage] = useState<ILocalMessage | undefined>();
-  const mutation = useCreateProjectDataFieldMutation();
+  const { isLoading, mutateAsync } = useCreateProjectDataFieldMutation();
 
-  const handleSubmit = useCallback(
-    async (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      if (mutation.isLoading) {
-        return;
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (isLoading) {
+      return;
+    }
+    const form = event.target as HTMLFormElement;
+    const formData = new FormData(form);
+    const data = {
+      projectId: formData.get('projectId')?.toString().trim() || '',
+      model: formData.get('model')?.toString().trim() || '',
+      title: formData.get('title')?.toString().trim() || '',
+      type: formData.get('type')?.toString() as EDataFieldType,
+    };
+    if (existingFields?.some((el) => el.title === data.title)) {
+      setErrorMessage('project.existingFieldTitle');
+      return;
+    }
+    try {
+      const project = await mutateAsync(data);
+      if (onFinish) {
+        onFinish(project);
       }
-      const form = event.target as HTMLFormElement;
-      const formData = new FormData(form);
-      const data = {
-        projectId: formData.get('projectId')?.toString().trim() || '',
-        model: formData.get('model')?.toString().trim() || '',
-        title: formData.get('title')?.toString().trim() || '',
-        type: formData.get('type')?.toString() as EDataFieldType,
-      };
-      if (existingFields?.some((el) => el.title === data.title)) {
-        setErrorMessage('project.existingFieldTitle');
-        return;
-      }
-      try {
-        const project = await mutation.mutateAsync(data);
-        if (onFinish) {
-          onFinish(project);
-        }
-        form.reset();
-        setErrorMessage(undefined);
-      } catch (error: any) {
-        setErrorMessage('common.networkError');
-      }
-    },
-    [mutation, existingFields, onFinish]
-  );
+      form.reset();
+      setErrorMessage(undefined);
+    } catch (error: any) {
+      setErrorMessage('common.networkError');
+    }
+  };
 
   return (
     <form
@@ -78,7 +75,7 @@ function CreateDataFieldForm(props: ICreateDataFieldFormProps) {
         type="submit"
         className={classNames(
           'btn btn-primary btn-block',
-          mutation.isLoading && 'loading'
+          isLoading && 'loading'
         )}>
         {f('common.confirm')}
       </button>

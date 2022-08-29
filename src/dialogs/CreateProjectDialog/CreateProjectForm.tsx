@@ -20,42 +20,39 @@ function CreateProjectForm(props: ICreateProjectFormProps) {
   const f = useFormatMessage();
   const [errorMessage, setErrorMessage] = useState<ILocalMessage | undefined>();
   const [background, setBackground] = useState<IProjectBackground>({});
-  const mutation = useCreateProjectMutation();
+  const { isLoading, mutateAsync } = useCreateProjectMutation();
 
   const handleBgChange = useCallback(
     (value: IProjectBackground) => setBackground(value),
     []
   );
 
-  const handleSubmit = useCallback(
-    async (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      if (mutation.isLoading) {
-        return;
-      }
-      const form = event.target as HTMLFormElement;
-      const formData = new FormData(form);
-      const fields = {
-        title: formData.get('title')?.toString().trim() || '',
-        description: formData.get('description')?.toString().trim() || '',
-        workspace: defaultWorkspaceId,
-        visibility: EProjectVisibility.Private,
-        background,
-      };
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (isLoading) {
+      return;
+    }
+    const form = event.target as HTMLFormElement;
+    const formData = new FormData(form);
+    const fields = {
+      title: formData.get('title')?.toString().trim() || '',
+      description: formData.get('description')?.toString().trim() || '',
+      workspace: defaultWorkspaceId,
+      visibility: EProjectVisibility.Private,
+      background,
+    };
 
-      try {
-        const project = await mutation.mutateAsync(fields);
-        if (onFinish) {
-          onFinish(project);
-          form.reset();
-        }
-      } catch (error: any) {
-        // TODO: handle error
-        setErrorMessage('common.networkError');
+    try {
+      const project = await mutateAsync(fields);
+      if (onFinish) {
+        onFinish(project);
+        form.reset();
       }
-    },
-    [mutation, background, defaultWorkspaceId, onFinish]
-  );
+    } catch (error: any) {
+      // TODO: handle error
+      setErrorMessage('common.networkError');
+    }
+  };
 
   return (
     <form
@@ -87,7 +84,7 @@ function CreateProjectForm(props: ICreateProjectFormProps) {
         type="submit"
         className={classNames(
           'btn btn-primary btn-block',
-          mutation.isLoading && 'loading'
+          isLoading && 'loading'
         )}>
         {f('common.confirm')}
       </button>

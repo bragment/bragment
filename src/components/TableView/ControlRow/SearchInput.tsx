@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import debounce from 'lodash/debounce';
-import { memo, useCallback, useMemo, useRef } from 'react';
+import { memo, useMemo, useRef } from 'react';
 import { HiSearch, HiXCircle } from 'react-icons/hi';
 import { useFormatMessage } from '../../hooks';
 import styles from '../index.module.scss';
@@ -18,19 +18,19 @@ function SearchInput(props: ISearchInputProps) {
     () => debounce((value: string) => onChange(value), 500),
     [onChange]
   );
-  const handleChange = useCallback(() => {
+  const handleChange = () => {
     debounceChange(inputRef.current?.value || '');
-  }, [debounceChange]);
-  const handleSearch = useCallback(() => {
+  };
+  const handleSearch = () => {
     inputRef.current?.focus();
-  }, []);
-  const handleClear = useCallback(() => {
+  };
+  const handleClear = () => {
     if (inputRef.current) {
       inputRef.current.focus();
       inputRef.current.value = '';
       debounceChange('');
     }
-  }, [debounceChange]);
+  };
 
   return (
     <div className={classNames('relative', styles.searchInput)}>

@@ -1,12 +1,5 @@
 import classNames from 'classnames';
-import {
-  memo,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react';
+import { memo, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 interface IDropdown {
   toggle: React.ReactElement;
@@ -33,13 +26,13 @@ function Dropdown(props: IDropdown) {
   const onOpenRef = useRef(onOpen);
   const onCloseRef = useRef(onClose);
   const divRef = useRef<HTMLDivElement>(null);
-  const handleClick = useCallback(() => {
+  const handleClick = () => {
     setOpen((value) => !value);
     const { activeElement } = document;
     if (activeElement instanceof HTMLElement) {
       activeElement.blur();
     }
-  }, []);
+  };
 
   useEffect(() => {
     if (open) {
