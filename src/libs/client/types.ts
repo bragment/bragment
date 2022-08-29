@@ -93,8 +93,8 @@ export interface IProjectDataView {
   model: string;
   title: string;
   type: EDataViewType;
-  hiddenFields: string[];
   createdAt: string;
+  visibleFields?: string[];
 }
 
 export interface IProjectDataField {

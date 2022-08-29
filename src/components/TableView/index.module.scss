@@ -1,11 +1,11 @@
 .wrapper {
-  &:global(.leftScrollable) {
-    .scrollableLeft::after {
+  &:global(.left-scrollable) {
+    .leftScrollable::after {
       opacity: 1;
     }
   }
-  &:global(.rightScrollable) {
-    .scrollableRight::before {
+  &:global(.right-scrollable) {
+    .rightScrollable::before {
       opacity: 1;
     }
   }
@@ -61,28 +61,24 @@
 
 .cell {
   --bgColor: hsl(var(--b3));
-  &.scrollableLeft::after {
+  &.leftScrollable::after,
+  &.rightScrollable::before {
     opacity: 0;
     content: '';
     position: absolute;
-    width: calc(1rem);
+    width: 1rem;
     height: 100%;
     top: 0;
     right: -1rem;
-    background-image: linear-gradient(to right, var(--bgColor), transparent);
     transition: opacity 0.2s;
   }
-
-  &.scrollableRight::before {
-    opacity: 0;
-    content: '';
-    position: absolute;
-    width: calc(1rem);
-    height: 100%;
-    top: 0;
+  &.leftScrollable::after {
+    right: -1rem;
+    background-image: linear-gradient(to right, var(--bgColor), transparent);
+  }
+  &.rightScrollable::before {
     left: -1rem;
     background-image: linear-gradient(to left, var(--bgColor), transparent);
-    transition: opacity 0.2s;
   }
 }
 

@@ -1,5 +1,6 @@
 import type { PrimitiveType } from 'intl-messageformat';
-import { useCallback, useContext } from 'react';
+import isEqual from 'lodash/isEqual';
+import { useCallback, useContext, useState } from 'react';
 import { useIntl } from 'react-intl';
 import type { ILocalMessage } from '../i18n/types';
 import { parseApiErrorMessage } from '../libs/client';
@@ -36,6 +37,22 @@ export function useFormatMessage(): (
     (id, values) => intl.formatMessage({ id }, values),
     [intl]
   );
+}
+
+export function useNestedState<S>(
+  initialState: S | (() => S)
+): [S, React.Dispatch<React.SetStateAction<S>>] {
+  const [state, _setState] = useState(initialState);
+  const setState: typeof _setState = useCallback((arg) => {
+    if (arg instanceof Function) {
+      return _setState(arg);
+    } else {
+      return _setState((oldValue) => {
+        return isEqual(oldValue, arg) ? oldValue : arg;
+      });
+    }
+  }, []);
+  return [state, setState];
 }
 
 export function useAuthSignOut() {

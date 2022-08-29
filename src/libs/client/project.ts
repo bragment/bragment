@@ -79,6 +79,18 @@ export function updateProjectDataModel(
   );
 }
 
+export function updateProjectDataView(
+  input: Partial<IProjectDataView> & { projectId: string; viewId: string }
+) {
+  const { viewId, projectId } = input;
+  return baseRequest<IProject>(
+    mainServerApi,
+    'PUT',
+    `/project/${projectId}/view/${viewId}`,
+    input
+  );
+}
+
 export function updateProjectDataField(
   input: Partial<IProjectDataField> & { projectId: string; fieldId: string }
 ) {

@@ -4,6 +4,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import classNames from 'classnames';
+import isEqual from 'lodash/isEqual';
 import { observer } from 'mobx-react';
 import { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
@@ -14,13 +15,18 @@ import {
   IProjectDataRecord,
   IProjectDataView,
 } from '../../libs/client/types';
-import { useUpdateProjectDataModelMutation } from '../../libs/react-query';
+import {
+  useUpdateProjectDataModelMutation,
+  useUpdateProjectDataViewMutation,
+} from '../../libs/react-query';
+import { useNestedState } from '../hooks';
 import ScrollContainer from '../ScrollContainer';
 import BodyRow from './BodyRow';
-import { ControlRow } from './ControlRow';
+import ControlRow from './ControlRow';
 import HeadRow from './HeadRow';
 import {
   createColumns,
+  createColumnVisibility,
   getColumnCanGlobalFilter,
   globalFilterFn,
 } from './helpers';
@@ -38,13 +44,10 @@ interface ITableViewProps {
 
 function TableView(props: ITableViewProps) {
   const { project, model, view, fields, records } = props;
-  const [globalFilter, setGlobalFilter] = useState<IGlobalFilter>({
-    updatedAt: new Date().toISOString(),
-    keywords: [],
-  });
   const scrollBarRef = useRef<Scrollbars>(null);
-  const updateModelMutation = useUpdateProjectDataModelMutation();
-  const projectId = project._id;
+
+  const { _id: projectId } = project;
+  const { _id: viewId } = view;
   const mainFieldId = model.mainField || fields[0]?._id;
   const modelFields = useMemo(
     () => fields.filter((field) => field.model === model._id),
@@ -54,6 +57,39 @@ function TableView(props: ITableViewProps) {
     () => records.filter((record) => record.model === model._id),
     [records, model]
   );
+  const visibleFieldIds = useMemo(
+    () =>
+      !view.visibleFields?.length
+        ? modelFields.map((el) => el._id)
+        : view.visibleFields,
+    [view, modelFields]
+  );
+
+  const [columnVisibility, setColumnVisibility] = useNestedState(
+    createColumnVisibility(
+      modelFields.map((el) => el._id),
+      visibleFieldIds
+    )
+  );
+  const [columnOrder, setColumnOrder] = useNestedState(visibleFieldIds);
+  const [globalFilter, setGlobalFilter] = useState<IGlobalFilter>({
+    updatedAt: new Date().toISOString(),
+    keywords: [],
+  });
+
+  const { mutateAsync: updateModelMutateAsync } =
+    useUpdateProjectDataModelMutation();
+  const {
+    mutateAsync: updateViewMutateAsync,
+    // TODO: add loading state
+    // isLoading: updateViewLoading,
+  } = useUpdateProjectDataViewMutation();
+
+  const updateVisibleFields = useCallback(() => {
+    if (columnOrder && !isEqual(columnOrder, visibleFieldIds)) {
+      updateViewMutateAsync({ projectId, viewId, visibleFields: columnOrder });
+    }
+  }, [updateViewMutateAsync, visibleFieldIds, columnOrder, projectId, viewId]);
 
   const handleCreateDateFieldFinish = useCallback(
     (data: IProject) => {
@@ -64,14 +100,22 @@ function TableView(props: ITableViewProps) {
         setTimeout(() => scrollBarRef.current?.scrollToRight());
       }
       if (field && !model.mainField) {
-        updateModelMutation.mutate({
-          projectId: project._id,
+        updateModelMutateAsync({
+          projectId: data._id,
           modelId: model._id,
           mainField: field._id,
         });
       }
+      if (view.visibleFields?.length) {
+        const fieldIds = [...view.visibleFields, field._id];
+        updateViewMutateAsync({
+          projectId: data._id,
+          viewId: view._id,
+          visibleFields: fieldIds,
+        });
+      }
     },
-    [project, model, updateModelMutation]
+    [updateModelMutateAsync, updateViewMutateAsync, model, view]
   );
 
   const handleSearchInputChange = useCallback((value: string) => {
@@ -83,11 +127,33 @@ function TableView(props: ITableViewProps) {
         .filter((el) => !!el),
     });
   }, []);
+  const handleVisibilityChange = useCallback(
+    (fieldIds: string[]) => {
+      setColumnOrder(fieldIds);
+      setColumnVisibility(
+        createColumnVisibility(
+          modelFields.map((el) => el._id),
+          fieldIds
+        )
+      );
+    },
+    [setColumnOrder, setColumnVisibility, modelFields]
+  );
+
+  useLayoutEffect(() => {
+    setColumnOrder(visibleFieldIds);
+    setColumnVisibility(
+      createColumnVisibility(
+        modelFields.map((el) => el._id),
+        visibleFieldIds
+      )
+    );
+  }, [setColumnOrder, setColumnVisibility, modelFields, visibleFieldIds]);
 
   useLayoutEffect(() => {
     scrollBarRef.current?.scrollToTop();
     scrollBarRef.current?.scrollToLeft();
-  }, [view._id]);
+  }, [viewId]);
 
   const columns = useMemo(
     () => createColumns(projectId, mainFieldId, modelFields),
@@ -99,6 +165,8 @@ function TableView(props: ITableViewProps) {
     columns,
     state: {
       columnPinning: { left: [mainFieldId] },
+      columnVisibility,
+      columnOrder,
       globalFilter,
     },
     getCoreRowModel: getCoreRowModel(),
@@ -114,10 +182,17 @@ function TableView(props: ITableViewProps) {
 
   return (
     <ScrollContainer className={classNames(styles.wrapper)} ref={scrollBarRef}>
-      <ControlRow onSearchInputChange={handleSearchInputChange} />
+      <ControlRow
+        mainFieldId={mainFieldId}
+        modelFields={modelFields}
+        visibleFieldIds={visibleFieldIds}
+        onSearchInputChange={handleSearchInputChange}
+        onVisibilityChange={handleVisibilityChange}
+        onShouldUpdateVisibility={updateVisibleFields}
+      />
       {headerGroups.map((headerGroup) => (
         <HeadRow
-          key={view._id}
+          key={viewId}
           headers={headerGroup.headers}
           projectId={project._id}
           modelId={model._id}

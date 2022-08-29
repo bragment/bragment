@@ -1,4 +1,5 @@
 import { QueryClientProvider } from '@tanstack/react-query';
+// import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { observer } from 'mobx-react';
 import { useEffect, useMemo } from 'react';
 import { IntlProvider } from 'react-intl';
@@ -28,6 +29,7 @@ function App(props: IAppProps) {
         <IntlProvider locale={language} messages={localMessages}>
           {children}
         </IntlProvider>
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </QueryClientProvider>
     </AppContext.Provider>
   );

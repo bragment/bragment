@@ -9,7 +9,7 @@ interface ISearchInputProps {
   onChange: (value: string) => void;
 }
 
-export function SearchInput(props: ISearchInputProps) {
+function SearchInput(props: ISearchInputProps) {
   const { onChange } = props;
   const f = useFormatMessage();
   const inputRef = useRef<HTMLInputElement>(null);

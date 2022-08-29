@@ -61,7 +61,7 @@ function HeadRow(props: IHeadRowProps) {
           'w-16 p-0',
           'justify-center',
           styles.cell,
-          styles.scrollableRight
+          styles.rightScrollable
         )}>
         <AnimatePing ping={hasNoField}>
           <CreateDataFieldButton
