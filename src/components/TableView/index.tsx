@@ -25,8 +25,9 @@ import BodyRow from './BodyRow';
 import ControlRow from './ControlRow';
 import HeadRow from './HeadRow';
 import {
+  convertToColumnSorting,
+  convertToColumnVisibility,
   createColumns,
-  createColumnVisibility,
   getColumnCanGlobalFilter,
   globalFilterFn,
 } from './helpers';
@@ -47,7 +48,7 @@ function TableView(props: ITableViewProps) {
   const scrollBarRef = useRef<Scrollbars>(null);
 
   const { _id: projectId } = project;
-  const { _id: viewId } = view;
+  const { _id: viewId, sorters } = view;
   const mainFieldId = model.mainField || fields[0]?._id;
   const modelFields = useMemo(
     () => fields.filter((field) => field.model === model._id),
@@ -65,8 +66,9 @@ function TableView(props: ITableViewProps) {
     [view, modelFields]
   );
 
+  const columnPinning = useMemo(() => ({ left: [mainFieldId] }), [mainFieldId]);
   const [columnVisibility, setColumnVisibility] = useNestedState(
-    createColumnVisibility(
+    convertToColumnVisibility(
       modelFields.map((el) => el._id),
       visibleFieldIds
     )
@@ -76,14 +78,14 @@ function TableView(props: ITableViewProps) {
     updatedAt: new Date().toISOString(),
     keywords: [],
   });
+  const [sorting, setSorting] = useNestedState(
+    convertToColumnSorting(sorters || [])
+  );
 
   const { mutateAsync: updateModelMutateAsync } =
     useUpdateProjectDataModelMutation();
-  const {
-    mutateAsync: updateViewMutateAsync,
-    // TODO: add loading state
-    // isLoading: updateViewLoading,
-  } = useUpdateProjectDataViewMutation();
+  const { mutateAsync: updateViewMutateAsync, isLoading: updateViewLoading } =
+    useUpdateProjectDataViewMutation();
 
   const updateVisibleFields = useCallback(() => {
     if (columnOrder && !isEqual(columnOrder, visibleFieldIds)) {
@@ -93,12 +95,7 @@ function TableView(props: ITableViewProps) {
 
   const handleCreateDateFieldFinish = useCallback(
     (data: IProject) => {
-      const { activeElement } = document;
       const field = data.fields[0];
-      if (activeElement instanceof HTMLElement) {
-        activeElement.blur();
-        setTimeout(() => scrollBarRef.current?.scrollToRight());
-      }
       if (field && !model.mainField) {
         updateModelMutateAsync({
           projectId: data._id,
@@ -114,8 +111,24 @@ function TableView(props: ITableViewProps) {
           visibleFields: fieldIds,
         });
       }
+      // NOTE: update the state optimistically, do it after modelFields update
+      requestAnimationFrame(() => {
+        setColumnOrder((order) => [...order, field._id]);
+        setColumnVisibility((visibility) => ({
+          ...visibility,
+          [field._id]: true,
+        }));
+        requestAnimationFrame(() => scrollBarRef.current?.scrollToRight());
+      });
     },
-    [updateModelMutateAsync, updateViewMutateAsync, model, view]
+    [
+      setColumnOrder,
+      setColumnVisibility,
+      updateModelMutateAsync,
+      updateViewMutateAsync,
+      model,
+      view,
+    ]
   );
 
   const handleSearchInputChange = useCallback((value: string) => {
@@ -131,7 +144,7 @@ function TableView(props: ITableViewProps) {
     (fieldIds: string[]) => {
       setColumnOrder(fieldIds);
       setColumnVisibility(
-        createColumnVisibility(
+        convertToColumnVisibility(
           modelFields.map((el) => el._id),
           fieldIds
         )
@@ -143,7 +156,7 @@ function TableView(props: ITableViewProps) {
   useLayoutEffect(() => {
     setColumnOrder(visibleFieldIds);
     setColumnVisibility(
-      createColumnVisibility(
+      convertToColumnVisibility(
         modelFields.map((el) => el._id),
         visibleFieldIds
       )
@@ -155,6 +168,10 @@ function TableView(props: ITableViewProps) {
     scrollBarRef.current?.scrollToLeft();
   }, [viewId]);
 
+  useLayoutEffect(() => {
+    setSorting(convertToColumnSorting(sorters || []));
+  }, [setSorting, sorters]);
+
   const columns = useMemo(
     () => createColumns(projectId, mainFieldId, modelFields),
     [projectId, mainFieldId, modelFields]
@@ -164,10 +181,11 @@ function TableView(props: ITableViewProps) {
     data: modelRecords,
     columns,
     state: {
-      columnPinning: { left: [mainFieldId] },
+      columnPinning,
       columnVisibility,
       columnOrder,
       globalFilter,
+      sorting,
     },
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -186,9 +204,13 @@ function TableView(props: ITableViewProps) {
         mainFieldId={mainFieldId}
         modelFields={modelFields}
         visibleFieldIds={visibleFieldIds}
-        onSearchInputChange={handleSearchInputChange}
+        visibleFieldCount={
+          view.visibleFields?.length ? columnOrder.length : undefined
+        }
+        visibilityUpdating={updateViewLoading}
         onVisibilityChange={handleVisibilityChange}
         onShouldUpdateVisibility={updateVisibleFields}
+        onSearchInputChange={handleSearchInputChange}
       />
       {headerGroups.map((headerGroup) => (
         <HeadRow

@@ -1,9 +1,21 @@
 import classNames from 'classnames';
-import { memo, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import {
+  forwardRef,
+  memo,
+  useEffect,
+  useImperativeHandle,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 
-interface IDropdown {
-  toggle: React.ReactElement;
-  content: React.ReactElement;
+export interface IDropdownRef {
+  close: () => void;
+}
+
+interface IDropdownProps {
+  toggle: React.ReactNode;
+  content: React.ReactNode;
   className?: string;
   toggleClassName?: string;
   contentClassName?: string;
@@ -11,7 +23,7 @@ interface IDropdown {
   onClose?: () => void;
 }
 
-function Dropdown(props: IDropdown) {
+function Dropdown(props: IDropdownProps, ref: React.Ref<IDropdownRef>) {
   const {
     toggle,
     content,
@@ -33,6 +45,14 @@ function Dropdown(props: IDropdown) {
       activeElement.blur();
     }
   };
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      close: () => setOpen(false),
+    }),
+    []
+  );
 
   useEffect(() => {
     if (open) {
@@ -84,4 +104,4 @@ function Dropdown(props: IDropdown) {
   );
 }
 
-export default memo(Dropdown);
+export default memo(forwardRef(Dropdown));

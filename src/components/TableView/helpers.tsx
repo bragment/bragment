@@ -1,5 +1,6 @@
 import {
   Column,
+  ColumnSort,
   createColumnHelper,
   FilterFnOption,
 } from '@tanstack/react-table';
@@ -8,6 +9,7 @@ import {
   EDataFieldType,
   IProjectDataField,
   IProjectDataRecord,
+  IProjectDataSorter,
   IRecordFieldData,
 } from '../../libs/client/types';
 import BodyCell from './BodyRow/Cell';
@@ -61,7 +63,10 @@ export function createColumns(
   });
 }
 
-export function createColumnVisibility(allIds: string[], visibleIds: string[]) {
+export function convertToColumnVisibility(
+  allIds: string[],
+  visibleIds: string[]
+) {
   const flag = visibleIds.length === 0;
   const record = allIds.reduce<Record<string, boolean>>((prev, el) => {
     prev[el] = flag;
@@ -73,6 +78,13 @@ export function createColumnVisibility(allIds: string[], visibleIds: string[]) {
     });
   }
   return record;
+}
+
+export function convertToColumnSorting(sorting: IProjectDataSorter[]) {
+  return sorting.map<ColumnSort>(({ field, descending }) => ({
+    id: field,
+    desc: descending,
+  }));
 }
 
 export const globalFilterFn: FilterFnOption<IProjectDataRecord> = (

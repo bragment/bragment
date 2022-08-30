@@ -47,9 +47,7 @@ export function useNestedState<S>(
     if (arg instanceof Function) {
       return _setState(arg);
     } else {
-      return _setState((oldValue) => {
-        return isEqual(oldValue, arg) ? oldValue : arg;
-      });
+      return _setState((oldValue) => (isEqual(oldValue, arg) ? oldValue : arg));
     }
   }, []);
   return [state, setState];

@@ -4,6 +4,7 @@ import Scrollbars from 'react-custom-scrollbars-2';
 import { HiOutlineEye } from 'react-icons/hi';
 import { IProjectDataField } from '../../../../libs/client/types';
 import Dropdown from '../../../Dropdown';
+import { useFormatMessage } from '../../../hooks';
 import ScrollContainer from '../../../ScrollContainer';
 import SortableList from '../../../SortableList';
 import FieldItem from './FieldItem';
@@ -13,6 +14,8 @@ interface IVisibilityButtonProps {
   mainFieldId: string;
   modelFields: IProjectDataField[];
   visibleFieldIds: string[];
+  count?: number;
+  loading?: boolean;
   onChange: (fieldIds: string[]) => void;
   onClose?: () => void;
 }
@@ -44,14 +47,23 @@ function initializeOrderingFieldList(
 }
 
 function VisibilityButton(props: IVisibilityButtonProps) {
-  const { mainFieldId, modelFields, visibleFieldIds, onChange, onClose } =
-    props;
+  const {
+    mainFieldId,
+    modelFields,
+    visibleFieldIds,
+    count,
+    loading,
+    onChange,
+    onClose,
+  } = props;
+  const f = useFormatMessage();
   const scrollBarsRef = useRef<Scrollbars>(null);
   const containerRef = useRef<HTMLDivElement>();
   const openedRef = useRef(false);
   const [visibleFieldRecord, setVisibleFieldRecord] = useState(
     initializeVisibleFieldRecord(visibleFieldIds)
   );
+  // NOTE: orderingFieldList not contain mainField
   const [orderingFieldList, setOrderingFieldList] = useState(
     initializeOrderingFieldList(modelFields, visibleFieldIds, mainFieldId)
   );
@@ -131,15 +143,24 @@ function VisibilityButton(props: IVisibilityButtonProps) {
       onOpen={handleOpen}
       onClose={handleClose}
       toggle={
-        <button className={classNames('btn btn-sm', 'h-10 my-1')}>
-          <HiOutlineEye className="text-xl mr-2" /> Click
+        <button
+          className={classNames(
+            'btn btn-sm',
+            'h-10 my-1',
+            loading && 'loading'
+          )}>
+          {!loading && <HiOutlineEye className="text-xl" />}
+          <span className="ml-2">
+            {f('dataView.fieldVisibility')}
+            {count !== undefined && ` (${count})`}
+          </span>
         </button>
       }
       content={
         <div
           className={classNames(
             'bg-base-100 border-base-300',
-            'w-64 px-0 py-2 overflow-hidden border rounded-box shadow'
+            'w-64 px-0 py-2 border overflow-hidden rounded-box shadow'
           )}>
           <ScrollContainer
             autoHeight
