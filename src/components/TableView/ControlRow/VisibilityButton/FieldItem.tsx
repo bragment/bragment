@@ -1,7 +1,9 @@
 import classNames from 'classnames';
 import { memo } from 'react';
 import { IProjectDataField } from '../../../../libs/client/types';
+import { dataFieldTypeRecord } from '../../../DataFieldTypeSelect/config';
 import { useFormatMessage } from '../../../hooks';
+import styles from './index.module.scss';
 
 interface IFieldItemProps {
   field: IProjectDataField;
@@ -16,6 +18,8 @@ function FieldItem(props: IFieldItemProps) {
   const handleChange = () => {
     onVisibleChange(field, !visible);
   };
+  const Icon = dataFieldTypeRecord[field.type]?.Icon;
+
   return (
     <div className={classNames('bg-base-100', 'rounded-lg')}>
       <div
@@ -23,15 +27,40 @@ function FieldItem(props: IFieldItemProps) {
           !main &&
             visible &&
             'hover:bg-base-content/10 active:bg-base-content/10',
-          'rounded-lg px-4 py-3 flex items-center'
+          'rounded-lg px-4 py-3 flex items-center',
+          main ? 'text-info' : 'text-base-content'
         )}>
-        <span className="flex-auto">{field.title}</span>
+        {Icon && (
+          <Icon
+            className={classNames(
+              'flex-none mr-2 text-lg',
+              !main && 'text-base-content-opacity'
+            )}
+          />
+        )}
+        <span className="flex-auto mr-2 text-ellipsis overflow-hidden">
+          {field.title}
+        </span>
         {main ? (
-          <div className="badge badge-info">{f('project.mainField')}</div>
+          <div
+            className={classNames(
+              'badge badge-info',
+              'relative',
+              styles.mainFieldBadge
+            )}>
+            {f('dataView.mainField')}
+            <div
+              className={classNames(
+                'badge badge-info',
+                'absolute right-0 opacity-0 whitespace-nowrap pointer-events-none'
+              )}>
+              {f('dataView.mainFieldVisibleFirst')}
+            </div>
+          </div>
         ) : (
           <input
             type="checkbox"
-            className="flex-none toggle toggle-primary"
+            className="flex-none toggle"
             checked={visible}
             onChange={handleChange}
           />

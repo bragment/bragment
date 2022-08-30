@@ -8,9 +8,11 @@ interface IControlRowProps {
   mainFieldId: string;
   modelFields: IProjectDataField[];
   visibleFieldIds: string[];
-  onSearchInputChange: (value: string) => void;
+  visibleFieldCount?: number;
+  visibilityUpdating?: boolean;
   onVisibilityChange: (fieldIds: string[]) => void;
   onShouldUpdateVisibility?: () => void;
+  onSearchInputChange: (value: string) => void;
 }
 
 function ControlRow(props: IControlRowProps) {
@@ -18,6 +20,8 @@ function ControlRow(props: IControlRowProps) {
     mainFieldId,
     modelFields,
     visibleFieldIds,
+    visibleFieldCount,
+    visibilityUpdating,
     onSearchInputChange,
     onVisibilityChange,
     onShouldUpdateVisibility,
@@ -36,6 +40,8 @@ function ControlRow(props: IControlRowProps) {
         mainFieldId={mainFieldId}
         modelFields={modelFields}
         visibleFieldIds={visibleFieldIds}
+        count={visibleFieldCount}
+        loading={visibilityUpdating}
         onChange={onVisibilityChange}
         onClose={onShouldUpdateVisibility}
       />

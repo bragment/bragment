@@ -69,7 +69,9 @@ function HeadRow(props: IHeadRowProps) {
             modelId={modelId}
             existingFields={modelFields}
             onFinish={onCreateDateFieldFinish}>
-            <HiPlus aria-label={f('project.addField')} className="text-lg" />
+            <button className={classNames('btn btn-ghost btn-sm', 'h-10')}>
+              <HiPlus aria-label={f('project.addField')} className="text-lg" />
+            </button>
           </CreateDataFieldButton>
         </AnimatePing>
       </div>

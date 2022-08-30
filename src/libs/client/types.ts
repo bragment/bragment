@@ -81,6 +81,11 @@ export enum EDataFieldType {
   HttpLink = 'HTTP_LINK',
 }
 
+export interface IProjectDataSorter {
+  field: string;
+  descending: boolean;
+}
+
 export interface IProjectDataModel {
   _id: string;
   title: string;
@@ -95,6 +100,7 @@ export interface IProjectDataView {
   type: EDataViewType;
   createdAt: string;
   visibleFields?: string[];
+  sorters?: IProjectDataSorter[];
 }
 
 export interface IProjectDataField {

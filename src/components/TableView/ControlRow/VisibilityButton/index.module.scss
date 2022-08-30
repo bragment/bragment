@@ -1,3 +1,11 @@
 .scrollContainer {
   --bgColor: hsl(var(--b1));
 }
+.mainFieldBadge {
+  &:hover {
+    > div {
+      transition: opacity 0.3s ease-in-out;
+      opacity: 1;
+    }
+  }
+}

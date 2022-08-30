@@ -58,7 +58,7 @@ function Cell(props: IItermProps) {
           className={classNames(
             'flex-none mr-2 text-lg',
             editing && 'relative z-30',
-            main ? 'text-info-opacity' : 'text-base-content-opacity'
+            !main && 'text-base-content-opacity'
           )}
         />
       )}
