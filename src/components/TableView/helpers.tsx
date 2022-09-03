@@ -3,6 +3,7 @@ import {
   ColumnSort,
   createColumnHelper,
   FilterFnOption,
+  SortingFn,
 } from '@tanstack/react-table';
 import classNames from 'classnames';
 import {
@@ -21,6 +22,20 @@ export function createFieldDataAccessor(field: IProjectDataField) {
   return (record: IProjectDataRecord) => record.data[field._id];
 }
 
+const sortingFn: SortingFn<IProjectDataRecord> = (rowA, rowB, columnId) => {
+  const a =
+    rowA.getValue<IRecordFieldData | undefined>(columnId)?.value.toString() ||
+    '';
+  const b =
+    rowB.getValue<IRecordFieldData | undefined>(columnId)?.value.toString() ||
+    '';
+
+  if (a === b) {
+    return 0;
+  }
+  return a > b ? 1 : -1;
+};
+
 export function createColumns(
   projectId: string,
   mainFieldId: string,
@@ -35,6 +50,8 @@ export function createColumns(
       enableGlobalFilter:
         field.type === EDataFieldType.SingleLineText ||
         field.type === EDataFieldType.MultiLineText,
+      enableSorting: true,
+      sortingFn,
       cell: (info) => (
         <BodyCell
           className={classNames(

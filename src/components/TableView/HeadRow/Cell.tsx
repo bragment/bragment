@@ -57,12 +57,13 @@ function Cell(props: IItermProps) {
         <Icon
           className={classNames(
             'flex-none mr-2 text-lg',
-            editing && 'relative z-30',
-            !main && 'text-base-content-opacity'
+            editing && 'relative z-30'
           )}
         />
       )}
-      <div className="text-ellipsis overflow-hidden">{field.title}</div>
+      <div className="text-ellipsis overflow-hidden whitespace-nowrap">
+        {field.title}
+      </div>
       {editing && (
         <div
           className={classNames(

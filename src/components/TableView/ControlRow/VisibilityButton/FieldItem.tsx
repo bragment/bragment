@@ -30,15 +30,8 @@ function FieldItem(props: IFieldItemProps) {
           'rounded-lg px-4 py-3 flex items-center',
           main ? 'text-info' : 'text-base-content'
         )}>
-        {Icon && (
-          <Icon
-            className={classNames(
-              'flex-none mr-2 text-lg',
-              !main && 'text-base-content-opacity'
-            )}
-          />
-        )}
-        <span className="flex-auto mr-2 text-ellipsis overflow-hidden">
+        {Icon && <Icon className="flex-none mr-2 text-lg" />}
+        <span className="flex-auto mr-2 text-ellipsis overflow-hidden whitespace-nowrap">
           {field.title}
         </span>
         {main ? (

@@ -67,7 +67,7 @@ function WorkspaceInstanceView() {
           'border-base-200 border-r-2 z-10', // FIXED: safari sticky issue
           'flex-none h-full font-bold text-xl capitalize pr-3 pl-[4.5rem]'
         )}>
-        <div className="max-w-[12rem] text-ellipsis overflow-hidden">
+        <div className="max-w-[12rem] text-ellipsis overflow-hidden whitespace-nowrap">
           {title}
         </div>
       </div>
@@ -79,8 +79,7 @@ function WorkspaceInstanceView() {
         )}>
         <div className="inline-block from-base-200 pointer-events-none sticky top-0 left-0 h-16 w-8 bg-gradient-to-r to-transparent z-10" />
         {views?.length === 0 ? (
-          <div
-            className={classNames('inline-block', 'text-base-content-opacity')}>
+          <div className={classNames('text-base-content/50', 'inline-block')}>
             {f('project.noViews')}
           </div>
         ) : (
@@ -98,7 +97,7 @@ function WorkspaceInstanceView() {
               className={styles.createViewButton}
               onFinish={handleCreateViewFinish}>
               <button className={classNames('btn btn-sm', 'h-10')}>
-                <HiOutlinePlus className="text-xl mr-2" />
+                <HiOutlinePlus className="text-base mr-2" />
                 {f('project.addView')}
               </button>
             </CreateDataViewButton>

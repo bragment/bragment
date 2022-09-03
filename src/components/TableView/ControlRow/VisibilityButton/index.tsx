@@ -8,7 +8,6 @@ import { useFormatMessage } from '../../../hooks';
 import ScrollContainer from '../../../ScrollContainer';
 import SortableList from '../../../SortableList';
 import FieldItem from './FieldItem';
-import styles from './index.module.scss';
 
 interface IVisibilityButtonProps {
   mainFieldId: string;
@@ -102,7 +101,7 @@ function VisibilityButton(props: IVisibilityButtonProps) {
     [mainFieldId, visibleFieldRecord]
   );
 
-  const handleOrderingFieldsChange = (fields: IProjectDataField[]) => {
+  const handleOrderingFieldListChange = (fields: IProjectDataField[]) => {
     setOrderingFieldList(fields);
   };
 
@@ -149,7 +148,7 @@ function VisibilityButton(props: IVisibilityButtonProps) {
             'h-10 my-1',
             loading && 'loading'
           )}>
-          {!loading && <HiOutlineEye className="text-xl" />}
+          {!loading && <HiOutlineEye className="text-base" />}
           <span className="ml-2">
             {f('dataView.fieldVisibility')}
             {count !== undefined && ` (${count})`}
@@ -163,11 +162,10 @@ function VisibilityButton(props: IVisibilityButtonProps) {
             'w-64 px-0 py-2 border overflow-hidden rounded-box shadow'
           )}>
           <ScrollContainer
+            ref={scrollBarsRef}
             autoHeight
             withShadow
-            autoHeightMax={280}
-            ref={scrollBarsRef}
-            className={styles.scrollContainer}>
+            autoHeightMax={280}>
             <div className="px-2">{mainFieldItem}</div>
             <SortableList
               droppableId="SORTABLE_FIELD_LIST"
@@ -177,7 +175,7 @@ function VisibilityButton(props: IVisibilityButtonProps) {
               getItemId={getItemId}
               getItemDraggable={getItemDraggable}
               renderItem={renderItem}
-              onChange={handleOrderingFieldsChange}
+              onChange={handleOrderingFieldListChange}
             />
           </ScrollContainer>
         </div>

@@ -78,7 +78,7 @@ function DataModelList() {
           'collapse-title',
           'h-16 leading-8 text-lg font-medium text-ellipsis whitespace-nowrap'
         )}>
-        <HiOutlineDatabase className="inline-block text-2xl text-warning align-middle mr-1" />
+        <HiOutlineDatabase className="inline-block text-xl text-warning align-middle mr-1" />
         <span className="align-middle">{f('project.model')}</span>
       </label>
       <div className="collapse-content bg-base-100">

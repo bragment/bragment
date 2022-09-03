@@ -1,5 +1,7 @@
 import classNames from 'classnames';
 import { memo, useLayoutEffect, useRef, useState } from 'react';
+import Dropdown, { IDropdownRef } from '../Dropdown';
+import ScrollContainer from '../ScrollContainer';
 
 export interface ISelectInputOption {
   value: string;
@@ -10,41 +12,56 @@ export interface ISelectInputOption {
 export interface ISelectInputProps {
   name?: string;
   className?: string;
+  selectClassName?: string;
+  selectedClassName?: string;
+  contentClassName?: string;
+  optionClassName?: string;
   defaultValue?: string;
   value?: string;
   options?: ISelectInputOption[];
+  withMask?: boolean;
+  getOptions?: () => ISelectInputOption[];
+  getSelectedOption?: () => ISelectInputOption;
   onChange?: (value: string) => void;
 }
 
 function SelectInput(props: ISelectInputProps) {
-  const { name, className, defaultValue, value, options, onChange } = props;
+  const {
+    name,
+    className,
+    selectClassName,
+    selectedClassName,
+    contentClassName,
+    optionClassName,
+    defaultValue,
+    value,
+    options,
+    withMask,
+    getOptions,
+    getSelectedOption,
+    onChange,
+  } = props;
+
+  const dropdownRef = useRef<IDropdownRef>(null);
   const controlledRef = useRef(value !== undefined);
-  const ulRef = useRef<HTMLUListElement>(null);
   const [selectedValue, setSelectedValue] = useState(value || defaultValue);
-  const selectedOption = options?.find(
-    (option) => option.value === selectedValue
-  );
+  const innerOptions = getOptions ? getOptions() : options;
+  const selectedOption = getSelectedOption
+    ? getSelectedOption()
+    : options?.find((option) => option.value === selectedValue);
   const selectedNode = selectedOption?.node;
   const selectedContent = selectedOption?.content;
 
   const handleClick = (event: React.MouseEvent<Element>) => {
-    const span = (event.target as Element).closest<HTMLSpanElement>(
-      'span.action'
-    );
-    const newValue = span?.dataset.value;
-    if (!newValue || !options?.some((option) => option.value === newValue)) {
+    const li = (event.target as Element).closest<HTMLSpanElement>('li');
+    const newValue = li?.dataset.value;
+    if (
+      !newValue ||
+      !innerOptions?.some((option) => option.value === newValue)
+    ) {
       return;
     }
-    const dropdownParent =
-      ulRef.current?.parentElement?.closest<HTMLUListElement>(
-        '.dropdown-content'
-      );
-    if (dropdownParent) {
-      dropdownParent.focus();
-    } else {
-      ulRef.current?.blur();
-    }
-
+    dropdownRef.current?.close();
     if (!controlledRef.current) {
       setSelectedValue(newValue);
     }
@@ -60,37 +77,60 @@ function SelectInput(props: ISelectInputProps) {
   }, [value]);
 
   return (
-    <div className={classNames('dropdown dropdown-end w-full', className)}>
-      <label tabIndex={0} className="related">
-        <div className="absolute top-0 left-0 w-full h-full pl-4 pr-10 flex items-center pointer-events-none">
-          {selectedNode || selectedContent}
+    <Dropdown
+      ref={dropdownRef}
+      withMask={withMask}
+      className={classNames('dropdown-end', className)}
+      toggleClassName="relative"
+      toggle={
+        <>
+          <div className="absolute top-0 left-0 w-full h-full pl-4 pr-10 flex items-center pointer-events-none">
+            {selectedNode || selectedContent}
+          </div>
+          <input type="hidden" name={name} value={selectedValue} />
+          <select
+            className={classNames(
+              'select select-bordered w-full',
+              selectClassName
+            )}
+          />
+        </>
+      }
+      contentClassName={classNames('w-full', contentClassName)}
+      content={
+        <div
+          className={classNames(
+            'bg-base-100 border-base-300',
+            'w-full px-0 py-2 border overflow-hidden rounded-box shadow'
+          )}>
+          <ScrollContainer autoHeight withShadow autoHeightMax={280}>
+            <ul role="listbox" className="px-2" onClick={handleClick}>
+              {innerOptions?.map((option) => {
+                const selected = option.value === selectedValue;
+                return (
+                  <li
+                    key={option.value}
+                    className={classNames(
+                      'w-full px-2 py-3 rounded-lg',
+                      'flex items-center',
+                      optionClassName,
+                      selected
+                        ? 'bg-info text-info-content'
+                        : 'cursor-pointer hover:bg-base-content/10',
+                      selected && selectedClassName
+                    )}
+                    role="option"
+                    aria-selected
+                    data-value={option.value}>
+                    {option.node || option.content}
+                  </li>
+                );
+              })}
+            </ul>
+          </ScrollContainer>
         </div>
-        <input type="hidden" name={name} value={selectedValue} />
-        <select className="select select-bordered w-full" />
-      </label>
-      <ul
-        ref={ulRef}
-        tabIndex={0}
-        className={classNames(
-          'dropdown-content menu border-base-300 bg-base-100 rounded-box',
-          'w-full mt-1 p-2 border shadow'
-        )}
-        onClick={handleClick}>
-        {options?.map((option) => (
-          <li key={option.value}>
-            <span
-              className={classNames(
-                'gap-0',
-                'action',
-                option.value === selectedValue && 'active checked'
-              )}
-              data-value={option.value}>
-              {option.node}
-            </span>
-          </li>
-        ))}
-      </ul>
-    </div>
+      }
+    />
   );
 }
 
