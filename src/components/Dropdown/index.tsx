@@ -19,6 +19,7 @@ interface IDropdownProps {
   className?: string;
   toggleClassName?: string;
   contentClassName?: string;
+  withMask?: boolean;
   onOpen?: () => void;
   onClose?: () => void;
 }
@@ -30,6 +31,7 @@ function Dropdown(props: IDropdownProps, ref: React.Ref<IDropdownRef>) {
     className,
     toggleClassName,
     contentClassName,
+    withMask,
     onOpen,
     onClose,
   } = props;
@@ -41,9 +43,12 @@ function Dropdown(props: IDropdownProps, ref: React.Ref<IDropdownRef>) {
   const handleClick = () => {
     setOpen((value) => !value);
     const { activeElement } = document;
-    if (activeElement instanceof HTMLElement) {
+    if (open && activeElement instanceof HTMLElement) {
       activeElement.blur();
     }
+  };
+  const handleMaskClick = () => {
+    setOpen(false);
   };
 
   useImperativeHandle(
@@ -85,21 +90,25 @@ function Dropdown(props: IDropdownProps, ref: React.Ref<IDropdownRef>) {
     <div
       ref={divRef}
       className={classNames('dropdown', className, open && 'dropdown-open')}>
+      {open && withMask && (
+        <div
+          className="fixed top-0 right-0 bottom-0 left-0"
+          onClick={handleMaskClick}
+        />
+      )}
       <label
         tabIndex={0}
         className={classNames(toggleClassName)}
         onClick={handleClick}>
         {toggle}
       </label>
-      <div
-        tabIndex={0}
-        className={classNames(
-          'dropdown-content',
-          contentClassName,
-          !open && 'content-visibility-hidden'
-        )}>
-        {content}
-      </div>
+      {open && (
+        <div
+          tabIndex={0}
+          className={classNames('dropdown-content', contentClassName)}>
+          {content}
+        </div>
+      )}
     </div>
   );
 }

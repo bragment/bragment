@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import { memo, useMemo } from 'react';
 import { EDataFieldType } from '../../libs/client/types';
 import { useFormatMessage } from '../hooks';
@@ -23,15 +22,14 @@ function DataFieldTypeSelect(props: IDataFieldTypeSelectProps) {
         value: type,
         content: f(title),
         node: (
-          <>
-            <Icon
-              className={classNames(
-                'mr-3 text-lg',
-                'text-base-content-opacity'
-              )}
-            />
-            {f(title)}
-          </>
+          <div className="w-full flex items-center">
+            <Icon className="flex-none mr-2 text-lg" />
+            <div
+              className="flex-auto text-ellipsis overflow-hidden whitespace-nowrap"
+              title={f(title)}>
+              {f(title)}
+            </div>
+          </div>
         ),
       })),
     [f]

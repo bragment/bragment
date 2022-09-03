@@ -1,7 +1,11 @@
 import classNames from 'classnames';
 import { memo } from 'react';
-import { IProjectDataField } from '../../../libs/client/types';
+import {
+  IProjectDataField,
+  IProjectDataSorter,
+} from '../../../libs/client/types';
 import SearchInput from './SearchInput';
+import SortingButton from './SortingButton';
 import VisibilityButton from './VisibilityButton';
 
 interface IControlRowProps {
@@ -9,9 +13,11 @@ interface IControlRowProps {
   modelFields: IProjectDataField[];
   visibleFieldIds: string[];
   visibleFieldCount?: number;
-  visibilityUpdating?: boolean;
+  sorters: IProjectDataSorter[];
+  onSortingChange: (sorters: IProjectDataSorter[]) => void;
   onVisibilityChange: (fieldIds: string[]) => void;
   onShouldUpdateVisibility?: () => void;
+  onShouldUpdateSorting?: () => void;
   onSearchInputChange: (value: string) => void;
 }
 
@@ -21,10 +27,12 @@ function ControlRow(props: IControlRowProps) {
     modelFields,
     visibleFieldIds,
     visibleFieldCount,
-    visibilityUpdating,
+    sorters,
     onSearchInputChange,
+    onSortingChange,
     onVisibilityChange,
     onShouldUpdateVisibility,
+    onShouldUpdateSorting,
   } = props;
 
   return (
@@ -36,12 +44,18 @@ function ControlRow(props: IControlRowProps) {
         'flex items-center pl-2 gap-2'
       )}>
       <SearchInput onChange={onSearchInputChange} />
+      <SortingButton
+        modelFields={modelFields}
+        visibleFieldIds={visibleFieldIds}
+        sorters={sorters}
+        onChange={onSortingChange}
+        onClose={onShouldUpdateSorting}
+      />
       <VisibilityButton
         mainFieldId={mainFieldId}
         modelFields={modelFields}
         visibleFieldIds={visibleFieldIds}
         count={visibleFieldCount}
-        loading={visibilityUpdating}
         onChange={onVisibilityChange}
         onClose={onShouldUpdateVisibility}
       />

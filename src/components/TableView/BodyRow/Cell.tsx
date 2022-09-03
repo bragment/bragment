@@ -52,7 +52,9 @@ function Cell(props: IItermProps) {
       )}
       onDoubleClick={handleDoubleClick}>
       <div className={styles.content}>
-        <div className="text-ellipsis overflow-hidden">{data?.value || ''}</div>
+        <div className="text-ellipsis overflow-hidden whitespace-nowrap">
+          {data?.value || ''}
+        </div>
         {editing && (
           <div
             className={classNames(

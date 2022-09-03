@@ -59,6 +59,10 @@
   @apply h-auto min-h-12;
 }
 
+.headRow + .bodyRow {
+  border-top-width: 0;
+}
+
 .cell {
   --bgColor: hsl(var(--b3));
   &.leftScrollable::after,

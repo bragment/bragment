@@ -14,7 +14,7 @@ interface ISortableListProps<T> {
   itemClassName?: string;
   getItemId: (data: T) => string;
   getItemDraggable?: (data: T) => boolean;
-  renderItem: (data: T) => React.ReactElement;
+  renderItem: (data: T, index: number) => React.ReactElement;
   onChange: (list: T[]) => void;
 }
 
@@ -94,7 +94,7 @@ function SortableList<T>(props: ISortableListProps<T>) {
                       ref={draggableProvided.innerRef}
                       {...draggableProvided.draggableProps}
                       {...draggableProvided.dragHandleProps}>
-                      {renderItem(data)}
+                      {renderItem(data, index)}
                     </li>
                   );
                 }}

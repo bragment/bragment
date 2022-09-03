@@ -1,5 +1,5 @@
 .scroll-container {
-  --bgColor: white;
+  --bgColor: hsl(var(--b1));
   --shadowSize: 2rem;
 
   &.top-scrollable > div > .top-shadow,

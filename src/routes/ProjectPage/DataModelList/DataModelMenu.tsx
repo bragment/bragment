@@ -16,7 +16,7 @@ function DataModelMenu(props: IDataModelMenuProps) {
   const getActiveClassName = useCallback(
     ({ isActive }: { isActive: boolean }) =>
       classNames(
-        'inline-block w-full text-ellipsis overflow-hidden',
+        'inline-block w-full text-ellipsis overflow-hidden whitespace-nowrap',
         isActive && 'active',
         isActive && 'pointer-events-none'
       ),

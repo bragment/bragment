@@ -1,6 +1,7 @@
 import {
   getCoreRowModel,
   getFilteredRowModel,
+  getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
 import classNames from 'classnames';
@@ -13,6 +14,7 @@ import {
   IProjectDataField,
   IProjectDataModel,
   IProjectDataRecord,
+  IProjectDataSorter,
   IProjectDataView,
 } from '../../libs/client/types';
 import {
@@ -48,7 +50,7 @@ function TableView(props: ITableViewProps) {
   const scrollBarRef = useRef<Scrollbars>(null);
 
   const { _id: projectId } = project;
-  const { _id: viewId, sorters } = view;
+  const { _id: viewId, sorters = [] } = view;
   const mainFieldId = model.mainField || fields[0]?._id;
   const modelFields = useMemo(
     () => fields.filter((field) => field.model === model._id),
@@ -78,13 +80,11 @@ function TableView(props: ITableViewProps) {
     updatedAt: new Date().toISOString(),
     keywords: [],
   });
-  const [sorting, setSorting] = useNestedState(
-    convertToColumnSorting(sorters || [])
-  );
+  const [sorting, setSorting] = useNestedState(convertToColumnSorting(sorters));
 
   const { mutateAsync: updateModelMutateAsync } =
     useUpdateProjectDataModelMutation();
-  const { mutateAsync: updateViewMutateAsync, isLoading: updateViewLoading } =
+  const { mutateAsync: updateViewMutateAsync } =
     useUpdateProjectDataViewMutation();
 
   const updateVisibleFields = useCallback(() => {
@@ -92,6 +92,15 @@ function TableView(props: ITableViewProps) {
       updateViewMutateAsync({ projectId, viewId, visibleFields: columnOrder });
     }
   }, [updateViewMutateAsync, visibleFieldIds, columnOrder, projectId, viewId]);
+  const updateSorting = useCallback(() => {
+    const newSorters = sorting.map((el) => ({
+      field: el.id,
+      descending: el.desc,
+    }));
+    if (!isEqual(sorters, newSorters)) {
+      updateViewMutateAsync({ projectId, viewId, sorters: newSorters });
+    }
+  }, [updateViewMutateAsync, sorters, sorting, projectId, viewId]);
 
   const handleCreateDateFieldFinish = useCallback(
     (data: IProject) => {
@@ -152,6 +161,14 @@ function TableView(props: ITableViewProps) {
     },
     [setColumnOrder, setColumnVisibility, modelFields]
   );
+  const handleSortingChange = useCallback(
+    (sorterList: IProjectDataSorter[]) => {
+      setSorting(
+        sorterList.map((el) => ({ id: el.field, desc: el.descending }))
+      );
+    },
+    [setSorting]
+  );
 
   useLayoutEffect(() => {
     setColumnOrder(visibleFieldIds);
@@ -169,7 +186,7 @@ function TableView(props: ITableViewProps) {
   }, [viewId]);
 
   useLayoutEffect(() => {
-    setSorting(convertToColumnSorting(sorters || []));
+    setSorting(convertToColumnSorting(sorters));
   }, [setSorting, sorters]);
 
   const columns = useMemo(
@@ -189,6 +206,7 @@ function TableView(props: ITableViewProps) {
     },
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
     getColumnCanGlobalFilter,
     globalFilterFn,
     debugTable: true,
@@ -207,9 +225,11 @@ function TableView(props: ITableViewProps) {
         visibleFieldCount={
           view.visibleFields?.length ? columnOrder.length : undefined
         }
-        visibilityUpdating={updateViewLoading}
+        sorters={sorters}
+        onSortingChange={handleSortingChange}
         onVisibilityChange={handleVisibilityChange}
         onShouldUpdateVisibility={updateVisibleFields}
+        onShouldUpdateSorting={updateSorting}
         onSearchInputChange={handleSearchInputChange}
       />
       {headerGroups.map((headerGroup) => (
@@ -227,7 +247,7 @@ function TableView(props: ITableViewProps) {
           key={row.id}
           index={row.index}
           cells={row.getVisibleCells()}
-          borderedBottom={row.index < rowModel.rows.length - 1}
+          borderedTop
         />
       ))}
 
