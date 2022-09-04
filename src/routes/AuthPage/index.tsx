@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
-import Scrollbars from 'react-custom-scrollbars-2';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useUserStore } from '../../components/hooks';
+import ScrollContainer from '../../components/ScrollContainer';
 import { ERoutePath } from '../types';
 import { getTheRoutePathBeforeSignIn } from './helpers';
 
@@ -18,7 +18,7 @@ function AuthPage() {
     );
   }
   return (
-    <Scrollbars autoHide>
+    <ScrollContainer autoHide>
       <div
         className={classNames(
           'bg-base-200 text-base-content',
@@ -33,7 +33,7 @@ function AuthPage() {
           </div>
         </div>
       </div>
-    </Scrollbars>
+    </ScrollContainer>
   );
 }
 

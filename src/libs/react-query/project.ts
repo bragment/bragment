@@ -30,12 +30,17 @@ function fetchProjectDataRecordsFn(context: QueryFunctionContext) {
   return fetchProjectDataRecords(projectId);
 }
 
-export function useProjectQuery(id: string, enabled: boolean) {
+export function useProjectQuery(
+  id: string,
+  enabled: boolean,
+  suspense?: boolean
+) {
   return useQuery<IProject, IApiError>(
     [EQueryKey.Project, id],
     fetchProjectFn,
     {
       enabled,
+      suspense,
     }
   );
 }
@@ -116,13 +121,15 @@ export function useCreateProjectDataRecordMutation() {
 
 export function useProjectDataRecordListQuery(
   projectId: string,
-  enabled: boolean
+  enabled: boolean,
+  suspense: boolean
 ) {
   return useQuery<IProjectDataRecord[], IApiError>(
     [EQueryKey.ProjectDataRecords, projectId],
     fetchProjectDataRecordsFn,
     {
       enabled,
+      suspense,
     }
   );
 }

@@ -1,11 +1,10 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useLayoutEffect, useState } from 'react';
 import { HiOutlineDatabase, HiPlus } from 'react-icons/hi';
-import { useMatch, useParams } from 'react-router-dom';
-import { useFormatMessage, useUserStore } from '../../../components/hooks';
+import { useMatch } from 'react-router-dom';
+import { useFormatMessage } from '../../../components/hooks';
 import { IProject } from '../../../libs/client/types';
-import { useProjectQuery } from '../../../libs/react-query';
 import { getProjectInstancePath } from '../../helpers';
 import { useNavigateProjectDataModelPage } from '../../hooks';
 import CreateDataModelForm from './CreateDataModelForm';
@@ -15,16 +14,17 @@ import styles from './index.module.scss';
 
 const TOGGLE_ID = 'DATA_MODEL_LIST_TOGGLE';
 
-function DataModelList() {
+interface IDataModelCollapseProps {
+  projectId: string;
+  modelId: string;
+  project?: IProject;
+}
+
+function DataModelCollapse(props: IDataModelCollapseProps) {
+  const { projectId, modelId, project } = props;
   const f = useFormatMessage();
   const navigate = useNavigateProjectDataModelPage();
-  const { me } = useUserStore();
-  const { projectId = '', modelId = '' } = useParams();
   const isProjectPath = useMatch(getProjectInstancePath(projectId));
-  const { data: project, isError } = useProjectQuery(
-    projectId,
-    !!(me && projectId)
-  );
   const models = project?.models?.slice().reverse();
   const [checked, setChecked] = useState(true);
   const [creating, setCreating] = useState(false);
@@ -50,7 +50,7 @@ function DataModelList() {
     [navigate, projectId]
   );
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (isProjectPath && !modelId && models?.length) {
       navigate(projectId, models[0]._id, {
         replace: true,
@@ -99,10 +99,10 @@ function DataModelList() {
             />
           </div>
         )}
-        <DataModelMenu loading={!isError && !project} models={models} />
+        <DataModelMenu projectId={projectId} models={models} />
       </div>
     </div>
   );
 }
 
-export default observer(DataModelList);
+export default observer(DataModelCollapse);

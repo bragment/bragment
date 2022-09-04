@@ -21,11 +21,11 @@ import WorkspaceMenu from './WorkspaceMenu';
 
 interface INavBarProps {
   className?: string;
-  prefix?: React.ReactNode;
+  suffix?: React.ReactNode;
 }
 
 function NavBar(props: INavBarProps) {
-  const { className, prefix } = props;
+  const { className, suffix } = props;
   const f = useFormatMessage();
   const { isLoading, mutateAsync } = useUpdateMyDataMutation();
   const { me, myMainWorkspaceId, updateMe } = useUserStore();
@@ -74,7 +74,7 @@ function NavBar(props: INavBarProps) {
 
   return (
     <header className={classNames('navbar', 'gap-3 z-30', className)}>
-      <div className="flex-none">{prefix}</div>
+      <div className="flex-none">{suffix}</div>
       <div className="flex-auto font-bold text-xl capitalize">{title}</div>
       <div className="flex-none">
         <div className={classNames('dropdown dropdown-end')}>
