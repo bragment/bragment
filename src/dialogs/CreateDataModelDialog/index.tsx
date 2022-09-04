@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import { useDialogStore, useFormatMessage } from '../../components/hooks';
 import { IProject } from '../../libs/client/types';
 import { useNavigateProjectDataModelPage } from '../../routes/hooks';
-import CreateDataModelForm from '../../routes/ProjectPage/DataModelList/CreateDataModelForm';
+import CreateDataModelForm from '../../routes/ProjectPage/DataModelCollapse/CreateDataModelForm';
 
 const DIALOG_ID = 'CREATE_DATA_MODEL_DIALOG';
 

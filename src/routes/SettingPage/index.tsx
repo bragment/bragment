@@ -1,14 +1,14 @@
 import classNames from 'classnames';
 import { memo } from 'react';
-import Scrollbars from 'react-custom-scrollbars-2';
 import image from '../../assets/under-construction.svg';
 import { useFormatMessage } from '../../components/hooks';
+import ScrollContainer from '../../components/ScrollContainer';
 
 function SettingPage() {
   const f = useFormatMessage();
   return (
     <div className={classNames('bg-base-200', 'w-full h-full')}>
-      <Scrollbars>
+      <ScrollContainer autoHide>
         <div
           className={classNames('text-base-content', 'max-w-lg my-20 mx-auto')}>
           <div
@@ -19,7 +19,7 @@ function SettingPage() {
             {f('common.underConstruction')}
           </h1>
         </div>
-      </Scrollbars>
+      </ScrollContainer>
     </div>
   );
 }

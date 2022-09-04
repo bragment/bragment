@@ -1,11 +1,11 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
-import Scrollbars from 'react-custom-scrollbars-2';
 import { HiFolder, HiMenu } from 'react-icons/hi';
 import { NavLink, Outlet, useParams } from 'react-router-dom';
 import { useFormatMessage } from '../../../components/hooks';
+import ScrollContainer from '../../../components/ScrollContainer';
 import { getWorkspaceInstancePath } from '../../helpers';
-import NavBar from './NavBar';
+import Header from './Header';
 
 const TOGGLE_ID = 'WORKSPACE_INSTANCE_VIEW_TOGGLE';
 
@@ -19,13 +19,13 @@ function WorkspaceInstanceView() {
       <label
         htmlFor={TOGGLE_ID}
         className="drawer-content bg-base-100 text-base-content">
-        <Scrollbars autoHide>
-          <NavBar
+        <ScrollContainer autoHide>
+          <Header
             className={classNames(
               'bg-base-200 text-base-content',
               'sticky top-0 md:hidden'
             )}
-            prefix={
+            suffix={
               <label htmlFor={TOGGLE_ID} className="btn btn-ghost">
                 <HiMenu className="text-xl" />
               </label>
@@ -35,12 +35,12 @@ function WorkspaceInstanceView() {
             <Outlet />
           </main>
           <div className="from-base-100 pointer-events-none sticky bottom-0 flex h-20 bg-gradient-to-t to-transparent" />
-        </Scrollbars>
+        </ScrollContainer>
       </label>
       <div className="drawer-side">
         <label htmlFor={TOGGLE_ID} className="drawer-overlay" />
         <aside className={classNames('bg-base-200 text-base-content', 'w-80')}>
-          <NavBar className="hidden md:flex" />
+          <Header className="hidden md:flex" />
           <ul className={classNames('menu', 'm-4 p-2')}>
             <li>
               <NavLink

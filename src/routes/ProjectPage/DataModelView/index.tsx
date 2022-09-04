@@ -1,12 +1,12 @@
 import { memo } from 'react';
 import { Outlet } from 'react-router-dom';
-import NavBar from './NavBar';
+import Header from './Header';
 
-function DataModelPage() {
+function DataModelView() {
   return (
     <div className="w-full h-full flex flex-col">
       <div className="flex-none">
-        <NavBar />
+        <Header />
       </div>
       <div className="flex-auto">
         <Outlet />
@@ -15,4 +15,4 @@ function DataModelPage() {
   );
 }
 
-export default memo(DataModelPage);
+export default memo(DataModelView);

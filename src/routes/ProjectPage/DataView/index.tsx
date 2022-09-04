@@ -1,23 +1,20 @@
 import { observer } from 'mobx-react';
 import { useParams } from 'react-router-dom';
-import { useUserStore } from '../../components/hooks';
-import TableView from '../../components/TableView';
-import { EDataViewType } from '../../libs/client/types';
+import TableView from '../../../components/TableView';
+import { EDataViewType } from '../../../libs/client/types';
 import {
   useProjectDataRecordListQuery,
   useProjectQuery,
-} from '../../libs/react-query';
-import Skeleton from './Skeleton';
+} from '../../../libs/react-query';
 
-function DataViewPage() {
-  const { me } = useUserStore();
+function DataView() {
   const { projectId = '', viewId = '' } = useParams();
-  const { data: project, isError: projectQueryError } = useProjectQuery(
+  const { data: records } = useProjectDataRecordListQuery(
     projectId,
-    !!(me && projectId)
+    true,
+    true
   );
-  const { data: records, isError: recordListQueryError } =
-    useProjectDataRecordListQuery(projectId, !!(me && projectId));
+  const { data: project } = useProjectQuery(projectId, true, true);
   const view = project?.views.find((el) => el._id === viewId);
   const model = project?.models.find((el) => el._id === view?.model);
   const fields = project?.fields;
@@ -35,11 +32,7 @@ function DataViewPage() {
       );
     }
   }
-  if (projectQueryError || recordListQueryError) {
-    // NOTE: handle request error
-    return null;
-  }
 
-  return <Skeleton />;
+  return null;
 }
-export default observer(DataViewPage);
+export default observer(DataView);
