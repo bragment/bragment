@@ -1,12 +1,13 @@
 import classNames from 'classnames';
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
-import { HiOutlineEye } from 'react-icons/hi';
+import { HiOutlineEye, HiOutlinePlus } from 'react-icons/hi';
 import { IProjectDataField } from '../../../../libs/client/types';
-import Dropdown from '../../../Dropdown';
+import Dropdown, { IDropdownRef } from '../../../Dropdown';
 import { useFormatMessage } from '../../../hooks';
 import ScrollContainer from '../../../ScrollContainer';
 import SortableList from '../../../SortableList';
+import { CREATE_FIELD_MODAL_TOGGLE_ID } from '../../HeadRow';
 import FieldItem from './FieldItem';
 
 interface IVisibilityButtonProps {
@@ -58,6 +59,7 @@ function VisibilityButton(props: IVisibilityButtonProps) {
   const f = useFormatMessage();
   const scrollBarsRef = useRef<Scrollbars>(null);
   const containerRef = useRef<HTMLDivElement>();
+  const dropdownRef = useRef<IDropdownRef>(null);
   const openedRef = useRef(false);
   const [visibleFieldRecord, setVisibleFieldRecord] = useState(
     initializeVisibleFieldRecord(visibleFieldIds)
@@ -101,9 +103,12 @@ function VisibilityButton(props: IVisibilityButtonProps) {
     [mainFieldId, visibleFieldRecord]
   );
 
-  const handleOrderingFieldListChange = (fields: IProjectDataField[]) => {
-    setOrderingFieldList(fields);
-  };
+  const handleOrderingFieldListChange = useCallback(
+    (fields: IProjectDataField[]) => {
+      setOrderingFieldList(fields);
+    },
+    [setOrderingFieldList]
+  );
 
   const handleOpen = useCallback(() => {
     if (openedRef.current) {
@@ -123,6 +128,11 @@ function VisibilityButton(props: IVisibilityButtonProps) {
     onClose && onClose();
   }, [onClose]);
 
+  const handleAddField = () => {
+    dropdownRef.current?.close();
+    document.getElementById(CREATE_FIELD_MODAL_TOGGLE_ID)?.click();
+  };
+
   useEffect(() => {
     containerRef.current = scrollBarsRef.current?.container;
   });
@@ -138,6 +148,7 @@ function VisibilityButton(props: IVisibilityButtonProps) {
 
   return (
     <Dropdown
+      ref={dropdownRef}
       className="dropdown-end"
       onOpen={handleOpen}
       onClose={handleClose}
@@ -178,6 +189,14 @@ function VisibilityButton(props: IVisibilityButtonProps) {
               onChange={handleOrderingFieldListChange}
             />
           </ScrollContainer>
+          <div className="w-full px-2">
+            <button
+              className={classNames('btn btn-ghost', 'w-full justify-start')}
+              onClick={handleAddField}>
+              <HiOutlinePlus className="text-base mr-2" />
+              {f('dataView.addField')}
+            </button>
+          </div>
         </div>
       }
     />

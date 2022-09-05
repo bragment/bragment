@@ -7,11 +7,20 @@ import {
 import classNames from 'classnames';
 import isEqual from 'lodash/isEqual';
 import { observer } from 'mobx-react';
-import { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
 import {
+  EDataFilterConjunction,
   IProject,
   IProjectDataField,
+  IProjectDataFilter,
   IProjectDataModel,
   IProjectDataRecord,
   IProjectDataSorter,
@@ -27,6 +36,7 @@ import BodyRow from './BodyRow';
 import ControlRow from './ControlRow';
 import HeadRow from './HeadRow';
 import {
+  convertToColumnFilters,
   convertToColumnSorting,
   convertToColumnVisibility,
   createColumns,
@@ -50,7 +60,7 @@ function TableView(props: ITableViewProps) {
   const scrollBarRef = useRef<Scrollbars>(null);
 
   const { _id: projectId } = project;
-  const { _id: viewId, sorters = [] } = view;
+  const { _id: viewId, filters = [], sorters = [] } = view;
   const mainFieldId = model.mainField || fields[0]?._id;
   const modelFields = useMemo(
     () => fields.filter((field) => field.model === model._id),
@@ -68,6 +78,9 @@ function TableView(props: ITableViewProps) {
     [view, modelFields]
   );
 
+  const [columnFilters, setColumnFilters] = useNestedState(
+    convertToColumnFilters(filters)
+  );
   const columnPinning = useMemo(() => ({ left: [mainFieldId] }), [mainFieldId]);
   const [columnVisibility, setColumnVisibility] = useNestedState(
     convertToColumnVisibility(
@@ -101,6 +114,17 @@ function TableView(props: ITableViewProps) {
       updateViewMutateAsync({ projectId, viewId, sorters: newSorters });
     }
   }, [updateViewMutateAsync, sorters, sorting, projectId, viewId]);
+  const updateFilters = useCallback(() => {
+    const newFilters = columnFilters.map((el) => ({
+      field: el.id,
+      operator: el.value.operator,
+      operand: el.value.operand,
+      conjunction: EDataFilterConjunction.And,
+    }));
+    if (!isEqual(filters, newFilters)) {
+      updateViewMutateAsync({ projectId, viewId, filters: newFilters });
+    }
+  }, [updateViewMutateAsync, filters, columnFilters, projectId, viewId]);
 
   const handleCreateDateFieldFinish = useCallback(
     (data: IProject) => {
@@ -169,8 +193,24 @@ function TableView(props: ITableViewProps) {
     },
     [setSorting]
   );
+  const handleFiltersChange = useCallback(
+    (filterList: IProjectDataFilter[]) => {
+      setColumnFilters(
+        filterList.map((el) => ({
+          id: el.field,
+          value: { operator: el.operator, operand: el.operand },
+        }))
+      );
+    },
+    [setColumnFilters]
+  );
 
   useLayoutEffect(() => {
+    scrollBarRef.current?.scrollToTop();
+    scrollBarRef.current?.scrollToLeft();
+  }, [viewId]);
+
+  useEffect(() => {
     setColumnOrder(visibleFieldIds);
     setColumnVisibility(
       convertToColumnVisibility(
@@ -180,12 +220,11 @@ function TableView(props: ITableViewProps) {
     );
   }, [setColumnOrder, setColumnVisibility, modelFields, visibleFieldIds]);
 
-  useLayoutEffect(() => {
-    scrollBarRef.current?.scrollToTop();
-    scrollBarRef.current?.scrollToLeft();
-  }, [viewId]);
+  useEffect(() => {
+    setColumnFilters(convertToColumnFilters(filters));
+  }, [setColumnFilters, filters]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     setSorting(convertToColumnSorting(sorters));
   }, [setSorting, sorters]);
 
@@ -198,9 +237,10 @@ function TableView(props: ITableViewProps) {
     data: modelRecords,
     columns,
     state: {
+      columnFilters,
+      columnOrder,
       columnPinning,
       columnVisibility,
-      columnOrder,
       globalFilter,
       sorting,
     },
@@ -225,11 +265,14 @@ function TableView(props: ITableViewProps) {
         visibleFieldCount={
           view.visibleFields?.length ? columnOrder.length : undefined
         }
+        filters={filters}
         sorters={sorters}
+        onFiltersChange={handleFiltersChange}
         onSortingChange={handleSortingChange}
         onVisibilityChange={handleVisibilityChange}
-        onShouldUpdateVisibility={updateVisibleFields}
+        onShouldUpdateFilters={updateFilters}
         onShouldUpdateSorting={updateSorting}
+        onShouldUpdateVisibility={updateVisibleFields}
         onSearchInputChange={handleSearchInputChange}
       />
       {headerGroups.map((headerGroup) => (

@@ -42,7 +42,7 @@ function CreateDataFieldButton(props: ICreateDataFieldButtonProps) {
           <div>
             <h3
               className={classNames('text-base-content', 'text-lg font-bold')}>
-              {f('project.addField')}
+              {f('dataView.addField')}
             </h3>
             <CreateDataFieldForm
               projectId={projectId}

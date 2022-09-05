@@ -2,8 +2,10 @@ import classNames from 'classnames';
 import { memo } from 'react';
 import {
   IProjectDataField,
+  IProjectDataFilter,
   IProjectDataSorter,
 } from '../../../libs/client/types';
+import FilterButton from './FilterButton';
 import SearchInput from './SearchInput';
 import SortingButton from './SortingButton';
 import VisibilityButton from './VisibilityButton';
@@ -14,11 +16,14 @@ interface IControlRowProps {
   visibleFieldIds: string[];
   visibleFieldCount?: number;
   sorters: IProjectDataSorter[];
+  filters: IProjectDataFilter[];
+  onSearchInputChange: (value: string) => void;
+  onFiltersChange: (filters: IProjectDataFilter[]) => void;
   onSortingChange: (sorters: IProjectDataSorter[]) => void;
   onVisibilityChange: (fieldIds: string[]) => void;
   onShouldUpdateVisibility?: () => void;
   onShouldUpdateSorting?: () => void;
-  onSearchInputChange: (value: string) => void;
+  onShouldUpdateFilters?: () => void;
 }
 
 function ControlRow(props: IControlRowProps) {
@@ -28,9 +33,12 @@ function ControlRow(props: IControlRowProps) {
     visibleFieldIds,
     visibleFieldCount,
     sorters,
+    filters,
     onSearchInputChange,
+    onFiltersChange,
     onSortingChange,
     onVisibilityChange,
+    onShouldUpdateFilters,
     onShouldUpdateVisibility,
     onShouldUpdateSorting,
   } = props;
@@ -41,9 +49,17 @@ function ControlRow(props: IControlRowProps) {
         'bg-base-200 border-base-300',
         'sticky left-0 top-0 z-40',
         'h-12 border-t',
-        'flex items-center pl-2 gap-2'
+        'flex items-center px-2 gap-2'
       )}>
       <SearchInput onChange={onSearchInputChange} />
+      <div className="flex-auto pointer-events-none" />
+      <FilterButton
+        modelFields={modelFields}
+        visibleFieldIds={visibleFieldIds}
+        filters={filters}
+        onChange={onFiltersChange}
+        onClose={onShouldUpdateFilters}
+      />
       <SortingButton
         modelFields={modelFields}
         visibleFieldIds={visibleFieldIds}

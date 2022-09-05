@@ -3,7 +3,10 @@ import { memo, useState } from 'react';
 import { HiLogin, HiLogout } from 'react-icons/hi';
 import { Outlet, useParams } from 'react-router-dom';
 import ScrollContainer from '../../../components/ScrollContainer';
-import { useProjectQuery } from '../../../libs/react-query';
+import {
+  useProjectDataRecordListQuery,
+  useProjectQuery,
+} from '../../../libs/react-query';
 import DataModelCollapse from '../DataModelCollapse';
 import styles from './index.module.scss';
 
@@ -13,6 +16,8 @@ function ProjectInstanceView() {
   const handleCheckboxChange = () => setChecked((old) => !old);
   const { projectId = '', modelId = '' } = useParams();
   const { data: project } = useProjectQuery(projectId, true, true);
+  // NOTE: prefetch for data view
+  useProjectDataRecordListQuery(projectId, true, true);
 
   return (
     <div className={classNames('w-full h-full flex', styles.wrapper)}>

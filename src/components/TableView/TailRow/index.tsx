@@ -55,7 +55,7 @@ function TailRow(props: ITailRowProps) {
           <div className="icon loading" />
         ) : (
           <HiPlus
-            aria-label={f('project.addData')}
+            aria-label={f('dataView.addData')}
             className="text-lg cursor-pointer"
             onClick={handlePlusClick}
           />

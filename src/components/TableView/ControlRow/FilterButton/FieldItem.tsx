@@ -1,45 +1,84 @@
 import classNames from 'classnames';
-import { memo, useCallback } from 'react';
-import { HiArrowDown, HiArrowUp, HiTrash } from 'react-icons/hi';
-import { IProjectDataField } from '../../../../libs/client/types';
+import debounce from 'lodash/debounce';
+import { memo, useCallback, useMemo, useRef } from 'react';
+import { HiTrash } from 'react-icons/hi';
+import {
+  EDataFilterConjunction,
+  EDataFilterOperator,
+  IProjectDataField,
+} from '../../../../libs/client/types';
 import { dataFieldTypeRecord } from '../../../DataFieldTypeSelect/config';
 import { useFormatMessage } from '../../../hooks';
 import SelectInput from '../../../SelectInput';
 import styles from './index.module.scss';
 
-export interface IInnerSorter {
+export interface IInnerFilter {
   field: IProjectDataField;
-  descending: boolean;
+  operator: EDataFilterOperator;
+  operand: string;
+  conjunction: EDataFilterConjunction;
 }
 
-interface IFieldItemProps extends IInnerSorter {
+interface IFieldItemProps extends IInnerFilter {
   index: number;
   otherFields: IProjectDataField[];
-  onChange: (index: number, sorter: IInnerSorter) => void;
+  onChange: (index: number, filter: IInnerFilter) => void;
   onDelete: (index: number) => void;
 }
 
 function FieldItem(props: IFieldItemProps) {
-  const { index, field, descending, otherFields, onChange, onDelete } = props;
+  const {
+    index,
+    field,
+    operator,
+    operand,
+    conjunction,
+    otherFields,
+    onChange,
+    onDelete,
+  } = props;
   const f = useFormatMessage();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleDelete = () => {
     onDelete(index);
   };
-  const handleDescendingChange = () => {
-    onChange(index, { field, descending: !descending });
-  };
+  const handleOperandChange = useMemo(
+    () =>
+      debounce(() => {
+        onChange(index, {
+          field,
+          operator,
+          operand: inputRef.current?.value || '',
+          conjunction,
+        });
+      }, 500),
+    [onChange, index, field, operator, conjunction]
+  );
   const handleFieldChange = useCallback(
     (fieldId: string) => {
       const newField = otherFields.find((el) => el._id === fieldId);
       if (newField && newField._id !== field._id) {
         onChange(index, {
           field: newField,
-          descending,
+          operator,
+          operand,
+          conjunction,
         });
       }
     },
-    [onChange, index, field, descending, otherFields]
+    [onChange, index, field, operator, operand, conjunction, otherFields]
+  );
+
+  const convertToOperatorMessage = useCallback(
+    (op: EDataFilterOperator) => {
+      const messages = {
+        [EDataFilterOperator.Contain]: f('common.contain'),
+        [EDataFilterOperator.Equal]: f('common.equal'),
+      };
+      return messages[op];
+    },
+    [f]
   );
   const convertToSelectOption = useCallback(
     ({ _id, type, title }: IProjectDataField) => {
@@ -73,7 +112,7 @@ function FieldItem(props: IFieldItemProps) {
     <div className={classNames('bg-base-100', 'rounded-lg')}>
       <div
         className={classNames(
-          'hover:bg-base-content/10 active:bg-base-content/10',
+          'hover:bg-base-content/10 focus-within:bg-base-content/10',
           'rounded-lg pl-4 pr-2 py-2 flex items-center text-base-content'
         )}>
         <div className="flex-auto mr-2">
@@ -89,17 +128,18 @@ function FieldItem(props: IFieldItemProps) {
             onChange={handleFieldChange}
           />
         </div>
-        <button
-          aria-label={
-            descending ? f('dataView.descending') : f('dataView.ascending')
-          }
-          className={classNames(
-            'btn btn-sm btn-ghost text-info',
-            'px-2 text-lg'
-          )}
-          onClick={handleDescendingChange}>
-          {descending ? <HiArrowDown /> : <HiArrowUp />}
-        </button>
+        <div className="flex-none mr-2">
+          {convertToOperatorMessage(operator)}
+        </div>
+        <div className="w-24 flex-none mr-2">
+          <input
+            ref={inputRef}
+            maxLength={128}
+            className={classNames('input input-bordered input-sm', 'w-full')}
+            defaultValue={operand}
+            onChange={handleOperandChange}
+          />
+        </div>
         <button
           aria-label={f('common.delete')}
           className={classNames(

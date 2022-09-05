@@ -2,13 +2,16 @@ import {
   Column,
   ColumnSort,
   createColumnHelper,
+  FilterFn,
   FilterFnOption,
   SortingFn,
 } from '@tanstack/react-table';
 import classNames from 'classnames';
 import {
   EDataFieldType,
+  EDataFilterOperator,
   IProjectDataField,
+  IProjectDataFilter,
   IProjectDataRecord,
   IProjectDataSorter,
   IRecordFieldData,
@@ -36,6 +39,21 @@ const sortingFn: SortingFn<IProjectDataRecord> = (rowA, rowB, columnId) => {
   return a > b ? 1 : -1;
 };
 
+const filterFn: FilterFn<IProjectDataRecord> = (
+  row,
+  columnId,
+  filterValue = {}
+) => {
+  const value =
+    row.getValue<IRecordFieldData | undefined>(columnId)?.value.toString() ||
+    '';
+  const { operator, operand } = filterValue;
+  if (operator === EDataFilterOperator.Contain) {
+    return value.includes(operand || '');
+  }
+  return true;
+};
+
 export function createColumns(
   projectId: string,
   mainFieldId: string,
@@ -50,6 +68,8 @@ export function createColumns(
       enableGlobalFilter:
         field.type === EDataFieldType.SingleLineText ||
         field.type === EDataFieldType.MultiLineText,
+      enableColumnFilter: true,
+      filterFn,
       enableSorting: true,
       sortingFn,
       cell: (info) => (
@@ -97,10 +117,17 @@ export function convertToColumnVisibility(
   return record;
 }
 
-export function convertToColumnSorting(sorting: IProjectDataSorter[]) {
-  return sorting.map<ColumnSort>(({ field, descending }) => ({
+export function convertToColumnSorting(sorters: IProjectDataSorter[]) {
+  return sorters.map<ColumnSort>(({ field, descending }) => ({
     id: field,
     desc: descending,
+  }));
+}
+
+export function convertToColumnFilters(filters: IProjectDataFilter[]) {
+  return filters.map(({ field, operator, operand }) => ({
+    id: field,
+    value: { operator, operand },
   }));
 }
 
