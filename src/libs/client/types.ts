@@ -81,6 +81,23 @@ export enum EDataFieldType {
   HttpLink = 'HTTP_LINK',
 }
 
+export enum EDataFilterOperator {
+  Contain = 'CONTAIN',
+  Equal = 'EQUAL',
+}
+
+export enum EDataFilterConjunction {
+  And = 'AND',
+  Or = 'OR',
+}
+
+export interface IProjectDataFilter {
+  field: string;
+  operator: EDataFilterOperator;
+  operand: string;
+  conjunction: EDataFilterConjunction;
+}
+
 export interface IProjectDataSorter {
   field: string;
   descending: boolean;
@@ -99,8 +116,9 @@ export interface IProjectDataView {
   title: string;
   type: EDataViewType;
   createdAt: string;
-  visibleFields?: string[];
+  filters?: IProjectDataFilter[];
   sorters?: IProjectDataSorter[];
+  visibleFields?: string[];
 }
 
 export interface IProjectDataField {

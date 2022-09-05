@@ -31,8 +31,8 @@ function Skeleton() {
           </div>
           {Array(3)
             .fill(0)
-            .map(() => (
-              <div className="h-12 px-4 py-3">
+            .map((_, i) => (
+              <div className="h-12 px-4 py-3" key={i}>
                 <div
                   className={classNames(
                     'bg-base-content',

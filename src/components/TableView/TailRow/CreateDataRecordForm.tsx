@@ -110,7 +110,7 @@ function CreateDataRecordForm(
         name={mainField._id}
         autoComplete="off"
         required
-        placeholder={f('project.addData')}
+        placeholder={f('dataView.addData')}
         value={data[mainField._id]?.value || ''}
         onChange={handleInputChange}
         className={classNames(

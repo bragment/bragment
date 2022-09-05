@@ -12,6 +12,8 @@ import CreateDataFieldButton from '../../CreateDataFieldButton';
 import { useFormatMessage } from '../../hooks';
 import styles from '../index.module.scss';
 
+export const CREATE_FIELD_MODAL_TOGGLE_ID = 'CREATE_FIELD_MODAL_TOGGLE';
+
 interface IHeadRowProps {
   projectId: string;
   modelId: string;
@@ -69,8 +71,10 @@ function HeadRow(props: IHeadRowProps) {
             modelId={modelId}
             existingFields={modelFields}
             onFinish={onCreateDateFieldFinish}>
-            <button className={classNames('btn btn-ghost btn-sm', 'h-10')}>
-              <HiPlus aria-label={f('project.addField')} className="text-lg" />
+            <button
+              id={CREATE_FIELD_MODAL_TOGGLE_ID}
+              className={classNames('btn btn-ghost btn-sm', 'h-10')}>
+              <HiPlus aria-label={f('dataView.addField')} className="text-lg" />
             </button>
           </CreateDataFieldButton>
         </AnimatePing>

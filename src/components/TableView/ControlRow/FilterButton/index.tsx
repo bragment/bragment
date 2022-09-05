@@ -1,29 +1,30 @@
 import classNames from 'classnames';
 import { memo, useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
-import { HiOutlinePlus, HiOutlineSwitchVertical } from 'react-icons/hi';
+import { HiOutlineFilter, HiOutlinePlus } from 'react-icons/hi';
 import {
+  EDataFilterConjunction,
+  EDataFilterOperator,
   IProjectDataField,
-  IProjectDataSorter,
+  IProjectDataFilter,
 } from '../../../../libs/client/types';
 import Dropdown from '../../../Dropdown';
 import { useFormatMessage, useNestedState } from '../../../hooks';
 import ScrollContainer from '../../../ScrollContainer';
-import SortableList from '../../../SortableList';
-import FieldItem, { IInnerSorter } from './FieldItem';
+import FieldItem, { IInnerFilter } from './FieldItem';
 
-interface ISortingButtonProps {
+interface IFilterButtonProps {
   modelFields: IProjectDataField[];
   visibleFieldIds: string[];
-  sorters: IProjectDataSorter[];
+  filters: IProjectDataFilter[];
   loading?: boolean;
-  onChange: (sorters: IProjectDataSorter[]) => void;
+  onChange: (filters: IProjectDataFilter[]) => void;
   onClose?: () => void;
 }
 
-function initializeInnerSorterList(
+function initializeInnerFilterList(
   modelFields: IProjectDataField[],
-  sorters: IProjectDataSorter[]
+  filters: IProjectDataFilter[]
 ) {
   const record = modelFields.reduce<Record<string, IProjectDataField>>(
     (prev, el) => {
@@ -32,7 +33,7 @@ function initializeInnerSorterList(
     },
     {}
   );
-  return sorters
+  return filters
     .map((el) => ({ ...el, field: record[el.field] }))
     .filter((el) => !!el.field);
 }
@@ -40,11 +41,11 @@ function initializeInnerSorterList(
 function initializeOtherFieldList(
   modelFields: IProjectDataField[],
   visibleFieldIds: string[],
-  sorters: IProjectDataSorter[] | IInnerSorter[]
+  filters: IProjectDataFilter[] | IInnerFilter[]
 ) {
   const visibilitySet = new Set(visibleFieldIds);
   const sortingSet = new Set(
-    sorters.map((el) =>
+    filters.map((el) =>
       typeof el.field === 'string' ? el.field : el.field._id
     )
   );
@@ -53,60 +54,50 @@ function initializeOtherFieldList(
   );
 }
 
-function SortingButton(props: ISortingButtonProps) {
-  const { modelFields, visibleFieldIds, sorters, loading, onChange, onClose } =
+function FilterButton(props: IFilterButtonProps) {
+  const { modelFields, visibleFieldIds, filters, loading, onChange, onClose } =
     props;
   const f = useFormatMessage();
   const scrollBarsRef = useRef<Scrollbars>(null);
-  const containerRef = useRef<HTMLDivElement>();
   const openedRef = useRef(false);
-  const [innerSorterList, setInnerSorterList] = useNestedState(
-    initializeInnerSorterList(modelFields, sorters)
+  const [innerFilterList, setInnerFilterList] = useNestedState(
+    initializeInnerFilterList(modelFields, filters)
   );
   const [otherFieldList, setOtherFieldList] = useNestedState(
-    initializeOtherFieldList(modelFields, visibleFieldIds, sorters)
+    initializeOtherFieldList(modelFields, visibleFieldIds, filters)
   );
-  const count = innerSorterList.length;
+  const count = innerFilterList.length;
 
-  const updateInnerSorterList = useCallback(
-    (index: number, sorter?: IInnerSorter) => {
-      if (sorter) {
-        setInnerSorterList((list) =>
-          list.map((el, i) => (i === index ? sorter : el))
+  const updateInnerFilterList = useCallback(
+    (index: number, filter?: IInnerFilter) => {
+      if (filter) {
+        setInnerFilterList((list) =>
+          list.map((el, i) => (i === index ? filter : el))
         );
       } else {
-        setInnerSorterList((list) => list.filter((_, i) => i !== index));
+        setInnerFilterList((list) => list.filter((_, i) => i !== index));
       }
     },
-    [setInnerSorterList]
+    [setInnerFilterList]
   );
   const renderItem = useCallback(
-    ({ field, descending }: IInnerSorter, index: number) => (
+    (
+      { field, operator, operand, conjunction }: IInnerFilter,
+      index: number
+    ) => (
       <FieldItem
+        key={field._id}
         index={index}
         field={field}
-        descending={descending}
+        operator={operator}
+        operand={operand}
+        conjunction={conjunction}
         otherFields={otherFieldList}
-        onChange={updateInnerSorterList}
-        onDelete={updateInnerSorterList}
+        onChange={updateInnerFilterList}
+        onDelete={updateInnerFilterList}
       />
     ),
-    [updateInnerSorterList, otherFieldList]
-  );
-
-  const getItemId = useCallback((sorter: IInnerSorter) => {
-    return sorter.field._id;
-  }, []);
-
-  const getItemDraggable = useCallback(() => {
-    return true;
-  }, []);
-
-  const handleInnerSorterListChange = useCallback(
-    (list: IInnerSorter[]) => {
-      setInnerSorterList(list);
-    },
-    [setInnerSorterList]
+    [updateInnerFilterList, otherFieldList]
   );
 
   const handleOpen = useCallback(() => {
@@ -114,8 +105,8 @@ function SortingButton(props: ISortingButtonProps) {
       return;
     }
     openedRef.current = true;
-    setInnerSorterList(initializeInnerSorterList(modelFields, sorters));
-  }, [setInnerSorterList, modelFields, sorters]);
+    setInnerFilterList(initializeInnerFilterList(modelFields, filters));
+  }, [setInnerFilterList, modelFields, filters]);
 
   const handleClose = useCallback(() => {
     if (!openedRef.current) {
@@ -125,35 +116,39 @@ function SortingButton(props: ISortingButtonProps) {
     onClose && onClose();
   }, [onClose]);
 
-  const handleAddSorter = useCallback(() => {
+  const handleAddFilter = useCallback(() => {
     const field = otherFieldList[0];
     if (field) {
-      setInnerSorterList((list) => [...list, { field, descending: false }]);
+      setInnerFilterList((list) => [
+        ...list,
+        {
+          field,
+          operator: EDataFilterOperator.Contain,
+          operand: '',
+          conjunction: EDataFilterConjunction.And,
+        },
+      ]);
     }
     requestAnimationFrame(() => {
       scrollBarsRef.current?.scrollToBottom();
     });
-  }, [setInnerSorterList, otherFieldList]);
+  }, [setInnerFilterList, otherFieldList]);
 
   useLayoutEffect(() => {
     setOtherFieldList(
-      initializeOtherFieldList(modelFields, visibleFieldIds, innerSorterList)
+      initializeOtherFieldList(modelFields, visibleFieldIds, innerFilterList)
     );
-  }, [setOtherFieldList, modelFields, visibleFieldIds, innerSorterList]);
-
-  useEffect(() => {
-    containerRef.current = scrollBarsRef.current?.container;
-  });
+  }, [setOtherFieldList, modelFields, visibleFieldIds, innerFilterList]);
 
   useEffect(() => {
     if (openedRef.current) {
-      const list = innerSorterList.map((el) => ({
+      const list = innerFilterList.map((el) => ({
         ...el,
         field: el.field._id,
       }));
       onChange(list);
     }
-  }, [onChange, innerSorterList]);
+  }, [onChange, innerFilterList]);
 
   return (
     <Dropdown
@@ -167,9 +162,9 @@ function SortingButton(props: ISortingButtonProps) {
             'h-10 my-1',
             loading && 'loading'
           )}>
-          {!loading && <HiOutlineSwitchVertical className="text-base" />}
+          {!loading && <HiOutlineFilter className="text-base" />}
           <span className="ml-2">
-            {f('dataView.sorting')}
+            {f('dataView.filter')}
             {!!count && ` (${count})`}
           </span>
         </button>
@@ -178,31 +173,22 @@ function SortingButton(props: ISortingButtonProps) {
         <div
           className={classNames(
             'bg-base-100 border-base-300',
-            'w-80 px-0 py-2 border overflow-hidden rounded-box shadow'
+            'w-96 px-0 py-2 border overflow-hidden rounded-box shadow'
           )}>
           <ScrollContainer
             ref={scrollBarsRef}
             autoHeight
             withShadow
             autoHeightMax={280}>
-            <SortableList
-              droppableId="SORTABLE_FIELD_LIST"
-              containerRef={containerRef}
-              listClassName="px-2"
-              list={innerSorterList}
-              getItemId={getItemId}
-              getItemDraggable={getItemDraggable}
-              renderItem={renderItem}
-              onChange={handleInnerSorterListChange}
-            />
+            <ul className="px-2">{innerFilterList.map(renderItem)}</ul>
           </ScrollContainer>
           {!!otherFieldList.length && (
             <div className="w-full px-2">
               <button
                 className={classNames('btn btn-ghost', 'w-full justify-start')}
-                onClick={handleAddSorter}>
+                onClick={handleAddFilter}>
                 <HiOutlinePlus className="text-base mr-2" />
-                {f('dataView.addSorter')}
+                {f('dataView.addFilter')}
               </button>
             </div>
           )}
@@ -212,4 +198,4 @@ function SortingButton(props: ISortingButtonProps) {
   );
 }
 
-export default memo(SortingButton);
+export default memo(FilterButton);
