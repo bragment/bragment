@@ -249,9 +249,9 @@ function TableView(props: ITableViewProps) {
     getSortedRowModel: getSortedRowModel(),
     getColumnCanGlobalFilter,
     globalFilterFn,
-    debugTable: true,
-    debugHeaders: true,
-    debugColumns: true,
+    debugTable: process.env.NODE_ENV === 'development',
+    debugHeaders: process.env.NODE_ENV === 'development',
+    debugColumns: process.env.NODE_ENV === 'development',
   });
   const headerGroups = table.getHeaderGroups();
   const rowModel = table.getRowModel();
