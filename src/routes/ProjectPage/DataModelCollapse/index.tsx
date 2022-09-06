@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
-import { useCallback, useLayoutEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { HiOutlineDatabase, HiPlus } from 'react-icons/hi';
 import { useMatch } from 'react-router-dom';
 import { useFormatMessage } from '../../../components/hooks';
@@ -50,7 +50,7 @@ function DataModelCollapse(props: IDataModelCollapseProps) {
     [navigate, projectId]
   );
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (isProjectPath && !modelId && models?.length) {
       navigate(projectId, models[0]._id, {
         replace: true,
