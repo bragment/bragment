@@ -75,7 +75,7 @@ export enum EDataViewType {
 
 export enum EDataFieldType {
   DateTime = 'DATE_TIME',
-  MultiLineText = 'MULTI_LINE_TEXT',
+  MultipleLineText = 'MULTIPLE_LINE_TEXT',
   Number = 'NUMBER',
   SingleLineText = 'SINGLE_LINE_TEXT',
   HttpLink = 'HTTP_LINK',

@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { memo } from 'react';
+import { getFieldIcon } from '../../../../fileds/renders';
 import { IProjectDataField } from '../../../../libs/client/types';
-import { dataFieldTypeRecord } from '../../../DataFieldTypeSelect/config';
 import { useFormatMessage } from '../../../hooks';
 import styles from './index.module.scss';
 
@@ -18,7 +18,7 @@ function FieldItem(props: IFieldItemProps) {
   const handleChange = () => {
     onVisibleChange(field, !visible);
   };
-  const Icon = dataFieldTypeRecord[field.type]?.Icon;
+  const Icon = getFieldIcon(field.type);
 
   return (
     <div className={classNames('bg-base-100', 'rounded-lg')}>

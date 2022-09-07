@@ -36,15 +36,16 @@ function SignInForm() {
   const { language } = useSettingStore();
 
   const getPasscode = async () => {
-    passcodeInputRef.current?.focus();
     if (passcodeLoading || isWaiting) {
       return;
     }
     const email = emailInputRef.current?.value.trim();
     if (!email) {
+      emailInputRef.current?.focus();
       return toastWarning(f('auth.requiredEmail'));
     }
     if (!verifyEmail(email)) {
+      emailInputRef.current?.focus();
       return toastWarning(f('auth.invalidEmail'));
     }
     setErrorMessage(undefined);
@@ -53,6 +54,7 @@ function SignInForm() {
       tokenRef.current = token;
       toastSuccess(f('auth.passcodeMailSent'));
       setWaitingSeconds(60);
+      passcodeInputRef.current?.focus();
     } catch (error: any) {
       const status = error?.response?.status;
       if (status === 400) {

@@ -2,12 +2,12 @@ import classNames from 'classnames';
 import debounce from 'lodash/debounce';
 import { memo, useCallback, useMemo, useRef } from 'react';
 import { HiTrash } from 'react-icons/hi';
+import { getFieldIcon } from '../../../../fileds/renders';
 import {
   EDataFilterConjunction,
   EDataFilterOperator,
   IProjectDataField,
 } from '../../../../libs/client/types';
-import { dataFieldTypeRecord } from '../../../DataFieldTypeSelect/config';
 import { useFormatMessage } from '../../../hooks';
 import SelectInput from '../../../SelectInput';
 import styles from './index.module.scss';
@@ -82,13 +82,13 @@ function FieldItem(props: IFieldItemProps) {
   );
   const convertToSelectOption = useCallback(
     ({ _id, type, title }: IProjectDataField) => {
-      const Icon = dataFieldTypeRecord[type]?.Icon;
+      const Icon = getFieldIcon(type);
       return {
         value: _id,
         content: title,
         node: (
           <div className="w-full flex items-center">
-            <Icon className="flex-none mr-2 text-lg" />
+            {Icon && <Icon className="flex-none mr-2 text-lg" />}
             <div
               className="flex-auto text-ellipsis overflow-hidden whitespace-nowrap"
               title={title}>

@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { memo, useCallback, useState } from 'react';
+import { getFieldIcon } from '../../../fileds/renders';
 import { IProjectDataField } from '../../../libs/client/types';
-import { dataFieldTypeRecord } from '../../DataFieldTypeSelect/config';
 import UpdateDataFieldTitleForm from './UpdateDataFieldTitleForm';
 import styles from '../index.module.scss';
 
@@ -26,8 +26,8 @@ function Cell(props: IItermProps) {
     className,
   } = props;
   const [editing, setEditing] = useState(false);
-  const { title = '' } = field;
-  const Icon = dataFieldTypeRecord[field.type]?.Icon;
+  const { title = '', type } = field;
+  const Icon = getFieldIcon(type);
 
   const handleDoubleClick = () => {
     setEditing(true);

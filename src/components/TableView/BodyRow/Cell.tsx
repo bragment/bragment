@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import { memo, useCallback, useState } from 'react';
+import { getFieldRenderer } from '../../../fileds/renders';
 import {
   IProjectDataField,
   IProjectDataRecord,
@@ -29,7 +30,7 @@ function Cell(props: IItermProps) {
     className,
   } = props;
   const [editing, setEditing] = useState(false);
-  const value = data?.value || '';
+  const renderer = getFieldRenderer(field.type);
 
   const handleDoubleClick = () => setEditing(true);
 
@@ -52,21 +53,19 @@ function Cell(props: IItermProps) {
       )}
       onDoubleClick={handleDoubleClick}>
       <div className={styles.content}>
-        <div className="text-ellipsis overflow-hidden whitespace-nowrap">
-          {data?.value || ''}
-        </div>
+        {renderer && renderer.renderTableCell(field, data)}
         {editing && (
           <div
             className={classNames(
               'absolute top-0 left-0 z-20',
-              'w-full h-full',
-              'flex items-center'
+              'w-full h-full pt-1',
+              'flex items-start'
             )}>
             <UpdateRecordFieldDataForm
               projectId={projectId}
               recordId={record._id}
-              fieldId={field._id}
-              defaultValue={value}
+              field={field}
+              data={data}
               onCancel={handleCancel}
               onFinish={handleFinish}
             />

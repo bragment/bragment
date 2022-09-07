@@ -1,11 +1,11 @@
 import { memo, useMemo } from 'react';
+import { getAllFieldRenderers } from '../../fileds/renders';
 import { EDataFieldType } from '../../libs/client/types';
 import { useFormatMessage } from '../hooks';
 import SelectInput, {
   ISelectInputOption,
   ISelectInputProps,
 } from '../SelectInput';
-import { dataFieldTypes } from './config';
 
 interface IDataFieldTypeSelectProps {
   defaultValue?: EDataFieldType;
@@ -13,26 +13,32 @@ interface IDataFieldTypeSelectProps {
 }
 
 function DataFieldTypeSelect(props: IDataFieldTypeSelectProps) {
+  const renderers = useMemo(() => getAllFieldRenderers(), []);
+  const firstRenderer = renderers[0];
   const f = useFormatMessage();
-  const { defaultValue, onChange } = props;
+  const { defaultValue = firstRenderer?.type, onChange } = props;
 
   const options = useMemo<ISelectInputOption[]>(
     () =>
-      dataFieldTypes.map(({ type, title, Icon }) => ({
-        value: type,
-        content: f(title),
-        node: (
-          <div className="w-full flex items-center">
-            <Icon className="flex-none mr-2 text-lg" />
-            <div
-              className="flex-auto text-ellipsis overflow-hidden whitespace-nowrap"
-              title={f(title)}>
-              {f(title)}
+      renderers.map((renderer) => {
+        const { type, Icon } = renderer;
+        const title = f(renderer.getNameAsMessageId());
+        return {
+          value: type,
+          content: title,
+          node: (
+            <div className="w-full flex items-center">
+              <Icon className="flex-none mr-2 text-lg" />
+              <div
+                className="flex-auto text-ellipsis overflow-hidden whitespace-nowrap"
+                title={title}>
+                {title}
+              </div>
             </div>
-          </div>
-        ),
-      })),
-    [f]
+          ),
+        };
+      }),
+    [f, renderers]
   );
 
   return (
