@@ -1,39 +1,31 @@
 import classNames from 'classnames';
 import { memo, useRef } from 'react';
 
-interface IUniversalInputProps {
-  name: string;
+interface IInputControlProps {
+  type: string;
   defaultValue: string;
   className?: string;
-  onBlur?: () => void;
+  onCancel?: () => void;
   onChange?: (value: string) => void;
-  onEnter?: () => void;
 }
 
-function UniversalInput(props: IUniversalInputProps) {
-  const { name, defaultValue, className, onBlur, onChange, onEnter } = props;
+function InputControl(props: IInputControlProps) {
+  const { type, defaultValue, className, onCancel, onChange } = props;
   const inputRef = useRef<HTMLInputElement>(null);
-
-  const handleChange = () => {
-    const input = inputRef.current;
-    if (input && onChange) {
-      onChange(input.value);
-    }
-  };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === 'Escape') {
       inputRef.current?.blur();
     }
-    if (event.key === 'Enter' && onEnter) {
-      onEnter();
+    if (event.key === 'Enter' && onChange) {
+      onChange(inputRef.current?.value || '');
     }
   };
 
   return (
     <input
       ref={inputRef}
-      name={name}
+      type={type}
       className={classNames(
         'input input-bordered',
         'w-full h-10 text-base outline-none active:outline-none focus:outline-none',
@@ -41,13 +33,11 @@ function UniversalInput(props: IUniversalInputProps) {
       )}
       autoFocus
       autoComplete="off"
-      type="text"
       defaultValue={defaultValue}
-      onBlur={onBlur}
-      onChange={handleChange}
+      onBlur={onCancel}
       onKeyDown={handleKeyDown}
     />
   );
 }
 
-export default memo(UniversalInput);
+export default memo(InputControl);

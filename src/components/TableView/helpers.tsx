@@ -67,7 +67,7 @@ export function createColumns(
       id,
       enableGlobalFilter:
         field.type === EDataFieldType.SingleLineText ||
-        field.type === EDataFieldType.MultiLineText,
+        field.type === EDataFieldType.MultipleLineText,
       enableColumnFilter: true,
       filterFn,
       enableSorting: true,

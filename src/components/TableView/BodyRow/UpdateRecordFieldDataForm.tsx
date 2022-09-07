@@ -1,38 +1,36 @@
 import classNames from 'classnames';
-import { memo, useCallback, useRef } from 'react';
-import { IProjectDataRecord } from '../../../libs/client/types';
+import { memo } from 'react';
+import { getFieldRenderer } from '../../../fileds/renders';
+import {
+  IProjectDataField,
+  IProjectDataRecord,
+  IRecordFieldData,
+} from '../../../libs/client/types';
 import { useUpdateProjectDataRecordMutation } from '../../../libs/react-query';
 import { useDialogStore, useFormatMessage } from '../../hooks';
-import UniversalInput from '../../UniversalInput';
 
 interface IUpdateRecordFieldDataFormProps {
   projectId: string;
-  fieldId: string;
   recordId: string;
-  defaultValue: string;
+  field: IProjectDataField;
+  data?: IRecordFieldData;
   onCancel?: () => void;
   onFinish?: (record?: IProjectDataRecord) => void;
 }
 
 function UpdateRecordFieldDataForm(props: IUpdateRecordFieldDataFormProps) {
-  const { projectId, fieldId, recordId, defaultValue, onCancel, onFinish } =
-    props;
+  const { projectId, field, recordId, data, onCancel, onFinish } = props;
   const { toastError } = useDialogStore();
   const f = useFormatMessage();
   const { isLoading, mutateAsync } = useUpdateProjectDataRecordMutation();
-  const valueRef = useRef(defaultValue);
+  const renderer = getFieldRenderer(field.type);
 
-  const handleChange = useCallback((value: string) => {
-    valueRef.current = value;
-  }, []);
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const onChange = async (value: string) => {
     if (isLoading) {
       return;
     }
-    const value = valueRef.current.trim();
-    if (value === defaultValue) {
+    value = value.trim();
+    if (value === data?.value) {
       if (onCancel) {
         onCancel();
       }
@@ -42,7 +40,7 @@ function UpdateRecordFieldDataForm(props: IUpdateRecordFieldDataFormProps) {
       projectId,
       recordId,
       data: {
-        [fieldId]: { value },
+        [field._id]: { value },
       },
     };
     try {
@@ -56,6 +54,10 @@ function UpdateRecordFieldDataForm(props: IUpdateRecordFieldDataFormProps) {
     }
   };
 
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+  };
+
   return (
     <form
       className={classNames(
@@ -63,13 +65,12 @@ function UpdateRecordFieldDataForm(props: IUpdateRecordFieldDataFormProps) {
         isLoading && 'loading'
       )}
       onSubmit={handleSubmit}>
-      <UniversalInput
-        name={fieldId}
-        defaultValue={defaultValue}
-        className="pr-8"
-        onBlur={onCancel}
-        onChange={handleChange}
-      />
+      {renderer &&
+        renderer.renderTableCellEditing(field, data, {
+          className: 'pr-8',
+          onCancel,
+          onChange,
+        })}
     </form>
   );
 }
