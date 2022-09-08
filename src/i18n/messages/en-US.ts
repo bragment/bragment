@@ -25,6 +25,7 @@ export default {
   'common.setting': 'Setting',
   'common.tooManyRequests': 'Too many requests.',
   'common.underConstruction': '🚧 Under construction.',
+  'dataField.date': 'Date',
   'dataField.dateTime': 'Date Time',
   'dataField.httpLink': 'Http Link',
   'dataField.multipleLineText': 'Multiple Line Text',

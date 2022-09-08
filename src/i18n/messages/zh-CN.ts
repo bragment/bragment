@@ -24,6 +24,7 @@ export default {
   'common.setting': '设置',
   'common.tooManyRequests': '请求过多',
   'common.underConstruction': '🚧 正在施工...',
+  'dataField.date': '日期',
   'dataField.dateTime': '日期时间',
   'dataField.httpLink': 'Http 链接',
   'dataField.multipleLineText': '多行文本',

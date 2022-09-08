@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import { memo, useCallback, useRef, useState } from 'react';
 import { HiPlus } from 'react-icons/hi';
 import { IProjectDataField } from '../../../libs/client/types';
+import AnimateSpin from '../../AnimateSpin';
 import { useFormatMessage } from '../../hooks';
 import CreateDataRecordForm, {
   ICreateDataRecordFormRef,
@@ -52,7 +53,7 @@ function TailRow(props: ITailRowProps) {
       <div
         className={classNames('w-16', 'flex-none justify-center', styles.cell)}>
         {loading ? (
-          <div className="icon loading" />
+          <AnimateSpin className="w-4 h-4" />
         ) : (
           <HiPlus
             aria-label={f('dataView.addData')}

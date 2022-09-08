@@ -1,8 +1,9 @@
 import BaseFieldRenderer from './BaseFieldRenderer';
-import HttpLinkRenderer from './HttpLinkRenderer';
-import MultipleLineTextRenderer from './MultipleLineTextRenderer';
-import NumberRenderer from './NumberRenderer';
-import SingleLineTextRenderer from './SingleLineTextRenderer';
+import DateFieldRenderer from './DateFieldRenderer';
+import HttpLinkFieldRenderer from './HttpLinkFieldRenderer';
+import MultipleLineTextFieldRenderer from './MultipleLineTextFieldRenderer';
+import NumberFieldRenderer from './NumberFieldRenderer';
+import SingleLineTextFieldRenderer from './SingleLineTextFieldRenderer';
 
 const map = new Map<string, BaseFieldRenderer>();
 
@@ -23,7 +24,8 @@ export function getFieldIcon(type: string) {
   return map.get(type)?.Icon;
 }
 
-registerFieldRenderer(SingleLineTextRenderer);
-registerFieldRenderer(MultipleLineTextRenderer);
-registerFieldRenderer(NumberRenderer);
-registerFieldRenderer(HttpLinkRenderer);
+registerFieldRenderer(SingleLineTextFieldRenderer);
+registerFieldRenderer(MultipleLineTextFieldRenderer);
+registerFieldRenderer(NumberFieldRenderer);
+registerFieldRenderer(DateFieldRenderer);
+registerFieldRenderer(HttpLinkFieldRenderer);

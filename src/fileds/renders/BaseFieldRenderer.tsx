@@ -35,6 +35,7 @@ export default class BaseFieldRenderer {
     data?: IRecordFieldData,
     props?: {
       className?: string;
+      loading?: boolean;
       onCancel?: () => void;
       onChange?: (value: string) => void;
     }
