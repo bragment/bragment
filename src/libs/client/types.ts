@@ -74,11 +74,11 @@ export enum EDataViewType {
 }
 
 export enum EDataFieldType {
-  DateTime = 'DATE_TIME',
+  Date = 'DATE',
+  HttpLink = 'HTTP_LINK',
   MultipleLineText = 'MULTIPLE_LINE_TEXT',
   Number = 'NUMBER',
   SingleLineText = 'SINGLE_LINE_TEXT',
-  HttpLink = 'HTTP_LINK',
 }
 
 export enum EDataFilterOperator {

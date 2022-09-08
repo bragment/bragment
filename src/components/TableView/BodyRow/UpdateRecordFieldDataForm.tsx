@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import { memo } from 'react';
 import { getFieldRenderer } from '../../../fileds/renders';
 import {
@@ -59,15 +58,10 @@ function UpdateRecordFieldDataForm(props: IUpdateRecordFieldDataFormProps) {
   };
 
   return (
-    <form
-      className={classNames(
-        'form-control form-single-input',
-        isLoading && 'loading'
-      )}
-      onSubmit={handleSubmit}>
+    <form className="w-full form-control" onSubmit={handleSubmit}>
       {renderer &&
         renderer.renderTableCellEditing(field, data, {
-          className: 'pr-8',
+          loading: isLoading,
           onCancel,
           onChange,
         })}

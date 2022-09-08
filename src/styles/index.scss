@@ -49,7 +49,7 @@ body {
   .alert {
     animation: button-pop var(--animation-btn, 0.25s) ease-out;
   }
-  .icon.loading,
+  // NOTE: add loading styles
   .form-single-input.loading,
   ul li > .action.loading {
     position: relative;
@@ -68,12 +68,7 @@ body {
       position: absolute;
     }
   }
-  .icon.loading {
-    @apply h-4 w-4;
-    &::after {
-      @apply mr-0 h-full w-full;
-    }
-  }
+  // NOTE: add clickable style like button
   .clickable {
     animation: button-pop var(--animation-btn, 0.25s) ease-out;
     text-transform: var(--btn-text-case, uppercase);

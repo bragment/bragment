@@ -1,11 +1,15 @@
 import { HiDocumentText } from 'react-icons/hi';
-import { IProjectDataField, IRecordFieldData } from '../../libs/client/types';
+import {
+  EDataFieldType,
+  IProjectDataField,
+  IRecordFieldData,
+} from '../../libs/client/types';
 import TextAreaControl from '../controls/TextAreaControl';
 import BaseFieldRenderer from './BaseFieldRenderer';
 
-export default class MultipleLineTextRenderer extends BaseFieldRenderer {
+export default class MultipleLineTextFieldRenderer extends BaseFieldRenderer {
   public name = 'dataField.multipleLineText';
-  public type = 'MULTIPLE_LINE_TEXT';
+  public type = EDataFieldType.MultipleLineText;
   public Icon = HiDocumentText;
   public constructor() {
     super();
@@ -17,6 +21,7 @@ export default class MultipleLineTextRenderer extends BaseFieldRenderer {
     data: IRecordFieldData,
     props: {
       className?: string;
+      loading?: boolean;
       onCancel?: () => void;
       onChange?: (value: string) => void;
     }

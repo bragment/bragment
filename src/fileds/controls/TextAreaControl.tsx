@@ -1,9 +1,11 @@
 import classNames from 'classnames';
 import { memo, useRef, useState } from 'react';
+import AnimateSpin from '../../components/AnimateSpin';
 
 interface ITextAreaControlProps {
   defaultValue: string;
   className?: string;
+  loading?: boolean;
   onCancel?: () => void;
   onChange?: (value: string) => void;
 }
@@ -26,7 +28,7 @@ function calculateTextAreaHeight(text: string) {
 }
 
 function TextAreaControl(props: ITextAreaControlProps) {
-  const { defaultValue, className, onCancel, onChange } = props;
+  const { defaultValue, className, loading, onCancel, onChange } = props;
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [height, setHeight] = useState(calculateTextAreaHeight(defaultValue));
 
@@ -60,20 +62,32 @@ function TextAreaControl(props: ITextAreaControlProps) {
   };
 
   return (
-    <textarea
-      ref={inputRef}
-      style={{ height }}
+    <div
       className={classNames(
-        'textarea textarea-bordered',
-        'w-full min-h-0 resize-none text-base outline-none active:outline-none focus:outline-none',
-        className
+        'w-full',
+        loading && 'relative pointer-events-none'
+      )}>
+      <textarea
+        ref={inputRef}
+        style={{ height }}
+        className={classNames(
+          'textarea textarea-bordered',
+          'w-full min-h-0 resize-none text-base outline-none active:outline-none focus:outline-none',
+          className
+        )}
+        autoFocus
+        autoComplete="off"
+        defaultValue={defaultValue}
+        onBlur={onCancel}
+        onKeyDown={handleKeyDown}
+      />
+      {loading && (
+        <AnimateSpin
+          className="absolute top-[1px] bottom-[7px] right-3 w-4 h-auto text-base"
+          bgColorClassName="bg-base-100"
+        />
       )}
-      autoFocus
-      autoComplete="off"
-      defaultValue={defaultValue}
-      onBlur={onCancel}
-      onKeyDown={handleKeyDown}
-    />
+    </div>
   );
 }
 

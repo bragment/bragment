@@ -1,6 +1,6 @@
+import { ErrorBoundary } from '@sentry/react';
 import { QueryErrorResetBoundary } from '@tanstack/react-query';
 import { memo } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
 import { HashRouter, Route, Routes } from 'react-router-dom';
 import GlobalToast from '../../dialogs/GlobalToast';
 import AuthPage from '../AuthPage';
@@ -26,15 +26,17 @@ function RootRouter() {
     <QueryErrorResetBoundary>
       {({ reset }) => (
         <ErrorBoundary
-          fallbackRender={({ error, resetErrorBoundary }) => (
-            // TODO: handle query error
-            <div>
-              There was an error!{' '}
-              <button onClick={() => resetErrorBoundary()}>Try again</button>
-              <pre style={{ whiteSpace: 'normal' }}>{error.message}</pre>
+          showDialog
+          onReset={reset}
+          fallback={({ error, componentStack, resetError }) => (
+            <div className="p-6">
+              {/* TODO: handle error */}
+              <div>You have encountered an error</div>
+              <div>{error.toString()}</div>
+              <div>{componentStack}</div>
+              <button onClick={() => resetError()}>Click here to reset!</button>
             </div>
-          )}
-          onReset={reset}>
+          )}>
           <HashRouter>
             <Routes>
               <Route path={ERoutePathName.Auth} element={<AuthPage />}>
