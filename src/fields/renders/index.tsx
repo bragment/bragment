@@ -24,6 +24,10 @@ export function getFieldIcon(type: string) {
   return map.get(type)?.Icon;
 }
 
+export function checkIfFieldFullWidth(type: string) {
+  return !!map.get(type)?.fullWidth;
+}
+
 registerFieldRenderer(SingleLineTextFieldRenderer);
 registerFieldRenderer(MultipleLineTextFieldRenderer);
 registerFieldRenderer(NumberFieldRenderer);

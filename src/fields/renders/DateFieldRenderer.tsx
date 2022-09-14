@@ -6,6 +6,7 @@ export default class DateFieldRenderer extends BaseFieldRenderer {
   public name = 'dataField.date';
   public type = EDataFieldType.Date;
   public Icon = HiCalendar;
+  public fullWidth = false;
 
   public constructor() {
     super();

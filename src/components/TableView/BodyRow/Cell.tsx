@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { memo, useCallback, useState } from 'react';
-import { getFieldRenderer } from '../../../fileds/renders';
+import { getFieldRenderer } from '../../../fields/renders';
 import {
   IProjectDataField,
   IProjectDataRecord,

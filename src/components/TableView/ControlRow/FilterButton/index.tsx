@@ -5,8 +5,8 @@ import { HiOutlineFilter, HiOutlinePlus } from 'react-icons/hi';
 import {
   EDataFilterConjunction,
   EDataFilterOperator,
+  IDataFilter,
   IProjectDataField,
-  IProjectDataFilter,
 } from '../../../../libs/client/types';
 import Dropdown from '../../../Dropdown';
 import { useFormatMessage, useNestedState } from '../../../hooks';
@@ -16,15 +16,15 @@ import FieldItem, { IInnerFilter } from './FieldItem';
 interface IFilterButtonProps {
   modelFields: IProjectDataField[];
   visibleFieldIds: string[];
-  filters: IProjectDataFilter[];
+  filters: IDataFilter[];
   loading?: boolean;
-  onChange: (filters: IProjectDataFilter[]) => void;
+  onChange: (filters: IDataFilter[]) => void;
   onClose?: () => void;
 }
 
 function initializeInnerFilterList(
   modelFields: IProjectDataField[],
-  filters: IProjectDataFilter[]
+  filters: IDataFilter[]
 ) {
   const record = modelFields.reduce<Record<string, IProjectDataField>>(
     (prev, el) => {
@@ -41,7 +41,7 @@ function initializeInnerFilterList(
 function initializeOtherFieldList(
   modelFields: IProjectDataField[],
   visibleFieldIds: string[],
-  filters: IProjectDataFilter[] | IInnerFilter[]
+  filters: IDataFilter[] | IInnerFilter[]
 ) {
   const visibilitySet = new Set(visibleFieldIds);
   const sortingSet = new Set(

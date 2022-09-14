@@ -2,10 +2,7 @@ import classNames from 'classnames';
 import { memo, useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
 import { HiOutlinePlus, HiOutlineSwitchVertical } from 'react-icons/hi';
-import {
-  IProjectDataField,
-  IProjectDataSorter,
-} from '../../../../libs/client/types';
+import { IDataSorter, IProjectDataField } from '../../../../libs/client/types';
 import Dropdown from '../../../Dropdown';
 import { useFormatMessage, useNestedState } from '../../../hooks';
 import ScrollContainer from '../../../ScrollContainer';
@@ -15,15 +12,15 @@ import FieldItem, { IInnerSorter } from './FieldItem';
 interface ISortingButtonProps {
   modelFields: IProjectDataField[];
   visibleFieldIds: string[];
-  sorters: IProjectDataSorter[];
+  sorters: IDataSorter[];
   loading?: boolean;
-  onChange: (sorters: IProjectDataSorter[]) => void;
+  onChange: (sorters: IDataSorter[]) => void;
   onClose?: () => void;
 }
 
 function initializeInnerSorterList(
   modelFields: IProjectDataField[],
-  sorters: IProjectDataSorter[]
+  sorters: IDataSorter[]
 ) {
   const record = modelFields.reduce<Record<string, IProjectDataField>>(
     (prev, el) => {
@@ -40,7 +37,7 @@ function initializeInnerSorterList(
 function initializeOtherFieldList(
   modelFields: IProjectDataField[],
   visibleFieldIds: string[],
-  sorters: IProjectDataSorter[] | IInnerSorter[]
+  sorters: IDataSorter[] | IInnerSorter[]
 ) {
   const visibilitySet = new Set(visibleFieldIds);
   const sortingSet = new Set(

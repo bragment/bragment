@@ -7,6 +7,7 @@ import {
 import {
   createProject,
   createProjectDataField,
+  createProjectDataForm,
   createProjectDataModel,
   createProjectDataRecord,
   createProjectDataView,
@@ -101,6 +102,21 @@ export function useCreateProjectDataFieldMutation() {
         (cached) =>
           cached
             ? { ...cached, fields: [...cached.fields, ...project.fields] }
+            : undefined
+      );
+    },
+  });
+}
+
+export function useCreateProjectDataFormMutation() {
+  const queryClient = useQueryClient();
+  return useMutation(createProjectDataForm, {
+    onSuccess: (project) => {
+      queryClient.setQueryData<IProject | undefined>(
+        [EQueryKey.Project, project._id],
+        (cached) =>
+          cached
+            ? { ...cached, form: [...cached.forms, ...project.forms] }
             : undefined
       );
     },

@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { memo } from 'react';
-import { getFieldIcon } from '../../../../fileds/renders';
+import { getFieldIcon } from '../../../../fields/renders';
 import { IProjectDataField } from '../../../../libs/client/types';
 import { useFormatMessage } from '../../../hooks';
 import styles from './index.module.scss';

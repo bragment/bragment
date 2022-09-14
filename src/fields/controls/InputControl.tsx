@@ -5,14 +5,25 @@ import AnimateSpin from '../../components/AnimateSpin';
 interface IInputControlProps {
   type: string;
   defaultValue: string;
+  name?: string;
   className?: string;
+  autoFocus?: boolean;
   loading?: boolean;
   onCancel?: () => void;
   onChange?: (value: string) => void;
 }
 
 function InputControl(props: IInputControlProps) {
-  const { type, defaultValue, className, loading, onCancel, onChange } = props;
+  const {
+    type,
+    defaultValue,
+    name,
+    className,
+    autoFocus,
+    loading,
+    onCancel,
+    onChange,
+  } = props;
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
@@ -33,12 +44,13 @@ function InputControl(props: IInputControlProps) {
       <input
         ref={inputRef}
         type={type}
+        name={name}
         className={classNames(
           'input input-bordered',
-          'w-full h-10 text-base outline-none active:outline-none focus:outline-none',
+          'h-10 text-base outline-none active:outline-none focus:outline-none',
           className
         )}
-        autoFocus
+        autoFocus={autoFocus}
         autoComplete="off"
         defaultValue={defaultValue}
         onBlur={onCancel}

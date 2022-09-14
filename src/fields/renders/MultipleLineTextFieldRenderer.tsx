@@ -28,9 +28,23 @@ export default class MultipleLineTextFieldRenderer extends BaseFieldRenderer {
   ) {
     return (
       <TextAreaControl
+        autoFocus
         defaultValue={this.getValueAsString(field, data)}
         {...props}
       />
+    );
+  }
+
+  public renderFormItem(
+    _field: IProjectDataField,
+    name: string,
+    defaultValue = '',
+    props: {
+      className?: string;
+    }
+  ) {
+    return (
+      <TextAreaControl name={name} defaultValue={defaultValue} {...props} />
     );
   }
 }

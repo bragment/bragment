@@ -53,6 +53,7 @@ export interface IProject {
   models: IProjectDataModel[];
   views: IProjectDataView[];
   fields: IProjectDataField[];
+  forms: IProjectDataForm[];
 }
 
 export interface IProjectBackground {
@@ -91,16 +92,34 @@ export enum EDataFilterConjunction {
   Or = 'OR',
 }
 
-export interface IProjectDataFilter {
+export interface IDataFilter {
   field: string;
   operator: EDataFilterOperator;
   operand: string;
   conjunction: EDataFilterConjunction;
 }
 
-export interface IProjectDataSorter {
+export interface IDataSorter {
   field: string;
   descending: boolean;
+}
+
+export interface IDataFormItem {
+  field: string;
+  label: string;
+  defaultValue: string;
+  required?: boolean;
+}
+export enum EDataFormItemKey {
+  field = 'field',
+  label = 'label',
+  defaultValue = 'defaultValue',
+  required = 'required',
+}
+
+export interface IRecordFieldData {
+  value: string;
+  updatedBy?: string;
 }
 
 export interface IProjectDataModel {
@@ -116,8 +135,8 @@ export interface IProjectDataView {
   title: string;
   type: EDataViewType;
   createdAt: string;
-  filters?: IProjectDataFilter[];
-  sorters?: IProjectDataSorter[];
+  filters?: IDataFilter[];
+  sorters?: IDataSorter[];
   visibleFields?: string[];
 }
 
@@ -128,9 +147,13 @@ export interface IProjectDataField {
   type: EDataFieldType;
 }
 
-export interface IRecordFieldData {
-  value: string;
-  updatedBy?: string;
+export interface IProjectDataForm {
+  _id: string;
+  model: string;
+  title: string;
+  items: IDataFormItem[];
+  banner?: string;
+  description?: string;
 }
 
 export interface IProjectDataRecord {
