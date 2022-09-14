@@ -9,6 +9,7 @@ export default class BaseFieldRenderer {
   public Icon = HiAnnotation;
   public editable = true;
   public inputType = 'text';
+  public fullWidth = true;
 
   public getInputType(_field: IProjectDataField) {
     return this.inputType;
@@ -42,8 +43,27 @@ export default class BaseFieldRenderer {
   ) {
     return (
       <InputControl
+        autoFocus
         type={this.getInputType(field)}
         defaultValue={this.getValueAsString(field, data)}
+        {...props}
+      />
+    );
+  }
+
+  public renderFormItem(
+    field: IProjectDataField,
+    name: string,
+    defaultValue = '',
+    props?: {
+      className?: string;
+    }
+  ) {
+    return (
+      <InputControl
+        type={this.getInputType(field)}
+        name={name}
+        defaultValue={defaultValue}
         {...props}
       />
     );

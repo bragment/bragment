@@ -63,7 +63,9 @@ function ProjectInstanceView() {
       </aside>
       <main
         className={classNames('bg-base-100 text-base-content', 'flex-auto')}>
-        <Outlet />
+        <ScrollContainer autoHide>
+          <Outlet />
+        </ScrollContainer>
       </main>
     </div>
   );

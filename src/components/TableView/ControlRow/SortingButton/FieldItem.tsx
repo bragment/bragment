@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { memo, useCallback } from 'react';
 import { HiArrowDown, HiArrowUp, HiTrash } from 'react-icons/hi';
-import { getFieldIcon } from '../../../../fileds/renders';
+import { getFieldIcon } from '../../../../fields/renders';
 import { IProjectDataField } from '../../../../libs/client/types';
 import { useFormatMessage } from '../../../hooks';
 import SelectInput from '../../../SelectInput';

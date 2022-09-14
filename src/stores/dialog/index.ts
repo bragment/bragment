@@ -1,14 +1,26 @@
 import { makeAutoObservable } from 'mobx';
+import { IProjectDataField } from '../../libs/client/types';
 import { EToastType, IToast } from '../types';
 
 function generateToastKey() {
   return Date.now().toString() + Math.random().toFixed(2).slice(1);
 }
 
+interface ICreateDataFormDialogOptions {
+  projectId: string;
+  modelId: string;
+  mainFieldId: string;
+  modelFields: IProjectDataField[];
+  visibleFieldIds?: string[];
+}
+
 class DialogStore {
   public createWorkspaceDialogVisible = false;
   public createProjectDialogVisible = false;
   public createDataModelDialogVisible = false;
+  public createDataFormDialogVisible = false;
+  public createDataFormDialogOptions: ICreateDataFormDialogOptions | null =
+    null;
   public toastList: IToast[] = [];
 
   constructor() {
@@ -19,24 +31,20 @@ class DialogStore {
     this.createWorkspaceDialogVisible = visible;
   };
 
-  public toggleCreateWorkspaceDialogVisible = () => {
-    this.createWorkspaceDialogVisible = !this.createWorkspaceDialogVisible;
-  };
-
   public setCreateProjectDialogVisible = (visible: boolean) => {
     this.createProjectDialogVisible = visible;
-  };
-
-  public toggleCreateProjectDialogVisible = () => {
-    this.createProjectDialogVisible = !this.createProjectDialogVisible;
   };
 
   public setCreateDataModelDialogVisible = (visible: boolean) => {
     this.createDataModelDialogVisible = visible;
   };
 
-  public toggleCreateDataModelDialogVisible = () => {
-    this.createDataModelDialogVisible = !this.createDataModelDialogVisible;
+  public setCreateDataFormDialogVisible = (
+    visible: boolean,
+    options: ICreateDataFormDialogOptions | null = null
+  ) => {
+    this.createDataFormDialogVisible = visible;
+    this.createDataFormDialogOptions = options ? { ...options } : options;
   };
 
   public setToastList = (list: IToast[]) => {

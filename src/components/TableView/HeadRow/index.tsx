@@ -73,6 +73,7 @@ function HeadRow(props: IHeadRowProps) {
             onFinish={onCreateDateFieldFinish}>
             <button
               id={CREATE_FIELD_MODAL_TOGGLE_ID}
+              title={f('dataView.addField')}
               className={classNames('btn btn-ghost btn-sm', 'h-10')}>
               <HiPlus aria-label={f('dataView.addField')} className="text-lg" />
             </button>

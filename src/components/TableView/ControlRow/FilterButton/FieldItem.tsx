@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import debounce from 'lodash/debounce';
 import { memo, useCallback, useMemo, useRef } from 'react';
 import { HiTrash } from 'react-icons/hi';
-import { getFieldIcon } from '../../../../fileds/renders';
+import { getFieldIcon } from '../../../../fields/renders';
 import {
   EDataFilterConjunction,
   EDataFilterOperator,

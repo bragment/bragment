@@ -2,6 +2,7 @@ import { baseRequest, mainServerApi } from './http';
 import {
   IProject,
   IProjectDataField,
+  IProjectDataForm,
   IProjectDataModel,
   IProjectDataRecord,
   IProjectDataView,
@@ -45,6 +46,17 @@ export async function createProjectDataField(
     'POST',
     `/project/${field.projectId}/field`,
     field
+  );
+}
+
+export async function createProjectDataForm(
+  form: Partial<IProjectDataForm> & { projectId: string }
+) {
+  return baseRequest<IProject>(
+    mainServerApi,
+    'POST',
+    `/project/${form.projectId}/form`,
+    form
   );
 }
 

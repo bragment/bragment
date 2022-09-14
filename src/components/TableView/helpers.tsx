@@ -10,10 +10,10 @@ import classNames from 'classnames';
 import {
   EDataFieldType,
   EDataFilterOperator,
+  IDataFilter,
+  IDataSorter,
   IProjectDataField,
-  IProjectDataFilter,
   IProjectDataRecord,
-  IProjectDataSorter,
   IRecordFieldData,
 } from '../../libs/client/types';
 import BodyCell from './BodyRow/Cell';
@@ -117,14 +117,14 @@ export function convertToColumnVisibility(
   return record;
 }
 
-export function convertToColumnSorting(sorters: IProjectDataSorter[]) {
+export function convertToColumnSorting(sorters: IDataSorter[]) {
   return sorters.map<ColumnSort>(({ field, descending }) => ({
     id: field,
     desc: descending,
   }));
 }
 
-export function convertToColumnFilters(filters: IProjectDataFilter[]) {
+export function convertToColumnFilters(filters: IDataFilter[]) {
   return filters.map(({ field, operator, operand }) => ({
     id: field,
     value: { operator, operand },

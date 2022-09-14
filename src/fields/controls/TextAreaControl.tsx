@@ -4,7 +4,9 @@ import AnimateSpin from '../../components/AnimateSpin';
 
 interface ITextAreaControlProps {
   defaultValue: string;
+  name?: string;
   className?: string;
+  autoFocus?: boolean;
   loading?: boolean;
   onCancel?: () => void;
   onChange?: (value: string) => void;
@@ -28,7 +30,15 @@ function calculateTextAreaHeight(text: string) {
 }
 
 function TextAreaControl(props: ITextAreaControlProps) {
-  const { defaultValue, className, loading, onCancel, onChange } = props;
+  const {
+    defaultValue,
+    name,
+    className,
+    autoFocus,
+    loading,
+    onCancel,
+    onChange,
+  } = props;
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [height, setHeight] = useState(calculateTextAreaHeight(defaultValue));
 
@@ -69,13 +79,14 @@ function TextAreaControl(props: ITextAreaControlProps) {
       )}>
       <textarea
         ref={inputRef}
+        name={name}
         style={{ height }}
         className={classNames(
           'textarea textarea-bordered',
-          'w-full min-h-0 resize-none text-base outline-none active:outline-none focus:outline-none',
+          'min-h-0 resize-none text-base outline-none active:outline-none focus:outline-none',
           className
         )}
-        autoFocus
+        autoFocus={autoFocus}
         autoComplete="off"
         defaultValue={defaultValue}
         onBlur={onCancel}

@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
-import { HiOutlineX } from 'react-icons/hi';
 import { useParams } from 'react-router-dom';
+import Dialog from '../../components/Dialog';
 import {
   useDialogStore,
   useFormatMessage,
@@ -29,11 +29,8 @@ const DIALOG_ID = 'CREATE_PROJECT_DIALOG';
 
 function CreateProjectDialog() {
   const f = useFormatMessage();
-  const {
-    createProjectDialogVisible,
-    setCreateProjectDialogVisible,
-    toggleCreateProjectDialogVisible,
-  } = useDialogStore();
+  const { createProjectDialogVisible, setCreateProjectDialogVisible } =
+    useDialogStore();
   const { workspaceId } = useParams<'workspaceId'>();
   const { myMainWorkspaceId } = useUserStore();
   const {
@@ -51,6 +48,10 @@ function CreateProjectDialog() {
         .catch(() => setSelectedUnsplashPhoto(null)),
     [setSelectedUnsplashPhoto]
   );
+
+  const handleCancel = useCallback(() => {
+    setCreateProjectDialogVisible(false);
+  }, [setCreateProjectDialogVisible]);
 
   const handleFinish = useCallback(async () => {
     setCreateProjectDialogVisible(false);
@@ -82,58 +83,32 @@ function CreateProjectDialog() {
   }, [selectedBuiltinColor, selectedUnsplashPhoto]);
 
   return (
-    <div
-      className={classNames(
-        !createProjectDialogVisible && 'content-visibility-hidden'
-      )}>
-      <input
-        type="checkbox"
-        className="modal-toggle"
-        id={DIALOG_ID}
-        checked={createProjectDialogVisible}
-        onChange={toggleCreateProjectDialogVisible}
-      />
-      <label
-        htmlFor={DIALOG_ID}
-        className={classNames('modal', 'cursor-pointer')}>
-        <label
-          className={classNames('modal-box', 'relative pb-16 overflow-visible')}
-          htmlFor="">
-          <div
-            className={classNames(
-              'w-full h-full absolute top-0 left-0 z-0 rounded-2xl overflow-hidden',
-              styles.background
-            )}>
-            <ProgressiveBackground {...backgroundData} />
-          </div>
-          <div
-            className={classNames(
-              'w-full h-full relative z-1',
-              'project-dialog-foreground'
-            )}>
-            <h3
-              className={classNames(
-                'text-primary-content',
-                'text-lg font-bold'
-              )}>
-              {f('workspace.createProject')}
-            </h3>
-            <CreateProjectForm
-              defaultWorkspaceId={workspaceId || myMainWorkspaceId}
-              onFinish={handleFinish}
-            />
-          </div>
-          <label
-            htmlFor={DIALOG_ID}
-            className={classNames(
-              'btn btn-sm btn-circle',
-              'absolute right-4 top-4 z-2'
-            )}>
-            <HiOutlineX className="text-lg" />
-          </label>
-        </label>
-      </label>
-    </div>
+    <Dialog
+      id={DIALOG_ID}
+      className="pb-16 overflow-visible"
+      visible={createProjectDialogVisible}
+      onClose={handleCancel}>
+      <div
+        className={classNames(
+          'w-full h-full absolute top-0 left-0 z-0 rounded-2xl overflow-hidden',
+          styles.background
+        )}>
+        <ProgressiveBackground {...backgroundData} />
+      </div>
+      <div
+        className={classNames(
+          'w-full h-full relative',
+          'project-dialog-foreground'
+        )}>
+        <h3 className={classNames('text-primary-content', 'text-lg font-bold')}>
+          {f('workspace.createProject')}
+        </h3>
+        <CreateProjectForm
+          defaultWorkspaceId={workspaceId || myMainWorkspaceId}
+          onFinish={handleFinish}
+        />
+      </div>
+    </Dialog>
   );
 }
 

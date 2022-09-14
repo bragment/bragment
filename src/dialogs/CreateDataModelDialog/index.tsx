@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
 import { useCallback } from 'react';
-import { HiOutlineX } from 'react-icons/hi';
 import { useParams } from 'react-router-dom';
+import Dialog from '../../components/Dialog';
 import { useDialogStore, useFormatMessage } from '../../components/hooks';
 import { IProject } from '../../libs/client/types';
 import { useNavigateProjectDataModelPage } from '../../routes/hooks';
@@ -14,11 +14,12 @@ function CreateDataModelDialog() {
   const f = useFormatMessage();
   const { projectId = '' } = useParams();
   const navigate = useNavigateProjectDataModelPage();
-  const {
-    createDataModelDialogVisible,
-    setCreateDataModelDialogVisible,
-    toggleCreateDataModelDialogVisible,
-  } = useDialogStore();
+  const { createDataModelDialogVisible, setCreateDataModelDialogVisible } =
+    useDialogStore();
+
+  const handleCancel = useCallback(() => {
+    setCreateDataModelDialogVisible(false);
+  }, [setCreateDataModelDialogVisible]);
 
   const handleFinish = useCallback(
     async (project: IProject) => {
@@ -30,45 +31,22 @@ function CreateDataModelDialog() {
   );
 
   return (
-    <div
-      className={classNames(
-        !createDataModelDialogVisible && 'content-visibility-hidden'
-      )}>
-      <input
-        type="checkbox"
-        className="modal-toggle"
-        id={DIALOG_ID}
-        checked={createDataModelDialogVisible}
-        onChange={toggleCreateDataModelDialogVisible}
-      />
-      <label
-        htmlFor={DIALOG_ID}
-        className={classNames('modal', 'cursor-pointer')}>
-        <label
-          className={classNames('modal-box', 'relative pb-16 overflow-visible')}
-          htmlFor="">
-          <div className={classNames('w-full h-full relative z-1')}>
-            <h3
-              className={classNames('text-base-content', 'text-lg font-bold')}>
-              {f('project.createModel')}
-            </h3>
-            <CreateDataModelForm
-              singleInput={false}
-              projectId={projectId}
-              onFinish={handleFinish}
-            />
-          </div>
-          <label
-            htmlFor={DIALOG_ID}
-            className={classNames(
-              'btn btn-sm btn-circle',
-              'absolute right-4 top-4 z-2'
-            )}>
-            <HiOutlineX className="text-lg" />
-          </label>
-        </label>
-      </label>
-    </div>
+    <Dialog
+      id={DIALOG_ID}
+      className="pb-16 overflow-visible"
+      visible={createDataModelDialogVisible}
+      onClose={handleCancel}>
+      <div className={classNames('w-full h-full relative z-1')}>
+        <h3 className={classNames('text-base-content', 'text-lg font-bold')}>
+          {f('project.createModel')}
+        </h3>
+        <CreateDataModelForm
+          singleInput={false}
+          projectId={projectId}
+          onFinish={handleFinish}
+        />
+      </div>
+    </Dialog>
   );
 }
 

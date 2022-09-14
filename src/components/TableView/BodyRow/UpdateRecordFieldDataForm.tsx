@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { getFieldRenderer } from '../../../fileds/renders';
+import { getFieldRenderer } from '../../../fields/renders';
 import {
   IProjectDataField,
   IProjectDataRecord,
@@ -62,6 +62,7 @@ function UpdateRecordFieldDataForm(props: IUpdateRecordFieldDataFormProps) {
       {renderer &&
         renderer.renderTableCellEditing(field, data, {
           loading: isLoading,
+          className: 'w-full',
           onCancel,
           onChange,
         })}

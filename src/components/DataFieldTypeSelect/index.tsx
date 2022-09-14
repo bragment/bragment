@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react';
-import { getAllFieldRenderers } from '../../fileds/renders';
+import { getAllFieldRenderers } from '../../fields/renders';
 import { EDataFieldType } from '../../libs/client/types';
 import { useFormatMessage } from '../hooks';
 import SelectInput, {

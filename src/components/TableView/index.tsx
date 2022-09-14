@@ -18,12 +18,12 @@ import {
 import Scrollbars from 'react-custom-scrollbars-2';
 import {
   EDataFilterConjunction,
+  IDataFilter,
+  IDataSorter,
   IProject,
   IProjectDataField,
-  IProjectDataFilter,
   IProjectDataModel,
   IProjectDataRecord,
-  IProjectDataSorter,
   IProjectDataView,
 } from '../../libs/client/types';
 import {
@@ -60,15 +60,16 @@ function TableView(props: ITableViewProps) {
   const scrollBarRef = useRef<Scrollbars>(null);
 
   const { _id: projectId } = project;
+  const { _id: modelId } = model;
   const { _id: viewId, filters = [], sorters = [] } = view;
   const mainFieldId = model.mainField || fields[0]?._id;
   const modelFields = useMemo(
-    () => fields.filter((field) => field.model === model._id),
-    [fields, model]
+    () => fields.filter((field) => field.model === modelId),
+    [fields, modelId]
   );
   const modelRecords = useMemo(
-    () => records.filter((record) => record.model === model._id),
-    [records, model]
+    () => records.filter((record) => record.model === modelId),
+    [records, modelId]
   );
   const visibleFieldIds = useMemo(
     () =>
@@ -186,7 +187,7 @@ function TableView(props: ITableViewProps) {
     [setColumnOrder, setColumnVisibility, modelFields]
   );
   const handleSortingChange = useCallback(
-    (sorterList: IProjectDataSorter[]) => {
+    (sorterList: IDataSorter[]) => {
       setSorting(
         sorterList.map((el) => ({ id: el.field, desc: el.descending }))
       );
@@ -194,7 +195,7 @@ function TableView(props: ITableViewProps) {
     [setSorting]
   );
   const handleFiltersChange = useCallback(
-    (filterList: IProjectDataFilter[]) => {
+    (filterList: IDataFilter[]) => {
       setColumnFilters(
         filterList.map((el) => ({
           id: el.field,
@@ -259,6 +260,8 @@ function TableView(props: ITableViewProps) {
   return (
     <ScrollContainer className={classNames(styles.wrapper)} ref={scrollBarRef}>
       <ControlRow
+        projectId={projectId}
+        modelId={modelId}
         mainFieldId={mainFieldId}
         modelFields={modelFields}
         visibleFieldIds={visibleFieldIds}
@@ -279,8 +282,8 @@ function TableView(props: ITableViewProps) {
         <HeadRow
           key={viewId}
           headers={headerGroup.headers}
-          projectId={project._id}
-          modelId={model._id}
+          projectId={projectId}
+          modelId={modelId}
           modelFields={modelFields}
           onCreateDateFieldFinish={handleCreateDateFieldFinish}
         />
@@ -296,8 +299,8 @@ function TableView(props: ITableViewProps) {
 
       {modelFields.length > 0 && (
         <TailRow
-          projectId={project._id}
-          modelId={model._id}
+          projectId={projectId}
+          modelId={modelId}
           mainFieldId={mainFieldId}
           modelFields={modelFields}
           borderedTop={rowModel.rows.length > 0}
