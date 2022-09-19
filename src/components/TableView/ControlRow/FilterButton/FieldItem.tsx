@@ -112,7 +112,7 @@ function FieldItem(props: IFieldItemProps) {
     <div className={classNames('bg-base-100', 'rounded-lg')}>
       <div
         className={classNames(
-          'hover:bg-base-content/10 focus-within:bg-base-content/10',
+          'focus-within:bg-base-content/10',
           'rounded-lg pl-4 pr-2 py-2 flex items-center text-base-content'
         )}>
         <div className="flex-auto mr-2">
@@ -123,6 +123,7 @@ function FieldItem(props: IFieldItemProps) {
             contentClassName={styles.selectContent}
             defaultValue={field._id}
             withMask
+            gapSize={1}
             getOptions={getOptions}
             getSelectedOption={getSelectedOption}
             onChange={handleFieldChange}

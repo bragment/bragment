@@ -7,6 +7,7 @@ import Dropdown from '../../../Dropdown';
 import { useFormatMessage, useNestedState } from '../../../hooks';
 import ScrollContainer from '../../../ScrollContainer';
 import SortableList from '../../../SortableList';
+import { IDragDropListProps } from '../../../SortableList/DragDropList';
 import FieldItem, { IInnerSorter } from './FieldItem';
 
 interface ISortingButtonProps {
@@ -55,7 +56,6 @@ function SortingButton(props: ISortingButtonProps) {
     props;
   const f = useFormatMessage();
   const scrollBarsRef = useRef<Scrollbars>(null);
-  const containerRef = useRef<HTMLDivElement>();
   const openedRef = useRef(false);
   const [innerSorterList, setInnerSorterList] = useNestedState(
     initializeInnerSorterList(modelFields, sorters)
@@ -77,19 +77,21 @@ function SortingButton(props: ISortingButtonProps) {
     },
     [setInnerSorterList]
   );
-  const renderItem = useCallback(
-    ({ field, descending }: IInnerSorter, index: number) => (
-      <FieldItem
-        index={index}
-        field={field}
-        descending={descending}
-        otherFields={otherFieldList}
-        onChange={updateInnerSorterList}
-        onDelete={updateInnerSorterList}
-      />
-    ),
-    [updateInnerSorterList, otherFieldList]
-  );
+  const renderItem: IDragDropListProps<IInnerSorter>['renderItem'] =
+    useCallback(
+      ({ field, descending }, index, dragHandleProps) => (
+        <FieldItem
+          index={index}
+          field={field}
+          descending={descending}
+          otherFields={otherFieldList}
+          dragHandleProps={dragHandleProps}
+          onChange={updateInnerSorterList}
+          onDelete={updateInnerSorterList}
+        />
+      ),
+      [updateInnerSorterList, otherFieldList]
+    );
 
   const getItemId = useCallback((sorter: IInnerSorter) => {
     return sorter.field._id;
@@ -132,15 +134,15 @@ function SortingButton(props: ISortingButtonProps) {
     });
   }, [setInnerSorterList, otherFieldList]);
 
+  const getContainer = useCallback(() => {
+    return scrollBarsRef.current?.container;
+  }, []);
+
   useLayoutEffect(() => {
     setOtherFieldList(
       initializeOtherFieldList(modelFields, visibleFieldIds, innerSorterList)
     );
   }, [setOtherFieldList, modelFields, visibleFieldIds, innerSorterList]);
-
-  useEffect(() => {
-    containerRef.current = scrollBarsRef.current?.container;
-  });
 
   useEffect(() => {
     if (openedRef.current) {
@@ -183,8 +185,9 @@ function SortingButton(props: ISortingButtonProps) {
             withShadow
             autoHeightMax={280}>
             <SortableList
+              customDragHandle
               droppableId="SORTABLE_FIELD_LIST"
-              containerRef={containerRef}
+              getContainer={getContainer}
               listClassName="px-2"
               list={innerSorterList}
               getItemId={getItemId}

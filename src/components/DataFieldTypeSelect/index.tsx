@@ -46,6 +46,7 @@ function DataFieldTypeSelect(props: IDataFieldTypeSelectProps) {
       name="type"
       defaultValue={defaultValue}
       options={options}
+      gapSize={2}
       onChange={onChange as ISelectInputProps['onChange']}
     />
   );

@@ -11,6 +11,7 @@ export interface IDragDropProps<T> {
   list: T[];
   listClassName?: string;
   itemClassName?: string;
+  customDragHandle?: boolean;
   getItemId: (data: T) => string;
   getItemDraggable?: (data: T) => boolean;
   renderItem: (
@@ -23,7 +24,6 @@ export interface IDragDropProps<T> {
 export interface IDragDropListProps<T> extends IDragDropProps<T> {
   offsetDiffRef: React.RefObject<{ x: number; y: number }>;
   droppable?: boolean;
-  customDragHandle?: boolean;
 }
 
 function DragDropList<T>(props: IDragDropListProps<T>) {

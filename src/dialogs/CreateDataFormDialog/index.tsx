@@ -179,7 +179,7 @@ function CreateDataFormDialog() {
       className="w-11/12 max-w-5xl p-0"
       visible={createDataFormDialogVisible}
       onClose={handleCancel}>
-      <div className={classNames('w-full h-full relative z-1')}>
+      <div className={classNames('w-full h-full relative')}>
         <h3
           className={classNames(
             'text-base-content',

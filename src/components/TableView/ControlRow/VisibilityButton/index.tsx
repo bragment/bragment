@@ -7,6 +7,7 @@ import Dropdown, { IDropdownRef } from '../../../Dropdown';
 import { useFormatMessage } from '../../../hooks';
 import ScrollContainer from '../../../ScrollContainer';
 import SortableList from '../../../SortableList';
+import { IDragDropListProps } from '../../../SortableList/DragDropList';
 import { CREATE_FIELD_MODAL_TOGGLE_ID } from '../../HeadRow';
 import FieldItem from './FieldItem';
 
@@ -58,7 +59,6 @@ function VisibilityButton(props: IVisibilityButtonProps) {
   } = props;
   const f = useFormatMessage();
   const scrollBarsRef = useRef<Scrollbars>(null);
-  const containerRef = useRef<HTMLDivElement>();
   const dropdownRef = useRef<IDropdownRef>(null);
   const openedRef = useRef(false);
   const [visibleFieldRecord, setVisibleFieldRecord] = useState(
@@ -75,20 +75,22 @@ function VisibilityButton(props: IVisibilityButtonProps) {
     },
     []
   );
-  const renderItem = useCallback(
-    (field: IProjectDataField) => (
-      <FieldItem
-        field={field}
-        main={field._id === mainFieldId}
-        visible={!!visibleFieldRecord[field._id]}
-        onVisibleChange={updateVisibleFieldRecord}
-      />
-    ),
-    [mainFieldId, visibleFieldRecord, updateVisibleFieldRecord]
-  );
+  const renderItem: IDragDropListProps<IProjectDataField>['renderItem'] =
+    useCallback(
+      (field, _index, dragHandleProps) => (
+        <FieldItem
+          field={field}
+          main={field._id === mainFieldId}
+          visible={!!visibleFieldRecord[field._id]}
+          dragHandleProps={dragHandleProps}
+          onVisibleChange={updateVisibleFieldRecord}
+        />
+      ),
+      [mainFieldId, visibleFieldRecord, updateVisibleFieldRecord]
+    );
   const mainField = modelFields.find((el) => el._id === mainFieldId);
   const mainFieldItem = useMemo(
-    () => mainField && renderItem(mainField),
+    () => mainField && renderItem(mainField, 0, null),
     [mainField, renderItem]
   );
 
@@ -129,13 +131,14 @@ function VisibilityButton(props: IVisibilityButtonProps) {
   }, [onClose]);
 
   const handleAddField = () => {
+    // TODO: should add field inside
     dropdownRef.current?.close();
     document.getElementById(CREATE_FIELD_MODAL_TOGGLE_ID)?.click();
   };
 
-  useEffect(() => {
-    containerRef.current = scrollBarsRef.current?.container;
-  });
+  const getContainer = useCallback(() => {
+    return scrollBarsRef.current?.container;
+  }, []);
 
   useEffect(() => {
     if (openedRef.current) {
@@ -179,8 +182,9 @@ function VisibilityButton(props: IVisibilityButtonProps) {
             autoHeightMax={280}>
             <div className="px-2">{mainFieldItem}</div>
             <SortableList
+              customDragHandle
               droppableId="SORTABLE_FIELD_LIST"
-              containerRef={containerRef}
+              getContainer={getContainer}
               listClassName="px-2"
               list={orderingFieldList}
               getItemId={getItemId}

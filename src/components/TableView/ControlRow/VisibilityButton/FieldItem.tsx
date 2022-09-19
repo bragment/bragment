@@ -1,19 +1,23 @@
+import { DraggableProvidedDragHandleProps } from '@hello-pangea/dnd';
 import classNames from 'classnames';
 import { memo } from 'react';
+import { HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi';
 import { getFieldIcon } from '../../../../fields/renders';
 import { IProjectDataField } from '../../../../libs/client/types';
 import { useFormatMessage } from '../../../hooks';
+import DragHandle from '../../../SortableList/DragHandle';
 import styles from './index.module.scss';
 
 interface IFieldItemProps {
   field: IProjectDataField;
   main: boolean;
   visible: boolean;
+  dragHandleProps: DraggableProvidedDragHandleProps | null;
   onVisibleChange: (field: IProjectDataField, visible: boolean) => void;
 }
 
 function FieldItem(props: IFieldItemProps) {
-  const { field, main, visible, onVisibleChange } = props;
+  const { field, main, visible, dragHandleProps, onVisibleChange } = props;
   const f = useFormatMessage();
   const handleChange = () => {
     onVisibleChange(field, !visible);
@@ -24,12 +28,14 @@ function FieldItem(props: IFieldItemProps) {
     <div className={classNames('bg-base-100', 'rounded-lg')}>
       <div
         className={classNames(
-          !main &&
-            visible &&
-            'hover:bg-base-content/10 active:bg-base-content/10',
-          'rounded-lg px-4 py-3 flex items-center',
-          main ? 'text-info' : 'text-base-content'
+          'rounded-lg pl-2 pr-4 py-2 flex items-center',
+          main ? 'text-info' : 'text-base-content',
+          styles.fieldItem
         )}>
+        <DragHandle
+          dragHandleProps={visible && !main ? dragHandleProps : null}
+          className={'h-8 px-1 mr-2 text-xl'}
+        />
         {Icon && <Icon className="flex-none mr-2 text-lg" />}
         <span className="flex-auto mr-2 text-ellipsis overflow-hidden whitespace-nowrap">
           {field.title}
@@ -38,7 +44,7 @@ function FieldItem(props: IFieldItemProps) {
           <div
             className={classNames(
               'badge badge-info',
-              'relative',
+              'relative -right-2',
               styles.mainFieldBadge
             )}>
             {f('dataView.mainField')}
@@ -51,12 +57,15 @@ function FieldItem(props: IFieldItemProps) {
             </div>
           </div>
         ) : (
-          <input
-            type="checkbox"
-            className="flex-none toggle"
-            checked={visible}
-            onChange={handleChange}
-          />
+          <label className={classNames('swap', 'flex-none text-lg')}>
+            <input type="checkbox" checked={visible} onChange={handleChange} />
+            <div className="swap-on">
+              <HiOutlineEye />
+            </div>
+            <div className="swap-off">
+              <HiOutlineEyeOff />
+            </div>
+          </label>
         )}
       </div>
     </div>

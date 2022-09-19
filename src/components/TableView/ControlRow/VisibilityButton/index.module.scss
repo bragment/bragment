@@ -6,3 +6,8 @@
     }
   }
 }
+:global(.dragging) {
+  .fieldItem {
+    @apply bg-base-content/10;
+  }
+}
