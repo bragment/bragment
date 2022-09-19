@@ -33,7 +33,7 @@ function CreateWorkspaceDialog() {
       className="pb-16 overflow-visible"
       visible={createWorkspaceDialogVisible}
       onClose={handleCancel}>
-      <div className={classNames('w-full h-full relative z-1')}>
+      <div className={classNames('w-full h-full relative')}>
         <h3 className={classNames('text-base-content', 'text-lg font-bold')}>
           {f('workspace.createWorkspace')}
         </h3>

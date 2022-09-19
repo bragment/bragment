@@ -1,3 +1,4 @@
+import { DraggableProvidedDragHandleProps } from '@hello-pangea/dnd';
 import classNames from 'classnames';
 import { memo, useCallback } from 'react';
 import { HiArrowDown, HiArrowUp, HiTrash } from 'react-icons/hi';
@@ -5,6 +6,7 @@ import { getFieldIcon } from '../../../../fields/renders';
 import { IProjectDataField } from '../../../../libs/client/types';
 import { useFormatMessage } from '../../../hooks';
 import SelectInput from '../../../SelectInput';
+import DragHandle from '../../../SortableList/DragHandle';
 import styles from './index.module.scss';
 
 export interface IInnerSorter {
@@ -15,12 +17,21 @@ export interface IInnerSorter {
 interface IFieldItemProps extends IInnerSorter {
   index: number;
   otherFields: IProjectDataField[];
+  dragHandleProps: DraggableProvidedDragHandleProps | null;
   onChange: (index: number, sorter: IInnerSorter) => void;
   onDelete: (index: number) => void;
 }
 
 function FieldItem(props: IFieldItemProps) {
-  const { index, field, descending, otherFields, onChange, onDelete } = props;
+  const {
+    index,
+    field,
+    descending,
+    otherFields,
+    dragHandleProps,
+    onChange,
+    onDelete,
+  } = props;
   const f = useFormatMessage();
 
   const handleDelete = () => {
@@ -73,9 +84,13 @@ function FieldItem(props: IFieldItemProps) {
     <div className={classNames('bg-base-100', 'rounded-lg')}>
       <div
         className={classNames(
-          'hover:bg-base-content/10 active:bg-base-content/10',
-          'rounded-lg pl-4 pr-2 py-2 flex items-center text-base-content'
+          'rounded-lg pl-2 pr-4 py-2 flex items-center text-base-content',
+          styles.fieldItem
         )}>
+        <DragHandle
+          dragHandleProps={dragHandleProps}
+          className={'h-8 px-1 mr-2 text-xl'}
+        />
         <div className="flex-auto mr-2">
           <SelectInput
             className="w-full"
@@ -84,6 +99,7 @@ function FieldItem(props: IFieldItemProps) {
             contentClassName={styles.selectContent}
             defaultValue={field._id}
             withMask
+            gapSize={1}
             getOptions={getOptions}
             getSelectedOption={getSelectedOption}
             onChange={handleFieldChange}

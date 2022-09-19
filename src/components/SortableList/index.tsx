@@ -4,7 +4,29 @@ import DroppableList, { IDragDropProps } from './DragDropList';
 
 interface ISortableListProps<T> extends IDragDropProps<T> {
   containerRef?: React.RefObject<HTMLElement | null | undefined>;
+  getContainer?: () => HTMLElement | null | undefined;
   onChange: (list: T[]) => void;
+}
+
+let maskElement: HTMLDivElement | undefined;
+
+function addMask(el: HTMLElement) {
+  maskElement?.remove();
+  maskElement = document.createElement('div');
+  maskElement.classList.add(
+    'fixed',
+    'top-0',
+    'bottom-0',
+    'left-0',
+    'right-0',
+    'bg-transparent'
+  );
+  el.prepend(maskElement);
+}
+
+function removeMask() {
+  maskElement?.remove();
+  maskElement = undefined;
 }
 
 function SortableList<T>(props: ISortableListProps<T>) {
@@ -14,6 +36,8 @@ function SortableList<T>(props: ISortableListProps<T>) {
     containerRef,
     listClassName,
     itemClassName,
+    customDragHandle,
+    getContainer,
     getItemId,
     getItemDraggable,
     renderItem,
@@ -33,26 +57,29 @@ function SortableList<T>(props: ISortableListProps<T>) {
         newList.splice(to, 0, item);
         onChange(newList);
       }
+      removeMask();
     },
     [list, onChange]
   );
 
   const handleBeforeDragStart = useCallback(() => {
-    const container = containerRef?.current;
+    const container = getContainer ? getContainer() : containerRef?.current;
     if (container) {
       const cRect = container.getClientRects()[0];
       offsetDiffRef.current = {
         x: cRect.x + container.scrollLeft - container.offsetLeft,
         y: cRect.y + container.scrollTop - container.offsetTop,
       };
+      addMask(container);
     }
-  }, [containerRef]);
+  }, [getContainer, containerRef]);
 
   return (
     <DragDropContext
       onBeforeDragStart={handleBeforeDragStart}
       onDragEnd={handleDragEnd}>
       <DroppableList
+        customDragHandle={customDragHandle}
         droppableId={droppableId}
         list={list}
         offsetDiffRef={offsetDiffRef}

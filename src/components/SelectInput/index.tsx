@@ -20,6 +20,7 @@ export interface ISelectInputProps {
   value?: string;
   options?: ISelectInputOption[];
   withMask?: boolean;
+  gapSize?: number;
   getOptions?: () => ISelectInputOption[];
   getSelectedOption?: () => ISelectInputOption;
   onChange?: (value: string) => void;
@@ -37,6 +38,7 @@ function SelectInput(props: ISelectInputProps) {
     value,
     options,
     withMask,
+    gapSize = 0,
     getOptions,
     getSelectedOption,
     onChange,
@@ -80,7 +82,7 @@ function SelectInput(props: ISelectInputProps) {
     <Dropdown
       ref={dropdownRef}
       withMask={withMask}
-      className={classNames('dropdown-end', className)}
+      className={classNames(className)}
       toggleClassName="relative"
       toggle={
         <>
@@ -105,7 +107,7 @@ function SelectInput(props: ISelectInputProps) {
           )}>
           <ScrollContainer autoHeight withShadow autoHeightMax={280}>
             <ul role="listbox" className="px-2" onClick={handleClick}>
-              {innerOptions?.map((option) => {
+              {innerOptions?.map((option, index) => {
                 const selected = option.value === selectedValue;
                 return (
                   <li
@@ -113,9 +115,10 @@ function SelectInput(props: ISelectInputProps) {
                     className={classNames(
                       'w-full px-2 py-3 rounded-lg',
                       'flex items-center',
+                      index && `mt-${gapSize}`,
                       optionClassName,
                       selected
-                        ? 'bg-info text-info-content'
+                        ? 'bg-primary text-primary-content'
                         : 'cursor-pointer hover:bg-base-content/10',
                       selected && selectedClassName
                     )}

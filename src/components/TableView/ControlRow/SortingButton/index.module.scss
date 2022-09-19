@@ -1,5 +1,10 @@
 .selectContent {
   position: fixed !important;
-  left: 1.5rem;
+  left: 3.25rem;
   width: 12.5rem;
+}
+:global(.dragging) {
+  .fieldItem {
+    @apply bg-base-content/10;
+  }
 }

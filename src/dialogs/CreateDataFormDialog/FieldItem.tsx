@@ -1,7 +1,7 @@
 import { DraggableProvidedDragHandleProps } from '@hello-pangea/dnd';
 import classNames from 'classnames';
 import { memo } from 'react';
-import { AiOutlineHolder } from 'react-icons/ai';
+import DragHandle from '../../components/SortableList/DragHandle';
 import { getFieldIcon } from '../../fields/renders';
 import { IProjectDataField } from '../../libs/client/types';
 
@@ -19,15 +19,10 @@ function FieldItem(props: IFieldItemProps) {
 
   return (
     <div className={classNames('h-12 flex items-center', className)}>
-      <div
-        {...dragHandleProps}
-        className={classNames(
-          'h-8 px-1 mr-2 cursor-grab rounded-lg',
-          'flex items-center',
-          'hover:bg-base-content/10'
-        )}>
-        <AiOutlineHolder className="text-xl" />
-      </div>
+      <DragHandle
+        dragHandleProps={dragHandleProps}
+        className={'h-8 px-1 mr-2 text-xl'}
+      />
       {Icon && <Icon className={classNames('flex-none mr-2 text-lg')} />}
       <div className="text-ellipsis overflow-hidden whitespace-nowrap">
         {field.title}

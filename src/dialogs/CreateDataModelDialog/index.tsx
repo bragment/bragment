@@ -36,7 +36,7 @@ function CreateDataModelDialog() {
       className="pb-16 overflow-visible"
       visible={createDataModelDialogVisible}
       onClose={handleCancel}>
-      <div className={classNames('w-full h-full relative z-1')}>
+      <div className={classNames('w-full h-full relative')}>
         <h3 className={classNames('text-base-content', 'text-lg font-bold')}>
           {f('project.createModel')}
         </h3>
