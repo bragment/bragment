@@ -50,6 +50,7 @@ export default {
   'dataView.sorting': 'Sorting',
   'dataView.table': 'Table',
   'project.addView': 'Add View',
+  'project.createData': 'Create Data',
   'project.createForm': 'Create Form',
   'project.createModel': 'Create Data Source',
   'project.description': 'Project Description',

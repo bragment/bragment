@@ -91,7 +91,7 @@ function FromItem(props: IFromItemProps) {
       <div className="relative pl-20 mt-1">
         <AutoSizeTextArea
           name={[field._id, EDataFormItemKey.label].join(SEPARATOR)}
-          className="text-lg font-bold leading-6 px-4 bg-transparent"
+          className="text-lg font-bold leading-6 px-2.5 bg-transparent"
           defaultValue={label || field.title}
           placeholder={field.title}
           withFocusedBorder

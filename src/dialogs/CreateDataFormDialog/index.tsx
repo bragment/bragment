@@ -221,6 +221,7 @@ function CreateDataFormDialog() {
                     ref={createFormRef}
                     modelId={modelId}
                     offsetDiffRef={offsetDiffRef}
+                    existingForms={createDataFormDialogOptions.existingForms}
                     items={formItems}
                     onItemListChange={handleItemListChange}
                   />

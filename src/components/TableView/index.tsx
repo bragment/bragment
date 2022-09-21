@@ -22,6 +22,7 @@ import {
   IDataSorter,
   IProject,
   IProjectDataField,
+  IProjectDataForm,
   IProjectDataModel,
   IProjectDataRecord,
   IProjectDataView,
@@ -52,11 +53,12 @@ interface ITableViewProps {
   model: IProjectDataModel;
   view: IProjectDataView;
   fields: IProjectDataField[];
+  forms: IProjectDataForm[];
   records: IProjectDataRecord[];
 }
 
 function TableView(props: ITableViewProps) {
-  const { project, model, view, fields, records } = props;
+  const { project, model, view, fields, forms, records } = props;
   const scrollBarRef = useRef<Scrollbars>(null);
 
   const { _id: projectId } = project;
@@ -66,6 +68,10 @@ function TableView(props: ITableViewProps) {
   const modelFields = useMemo(
     () => fields.filter((field) => field.model === modelId),
     [fields, modelId]
+  );
+  const modelForms = useMemo(
+    () => forms.filter((form) => form.model === modelId),
+    [forms, modelId]
   );
   const modelRecords = useMemo(
     () => records.filter((record) => record.model === modelId),
@@ -264,6 +270,7 @@ function TableView(props: ITableViewProps) {
         modelId={modelId}
         mainFieldId={mainFieldId}
         modelFields={modelFields}
+        modelForms={modelForms}
         visibleFieldIds={visibleFieldIds}
         visibleFieldCount={
           view.visibleFields?.length ? columnOrder.length : undefined

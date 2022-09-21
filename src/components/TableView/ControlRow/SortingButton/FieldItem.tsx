@@ -84,7 +84,7 @@ function FieldItem(props: IFieldItemProps) {
     <div className={classNames('bg-base-100', 'rounded-lg')}>
       <div
         className={classNames(
-          'rounded-lg pl-2 pr-4 py-2 flex items-center text-base-content',
+          'rounded-lg px-2 py-2 flex items-center text-base-content',
           styles.fieldItem
         )}>
         <DragHandle

@@ -37,8 +37,8 @@ function WorkspaceMenu(props: IWorkspaceMenuProps) {
         styles.workspaceMenu
       )}
       onClick={handleClick}>
-      {workspaces?.map((workspace) => (
-        <li className="mt-2" key={workspace._id}>
+      {workspaces?.map((workspace, index) => (
+        <li className={classNames(index && 'mt-1')} key={workspace._id}>
           <NavLink
             className={getActiveClassName}
             to={getWorkspaceInstancePath(workspace._id)}>
