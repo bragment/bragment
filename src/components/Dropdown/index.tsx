@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import {
   forwardRef,
   memo,
+  useCallback,
   useEffect,
   useImperativeHandle,
   useLayoutEffect,
@@ -11,6 +12,8 @@ import {
 
 export interface IDropdownRef {
   close: () => void;
+  open: () => void;
+  toggle: () => void;
 }
 
 interface IDropdownProps {
@@ -19,6 +22,7 @@ interface IDropdownProps {
   className?: string;
   toggleClassName?: string;
   contentClassName?: string;
+  externalToggleRef?: React.RefObject<HTMLElement>;
   withMask?: boolean;
   onOpen?: () => void;
   onClose?: () => void;
@@ -31,7 +35,8 @@ function Dropdown(props: IDropdownProps, ref: React.Ref<IDropdownRef>) {
     className,
     toggleClassName,
     contentClassName,
-    withMask,
+    externalToggleRef,
+    withMask = false,
     onOpen,
     onClose,
   } = props;
@@ -40,13 +45,13 @@ function Dropdown(props: IDropdownProps, ref: React.Ref<IDropdownRef>) {
   const onOpenRef = useRef(onOpen);
   const onCloseRef = useRef(onClose);
   const divRef = useRef<HTMLDivElement>(null);
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     setOpen((value) => !value);
     const { activeElement } = document;
     if (open && activeElement instanceof HTMLElement) {
       activeElement.blur();
     }
-  };
+  }, [open]);
   const handleMaskClick = () => {
     setOpen(false);
   };
@@ -55,20 +60,27 @@ function Dropdown(props: IDropdownProps, ref: React.Ref<IDropdownRef>) {
     ref,
     () => ({
       close: () => setOpen(false),
+      open: () => setOpen(true),
+      toggle: handleClick,
     }),
-    []
+    [handleClick]
   );
 
   useEffect(() => {
     if (open) {
-      document.addEventListener('mousedown', (e) => {
+      const handleMouseDown = (e: MouseEvent) => {
         const { target } = e;
         if (target instanceof Element && !divRef.current?.contains(target)) {
+          if (externalToggleRef?.current?.contains(target)) {
+            return;
+          }
           setOpen(false);
         }
-      });
+      };
+      document.addEventListener('mousedown', handleMouseDown);
+      return () => document.removeEventListener('mousedown', handleMouseDown);
     }
-  }, [open]);
+  }, [open, externalToggleRef]);
 
   useLayoutEffect(() => {
     onOpenRef.current = onOpen;

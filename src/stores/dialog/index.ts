@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import { IProjectDataField } from '../../libs/client/types';
+import { IProjectDataField, IProjectDataForm } from '../../libs/client/types';
 import { EToastType, IToast } from '../types';
 
 function generateToastKey() {
@@ -12,6 +12,7 @@ interface ICreateDataFormDialogOptions {
   mainFieldId: string;
   modelFields: IProjectDataField[];
   visibleFieldIds?: string[];
+  existingForms?: IProjectDataForm[];
 }
 
 class DialogStore {

@@ -4,8 +4,9 @@ import {
   IDataFilter,
   IDataSorter,
   IProjectDataField,
+  IProjectDataForm,
 } from '../../../libs/client/types';
-import CreateFormButton from './CreateButton/CreateFormButton';
+import CreateButton from './CreateButton';
 import FilterButton from './FilterButton';
 import SearchInput from './SearchInput';
 import SortingButton from './SortingButton';
@@ -16,6 +17,7 @@ interface IControlRowProps {
   modelId: string;
   mainFieldId: string;
   modelFields: IProjectDataField[];
+  modelForms: IProjectDataForm[];
   visibleFieldIds: string[];
   visibleFieldCount?: number;
   sorters: IDataSorter[];
@@ -35,6 +37,7 @@ function ControlRow(props: IControlRowProps) {
     modelId,
     mainFieldId,
     modelFields,
+    modelForms,
     visibleFieldIds,
     visibleFieldCount,
     sorters,
@@ -57,12 +60,13 @@ function ControlRow(props: IControlRowProps) {
         'flex items-center gap-2'
       )}>
       <SearchInput onChange={onSearchInputChange} />
-      <CreateFormButton
+      <CreateButton
         projectId={projectId}
         modelId={modelId}
         mainFieldId={mainFieldId}
         modelFields={modelFields}
         visibleFieldIds={visibleFieldIds}
+        modelForms={modelForms}
       />
       <FilterButton
         modelFields={modelFields}

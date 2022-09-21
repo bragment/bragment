@@ -109,7 +109,7 @@ function FieldItem(props: IFieldItemProps) {
   );
 
   return (
-    <div className={classNames('bg-base-100', 'rounded-lg')}>
+    <li className={classNames('bg-base-100', 'rounded-lg')}>
       <div
         className={classNames(
           'focus-within:bg-base-content/10',
@@ -151,7 +151,7 @@ function FieldItem(props: IFieldItemProps) {
           <HiTrash />
         </button>
       </div>
-    </div>
+    </li>
   );
 }
 

@@ -18,6 +18,7 @@ import {
   IProjectDataField,
   IProjectDataForm,
 } from '../../libs/client/types';
+import { getAvailableTitle } from '../../utils';
 import FormItem, { SEPARATOR } from './FromItem';
 
 export type IInnerDataFormItem = Omit<IDataFormItem, 'field'> & {
@@ -27,6 +28,7 @@ export type IInnerDataFormItem = Omit<IDataFormItem, 'field'> & {
 interface ICreateFormProps {
   modelId: string;
   offsetDiffRef: IDragDropListProps<IInnerDataFormItem>['offsetDiffRef'];
+  existingForms?: IProjectDataForm[];
   items: IInnerDataFormItem[];
   onItemListChange?: (items: IInnerDataFormItem[]) => void;
 }
@@ -38,7 +40,8 @@ export interface ICreateFormRef {
 export const FORM_ITEM_LIST_ID = 'FORM_ITEM_LIST';
 
 function CreateForm(props: ICreateFormProps, ref: Ref<ICreateFormRef>) {
-  const { modelId, offsetDiffRef, items, onItemListChange } = props;
+  const { modelId, offsetDiffRef, existingForms, items, onItemListChange } =
+    props;
   const formRef = useRef<HTMLFormElement>(null);
   const f = useFormatMessage();
 
@@ -122,7 +125,10 @@ function CreateForm(props: ICreateFormProps, ref: Ref<ICreateFormRef>) {
           name="title"
           className="px-4 text-3xl font-bold"
           placeholder={f('project.formTitle')}
-          defaultValue={f('project.newForm')}
+          defaultValue={getAvailableTitle(
+            f('project.newForm'),
+            existingForms?.map((el) => el.title)
+          )}
           withFocusedBorder
           withoutOutline
         />

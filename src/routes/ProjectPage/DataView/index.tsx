@@ -18,8 +18,9 @@ function DataView() {
   const view = project?.views.find((el) => el._id === viewId);
   const model = project?.models.find((el) => el._id === view?.model);
   const fields = project?.fields;
+  const forms = project?.forms;
 
-  if (project && model && view && fields && records) {
+  if (project && model && view && fields && forms && records) {
     if (view.type === EDataViewType.Table) {
       return (
         <TableView
@@ -27,6 +28,7 @@ function DataView() {
           model={model}
           view={view}
           fields={fields}
+          forms={forms}
           records={records}
         />
       );
