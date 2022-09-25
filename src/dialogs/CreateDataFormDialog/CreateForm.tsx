@@ -80,7 +80,7 @@ function CreateForm(props: ICreateFormProps, ref: Ref<ICreateFormRef>) {
       [removeItemByFieldId]
     );
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.stopPropagation();
     e.preventDefault();
   };

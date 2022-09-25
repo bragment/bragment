@@ -67,9 +67,10 @@ function CreateDataFormDialog() {
   const rightSideScrollBarsRef = useRef<Scrollbars>(null);
   const offsetDiffRef = useRef({ x: 0, y: 0 });
 
-  const mutation = useCreateProjectDataFormMutation();
+  const { isLoading, mutateAsync } = useCreateProjectDataFormMutation();
   const projectId = createDataFormDialogOptions?.projectId;
   const modelId = createDataFormDialogOptions?.modelId;
+  const existingForms = createDataFormDialogOptions?.existingForms;
   const [modelFields, setModelFields] = useState(
     createDataFormDialogOptions?.modelFields || []
   );
@@ -145,12 +146,12 @@ function CreateDataFormDialog() {
   );
 
   const handleSave = async () => {
-    if (mutation.isLoading || !projectId) {
+    if (isLoading || !projectId) {
       return;
     }
     const data = createFormRef.current?.getData();
     if (data) {
-      await mutation.mutateAsync({
+      await mutateAsync({
         projectId,
         ...data,
       });
@@ -221,7 +222,7 @@ function CreateDataFormDialog() {
                     ref={createFormRef}
                     modelId={modelId}
                     offsetDiffRef={offsetDiffRef}
-                    existingForms={createDataFormDialogOptions.existingForms}
+                    existingForms={existingForms}
                     items={formItems}
                     onItemListChange={handleItemListChange}
                   />
@@ -233,10 +234,7 @@ function CreateDataFormDialog() {
       </div>
       <div className={classNames('modal-action', 'mt-0 py-4 px-8')}>
         <button
-          className={classNames(
-            'btn btn-primary',
-            mutation.isLoading && 'loading'
-          )}
+          className={classNames('btn btn-primary', isLoading && 'loading')}
           onClick={handleSave}>
           {f('common.save')}
         </button>
