@@ -15,12 +15,22 @@ interface ICreateDataFormDialogOptions {
   existingForms?: IProjectDataForm[];
 }
 
+interface ICreateDataRecordDialogOptions {
+  projectId: string;
+  modelId: string;
+  modelFields: IProjectDataField[];
+  modelForm: IProjectDataForm;
+}
+
 class DialogStore {
   public createWorkspaceDialogVisible = false;
   public createProjectDialogVisible = false;
   public createDataModelDialogVisible = false;
   public createDataFormDialogVisible = false;
+  public createDataRecordDialogVisible = false;
   public createDataFormDialogOptions: ICreateDataFormDialogOptions | null =
+    null;
+  public createDataRecordDialogOptions: ICreateDataRecordDialogOptions | null =
     null;
   public toastList: IToast[] = [];
 
@@ -46,6 +56,14 @@ class DialogStore {
   ) => {
     this.createDataFormDialogVisible = visible;
     this.createDataFormDialogOptions = options ? { ...options } : options;
+  };
+
+  public setCreateDataRecordDialogVisible = (
+    visible: boolean,
+    options: ICreateDataRecordDialogOptions | null = null
+  ) => {
+    this.createDataRecordDialogVisible = visible;
+    this.createDataRecordDialogOptions = options ? { ...options } : options;
   };
 
   public setToastList = (list: IToast[]) => {

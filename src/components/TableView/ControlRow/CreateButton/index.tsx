@@ -36,16 +36,35 @@ function CreateButton(props: ICreateButtonProps) {
   const scrollBarsRef = useRef<Scrollbars>(null);
   const dropdownRef = useRef<IDropdownRef>(null);
   const externalToggleRef = useRef<HTMLButtonElement>(null);
-  const { setCreateDataFormDialogVisible } = useDialogStore();
+  const { setCreateDataFormDialogVisible, setCreateDataRecordDialogVisible } =
+    useDialogStore();
   const f = useFormatMessage();
 
-  const renderItem = useCallback(
-    (form: IProjectDataForm) => <Item key={form._id} form={form} />,
-    []
+  const handleFormClick = useCallback(
+    (modelForm: IProjectDataForm) => {
+      setCreateDataRecordDialogVisible(true, {
+        projectId,
+        modelId,
+        modelForm,
+        modelFields,
+      });
+    },
+    [setCreateDataRecordDialogVisible, projectId, modelId, modelFields]
   );
 
-  const handleRightSideClick = () => {
+  const renderItem = useCallback(
+    (form: IProjectDataForm) => (
+      <Item key={form._id} form={form} onClick={handleFormClick} />
+    ),
+    [handleFormClick]
+  );
+
+  const handleListFormClick = () => {
     dropdownRef.current?.toggle();
+  };
+
+  const handleCreateDataClick = () => {
+    handleFormClick(modelForms[0]);
   };
 
   const handleCreateFormClick = () => {
@@ -71,14 +90,16 @@ function CreateButton(props: ICreateButtonProps) {
 
   return (
     <div className="btn-group">
-      <button className={classNames('btn btn-sm', 'h-10')}>
+      <button
+        className={classNames('btn btn-sm', 'h-10')}
+        onClick={handleCreateDataClick}>
         <HiOutlinePlus className="text-base mr-2" />
         {f('project.createData')}
       </button>
       <button
         ref={externalToggleRef}
         className={classNames('btn btn-sm', 'h-10')}
-        onClick={handleRightSideClick}>
+        onClick={handleListFormClick}>
         <HiOutlineChevronDown className="text-base" />
       </button>
       <Dropdown

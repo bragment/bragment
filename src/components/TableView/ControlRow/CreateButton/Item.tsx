@@ -4,12 +4,18 @@ import { IProjectDataForm } from '../../../../libs/client/types';
 
 interface IItemProps {
   form: IProjectDataForm;
+  onClick: (form: IProjectDataForm) => void;
 }
 
 function Item(props: IItemProps) {
-  const { form } = props;
+  const { form, onClick } = props;
+  const handleClick = () => {
+    onClick(form);
+  };
   return (
-    <li className={classNames('bg-base-100', 'rounded-lg')}>
+    <li
+      className={classNames('bg-base-100', 'rounded-lg')}
+      onClick={handleClick}>
       <div
         className={classNames(
           'cursor-pointer hover:bg-base-content/10',
