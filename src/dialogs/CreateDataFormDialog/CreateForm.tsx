@@ -28,8 +28,9 @@ export type IInnerDataFormItem = Omit<IDataFormItem, 'field'> & {
 interface ICreateFormProps {
   modelId: string;
   offsetDiffRef: IDragDropListProps<IInnerDataFormItem>['offsetDiffRef'];
-  existingForms?: IProjectDataForm[];
   items: IInnerDataFormItem[];
+  existingForms?: IProjectDataForm[];
+  title?: string;
   onItemListChange?: (items: IInnerDataFormItem[]) => void;
 }
 
@@ -40,8 +41,14 @@ export interface ICreateFormRef {
 export const FORM_ITEM_LIST_ID = 'FORM_ITEM_LIST';
 
 function CreateForm(props: ICreateFormProps, ref: Ref<ICreateFormRef>) {
-  const { modelId, offsetDiffRef, existingForms, items, onItemListChange } =
-    props;
+  const {
+    modelId,
+    offsetDiffRef,
+    items,
+    existingForms,
+    title,
+    onItemListChange,
+  } = props;
   const formRef = useRef<HTMLFormElement>(null);
   const f = useFormatMessage();
 
@@ -125,10 +132,14 @@ function CreateForm(props: ICreateFormProps, ref: Ref<ICreateFormRef>) {
           name="title"
           className="px-4 text-3xl font-bold"
           placeholder={f('project.formTitle')}
-          defaultValue={getAvailableTitle(
-            f('project.newForm'),
-            existingForms?.map((el) => el.title)
-          )}
+          defaultValue={
+            title !== undefined
+              ? title
+              : getAvailableTitle(
+                  f('project.newForm'),
+                  existingForms?.map((el) => el.title)
+                )
+          }
           withFocusedBorder
           withoutOutline
         />
@@ -143,6 +154,7 @@ function CreateForm(props: ICreateFormProps, ref: Ref<ICreateFormRef>) {
         getItemId={getItemId}
         renderItem={renderItem}
       />
+      <br />
     </form>
   );
 }

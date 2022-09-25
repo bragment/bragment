@@ -4,8 +4,9 @@ import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import Dialog from '../../components/Dialog';
 import { useDialogStore, useFormatMessage } from '../../components/hooks';
 import ScrollContainer from '../../components/ScrollContainer';
-import { IDataFormItem, IProjectDataField } from '../../libs/client/types';
+import { IProjectDataField, IProjectDataForm } from '../../libs/client/types';
 import { useCreateProjectDataRecordMutation } from '../../libs/react-query';
+import { generateFormItem, initializeFormItems } from '../CreateDataFormDialog';
 import { IInnerDataFormItem } from '../CreateDataFormDialog/CreateForm';
 import CreateDataRecordForm, {
   ICreateDataRecordFormRef,
@@ -13,18 +14,18 @@ import CreateDataRecordForm, {
 
 const DIALOG_ID = 'CREATE_RECORD_FORM_DIALOG';
 
-function initializeFormItems(
+function initializeHiddenItems(
   modelFields: IProjectDataField[],
-  items: IDataFormItem[]
+  visibleFieldIds?: string[],
+  modelForm?: IProjectDataForm
 ) {
-  const record: Record<string, IProjectDataField> = {};
-  modelFields.forEach((el) => (record[el._id] = el));
-  return items
-    .filter((item) => !!record[item.field])
-    .map<IInnerDataFormItem>((item) => ({
-      ...item,
-      field: record[item.field],
-    }));
+  if (!visibleFieldIds || modelForm) {
+    return [];
+  }
+  const visibleSet = new Set(visibleFieldIds);
+  return modelFields
+    .filter((el) => !visibleSet.has(el._id))
+    .map((el) => generateFormItem(el));
 }
 
 function CreateDataRecordDialog() {
@@ -41,6 +42,7 @@ function CreateDataRecordDialog() {
   const modelForm = createDataRecordDialogOptions?.modelForm;
   const title = modelForm?.title || '';
   const [formItems, setFormItems] = useState<IInnerDataFormItem[]>([]);
+  const [hiddenItems, setHiddenItems] = useState<IInnerDataFormItem[]>([]);
 
   const handleCancel = useCallback(() => {
     setCreateDataRecordDialogVisible(false);
@@ -63,11 +65,17 @@ function CreateDataRecordDialog() {
   useLayoutEffect(() => {
     if (createDataRecordDialogVisible) {
       const _modelFields = createDataRecordDialogOptions?.modelFields || [];
-      const _items = createDataRecordDialogOptions?.modelForm.items || [];
-      const _formItems = initializeFormItems(_modelFields, _items);
-      setFormItems(_formItems);
+      const _visibleFieldIds = createDataRecordDialogOptions?.visibleFieldIds;
+      const _modelForm = createDataRecordDialogOptions?.modelForm;
+      setFormItems(
+        initializeFormItems(_modelFields, _visibleFieldIds, _modelForm)
+      );
+      setHiddenItems(
+        initializeHiddenItems(_modelFields, _visibleFieldIds, _modelForm)
+      );
     } else {
       setFormItems([]);
+      setHiddenItems([]);
     }
   }, [createDataRecordDialogVisible, createDataRecordDialogOptions]);
 
@@ -94,7 +102,7 @@ function CreateDataRecordDialog() {
           )}>
           <div className={classNames('flex-auto')}>
             <ScrollContainer>
-              {modelId && projectId && modelForm && (
+              {modelId && projectId && (
                 <div className="max-w-xl mx-auto">
                   <CreateDataRecordForm
                     ref={createDataRecordFormRef}
@@ -102,6 +110,7 @@ function CreateDataRecordDialog() {
                     modelId={modelId}
                     title={title}
                     items={formItems}
+                    hiddenItems={hiddenItems}
                   />
                 </div>
               )}

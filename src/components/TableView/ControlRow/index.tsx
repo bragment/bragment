@@ -60,36 +60,40 @@ function ControlRow(props: IControlRowProps) {
         'flex items-center gap-2'
       )}>
       <SearchInput onChange={onSearchInputChange} />
-      <CreateButton
-        projectId={projectId}
-        modelId={modelId}
-        mainFieldId={mainFieldId}
-        modelFields={modelFields}
-        visibleFieldIds={visibleFieldIds}
-        modelForms={modelForms}
-      />
-      <FilterButton
-        modelFields={modelFields}
-        visibleFieldIds={visibleFieldIds}
-        filters={filters}
-        onChange={onFiltersChange}
-        onClose={onShouldUpdateFilters}
-      />
-      <SortingButton
-        modelFields={modelFields}
-        visibleFieldIds={visibleFieldIds}
-        sorters={sorters}
-        onChange={onSortingChange}
-        onClose={onShouldUpdateSorting}
-      />
-      <VisibilityButton
-        mainFieldId={mainFieldId}
-        modelFields={modelFields}
-        visibleFieldIds={visibleFieldIds}
-        count={visibleFieldCount}
-        onChange={onVisibilityChange}
-        onClose={onShouldUpdateVisibility}
-      />
+      {!!modelFields.length && (
+        <>
+          <CreateButton
+            projectId={projectId}
+            modelId={modelId}
+            mainFieldId={mainFieldId}
+            modelFields={modelFields}
+            visibleFieldIds={visibleFieldIds}
+            modelForms={modelForms}
+          />
+          <FilterButton
+            modelFields={modelFields}
+            visibleFieldIds={visibleFieldIds}
+            filters={filters}
+            onChange={onFiltersChange}
+            onClose={onShouldUpdateFilters}
+          />
+          <SortingButton
+            modelFields={modelFields}
+            visibleFieldIds={visibleFieldIds}
+            sorters={sorters}
+            onChange={onSortingChange}
+            onClose={onShouldUpdateSorting}
+          />
+          <VisibilityButton
+            mainFieldId={mainFieldId}
+            modelFields={modelFields}
+            visibleFieldIds={visibleFieldIds}
+            count={visibleFieldCount}
+            onChange={onVisibilityChange}
+            onClose={onShouldUpdateVisibility}
+          />
+        </>
+      )}
     </div>
   );
 }

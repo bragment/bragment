@@ -10,8 +10,11 @@ import Scrollbars from 'react-custom-scrollbars-2';
 import Dialog from '../../components/Dialog';
 import { useDialogStore, useFormatMessage } from '../../components/hooks';
 import ScrollContainer from '../../components/ScrollContainer';
-import { IProjectDataField } from '../../libs/client/types';
-import { useCreateProjectDataFormMutation } from '../../libs/react-query';
+import { IProjectDataField, IProjectDataForm } from '../../libs/client/types';
+import {
+  useCreateProjectDataFormMutation,
+  useUpdateProjectDataFormMutation,
+} from '../../libs/react-query';
 import CreateForm, {
   FORM_ITEM_LIST_ID,
   ICreateFormRef,
@@ -29,14 +32,23 @@ function initializeUsableFields(
   return modelFields.filter((el) => !set.has(el._id));
 }
 
-function initializeFormItems(
+export function initializeFormItems(
   modelFields: IProjectDataField[],
-  visibleFieldIds?: string[]
+  visibleFieldIds?: string[],
+  modelForm?: IProjectDataForm
 ) {
+  const record: Record<string, IProjectDataField> = {};
+  modelFields.forEach((el) => (record[el._id] = el));
+  if (modelForm) {
+    return modelForm.items
+      .filter((el) => !!record[el.field])
+      .map((el) => ({
+        ...el,
+        field: record[el.field],
+      }));
+  }
   let visibleFields: IProjectDataField[] = [];
   if (visibleFieldIds && visibleFieldIds.length > 0) {
-    const record: Record<string, IProjectDataField> = {};
-    modelFields.forEach((el) => (record[el._id] = el));
     visibleFields = visibleFieldIds
       .map((id) => record[id])
       .filter((el) => !!el);
@@ -46,7 +58,7 @@ function initializeFormItems(
   );
 }
 
-function generateFormItem(field: IProjectDataField) {
+export function generateFormItem(field: IProjectDataField) {
   return {
     field: field,
     label: field.title,
@@ -67,10 +79,15 @@ function CreateDataFormDialog() {
   const rightSideScrollBarsRef = useRef<Scrollbars>(null);
   const offsetDiffRef = useRef({ x: 0, y: 0 });
 
-  const { isLoading, mutateAsync } = useCreateProjectDataFormMutation();
+  const { isLoading: isCreating, mutateAsync: createAsync } =
+    useCreateProjectDataFormMutation();
+  const { isLoading: isUpdating, mutateAsync: updateAsync } =
+    useUpdateProjectDataFormMutation();
   const projectId = createDataFormDialogOptions?.projectId;
   const modelId = createDataFormDialogOptions?.modelId;
   const existingForms = createDataFormDialogOptions?.existingForms;
+  const modelForm = createDataFormDialogOptions?.modelForm;
+  const editing = createDataFormDialogOptions?.editing;
   const [modelFields, setModelFields] = useState(
     createDataFormDialogOptions?.modelFields || []
   );
@@ -146,15 +163,17 @@ function CreateDataFormDialog() {
   );
 
   const handleSave = async () => {
-    if (isLoading || !projectId) {
+    if (isCreating || isUpdating || !projectId) {
       return;
     }
     const data = createFormRef.current?.getData();
     if (data) {
-      await mutateAsync({
-        projectId,
-        ...data,
-      });
+      await (editing && modelForm
+        ? updateAsync({ projectId, formId: modelForm._id, ...data })
+        : createAsync({
+            projectId,
+            ...data,
+          }));
       setCreateDataFormDialogVisible(false);
     }
   };
@@ -163,7 +182,12 @@ function CreateDataFormDialog() {
     if (createDataFormDialogVisible) {
       const _modelFields = createDataFormDialogOptions?.modelFields || [];
       const _visibleFieldIds = createDataFormDialogOptions?.visibleFieldIds;
-      const _formItems = initializeFormItems(_modelFields, _visibleFieldIds);
+      const _modelForm = createDataFormDialogOptions?.modelForm;
+      const _formItems = initializeFormItems(
+        _modelFields,
+        _visibleFieldIds,
+        _modelForm
+      );
       setModelFields(_modelFields);
       setFormItems(_formItems);
       setUsableFields(initializeUsableFields(_modelFields, _formItems));
@@ -171,8 +195,7 @@ function CreateDataFormDialog() {
       setFormItems([]);
       setUsableFields([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [createDataFormDialogVisible]);
+  }, [createDataFormDialogVisible, createDataFormDialogOptions]);
 
   return (
     <Dialog
@@ -186,7 +209,7 @@ function CreateDataFormDialog() {
             'text-base-content',
             'p-[1.125rem] text-lg font-bold'
           )}>
-          {f('project.createForm')}
+          {f(editing ? 'project.editForm' : 'project.createForm')}
         </h3>
         <div
           style={{ height: 'calc(100vh - 16.25rem)' }}
@@ -220,10 +243,11 @@ function CreateDataFormDialog() {
                 {modelId && (
                   <CreateForm
                     ref={createFormRef}
-                    modelId={modelId}
+                    modelId={modelForm?.model || modelId}
                     offsetDiffRef={offsetDiffRef}
-                    existingForms={existingForms}
                     items={formItems}
+                    existingForms={existingForms}
+                    title={modelForm?.title}
                     onItemListChange={handleItemListChange}
                   />
                 )}
@@ -234,7 +258,10 @@ function CreateDataFormDialog() {
       </div>
       <div className={classNames('modal-action', 'mt-0 py-4 px-8')}>
         <button
-          className={classNames('btn btn-primary', isLoading && 'loading')}
+          className={classNames(
+            'btn btn-primary',
+            (isCreating || isUpdating) && 'loading'
+          )}
           onClick={handleSave}>
           {f('common.save')}
         </button>

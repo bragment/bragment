@@ -1,15 +1,12 @@
 import classNames from 'classnames';
 import { memo, useCallback, useRef } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
-import {
-  HiOutlineChevronDown,
-  HiOutlineClipboardList,
-  HiOutlinePlus,
-} from 'react-icons/hi';
+import { HiOutlineChevronDown, HiOutlinePlus } from 'react-icons/hi';
 import {
   IProjectDataField,
   IProjectDataForm,
 } from '../../../../libs/client/types';
+import { useDeleteProjectDataFormMutation } from '../../../../libs/react-query';
 import Dropdown, { IDropdownRef } from '../../../Dropdown';
 import { useDialogStore, useFormatMessage } from '../../../hooks';
 import ScrollContainer from '../../../ScrollContainer';
@@ -25,38 +22,64 @@ interface ICreateButtonProps {
 }
 
 function CreateButton(props: ICreateButtonProps) {
-  const {
-    modelForms,
-    projectId,
-    modelId,
-    mainFieldId,
-    modelFields,
-    visibleFieldIds,
-  } = props;
+  const { modelForms, projectId, modelId, modelFields, visibleFieldIds } =
+    props;
   const scrollBarsRef = useRef<Scrollbars>(null);
   const dropdownRef = useRef<IDropdownRef>(null);
   const externalToggleRef = useRef<HTMLButtonElement>(null);
   const { setCreateDataFormDialogVisible, setCreateDataRecordDialogVisible } =
     useDialogStore();
+  const { mutateAsync } = useDeleteProjectDataFormMutation();
   const f = useFormatMessage();
 
   const handleFormClick = useCallback(
-    (modelForm: IProjectDataForm) => {
+    (modelForm?: IProjectDataForm) => {
       setCreateDataRecordDialogVisible(true, {
         projectId,
         modelId,
         modelForm,
         modelFields,
+        visibleFieldIds,
       });
     },
-    [setCreateDataRecordDialogVisible, projectId, modelId, modelFields]
+    [
+      setCreateDataRecordDialogVisible,
+      projectId,
+      modelId,
+      modelFields,
+      visibleFieldIds,
+    ]
+  );
+  const handleFormEdit = useCallback(
+    (modelForm: IProjectDataForm) => {
+      setCreateDataFormDialogVisible(true, {
+        projectId,
+        modelId,
+        modelForm,
+        modelFields,
+        editing: true,
+      });
+    },
+    [setCreateDataFormDialogVisible, projectId, modelId, modelFields]
+  );
+  const handleFormDelete = useCallback(
+    async (form: IProjectDataForm) => {
+      await mutateAsync({ projectId, form });
+    },
+    [mutateAsync, projectId]
   );
 
   const renderItem = useCallback(
     (form: IProjectDataForm) => (
-      <Item key={form._id} form={form} onClick={handleFormClick} />
+      <Item
+        key={form._id}
+        form={form}
+        onClick={handleFormClick}
+        onEdit={handleFormEdit}
+        onDelete={handleFormDelete}
+      />
     ),
-    [handleFormClick]
+    [handleFormClick, handleFormEdit, handleFormDelete]
   );
 
   const handleListFormClick = () => {
@@ -64,29 +87,18 @@ function CreateButton(props: ICreateButtonProps) {
   };
 
   const handleCreateDataClick = () => {
-    handleFormClick(modelForms[0]);
+    handleFormClick();
   };
 
   const handleCreateFormClick = () => {
     setCreateDataFormDialogVisible(true, {
       projectId,
       modelId,
-      mainFieldId,
       modelFields,
       visibleFieldIds,
+      existingForms: modelForms,
     });
   };
-
-  if (!modelForms.length) {
-    return (
-      <button
-        className={classNames('btn btn-sm', 'h-10')}
-        onClick={handleCreateFormClick}>
-        <HiOutlineClipboardList className="text-base mr-2" />
-        {f('project.createForm')}
-      </button>
-    );
-  }
 
   return (
     <div className="btn-group">
