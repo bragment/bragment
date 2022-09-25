@@ -71,6 +71,17 @@ export async function createProjectDataRecord(
   );
 }
 
+export async function deleteProjectDataForm(input: {
+  projectId: string;
+  form: IProjectDataForm;
+}) {
+  return baseRequest<IProject>(
+    mainServerApi,
+    'DELETE',
+    `/project/${input.projectId}/form/${input.form._id}`
+  );
+}
+
 export function fetchProjectDataRecords(projectId: string) {
   return baseRequest<IProjectDataRecord[]>(
     mainServerApi,
@@ -111,6 +122,18 @@ export function updateProjectDataField(
     mainServerApi,
     'PUT',
     `/project/${projectId}/field/${fieldId}`,
+    input
+  );
+}
+
+export function updateProjectDataFrom(
+  input: Partial<IProjectDataForm> & { projectId: string; formId: string }
+) {
+  const { formId, projectId } = input;
+  return baseRequest<IProject>(
+    mainServerApi,
+    'PUT',
+    `/project/${projectId}/form/${formId}`,
     input
   );
 }

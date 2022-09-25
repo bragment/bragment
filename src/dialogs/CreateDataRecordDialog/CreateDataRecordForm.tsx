@@ -1,4 +1,14 @@
-import { forwardRef, memo, Ref, useImperativeHandle, useRef } from 'react';
+import classNames from 'classnames';
+import {
+  forwardRef,
+  memo,
+  Ref,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
+import { HiChevronDown, HiChevronUp } from 'react-icons/hi';
+import { useFormatMessage } from '../../components/hooks';
 import { IProjectDataRecord } from '../../libs/client/types';
 import { IInnerDataFormItem } from '../CreateDataFormDialog/CreateForm';
 import FormItem from './FormItem';
@@ -9,6 +19,7 @@ interface ICreateDataRecordFormProps {
   modelId: string;
   title: string;
   items: IInnerDataFormItem[];
+  hiddenItems?: IInnerDataFormItem[];
 }
 
 export interface ICreateDataRecordFormRef {
@@ -19,12 +30,18 @@ function CreateDataRecordForm(
   props: ICreateDataRecordFormProps,
   ref: Ref<ICreateDataRecordFormRef>
 ) {
-  const { projectId, modelId, title, items } = props;
+  const { projectId, modelId, title, items, hiddenItems } = props;
+  const [hiddenItemsVisible, setHiddenItemsVisible] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
+  const f = useFormatMessage();
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.stopPropagation();
     e.preventDefault();
+  };
+
+  const handleHiddenItemVisibleChange = () => {
+    setHiddenItemsVisible((value) => !value);
   };
 
   useImperativeHandle(
@@ -68,6 +85,45 @@ function CreateDataRecordForm(
           />
         ))}
       </div>
+      {!!hiddenItems?.length && (
+        <div>
+          <label className={classNames('swap', 'pl-4 mb-6')}>
+            <input
+              type="checkbox"
+              checked={hiddenItemsVisible}
+              onChange={handleHiddenItemVisibleChange}
+            />
+            <div
+              className={classNames(
+                'swap-on bg-base-content/10',
+                'px-4 py-3 flex items-center rounded-lg'
+              )}>
+              <HiChevronDown className="text-xl mr-2" />
+              {f('project.showOtherFields')}
+            </div>
+            <div
+              className={classNames(
+                'swap-off bg-base-content/10',
+                'px-4 py-3 flex items-center rounded-lg'
+              )}>
+              <HiChevronUp className="text-xl mr-2" />
+              {f('project.hideOtherFields')}
+            </div>
+          </label>
+          {hiddenItemsVisible && (
+            <div>
+              {hiddenItems.map((item, index) => (
+                <FormItem
+                  key={item.field._id}
+                  index={items.length + index}
+                  name={DATA_PREFIX + item.field._id}
+                  item={item}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
       <br />
     </form>
   );

@@ -11,9 +11,11 @@ import {
   createProjectDataModel,
   createProjectDataRecord,
   createProjectDataView,
+  deleteProjectDataForm,
   fetchProject,
   fetchProjectDataRecords,
   updateProjectDataField,
+  updateProjectDataFrom,
   updateProjectDataModel,
   updateProjectDataRecord,
   updateProjectDataView,
@@ -116,8 +118,59 @@ export function useCreateProjectDataFormMutation() {
         [EQueryKey.Project, project._id],
         (cached) =>
           cached
-            ? { ...cached, form: [...cached.forms, ...project.forms] }
+            ? { ...cached, forms: [...cached.forms, ...project.forms] }
             : undefined
+      );
+    },
+  });
+}
+
+export function useDeleteProjectDataFormMutation() {
+  const queryClient = useQueryClient();
+  return useMutation(deleteProjectDataForm, {
+    onMutate: (input) => {
+      const context = { deletedIndex: -1 };
+      queryClient.setQueryData<IProject | undefined>(
+        [EQueryKey.Project, input.projectId],
+        (cached) =>
+          cached
+            ? {
+                ...cached,
+                forms: cached.forms.filter((el, index) => {
+                  if (el._id === input.form._id) {
+                    context.deletedIndex = index;
+                    return false;
+                  }
+                  return true;
+                }),
+              }
+            : undefined
+      );
+      return context;
+    },
+    onError: (_error, input, context) => {
+      if (!context || context.deletedIndex < 0) {
+        return;
+      }
+      const { deletedIndex } = context;
+      queryClient.setQueryData<IProject | undefined>(
+        [EQueryKey.Project, input.projectId],
+        (cached) => {
+          const forms = (cached?.forms || []).slice(0);
+          forms.splice(deletedIndex, 0, input.form);
+          return cached
+            ? {
+                ...cached,
+                forms: cached.forms.filter((el, index) => {
+                  if (el._id === input.form._id) {
+                    context.deletedIndex = index;
+                    return false;
+                  }
+                  return true;
+                }),
+              }
+            : undefined;
+        }
       );
     },
   });
@@ -221,6 +274,33 @@ export function useUpdateProjectDataFieldMutation() {
                     ...cached,
                     fields: cached.fields.map((el) =>
                       el._id === field._id ? field : el
+                    ),
+                  }
+                : undefined
+          );
+        }
+      },
+    }
+  );
+}
+
+export function useUpdateProjectDataFormMutation() {
+  const queryClient = useQueryClient();
+  return useMutation(
+    [EMutationKey.UpdateProjectDataField],
+    updateProjectDataFrom,
+    {
+      onSuccess: (project) => {
+        const form = project?.forms[0];
+        if (form) {
+          queryClient.setQueryData<IProject | undefined>(
+            [EQueryKey.Project, project._id],
+            (cached) =>
+              cached
+                ? {
+                    ...cached,
+                    forms: cached.forms.map((el) =>
+                      el._id === form._id ? form : el
                     ),
                   }
                 : undefined

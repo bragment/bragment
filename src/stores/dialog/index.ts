@@ -9,17 +9,19 @@ function generateToastKey() {
 interface ICreateDataFormDialogOptions {
   projectId: string;
   modelId: string;
-  mainFieldId: string;
   modelFields: IProjectDataField[];
+  modelForm?: IProjectDataForm;
   visibleFieldIds?: string[];
   existingForms?: IProjectDataForm[];
+  editing?: boolean;
 }
 
 interface ICreateDataRecordDialogOptions {
   projectId: string;
   modelId: string;
   modelFields: IProjectDataField[];
-  modelForm: IProjectDataForm;
+  modelForm?: IProjectDataForm;
+  visibleFieldIds?: string[];
 }
 
 class DialogStore {
