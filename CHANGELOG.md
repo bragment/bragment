@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.6.0](https://github.com/bragment/bragment/compare/v0.5.0-0...v0.6.0) (2022-09-26)
+
+### Features
+
+- **components:** add create button ([5d4160f](https://github.com/bragment/bragment/commit/5d4160f399858c3d82ba43727cc4c399a676117b))
+- **components:** adjust SortableList ([6bdef3d](https://github.com/bragment/bragment/commit/6bdef3d41c97c3f6a02e6b820d38223acf74dbe0))
+- **dialogs:** add create record dialog ([b2c2712](https://github.com/bragment/bragment/commit/b2c2712c8e8adffa016ad1ca6fef5da3beae7320))
+- **dialogs:** create project form ([8f51c46](https://github.com/bragment/bragment/commit/8f51c467c96d680339c02a0e90e75148c2dd854d))
+- **dialogs:** update project form ([2f7efea](https://github.com/bragment/bragment/commit/2f7efea109042d4d34a945bc1d36ac7c3edd7600))
+- **fields:** abstract field renderer ([e6c10f5](https://github.com/bragment/bragment/commit/e6c10f597621813b758dee238f5a6c7a9dfaf713))
+- **fields:** add DateFieldRenderer ([db2e9ef](https://github.com/bragment/bragment/commit/db2e9ef8d60a42d120344473c241d21b858b3c90))
+
 ## 0.5.0 (2022-09-05)
 
 ### Features
