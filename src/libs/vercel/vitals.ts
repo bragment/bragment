@@ -4,7 +4,7 @@ import { getAnalyticsId } from '../utils';
 const vitalsUrl = 'https://vitals.vercel-analytics.com/v1/vitals';
 
 function getConnectionSpeed() {
-  return (navigator.connection as any)?.effectiveType || '';
+  return (navigator as any).connection?.effectiveType || '';
 }
 
 export function sendToVercelAnalytics(metric: Metric) {
