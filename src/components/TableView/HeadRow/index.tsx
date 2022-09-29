@@ -8,7 +8,7 @@ import {
   IProjectDataRecord,
 } from '../../../libs/client/types';
 import AnimatePing from '../../AnimatePing';
-import CreateDataFieldButton from '../../CreateDataFieldButton';
+import CreateDataFieldDropdown from '../../CreateDataFieldDropdown';
 import { useFormatMessage } from '../../hooks';
 import styles from '../index.module.scss';
 
@@ -66,7 +66,7 @@ function HeadRow(props: IHeadRowProps) {
           styles.rightScrollable
         )}>
         <AnimatePing ping={hasNoField}>
-          <CreateDataFieldButton
+          <CreateDataFieldDropdown
             projectId={projectId}
             modelId={modelId}
             existingFields={modelFields}
@@ -77,7 +77,7 @@ function HeadRow(props: IHeadRowProps) {
               className={classNames('btn btn-ghost btn-sm', 'h-10')}>
               <HiPlus aria-label={f('dataView.addField')} className="text-lg" />
             </button>
-          </CreateDataFieldButton>
+          </CreateDataFieldDropdown>
         </AnimatePing>
       </div>
     </div>

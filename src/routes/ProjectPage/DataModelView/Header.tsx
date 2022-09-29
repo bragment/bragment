@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import { HiOutlinePlus } from 'react-icons/hi';
 import { useMatch, useParams } from 'react-router-dom';
 import AnimatePing from '../../../components/AnimatePing';
-import CreateDataViewButton from '../../../components/CreateDataViewButton';
+import CreateDataViewDropdown from '../../../components/CreateDataViewDropdown';
 import { useFormatMessage, useUserStore } from '../../../components/hooks';
 import { IProject } from '../../../libs/client/types';
 import { useProjectQuery } from '../../../libs/react-query';
@@ -90,17 +90,16 @@ function WorkspaceInstanceView() {
       {isOwner && (
         <div className="flex-none h-full pl-3">
           <AnimatePing ping={views?.length === 0}>
-            <CreateDataViewButton
+            <CreateDataViewDropdown
               projectId={projectId}
               modelId={modelId}
               existingViews={views}
-              className={styles.createViewButton}
               onFinish={handleCreateViewFinish}>
               <button className={classNames('btn btn-sm', 'h-10')}>
                 <HiOutlinePlus className="text-base mr-2" />
                 {f('project.addView')}
               </button>
-            </CreateDataViewButton>
+            </CreateDataViewDropdown>
           </AnimatePing>
         </div>
       )}

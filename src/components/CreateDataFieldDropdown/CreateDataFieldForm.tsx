@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { memo, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import { ILocalMessage } from '../../i18n/types';
 import {
   EDataFieldType,
@@ -7,6 +7,7 @@ import {
   IProjectDataField,
 } from '../../libs/client/types';
 import { useCreateProjectDataFieldMutation } from '../../libs/react-query';
+import { getAvailableTitle } from '../../utils';
 import DataFieldTypeSelect from '../DataFieldTypeSelect';
 import { useFormatMessage } from '../hooks';
 
@@ -19,9 +20,10 @@ export interface ICreateDataFieldFormProps {
 
 function CreateDataFieldForm(props: ICreateDataFieldFormProps) {
   const { projectId, modelId, existingFields, onFinish } = props;
-  const f = useFormatMessage();
   const [errorMessage, setErrorMessage] = useState<ILocalMessage | undefined>();
   const { isLoading, mutateAsync } = useCreateProjectDataFieldMutation();
+  const titleInputRef = useRef<HTMLInputElement>(null);
+  const f = useFormatMessage();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -52,6 +54,16 @@ function CreateDataFieldForm(props: ICreateDataFieldFormProps) {
     }
   };
 
+  useEffect(() => {
+    if (!titleInputRef.current || titleInputRef.current.value) {
+      return;
+    }
+    titleInputRef.current.value = getAvailableTitle(
+      f('project.field'),
+      existingFields?.map((el) => el.title)
+    );
+  }, [f, existingFields]);
+
   return (
     <form
       className={classNames('form-control', 'space-y-4')}
@@ -61,8 +73,8 @@ function CreateDataFieldForm(props: ICreateDataFieldFormProps) {
       </label>
       <input name="projectId" type="hidden" value={projectId} />
       <input name="model" type="hidden" value={modelId} />
-      <DataFieldTypeSelect defaultValue={EDataFieldType.SingleLineText} />
       <input
+        ref={titleInputRef}
         name="title"
         type="text"
         autoComplete="off"
@@ -71,6 +83,7 @@ function CreateDataFieldForm(props: ICreateDataFieldFormProps) {
         placeholder={f('project.fieldTitle')}
         className={classNames('input input-bordered', 'w-full')}
       />
+      <DataFieldTypeSelect defaultValue={EDataFieldType.SingleLineText} />
       <button
         type="submit"
         className={classNames(

@@ -1,24 +1,22 @@
 import classNames from 'classnames';
+import Dropdown from 'rc-dropdown';
 import { memo, useRef } from 'react';
 import { IProject, IProjectDataField } from '../../libs/client/types';
-import Dropdown, { IDropdownRef } from '../Dropdown';
 import { useFormatMessage } from '../hooks';
 import CreateDataFieldForm from './CreateDataFieldForm';
 
 interface ICreateDataFieldButtonProps {
   projectId: string;
   modelId: string;
-  children?: React.ReactNode;
-  className?: string;
+  children: React.ReactElement;
   existingFields?: IProjectDataField[];
   onFinish?: (project: IProject) => void;
 }
 
-function CreateDataFieldButton(props: ICreateDataFieldButtonProps) {
-  const { projectId, modelId, className, children, existingFields, onFinish } =
-    props;
+function CreateDataFieldDropdown(props: ICreateDataFieldButtonProps) {
+  const { projectId, modelId, children, existingFields, onFinish } = props;
   const f = useFormatMessage();
-  const dropdownRef = useRef<IDropdownRef>(null);
+  const dropdownRef = useRef<{ close: () => void }>(null);
 
   const handleFinish = async (project: IProject) => {
     if (onFinish) {
@@ -27,18 +25,22 @@ function CreateDataFieldButton(props: ICreateDataFieldButtonProps) {
     dropdownRef.current?.close();
   };
 
+  const handleClick: React.MouseEventHandler = (event) => {
+    event.stopPropagation();
+  };
+
   return (
     <Dropdown
       ref={dropdownRef}
-      className={classNames('dropdown-end', className)}
-      toggle={children}
-      content={
+      trigger="click"
+      overlayClassName="[&.rc-dropdown-hidden>div]:content-hidden"
+      overlay={
         <div
-          tabIndex={0}
           className={classNames(
             'border-base-300 bg-base-100',
-            'w-80 mt-1 p-6 pb-16 border rounded-box shadow'
-          )}>
+            'w-80 p-6 pb-16 border rounded-box shadow'
+          )}
+          onClick={handleClick}>
           <div>
             <h3
               className={classNames('text-base-content', 'text-lg font-bold')}>
@@ -52,9 +54,10 @@ function CreateDataFieldButton(props: ICreateDataFieldButtonProps) {
             />
           </div>
         </div>
-      }
-    />
+      }>
+      {children}
+    </Dropdown>
   );
 }
 
-export default memo(CreateDataFieldButton);
+export default memo(CreateDataFieldDropdown);

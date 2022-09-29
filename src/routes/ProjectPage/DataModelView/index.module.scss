@@ -14,12 +14,3 @@
     background-color: hsl(var(--b3));
   }
 }
-
-.createViewButton {
-  :global {
-    .action::after {
-      right: 0.75rem;
-      top: 1rem;
-    }
-  }
-}

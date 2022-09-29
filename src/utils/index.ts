@@ -27,6 +27,7 @@ export function getAvailableTitle(prefix: string, existing?: string[]) {
       return title;
     }
   }
+  return prefix;
 }
 
 export function getCurrentSearchParam(name: string) {

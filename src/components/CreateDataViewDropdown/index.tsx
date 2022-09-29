@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import Dropdown from 'rc-dropdown';
 import { memo, useRef } from 'react';
 import {
   EDataViewType,
@@ -7,29 +8,30 @@ import {
 } from '../../libs/client/types';
 import { useCreateProjectDataViewMutation } from '../../libs/react-query';
 import { getAvailableTitle } from '../../utils';
-import Dropdown, { IDropdownRef } from '../Dropdown';
+import AnimateSpin from '../AnimateSpin';
 import { useDialogStore, useFormatMessage } from '../hooks';
 import { dataViewTypes } from './config';
 
-interface ICreateDataViewButtonProps {
+interface ICreateDataViewDropdownProps {
   projectId: string;
   modelId: string;
-  children: React.ReactNode;
-  className?: string;
+  children: React.ReactElement;
   existingViews?: IProjectDataView[];
   onFinish?: (project: IProject) => void;
 }
 
-function CreateDataViewButton(props: ICreateDataViewButtonProps) {
-  const { projectId, modelId, className, children, existingViews, onFinish } =
-    props;
+function CreateDataViewDropdown(props: ICreateDataViewDropdownProps) {
+  const { projectId, modelId, children, existingViews, onFinish } = props;
   const f = useFormatMessage();
   const { toastError } = useDialogStore();
-  const dropdownRef = useRef<IDropdownRef>(null);
+  const dropdownRef = useRef<{ close: () => void }>(null);
   const viewTypeRef = useRef(EDataViewType.Table);
   const { isLoading, mutateAsync } = useCreateProjectDataViewMutation();
 
-  const handleClick = async (event: React.MouseEvent<Element>) => {
+  const handleClick: React.MouseEventHandler<HTMLUListElement> = async (
+    event
+  ) => {
+    event.stopPropagation();
     const span = (event.target as Element).closest<HTMLSpanElement>(
       'span.action'
     );
@@ -63,34 +65,38 @@ function CreateDataViewButton(props: ICreateDataViewButtonProps) {
   return (
     <Dropdown
       ref={dropdownRef}
-      className={classNames('dropdown-end', className)}
-      toggle={children}
-      content={
+      trigger="click"
+      overlayClassName="[&.rc-dropdown-hidden>ul]:content-hidden"
+      overlay={
         <ul
-          tabIndex={0}
           className={classNames(
             'menu border-base-300 bg-base-100',
-            'w-52 mt-2 p-2 border overflow-hidden rounded-box shadow'
+            'w-52 p-2 border overflow-hidden rounded-box shadow'
           )}
           onClick={handleClick}>
           {dataViewTypes.map(({ type, title, Icon }) => (
             <li key={type}>
               <span
                 className={classNames(
+                  'relative',
                   'action',
-                  viewTypeRef.current === type && isLoading && 'active loading'
+                  viewTypeRef.current === type && isLoading && 'active'
                 )}
                 data-type={type}
                 data-title={f(title)}>
                 <Icon className="text-xl" />
                 {f(title)}
+                {viewTypeRef.current === type && isLoading && (
+                  <AnimateSpin className="absolute w-4 h-4 right-4" />
+                )}
               </span>
             </li>
           ))}
         </ul>
-      }
-    />
+      }>
+      {children}
+    </Dropdown>
   );
 }
 
-export default memo(CreateDataViewButton);
+export default memo(CreateDataViewDropdown);
