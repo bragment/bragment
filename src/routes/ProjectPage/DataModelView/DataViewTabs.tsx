@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { memo } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
-import { dataViewTypeRecord } from '../../../components/CreateDataViewButton/config';
+import { dataViewTypeRecord } from '../../../components/CreateDataViewDropdown/config';
 import { IProjectDataView } from '../../../libs/client/types';
 import { getProjectDataViewPath } from '../../helpers';
 

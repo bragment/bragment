@@ -1,4 +1,5 @@
 @import './mixins.scss';
+@import './rc-dropdown.scss';
 
 // NOTE: import tailwindcss
 @import 'tailwindcss/base';
@@ -50,8 +51,7 @@ body {
     animation: button-pop var(--animation-btn, 0.25s) ease-out;
   }
   // NOTE: add loading styles
-  .form-single-input.loading,
-  ul li > .action.loading {
+  .form-single-input.loading {
     position: relative;
     &,
     &:hover {
