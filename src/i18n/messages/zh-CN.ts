@@ -59,6 +59,7 @@ export default {
   'project.existingFieldTitle': '字段名称已存在！',
   'project.field': '字段',
   'project.fieldTitle': '字段名称',
+  'project.fieldType': '字段类型',
   'project.form': '表单',
   'project.formTitle': '表单名称',
   'project.getModelStarted': '从创建一个新的数据源开始吧！',

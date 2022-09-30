@@ -1,11 +1,10 @@
 import { DraggableProvidedDragHandleProps } from '@hello-pangea/dnd';
 import classNames from 'classnames';
-import { memo, useCallback } from 'react';
+import { memo, useCallback, useMemo } from 'react';
 import { HiArrowDown, HiArrowUp, HiTrash } from 'react-icons/hi';
-import { getFieldIcon } from '../../../../fields/renders';
 import { IProjectDataField } from '../../../../libs/client/types';
+import DataFieldSelect from '../../../DataFieldSelect';
 import { useFormatMessage } from '../../../hooks';
-import SelectInput from '../../../SelectInput';
 import DragHandle from '../../../SortableList/DragHandle';
 import styles from './index.module.scss';
 
@@ -33,6 +32,11 @@ function FieldItem(props: IFieldItemProps) {
     onDelete,
   } = props;
   const f = useFormatMessage();
+  const selectedFieldId = useMemo(() => field._id, [field]);
+  const selectableFields = useMemo(
+    () => [field, ...otherFields],
+    [field, otherFields]
+  );
 
   const handleDelete = () => {
     onDelete(index);
@@ -52,33 +56,6 @@ function FieldItem(props: IFieldItemProps) {
     },
     [onChange, index, field, descending, otherFields]
   );
-  const convertToSelectOption = useCallback(
-    ({ _id, type, title }: IProjectDataField) => {
-      const Icon = getFieldIcon(type);
-      return {
-        value: _id,
-        content: title,
-        node: (
-          <div className="w-full flex items-center">
-            {Icon && <Icon className="flex-none mr-2 text-lg" />}
-            <div
-              className="flex-auto text-ellipsis overflow-hidden whitespace-nowrap"
-              title={title}>
-              {title}
-            </div>
-          </div>
-        ),
-      };
-    },
-    []
-  );
-  const getSelectedOption = useCallback(() => {
-    return convertToSelectOption(field);
-  }, [convertToSelectOption, field]);
-  const getOptions = useCallback(
-    () => [field, ...otherFields].map(convertToSelectOption),
-    [convertToSelectOption, field, otherFields]
-  );
 
   return (
     <div className={classNames('bg-base-100', 'rounded-lg')}>
@@ -92,16 +69,9 @@ function FieldItem(props: IFieldItemProps) {
           className={'h-8 px-1 mr-2 text-xl'}
         />
         <div className="flex-auto mr-2">
-          <SelectInput
-            className="w-full"
-            selectClassName="select-sm"
-            optionClassName="py-1"
-            contentClassName={styles.selectContent}
-            defaultValue={field._id}
-            withMask
-            gapSize={1}
-            getOptions={getOptions}
-            getSelectedOption={getSelectedOption}
+          <DataFieldSelect
+            fields={selectableFields}
+            value={selectedFieldId}
             onChange={handleFieldChange}
           />
         </div>

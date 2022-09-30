@@ -12,6 +12,10 @@ export function registerFieldRenderer(Renderer: typeof BaseFieldRenderer) {
   map.set(renderer.type, renderer);
 }
 
+export function getDefaultFieldType() {
+  return getAllFieldRenderers()[0].type;
+}
+
 export function getFieldRenderer(type: string) {
   return map.get(type);
 }

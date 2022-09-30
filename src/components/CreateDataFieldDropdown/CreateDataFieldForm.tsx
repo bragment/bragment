@@ -1,5 +1,6 @@
 import classNames from 'classnames';
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
+import { getDefaultFieldType } from '../../fields/renders';
 import { ILocalMessage } from '../../i18n/types';
 import {
   EDataFieldType,
@@ -21,9 +22,16 @@ export interface ICreateDataFieldFormProps {
 function CreateDataFieldForm(props: ICreateDataFieldFormProps) {
   const { projectId, modelId, existingFields, onFinish } = props;
   const [errorMessage, setErrorMessage] = useState<ILocalMessage | undefined>();
+  const [fieldType, setFieldType] = useState(
+    getDefaultFieldType() as EDataFieldType
+  );
   const { isLoading, mutateAsync } = useCreateProjectDataFieldMutation();
   const titleInputRef = useRef<HTMLInputElement>(null);
   const f = useFormatMessage();
+
+  const handleFieldTypeChange = useCallback((type: EDataFieldType) => {
+    setFieldType(type);
+  }, []);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -48,6 +56,7 @@ function CreateDataFieldForm(props: ICreateDataFieldFormProps) {
         onFinish(project);
       }
       form.reset();
+      setFieldType(getDefaultFieldType() as EDataFieldType);
       setErrorMessage(undefined);
     } catch (error: any) {
       setErrorMessage('common.networkError');
@@ -73,6 +82,7 @@ function CreateDataFieldForm(props: ICreateDataFieldFormProps) {
       </label>
       <input name="projectId" type="hidden" value={projectId} />
       <input name="model" type="hidden" value={modelId} />
+      <input name="type" type="hidden" value={fieldType} />
       <input
         ref={titleInputRef}
         name="title"
@@ -83,7 +93,7 @@ function CreateDataFieldForm(props: ICreateDataFieldFormProps) {
         placeholder={f('project.fieldTitle')}
         className={classNames('input input-bordered', 'w-full')}
       />
-      <DataFieldTypeSelect defaultValue={EDataFieldType.SingleLineText} />
+      <DataFieldTypeSelect value={fieldType} onChange={handleFieldTypeChange} />
       <button
         type="submit"
         className={classNames(

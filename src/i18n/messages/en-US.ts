@@ -60,6 +60,7 @@ export default {
   'project.existingFieldTitle': 'Field title exists.',
   'project.field': 'Field',
   'project.fieldTitle': 'Field Title',
+  'project.fieldType': 'Field Type',
   'project.form': 'Form',
   'project.formTitle': 'Form Title',
   'project.getModelStarted': 'Get started by creating a new data source.',

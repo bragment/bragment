@@ -2,15 +2,13 @@ import classNames from 'classnames';
 import debounce from 'lodash/debounce';
 import { memo, useCallback, useMemo, useRef } from 'react';
 import { HiTrash } from 'react-icons/hi';
-import { getFieldIcon } from '../../../../fields/renders';
 import {
   EDataFilterConjunction,
   EDataFilterOperator,
   IProjectDataField,
 } from '../../../../libs/client/types';
+import DataFieldSelect from '../../../DataFieldSelect';
 import { useFormatMessage } from '../../../hooks';
-import SelectInput from '../../../SelectInput';
-import styles from './index.module.scss';
 
 export interface IInnerFilter {
   field: IProjectDataField;
@@ -39,6 +37,12 @@ function FieldItem(props: IFieldItemProps) {
   } = props;
   const f = useFormatMessage();
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const selectedFieldId = useMemo(() => field._id, [field]);
+  const selectableFields = useMemo(
+    () => [field, ...otherFields],
+    [field, otherFields]
+  );
 
   const handleDelete = () => {
     onDelete(index);
@@ -80,33 +84,6 @@ function FieldItem(props: IFieldItemProps) {
     },
     [f]
   );
-  const convertToSelectOption = useCallback(
-    ({ _id, type, title }: IProjectDataField) => {
-      const Icon = getFieldIcon(type);
-      return {
-        value: _id,
-        content: title,
-        node: (
-          <div className="w-full flex items-center">
-            {Icon && <Icon className="flex-none mr-2 text-lg" />}
-            <div
-              className="flex-auto text-ellipsis overflow-hidden whitespace-nowrap"
-              title={title}>
-              {title}
-            </div>
-          </div>
-        ),
-      };
-    },
-    []
-  );
-  const getSelectedOption = useCallback(() => {
-    return convertToSelectOption(field);
-  }, [convertToSelectOption, field]);
-  const getOptions = useCallback(
-    () => [field, ...otherFields].map(convertToSelectOption),
-    [convertToSelectOption, field, otherFields]
-  );
 
   return (
     <li className={classNames('bg-base-100', 'rounded-lg')}>
@@ -116,16 +93,9 @@ function FieldItem(props: IFieldItemProps) {
           'rounded-lg pl-4 pr-2 py-2 flex items-center text-base-content'
         )}>
         <div className="flex-auto mr-2">
-          <SelectInput
-            className="w-full"
-            selectClassName="select-sm"
-            optionClassName="py-1"
-            contentClassName={styles.selectContent}
-            defaultValue={field._id}
-            withMask
-            gapSize={1}
-            getOptions={getOptions}
-            getSelectedOption={getSelectedOption}
+          <DataFieldSelect
+            fields={selectableFields}
+            value={selectedFieldId}
             onChange={handleFieldChange}
           />
         </div>
