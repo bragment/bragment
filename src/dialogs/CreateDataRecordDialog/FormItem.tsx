@@ -18,7 +18,7 @@ function FormItem(props: IFormItemProps) {
       <div className="flex items-center">
         <div
           className={classNames('text-base-content/50', 'text-3xl font-bold')}>
-          <div className="h-10 leading-10">
+          <div className="h-10 leading-10 tabular-nums">
             {(index + 1).toString().padStart(2, '0')}
           </div>
         </div>

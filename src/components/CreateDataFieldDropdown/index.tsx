@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import Dropdown from 'rc-dropdown';
-import { memo, useRef } from 'react';
+import React, { memo, useRef } from 'react';
 import { IProject, IProjectDataField } from '../../libs/client/types';
 import { useFormatMessage } from '../hooks';
 import CreateDataFieldForm from './CreateDataFieldForm';
@@ -25,7 +25,7 @@ function CreateDataFieldDropdown(props: ICreateDataFieldButtonProps) {
     dropdownRef.current?.close();
   };
 
-  const handleClick: React.MouseEventHandler = (event) => {
+  const stopPropagation = (event: React.MouseEvent | React.KeyboardEvent) => {
     event.stopPropagation();
   };
 
@@ -40,7 +40,8 @@ function CreateDataFieldDropdown(props: ICreateDataFieldButtonProps) {
             'border-base-300 bg-base-100',
             'w-80 p-6 pb-16 border rounded-box shadow'
           )}
-          onClick={handleClick}>
+          onClick={stopPropagation}
+          onKeyDown={stopPropagation}>
           <div>
             <h3
               className={classNames('text-base-content', 'text-lg font-bold')}>

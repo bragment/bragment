@@ -102,7 +102,7 @@ function FromItem(props: IFromItemProps) {
             'text-base-content/50',
             'absolute top-0 left-8 text-3xl font-bold p-[1px]'
           )}>
-          <div className="h-10 leading-10">
+          <div className="h-10 leading-10 tabular-nums">
             {(index + 1).toString().padStart(2, '0')}
           </div>
         </div>

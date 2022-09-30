@@ -1,35 +1,37 @@
 import Select, { Option } from 'rc-select';
 import { memo } from 'react';
-import { getAllFieldRenderers } from '../../fields/renders';
-import { EDataFieldType } from '../../libs/client/types';
+import { getFieldIcon } from '../../fields/renders';
+import { IProjectDataField } from '../../libs/client/types';
 import { useFormatMessage } from '../hooks';
 
-interface IDataFieldTypeSelectProps {
-  value?: EDataFieldType;
-  onChange?: (value: EDataFieldType) => void;
+interface IDataFieldSelectProps {
+  fields: IProjectDataField[];
+  value?: string;
+  onChange?: (value: string) => void;
 }
 
-function DataFieldTypeSelect(props: IDataFieldTypeSelectProps) {
-  const { value, onChange } = props;
+function DataFieldSelect(props: IDataFieldSelectProps) {
+  const { fields, value, onChange } = props;
   const f = useFormatMessage();
 
   return (
     <Select
+      className="select-sm"
       dropdownClassName="py-2"
       showArrow={false}
+      dropdownMatchSelectWidth={240}
       placeholder={<div className="w-full">{f('project.fieldType')}</div>}
       value={value}
       onChange={onChange}>
-      {getAllFieldRenderers().map((renderer) => {
-        const { type, Icon } = renderer;
-        const title = f(renderer.getNameAsMessageId());
+      {fields.map(({ _id, type, title }) => {
+        const Icon = getFieldIcon(type);
         return (
           <Option
-            key={type}
-            value={type}
-            className="h-10 mx-2 px-2 flex items-center">
+            key={_id}
+            value={_id}
+            className="h-[1.875rem] mx-2 px-2 flex items-center">
             <div className="w-full flex items-center">
-              <Icon className="flex-none mr-2 text-lg" />
+              {Icon && <Icon className="flex-none mr-2 text-lg" />}
               <div
                 className="flex-auto text-ellipsis overflow-hidden whitespace-nowrap"
                 title={title}>
@@ -43,4 +45,4 @@ function DataFieldTypeSelect(props: IDataFieldTypeSelectProps) {
   );
 }
 
-export default memo(DataFieldTypeSelect);
+export default memo(DataFieldSelect);
