@@ -3,6 +3,7 @@ import { memo } from 'react';
 import {
   IDataFilter,
   IDataSorter,
+  IProject,
   IProjectDataField,
   IProjectDataForm,
 } from '../../../libs/client/types';
@@ -29,6 +30,7 @@ interface IControlRowProps {
   onShouldUpdateVisibility?: () => void;
   onShouldUpdateSorting?: () => void;
   onShouldUpdateFilters?: () => void;
+  onCreateDateFieldFinish?: (project: IProject) => void;
 }
 
 function ControlRow(props: IControlRowProps) {
@@ -49,6 +51,7 @@ function ControlRow(props: IControlRowProps) {
     onShouldUpdateFilters,
     onShouldUpdateVisibility,
     onShouldUpdateSorting,
+    onCreateDateFieldFinish,
   } = props;
 
   return (
@@ -85,12 +88,15 @@ function ControlRow(props: IControlRowProps) {
             onClose={onShouldUpdateSorting}
           />
           <VisibilityButton
+            projectId={projectId}
+            modelId={modelId}
             mainFieldId={mainFieldId}
             modelFields={modelFields}
             visibleFieldIds={visibleFieldIds}
             count={visibleFieldCount}
             onChange={onVisibilityChange}
             onClose={onShouldUpdateVisibility}
+            onCreateDateFieldFinish={onCreateDateFieldFinish}
           />
         </>
       )}

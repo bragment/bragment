@@ -32,9 +32,7 @@ function Item(props: IItemProps) {
   };
 
   return (
-    <li
-      className={classNames('bg-base-100', 'rounded-lg')}
-      onClick={handleClick}>
+    <li className="rounded-lg" onClick={handleClick}>
       <div
         className={classNames(
           'cursor-pointer hover:bg-base-content/10',

@@ -25,7 +25,7 @@ function FieldItem(props: IFieldItemProps) {
   const Icon = getFieldIcon(field.type);
 
   return (
-    <div className={classNames('bg-base-100', 'rounded-lg')}>
+    <div className={classNames('rounded-lg', styles.fieldItemWrapper)}>
       <div
         className={classNames(
           'rounded-lg pl-2 pr-4 py-2 flex items-center',
@@ -44,7 +44,7 @@ function FieldItem(props: IFieldItemProps) {
           <div
             className={classNames(
               'badge badge-info',
-              'relative -right-2',
+              'flex-none relative -right-2',
               styles.mainFieldBadge
             )}>
             {f('dataView.mainField')}

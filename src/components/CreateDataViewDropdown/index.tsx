@@ -24,7 +24,7 @@ function CreateDataViewDropdown(props: ICreateDataViewDropdownProps) {
   const { projectId, modelId, children, existingViews, onFinish } = props;
   const f = useFormatMessage();
   const { toastError } = useDialogStore();
-  const dropdownRef = useRef<{ close: () => void }>(null);
+  const dropdownRef = useRef<IDropdownRef>(null);
   const viewTypeRef = useRef(EDataViewType.Table);
   const { isLoading, mutateAsync } = useCreateProjectDataViewMutation();
 
@@ -66,7 +66,6 @@ function CreateDataViewDropdown(props: ICreateDataViewDropdownProps) {
     <Dropdown
       ref={dropdownRef}
       trigger="click"
-      overlayClassName="[&.rc-dropdown-hidden>ul]:content-hidden"
       overlay={
         <ul
           className={classNames(

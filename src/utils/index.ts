@@ -45,3 +45,9 @@ export function getCurrentSearchParam(name: string) {
   }
   return null;
 }
+
+export function stopEventPropagation(
+  event: React.MouseEvent | React.KeyboardEvent
+) {
+  event.stopPropagation();
+}

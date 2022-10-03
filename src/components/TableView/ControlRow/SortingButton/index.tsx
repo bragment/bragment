@@ -1,9 +1,10 @@
 import classNames from 'classnames';
+import Dropdown from 'rc-dropdown';
 import { memo, useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
 import { HiOutlinePlus, HiOutlineSwitchVertical } from 'react-icons/hi';
 import { IDataSorter, IProjectDataField } from '../../../../libs/client/types';
-import Dropdown from '../../../Dropdown';
+import { stopEventPropagation } from '../../../../utils';
 import { useFormatMessage, useNestedState } from '../../../hooks';
 import ScrollContainer from '../../../ScrollContainer';
 import SortableList from '../../../SortableList';
@@ -56,7 +57,7 @@ function SortingButton(props: ISortingButtonProps) {
     props;
   const f = useFormatMessage();
   const scrollBarsRef = useRef<Scrollbars>(null);
-  const openedRef = useRef(false);
+  const dropdownRef = useRef<IDropdownRef>(null);
   const [innerSorterList, setInnerSorterList] = useNestedState(
     initializeInnerSorterList(modelFields, sorters)
   );
@@ -108,21 +109,17 @@ function SortingButton(props: ISortingButtonProps) {
     [setInnerSorterList]
   );
 
-  const handleOpen = useCallback(() => {
-    if (openedRef.current) {
-      return;
-    }
-    openedRef.current = true;
-    setInnerSorterList(initializeInnerSorterList(modelFields, sorters));
-  }, [setInnerSorterList, modelFields, sorters]);
-
-  const handleClose = useCallback(() => {
-    if (!openedRef.current) {
-      return;
-    }
-    openedRef.current = false;
-    onClose && onClose();
-  }, [onClose]);
+  const handleVisibleChange = useCallback(
+    (visible: boolean) => {
+      if (visible) {
+        setInnerSorterList(initializeInnerSorterList(modelFields, sorters));
+        scrollBarsRef.current?.scrollToTop();
+      } else {
+        onClose && onClose();
+      }
+    },
+    [onClose, setInnerSorterList, modelFields, sorters]
+  );
 
   const handleAddSorter = useCallback(() => {
     const field = otherFieldList[0];
@@ -134,10 +131,6 @@ function SortingButton(props: ISortingButtonProps) {
     });
   }, [setInnerSorterList, otherFieldList]);
 
-  const getContainer = useCallback(() => {
-    return scrollBarsRef.current?.container;
-  }, []);
-
   useLayoutEffect(() => {
     setOtherFieldList(
       initializeOtherFieldList(modelFields, visibleFieldIds, innerSorterList)
@@ -145,7 +138,7 @@ function SortingButton(props: ISortingButtonProps) {
   }, [setOtherFieldList, modelFields, visibleFieldIds, innerSorterList]);
 
   useEffect(() => {
-    if (openedRef.current) {
+    if (dropdownRef.current?.state.popupVisible) {
       const list = innerSorterList.map((el) => ({
         ...el,
         field: el.field._id,
@@ -156,29 +149,16 @@ function SortingButton(props: ISortingButtonProps) {
 
   return (
     <Dropdown
-      className="dropdown-end"
-      onOpen={handleOpen}
-      onClose={handleClose}
-      toggle={
-        <button
-          className={classNames(
-            'btn btn-sm',
-            'h-10 my-1',
-            loading && 'loading'
-          )}>
-          {!loading && <HiOutlineSwitchVertical className="text-base" />}
-          <span className="ml-2">
-            {f('dataView.sorting')}
-            {!!count && ` (${count})`}
-          </span>
-        </button>
-      }
-      content={
+      ref={dropdownRef}
+      trigger="click"
+      onVisibleChange={handleVisibleChange}
+      overlay={
         <div
           className={classNames(
             'bg-base-100 border-base-300',
             'w-80 px-0 py-2 border overflow-hidden rounded-box shadow'
-          )}>
+          )}
+          onClick={stopEventPropagation}>
           <ScrollContainer
             ref={scrollBarsRef}
             autoHeight
@@ -187,7 +167,6 @@ function SortingButton(props: ISortingButtonProps) {
             <SortableList
               customDragHandle
               droppableId="SORTABLE_FIELD_LIST"
-              getContainer={getContainer}
               listClassName="px-2"
               list={innerSorterList}
               getItemId={getItemId}
@@ -207,8 +186,14 @@ function SortingButton(props: ISortingButtonProps) {
             </div>
           )}
         </div>
-      }
-    />
+      }>
+      <button
+        className={classNames('btn btn-sm', 'h-10 my-1', loading && 'loading')}>
+        {!loading && <HiOutlineSwitchVertical className="text-base" />}
+        <span className="ml-2">{f('dataView.sorting')}</span>
+        {!!count && <div className="badge ml-2">{count}</div>}
+      </button>
+    </Dropdown>
   );
 }
 
