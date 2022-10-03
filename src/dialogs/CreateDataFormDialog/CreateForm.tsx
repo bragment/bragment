@@ -149,7 +149,7 @@ function CreateForm(props: ICreateFormProps, ref: Ref<ICreateFormRef>) {
         droppableId={FORM_ITEM_LIST_ID}
         offsetDiffRef={offsetDiffRef}
         listClassName="p-4"
-        itemClassName={classNames('bg-base-100', 'rounded-lg')}
+        itemClassName="rounded-lg"
         list={items}
         getItemId={getItemId}
         renderItem={renderItem}

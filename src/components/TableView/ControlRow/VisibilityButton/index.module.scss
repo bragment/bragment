@@ -7,6 +7,9 @@
   }
 }
 :global(.dragging) {
+  .fieldItemWrapper {
+    @apply bg-base-100;
+  }
   .fieldItem {
     @apply bg-base-content/10;
   }

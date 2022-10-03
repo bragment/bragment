@@ -58,7 +58,7 @@ function FieldItem(props: IFieldItemProps) {
   );
 
   return (
-    <div className={classNames('bg-base-100', 'rounded-lg')}>
+    <div className={classNames('rounded-lg', styles.fieldItemWrapper)}>
       <div
         className={classNames(
           'rounded-lg px-2 py-2 flex items-center text-base-content',

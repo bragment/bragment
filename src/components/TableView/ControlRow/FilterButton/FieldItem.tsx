@@ -86,7 +86,7 @@ function FieldItem(props: IFieldItemProps) {
   );
 
   return (
-    <li className={classNames('bg-base-100', 'rounded-lg')}>
+    <li className="rounded-lg">
       <div
         className={classNames(
           'focus-within:bg-base-content/10',

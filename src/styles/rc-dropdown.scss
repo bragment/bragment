@@ -5,6 +5,9 @@
 }
 .rc-dropdown-hidden {
   @apply hidden;
+  > * {
+    @apply content-hidden;
+  }
 }
 .rc-dropdown-slide-up-enter,
 .rc-dropdown-slide-up-appear {

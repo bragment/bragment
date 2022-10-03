@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import Dropdown from 'rc-dropdown';
 import { memo, useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
 import { HiOutlineFilter, HiOutlinePlus } from 'react-icons/hi';
@@ -8,7 +9,7 @@ import {
   IDataFilter,
   IProjectDataField,
 } from '../../../../libs/client/types';
-import Dropdown from '../../../Dropdown';
+import { stopEventPropagation } from '../../../../utils';
 import { useFormatMessage, useNestedState } from '../../../hooks';
 import ScrollContainer from '../../../ScrollContainer';
 import FieldItem, { IInnerFilter } from './FieldItem';
@@ -59,7 +60,7 @@ function FilterButton(props: IFilterButtonProps) {
     props;
   const f = useFormatMessage();
   const scrollBarsRef = useRef<Scrollbars>(null);
-  const openedRef = useRef(false);
+  const dropdownRef = useRef<IDropdownRef>(null);
   const [innerFilterList, setInnerFilterList] = useNestedState(
     initializeInnerFilterList(modelFields, filters)
   );
@@ -100,21 +101,17 @@ function FilterButton(props: IFilterButtonProps) {
     [updateInnerFilterList, otherFieldList]
   );
 
-  const handleOpen = useCallback(() => {
-    if (openedRef.current) {
-      return;
-    }
-    openedRef.current = true;
-    setInnerFilterList(initializeInnerFilterList(modelFields, filters));
-  }, [setInnerFilterList, modelFields, filters]);
-
-  const handleClose = useCallback(() => {
-    if (!openedRef.current) {
-      return;
-    }
-    openedRef.current = false;
-    onClose && onClose();
-  }, [onClose]);
+  const handleVisibleChange = useCallback(
+    (visible: boolean) => {
+      if (visible) {
+        setInnerFilterList(initializeInnerFilterList(modelFields, filters));
+        scrollBarsRef.current?.scrollToTop();
+      } else {
+        onClose && onClose();
+      }
+    },
+    [onClose, setInnerFilterList, modelFields, filters]
+  );
 
   const handleAddFilter = useCallback(() => {
     const field = otherFieldList[0];
@@ -141,7 +138,7 @@ function FilterButton(props: IFilterButtonProps) {
   }, [setOtherFieldList, modelFields, visibleFieldIds, innerFilterList]);
 
   useEffect(() => {
-    if (openedRef.current) {
+    if (dropdownRef.current?.state.popupVisible) {
       const list = innerFilterList.map((el) => ({
         ...el,
         field: el.field._id,
@@ -152,29 +149,17 @@ function FilterButton(props: IFilterButtonProps) {
 
   return (
     <Dropdown
-      className="dropdown-end"
-      onOpen={handleOpen}
-      onClose={handleClose}
-      toggle={
-        <button
-          className={classNames(
-            'btn btn-sm',
-            'h-10 my-1',
-            loading && 'loading'
-          )}>
-          {!loading && <HiOutlineFilter className="text-base" />}
-          <span className="ml-2">
-            {f('dataView.filter')}
-            {!!count && ` (${count})`}
-          </span>
-        </button>
-      }
-      content={
+      ref={dropdownRef}
+      trigger="click"
+      onVisibleChange={handleVisibleChange}
+      overlay={
         <div
           className={classNames(
             'bg-base-100 border-base-300',
             'w-96 px-0 py-2 border overflow-hidden rounded-box shadow'
-          )}>
+          )}
+          onClick={stopEventPropagation}
+          onKeyDown={stopEventPropagation}>
           <ScrollContainer
             ref={scrollBarsRef}
             autoHeight
@@ -193,8 +178,14 @@ function FilterButton(props: IFilterButtonProps) {
             </div>
           )}
         </div>
-      }
-    />
+      }>
+      <button
+        className={classNames('btn btn-sm', 'h-10 my-1', loading && 'loading')}>
+        {!loading && <HiOutlineFilter className="text-base" />}
+        <span className="ml-2">{f('dataView.filter')}</span>
+        {!!count && <div className="badge ml-2">{count}</div>}
+      </button>
+    </Dropdown>
   );
 }
 

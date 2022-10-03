@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import Dropdown from 'rc-dropdown';
 import { memo, useCallback, useRef } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
 import { HiOutlineChevronDown, HiOutlinePlus } from 'react-icons/hi';
@@ -7,7 +8,7 @@ import {
   IProjectDataForm,
 } from '../../../../libs/client/types';
 import { useDeleteProjectDataFormMutation } from '../../../../libs/react-query';
-import Dropdown, { IDropdownRef } from '../../../Dropdown';
+import { stopEventPropagation } from '../../../../utils';
 import { useDialogStore, useFormatMessage } from '../../../hooks';
 import ScrollContainer from '../../../ScrollContainer';
 import Item from './Item';
@@ -25,7 +26,6 @@ function CreateButton(props: ICreateButtonProps) {
   const { modelForms, projectId, modelId, modelFields, visibleFieldIds } =
     props;
   const scrollBarsRef = useRef<Scrollbars>(null);
-  const dropdownRef = useRef<IDropdownRef>(null);
   const externalToggleRef = useRef<HTMLButtonElement>(null);
   const { setCreateDataFormDialogVisible, setCreateDataRecordDialogVisible } =
     useDialogStore();
@@ -82,9 +82,11 @@ function CreateButton(props: ICreateButtonProps) {
     [handleFormClick, handleFormEdit, handleFormDelete]
   );
 
-  const handleListFormClick = () => {
-    dropdownRef.current?.toggle();
-  };
+  const handleVisibleChange = useCallback((visible: boolean) => {
+    if (visible) {
+      scrollBarsRef.current?.scrollToTop();
+    }
+  }, []);
 
   const handleCreateDataClick = () => {
     handleFormClick();
@@ -108,24 +110,17 @@ function CreateButton(props: ICreateButtonProps) {
         <HiOutlinePlus className="text-base mr-2" />
         {f('project.createData')}
       </button>
-      <button
-        ref={externalToggleRef}
-        className={classNames('btn btn-sm', 'h-10')}
-        onClick={handleListFormClick}>
-        <HiOutlineChevronDown className="text-base" />
-      </button>
       <Dropdown
-        ref={dropdownRef}
-        externalToggleRef={externalToggleRef}
-        className="dropdown-end"
-        contentClassName="mt-1"
-        toggle={<div className="h-10" />}
-        content={
+        trigger="click"
+        onVisibleChange={handleVisibleChange}
+        overlay={
           <div
             className={classNames(
               'bg-base-100 border-base-300',
               'w-56 px-0 py-2 border overflow-hidden rounded-box shadow'
-            )}>
+            )}
+            onClick={stopEventPropagation}
+            onKeyDown={stopEventPropagation}>
             <ScrollContainer
               ref={scrollBarsRef}
               autoHeight
@@ -142,8 +137,13 @@ function CreateButton(props: ICreateButtonProps) {
               </button>
             </div>
           </div>
-        }
-      />
+        }>
+        <button
+          ref={externalToggleRef}
+          className={classNames('btn btn-sm', 'h-10')}>
+          <HiOutlineChevronDown className="text-base" />
+        </button>
+      </Dropdown>
     </div>
   );
 }

@@ -1,17 +1,20 @@
 import classNames from 'classnames';
+import Dropdown from 'rc-dropdown';
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
 import { HiOutlineEye, HiOutlinePlus } from 'react-icons/hi';
-import { IProjectDataField } from '../../../../libs/client/types';
-import Dropdown, { IDropdownRef } from '../../../Dropdown';
+import { IProject, IProjectDataField } from '../../../../libs/client/types';
+import { stopEventPropagation } from '../../../../utils';
+import CreateDataFieldDropdown from '../../../CreateDataFieldDropdown';
 import { useFormatMessage } from '../../../hooks';
 import ScrollContainer from '../../../ScrollContainer';
 import SortableList from '../../../SortableList';
 import { IDragDropListProps } from '../../../SortableList/DragDropList';
-import { CREATE_FIELD_MODAL_TOGGLE_ID } from '../../HeadRow';
 import FieldItem from './FieldItem';
 
 interface IVisibilityButtonProps {
+  projectId: string;
+  modelId: string;
   mainFieldId: string;
   modelFields: IProjectDataField[];
   visibleFieldIds: string[];
@@ -19,6 +22,7 @@ interface IVisibilityButtonProps {
   loading?: boolean;
   onChange: (fieldIds: string[]) => void;
   onClose?: () => void;
+  onCreateDateFieldFinish?: (project: IProject) => void;
 }
 
 function initializeVisibleFieldRecord(visibleFieldIds: string[]) {
@@ -49,6 +53,8 @@ function initializeOrderingFieldList(
 
 function VisibilityButton(props: IVisibilityButtonProps) {
   const {
+    projectId,
+    modelId,
     mainFieldId,
     modelFields,
     visibleFieldIds,
@@ -56,11 +62,12 @@ function VisibilityButton(props: IVisibilityButtonProps) {
     loading,
     onChange,
     onClose,
+    onCreateDateFieldFinish,
   } = props;
   const f = useFormatMessage();
   const scrollBarsRef = useRef<Scrollbars>(null);
   const dropdownRef = useRef<IDropdownRef>(null);
-  const openedRef = useRef(false);
+  const createDataFieldDropdownTriggerRef = useRef<HTMLDivElement>(null);
   const [visibleFieldRecord, setVisibleFieldRecord] = useState(
     initializeVisibleFieldRecord(visibleFieldIds)
   );
@@ -112,36 +119,29 @@ function VisibilityButton(props: IVisibilityButtonProps) {
     [setOrderingFieldList]
   );
 
-  const handleOpen = useCallback(() => {
-    if (openedRef.current) {
-      return;
-    }
-    openedRef.current = true;
-    setVisibleFieldRecord(initializeVisibleFieldRecord(visibleFieldIds));
-    setOrderingFieldList(
-      initializeOrderingFieldList(modelFields, visibleFieldIds, mainFieldId)
-    );
-  }, [mainFieldId, modelFields, visibleFieldIds]);
-  const handleClose = useCallback(() => {
-    if (!openedRef.current) {
-      return;
-    }
-    openedRef.current = false;
-    onClose && onClose();
-  }, [onClose]);
+  const handleVisibleChange = useCallback(
+    (visible: boolean) => {
+      if (visible) {
+        setVisibleFieldRecord(initializeVisibleFieldRecord(visibleFieldIds));
+        setOrderingFieldList(
+          initializeOrderingFieldList(modelFields, visibleFieldIds, mainFieldId)
+        );
+        scrollBarsRef.current?.scrollToTop();
+      } else {
+        onClose && onClose();
+      }
+    },
+    [onClose, mainFieldId, modelFields, visibleFieldIds]
+  );
 
   const handleAddField = () => {
     // TODO: should add field inside
     dropdownRef.current?.close();
-    document.getElementById(CREATE_FIELD_MODAL_TOGGLE_ID)?.click();
+    createDataFieldDropdownTriggerRef.current?.click();
   };
 
-  const getContainer = useCallback(() => {
-    return scrollBarsRef.current?.container;
-  }, []);
-
   useEffect(() => {
-    if (openedRef.current) {
+    if (dropdownRef.current?.state.popupVisible) {
       const fieldIds = orderingFieldList
         .filter((el) => visibleFieldRecord[el._id])
         .map((el) => el._id);
@@ -150,60 +150,67 @@ function VisibilityButton(props: IVisibilityButtonProps) {
   }, [onChange, mainFieldId, orderingFieldList, visibleFieldRecord]);
 
   return (
-    <Dropdown
-      ref={dropdownRef}
-      className="dropdown-end"
-      onOpen={handleOpen}
-      onClose={handleClose}
-      toggle={
+    <div className="relative">
+      <CreateDataFieldDropdown
+        projectId={projectId}
+        modelId={modelId}
+        existingFields={modelFields}
+        onFinish={onCreateDateFieldFinish}>
+        <div
+          ref={createDataFieldDropdownTriggerRef}
+          className="absolute w-full h-10 my-1 top-0 left-0 z-0"
+        />
+      </CreateDataFieldDropdown>
+      <Dropdown
+        ref={dropdownRef}
+        trigger="click"
+        onVisibleChange={handleVisibleChange}
+        overlay={
+          <div
+            className={classNames(
+              'bg-base-100 border-base-300',
+              'w-64 px-0 py-2 border overflow-hidden rounded-box shadow'
+            )}
+            onClick={stopEventPropagation}>
+            <ScrollContainer
+              ref={scrollBarsRef}
+              autoHeight
+              withShadow
+              autoHeightMax={280}>
+              <div className="px-2">{mainFieldItem}</div>
+              <SortableList
+                customDragHandle
+                droppableId="SORTABLE_FIELD_LIST"
+                listClassName="px-2"
+                list={orderingFieldList}
+                getItemId={getItemId}
+                getItemDraggable={getItemDraggable}
+                renderItem={renderItem}
+                onChange={handleOrderingFieldListChange}
+              />
+            </ScrollContainer>
+            <div className="w-full px-2">
+              <button
+                className={classNames('btn btn-ghost', 'w-full justify-start')}
+                onClick={handleAddField}>
+                <HiOutlinePlus className="text-base mr-2" />
+                {f('dataView.addField')}
+              </button>
+            </div>
+          </div>
+        }>
         <button
           className={classNames(
             'btn btn-sm',
-            'h-10 my-1',
+            'relative h-10 my-1 z-10',
             loading && 'loading'
           )}>
           {!loading && <HiOutlineEye className="text-base" />}
-          <span className="ml-2">
-            {f('dataView.fieldVisibility')}
-            {count !== undefined && ` (${count})`}
-          </span>
+          <span className="ml-2">{f('dataView.fieldVisibility')}</span>
+          {!!count && <div className="badge ml-2">{count}</div>}
         </button>
-      }
-      content={
-        <div
-          className={classNames(
-            'bg-base-100 border-base-300',
-            'w-64 px-0 py-2 border overflow-hidden rounded-box shadow'
-          )}>
-          <ScrollContainer
-            ref={scrollBarsRef}
-            autoHeight
-            withShadow
-            autoHeightMax={280}>
-            <div className="px-2">{mainFieldItem}</div>
-            <SortableList
-              customDragHandle
-              droppableId="SORTABLE_FIELD_LIST"
-              getContainer={getContainer}
-              listClassName="px-2"
-              list={orderingFieldList}
-              getItemId={getItemId}
-              getItemDraggable={getItemDraggable}
-              renderItem={renderItem}
-              onChange={handleOrderingFieldListChange}
-            />
-          </ScrollContainer>
-          <div className="w-full px-2">
-            <button
-              className={classNames('btn btn-ghost', 'w-full justify-start')}
-              onClick={handleAddField}>
-              <HiOutlinePlus className="text-base mr-2" />
-              {f('dataView.addField')}
-            </button>
-          </div>
-        </div>
-      }
-    />
+      </Dropdown>
+    </div>
   );
 }
 

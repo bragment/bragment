@@ -284,6 +284,7 @@ function TableView(props: ITableViewProps) {
         onShouldUpdateSorting={updateSorting}
         onShouldUpdateVisibility={updateVisibleFields}
         onSearchInputChange={handleSearchInputChange}
+        onCreateDateFieldFinish={handleCreateDateFieldFinish}
       />
       {headerGroups.map((headerGroup) => (
         <HeadRow
