@@ -70,6 +70,7 @@ function FieldItem(props: IFieldItemProps) {
         />
         <div className="flex-auto mr-2">
           <DataFieldSelect
+            size="sm"
             fields={selectableFields}
             value={selectedFieldId}
             onChange={handleFieldChange}

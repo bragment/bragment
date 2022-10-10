@@ -79,6 +79,7 @@ export enum EDataFieldType {
   HttpLink = 'HTTP_LINK',
   MultipleLineText = 'MULTIPLE_LINE_TEXT',
   Number = 'NUMBER',
+  Resolver = 'RESOLVER',
   SingleLineText = 'SINGLE_LINE_TEXT',
 }
 
@@ -117,7 +118,8 @@ export enum EDataFormItemKey {
   required = 'required',
 }
 
-export interface IRecordFieldData {
+export type IRecordFieldAnyData = any;
+export interface IRecordFieldData extends IRecordFieldAnyData {
   value: string;
   updatedBy?: string;
 }
@@ -145,6 +147,9 @@ export interface IProjectDataField {
   model: string;
   title: string;
   type: EDataFieldType;
+  asType?: EDataFieldType;
+  relatedField?: string;
+  subPath?: string;
 }
 
 export interface IProjectDataForm {

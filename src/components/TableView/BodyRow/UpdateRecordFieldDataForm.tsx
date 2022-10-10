@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { getFieldRenderer } from '../../../fields/renders';
+import { getFieldRenderer } from '../../../fields/renderers';
 import {
   IProjectDataField,
   IProjectDataRecord,
@@ -10,7 +10,7 @@ import { useDialogStore, useFormatMessage } from '../../hooks';
 
 interface IUpdateRecordFieldDataFormProps {
   projectId: string;
-  recordId: string;
+  record: IProjectDataRecord;
   field: IProjectDataField;
   data?: IRecordFieldData;
   onCancel?: () => void;
@@ -18,7 +18,7 @@ interface IUpdateRecordFieldDataFormProps {
 }
 
 function UpdateRecordFieldDataForm(props: IUpdateRecordFieldDataFormProps) {
-  const { projectId, field, recordId, data, onCancel, onFinish } = props;
+  const { projectId, field, record, data, onCancel, onFinish } = props;
   const { toastError } = useDialogStore();
   const f = useFormatMessage();
   const { isLoading, mutateAsync } = useUpdateProjectDataRecordMutation();
@@ -37,15 +37,15 @@ function UpdateRecordFieldDataForm(props: IUpdateRecordFieldDataFormProps) {
     }
     const fields = {
       projectId,
-      recordId,
+      recordId: record._id,
       data: {
         [field._id]: { value },
       },
     };
     try {
-      const record = await mutateAsync(fields);
+      const result = await mutateAsync(fields);
       if (onFinish) {
-        onFinish(record);
+        onFinish(result);
       }
     } catch (error: any) {
       // TODO: handle request error
@@ -60,7 +60,7 @@ function UpdateRecordFieldDataForm(props: IUpdateRecordFieldDataFormProps) {
   return (
     <form className="w-full form-control" onSubmit={handleSubmit}>
       {renderer &&
-        renderer.renderTableCellEditing(field, data, {
+        renderer.renderEditingTableBodyCell(field, record, {
           loading: isLoading,
           className: 'w-full',
           onCancel,
