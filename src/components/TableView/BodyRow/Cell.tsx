@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { memo, useCallback, useState } from 'react';
-import { getFieldRenderer } from '../../../fields/renders';
+import { getFieldRenderer } from '../../../fields/renderers';
 import {
   IProjectDataField,
   IProjectDataRecord,
@@ -32,7 +32,11 @@ function Cell(props: IItermProps) {
   const [editing, setEditing] = useState(false);
   const renderer = getFieldRenderer(field.type);
 
-  const handleDoubleClick = () => setEditing(true);
+  const handleDoubleClick = () => {
+    if (renderer?.editable) {
+      setEditing(true);
+    }
+  };
 
   const handleCancel = useCallback(() => {
     setEditing(false);
@@ -53,7 +57,7 @@ function Cell(props: IItermProps) {
       )}
       onDoubleClick={handleDoubleClick}>
       <div className={styles.content}>
-        {renderer && renderer.renderTableCell(field, data)}
+        {renderer && renderer.renderTableBodyCell(field, record)}
         {editing && (
           <div
             className={classNames(
@@ -63,8 +67,8 @@ function Cell(props: IItermProps) {
             )}>
             <UpdateRecordFieldDataForm
               projectId={projectId}
-              recordId={record._id}
               field={field}
+              record={record}
               data={data}
               onCancel={handleCancel}
               onFinish={handleFinish}

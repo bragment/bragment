@@ -1,7 +1,15 @@
 import classNames from 'classnames';
-import { memo, useCallback, useEffect, useRef, useState } from 'react';
-import { getDefaultFieldType } from '../../fields/renders';
-import { ILocalMessage } from '../../i18n/types';
+import {
+  forwardRef,
+  memo,
+  Ref,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
+import { getDefaultFieldType, getFieldRenderer } from '../../fields/renderers';
 import {
   EDataFieldType,
   IProject,
@@ -10,58 +18,83 @@ import {
 import { useCreateProjectDataFieldMutation } from '../../libs/react-query';
 import { getAvailableTitle } from '../../utils';
 import DataFieldTypeSelect from '../DataFieldTypeSelect';
-import { useFormatMessage } from '../hooks';
+import { useDialogStore, useFormatMessage } from '../hooks';
 
-export interface ICreateDataFieldFormProps {
+interface ICreateDataFieldFormProps {
   projectId: string;
   modelId: string;
   existingFields?: IProjectDataField[];
   onFinish?: (project: IProject) => void;
 }
 
-function CreateDataFieldForm(props: ICreateDataFieldFormProps) {
+export interface ICreateDataFieldFormRef {
+  submit: () => Promise<void>;
+}
+
+function CreateDataFieldForm(
+  props: ICreateDataFieldFormProps,
+  ref: Ref<ICreateDataFieldFormRef>
+) {
   const { projectId, modelId, existingFields, onFinish } = props;
-  const [errorMessage, setErrorMessage] = useState<ILocalMessage | undefined>();
-  const [fieldType, setFieldType] = useState(
-    getDefaultFieldType() as EDataFieldType
-  );
-  const { isLoading, mutateAsync } = useCreateProjectDataFieldMutation();
-  const titleInputRef = useRef<HTMLInputElement>(null);
   const f = useFormatMessage();
+  const formRef = useRef<HTMLFormElement>(null);
+  const titleInputRef = useRef<HTMLInputElement>(null);
+  const [fieldType, setFieldType] = useState(getDefaultFieldType());
+  const { toastError } = useDialogStore();
+  const { isLoading, mutateAsync } = useCreateProjectDataFieldMutation();
+
+  const renderer = getFieldRenderer(fieldType);
+  const extra = renderer?.renderCreateFieldExtra({ existingFields });
 
   const handleFieldTypeChange = useCallback((type: EDataFieldType) => {
     setFieldType(type);
   }, []);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (isLoading) {
-      return;
-    }
-    const form = event.target as HTMLFormElement;
-    const formData = new FormData(form);
-    const data = {
-      projectId: formData.get('projectId')?.toString().trim() || '',
-      model: formData.get('model')?.toString().trim() || '',
-      title: formData.get('title')?.toString().trim() || '',
-      type: formData.get('type')?.toString() as EDataFieldType,
-    };
-    if (existingFields?.some((el) => el.title === data.title)) {
-      setErrorMessage('project.existingFieldTitle');
-      return;
-    }
-    try {
-      const project = await mutateAsync(data);
-      if (onFinish) {
-        onFinish(project);
+  const handleSubmit = useCallback(
+    async (event?: React.FormEvent<HTMLFormElement>) => {
+      event?.preventDefault();
+      const form = formRef.current;
+      if (isLoading || !form) {
+        return;
       }
-      form.reset();
-      setFieldType(getDefaultFieldType() as EDataFieldType);
-      setErrorMessage(undefined);
-    } catch (error: any) {
-      setErrorMessage('common.networkError');
-    }
-  };
+      const formData = new FormData(form);
+      const entries = Array.from(formData.entries());
+      const data = {
+        ...entries.reduce<any>((prev, [key, value]) => {
+          prev[key] = value;
+          return prev;
+        }, {}),
+        projectId: formData.get('projectId')?.toString().trim() || '',
+        model: formData.get('model')?.toString().trim() || '',
+        title: formData.get('title')?.toString().trim() || '',
+        type: formData.get('type')?.toString() as EDataFieldType,
+      };
+      if (existingFields?.some((el) => el.title === data.title)) {
+        toastError(f('project.existingFieldTitle'));
+        titleInputRef.current?.focus();
+        return;
+      }
+      try {
+        const project = await mutateAsync(data);
+        if (onFinish) {
+          onFinish(project);
+        }
+        form.reset();
+        setFieldType(getDefaultFieldType());
+      } catch (error: any) {
+        toastError(f('common.networkError'));
+      }
+    },
+    [f, mutateAsync, onFinish, toastError, existingFields, isLoading]
+  );
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      submit: handleSubmit,
+    }),
+    [handleSubmit]
+  );
 
   useEffect(() => {
     if (!titleInputRef.current || titleInputRef.current.value) {
@@ -75,11 +108,9 @@ function CreateDataFieldForm(props: ICreateDataFieldFormProps) {
 
   return (
     <form
+      ref={formRef}
       className={classNames('form-control', 'space-y-4')}
       onSubmit={handleSubmit}>
-      <label className={classNames('label text-error', 'pt-0 pb-0 h-6')}>
-        {errorMessage && f(errorMessage)}
-      </label>
       <input name="projectId" type="hidden" value={projectId} />
       <input name="model" type="hidden" value={modelId} />
       <input name="type" type="hidden" value={fieldType} />
@@ -94,16 +125,11 @@ function CreateDataFieldForm(props: ICreateDataFieldFormProps) {
         className={classNames('input input-bordered', 'w-full')}
       />
       <DataFieldTypeSelect value={fieldType} onChange={handleFieldTypeChange} />
-      <button
-        type="submit"
-        className={classNames(
-          'btn btn-primary btn-block',
-          isLoading && 'loading'
-        )}>
-        {f('common.confirm')}
-      </button>
+      {extra}
+      {/* NOTE: padding bottom */}
+      <div />
     </form>
   );
 }
 
-export default memo(CreateDataFieldForm);
+export default memo(forwardRef(CreateDataFieldForm));

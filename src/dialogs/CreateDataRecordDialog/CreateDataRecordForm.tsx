@@ -98,16 +98,16 @@ function CreateDataRecordForm(
                 'swap-on bg-base-content/10',
                 'px-4 py-3 flex items-center rounded-lg'
               )}>
-              <HiChevronDown className="text-xl mr-2" />
-              {f('project.showOtherFields')}
+              <HiChevronUp className="text-xl mr-2" />
+              {f('project.hideOtherFields')}
             </div>
             <div
               className={classNames(
                 'swap-off bg-base-content/10',
                 'px-4 py-3 flex items-center rounded-lg'
               )}>
-              <HiChevronUp className="text-xl mr-2" />
-              {f('project.hideOtherFields')}
+              <HiChevronDown className="text-xl mr-2" />
+              {f('project.showOtherFields')}
             </div>
           </label>
           {hiddenItemsVisible && (

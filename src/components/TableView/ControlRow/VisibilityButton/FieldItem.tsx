@@ -2,7 +2,7 @@ import { DraggableProvidedDragHandleProps } from '@hello-pangea/dnd';
 import classNames from 'classnames';
 import { memo } from 'react';
 import { HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi';
-import { getFieldIcon } from '../../../../fields/renders';
+import { getFieldIcon } from '../../../../fields/renderers';
 import { IProjectDataField } from '../../../../libs/client/types';
 import { useFormatMessage } from '../../../hooks';
 import DragHandle from '../../../SortableList/DragHandle';

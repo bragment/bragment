@@ -2,23 +2,24 @@ import { HiDocumentText } from 'react-icons/hi';
 import {
   EDataFieldType,
   IProjectDataField,
-  IRecordFieldData,
+  IProjectDataRecord,
 } from '../../libs/client/types';
 import TextAreaControl from '../controls/TextAreaControl';
-import BaseFieldRenderer from './BaseFieldRenderer';
+import FieldRendererBase from './FieldRendererBase';
+import { EFieldCategory } from './types';
 
-export default class MultipleLineTextFieldRenderer extends BaseFieldRenderer {
+export default class MultipleLineTextFieldRenderer extends FieldRendererBase {
+  public category = EFieldCategory.Basic;
   public name = 'dataField.multipleLineText';
   public type = EDataFieldType.MultipleLineText;
   public Icon = HiDocumentText;
-  public constructor() {
-    super();
-    this.editable = true;
-  }
 
-  public renderTableCellEditing(
+  public editable = true;
+  public fullWidth = true;
+
+  public renderEditingTableBodyCell(
     field: IProjectDataField,
-    data: IRecordFieldData,
+    record: IProjectDataRecord,
     props: {
       className?: string;
       loading?: boolean;
@@ -29,7 +30,7 @@ export default class MultipleLineTextFieldRenderer extends BaseFieldRenderer {
     return (
       <TextAreaControl
         autoFocus
-        defaultValue={this.getValueAsString(field, data)}
+        defaultValue={this.getStringValue(field, record)}
         {...props}
       />
     );
@@ -38,7 +39,7 @@ export default class MultipleLineTextFieldRenderer extends BaseFieldRenderer {
   public renderFormItem(
     _field: IProjectDataField,
     name: string,
-    defaultValue = '',
+    defaultValue: string,
     props: {
       className?: string;
     }
