@@ -1,9 +1,6 @@
 import classNames from 'classnames';
 import { memo } from 'react';
-import {
-  checkIfFieldFullWidth,
-  getFieldRenderer,
-} from '../../fields/renderers';
+import { checkIfFieldFullWidth, getFieldRenderer } from '../../fields';
 import { IInnerDataFormItem } from '../CreateDataFormDialog/CreateForm';
 
 interface IFormItemProps {

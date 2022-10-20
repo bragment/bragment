@@ -18,6 +18,15 @@ export function checkIfSafari() {
   return false;
 }
 
+export function checkIfHttpLink(text: string) {
+  try {
+    const url = new URL(text);
+    return url.protocol.startsWith('http');
+  } catch (e) {
+    return false;
+  }
+}
+
 export function getAvailableTitle(prefix: string, existing?: string[]) {
   const existingSet = new Set(existing || []);
   let i = 0;

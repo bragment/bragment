@@ -4,7 +4,7 @@ import { memo, useMemo } from 'react';
 import {
   getAllCategoryFieldRenderers,
   getCategoryMessageId,
-} from '../../fields/renderers';
+} from '../../fields';
 import type FieldRendererBase from '../../fields/renderers/FieldRendererBase';
 import { ILocalMessage } from '../../i18n/types';
 import { EDataFieldType } from '../../libs/client/types';

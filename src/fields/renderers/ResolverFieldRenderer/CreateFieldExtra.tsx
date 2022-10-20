@@ -4,12 +4,12 @@ import DataFieldSelect from '../../../components/DataFieldSelect';
 import DataFieldTypeSelect from '../../../components/DataFieldTypeSelect';
 import { useFormatMessage } from '../../../components/hooks';
 import { EDataFieldType, IProjectDataField } from '../../../libs/client/types';
-import { EFieldCategory } from '../types';
+import { EFieldCategory } from '../../types';
 import {
   checkIfFieldResolvable,
   getDefaultFieldType,
   getResolvablePaths,
-} from '../utils';
+} from '../../utils';
 
 interface ICreateFieldExtraProps {
   existingFields?: IProjectDataField[];
@@ -53,7 +53,7 @@ function CreateFieldExtra(props: ICreateFieldExtraProps) {
   return (
     <div>
       <div className="divider my-0" />
-      <input type="hidden" name="relateField" value={relatedField} />
+      <input type="hidden" name="relatedField" value={relatedField} />
       <input type="hidden" name="subPath" value={subPath} />
       <input type="hidden" name="asType" value={asType} />
       <label className="label">

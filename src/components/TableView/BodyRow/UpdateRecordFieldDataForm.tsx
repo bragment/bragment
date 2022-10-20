@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { getFieldRenderer } from '../../../fields/renderers';
+import { getFieldRenderer } from '../../../fields';
 import {
   IProjectDataField,
   IProjectDataRecord,

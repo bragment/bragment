@@ -24,12 +24,12 @@ import { IApiError, IProject, IProjectDataRecord } from '../client/types';
 import { EMutationKey, EQueryKey } from './types';
 
 function fetchProjectFn(context: QueryFunctionContext) {
-  const [_key, id] = context.queryKey as [string, string];
+  const [_key, id] = context.queryKey as string[];
   return fetchProject(id);
 }
 
 function fetchProjectDataRecordsFn(context: QueryFunctionContext) {
-  const [_key, projectId] = context.queryKey as [string, string];
+  const [_key, projectId] = context.queryKey as string[];
   return fetchProjectDataRecords(projectId);
 }
 

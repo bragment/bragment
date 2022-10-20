@@ -2,7 +2,7 @@ import { DraggableProvidedDragHandleProps } from '@hello-pangea/dnd';
 import classNames from 'classnames';
 import { memo } from 'react';
 import DragHandle from '../../components/SortableList/DragHandle';
-import { getFieldIcon } from '../../fields/renderers';
+import { getFieldIcon } from '../../fields';
 import { IProjectDataField } from '../../libs/client/types';
 
 interface IFieldItemProps {

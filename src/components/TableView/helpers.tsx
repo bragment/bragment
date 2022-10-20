@@ -139,11 +139,11 @@ export const globalFilterFn: FilterFnOption<IProjectDataRecord> = (
   const { updatedAt, keywords } = filter;
   const data = row.getValue<IRecordFieldData | undefined>(columnId);
   const value = data?.value;
-  if (!value) {
-    return false;
-  }
   if (!keywords.length || row.original.updatedAt > updatedAt) {
     return true;
+  }
+  if (!value) {
+    return false;
   }
   let index = 0;
   for (const word of keywords) {

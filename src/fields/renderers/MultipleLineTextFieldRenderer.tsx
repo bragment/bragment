@@ -5,8 +5,8 @@ import {
   IProjectDataRecord,
 } from '../../libs/client/types';
 import TextAreaControl from '../controls/TextAreaControl';
+import { EFieldCategory } from '../types';
 import FieldRendererBase from './FieldRendererBase';
-import { EFieldCategory } from './types';
 
 export default class MultipleLineTextFieldRenderer extends FieldRendererBase {
   public category = EFieldCategory.Basic;

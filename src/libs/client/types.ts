@@ -119,9 +119,23 @@ export enum EDataFormItemKey {
 }
 
 export type IRecordFieldAnyData = any;
+export interface IMetadata {
+  title?: string;
+  description?: string;
+  icon?: string;
+  image?: string;
+  keywords?: string[];
+  language?: string;
+  type?: string;
+  url?: string;
+  provider?: string;
+}
 export interface IRecordFieldData extends IRecordFieldAnyData {
   value: string;
   updatedBy?: string;
+  mime?: string;
+  metadata?: IMetadata;
+  unreached?: Record<string, boolean>;
 }
 
 export interface IProjectDataModel {

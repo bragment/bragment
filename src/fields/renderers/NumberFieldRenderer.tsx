@@ -1,7 +1,7 @@
 import { HiHashtag } from 'react-icons/hi';
 import { EDataFieldType } from '../../libs/client/types';
+import { EFieldCategory } from '../types';
 import FieldRendererBase from './FieldRendererBase';
-import { EFieldCategory } from './types';
 
 export default class NumberFieldRenderer extends FieldRendererBase {
   public category = EFieldCategory.Basic;

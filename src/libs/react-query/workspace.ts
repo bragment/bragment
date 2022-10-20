@@ -13,12 +13,12 @@ import {
 import { EQueryKey } from './types';
 
 function fetchProjectListFn(context: QueryFunctionContext) {
-  const [_key, id] = context.queryKey as [string, string];
+  const [_key, id] = context.queryKey as string[];
   return fetchWorkspaceProjects(id);
 }
 
 function fetchWorkspaceFn(context: QueryFunctionContext) {
-  const [_key, id] = context.queryKey as [string, string];
+  const [_key, id] = context.queryKey as string[];
   return fetchWorkspace(id);
 }
 
