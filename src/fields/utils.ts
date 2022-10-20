@@ -1,6 +1,6 @@
-import { ILocalMessage } from '../../i18n/types';
-import { IProjectDataField } from '../../libs/client/types';
-import type FieldRendererBase from './FieldRendererBase';
+import { ILocalMessage } from '../i18n/types';
+import { IProjectDataField } from '../libs/client/types';
+import type FieldRendererBase from './renderers/FieldRendererBase';
 import { EFieldCategory } from './types';
 
 const projectFieldMap = new Map<string, IProjectDataField>();

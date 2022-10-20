@@ -1,8 +1,9 @@
 import classNames from 'classnames';
-import { memo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { HiLogin, HiLogout } from 'react-icons/hi';
 import { Outlet, useParams } from 'react-router-dom';
 import ScrollContainer from '../../../components/ScrollContainer';
+import { setProjectFields } from '../../../fields';
 import {
   useProjectDataRecordListQuery,
   useProjectQuery,
@@ -18,6 +19,10 @@ function ProjectInstanceView() {
   const { data: project } = useProjectQuery(projectId, true, true);
   // NOTE: prefetch for data view
   useProjectDataRecordListQuery(projectId, true, true);
+
+  useEffect(() => {
+    setProjectFields(project?.fields || []);
+  }, [project]);
 
   return (
     <div className={classNames('w-full h-full flex', styles.wrapper)}>

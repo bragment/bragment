@@ -9,7 +9,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { getDefaultFieldType, getFieldRenderer } from '../../fields/renderers';
+import { getDefaultFieldType, getFieldRenderer } from '../../fields';
 import {
   EDataFieldType,
   IProject,

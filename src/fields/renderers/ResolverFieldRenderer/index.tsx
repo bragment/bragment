@@ -5,16 +5,17 @@ import {
   IProjectDataRecord,
 } from '../../../libs/client/types';
 import ResolverWrapper from '../../controls/ResolverWrapper';
-import FieldRendererBase from '../FieldRendererBase';
-import { EFieldCategory } from '../types';
+import { EFieldCategory } from '../../types';
 import {
   getDefaultFieldType,
   getFieldRenderer,
   getProjectField,
-} from '../utils';
+} from '../../utils';
+import FieldRendererBase from '../FieldRendererBase';
 import CreateFieldExtra from './CreateFieldExtra';
 
 export default class ResolverFieldRenderer extends FieldRendererBase {
+  static SEPARATOR = '.';
   public category = EFieldCategory.Advanced;
   public name = 'dataField.resolver';
   public type = EDataFieldType.Resolver;
@@ -22,27 +23,23 @@ export default class ResolverFieldRenderer extends FieldRendererBase {
 
   public editable = false;
 
-  // public getValue(field: IProjectDataField, record: IProjectDataRecord) {
-  //   const relatedField = field.relatedField
-  //     ? getProjectField(field.relatedField)
-  //     : undefined;
-  //   const relatedRenderer = relatedField
-  //     ? getFieldRenderer(relatedField.type)
-  //     : undefined;
-  //   const relatedData = relatedRenderer?.getValue(field, record);
-  //   if (
-  //     !field.relatedField ||
-  //     !field.subPath ||
-  //     !relatedField ||
-  //     !relatedRenderer ||
-  //     !relatedData
-  //   ) {
-  //     return undefined;
-  //   }
-  //   if (field.subPath in (relatedData as IRecordFieldData)) {
-  //     return (relatedData as IRecordFieldData)[field.subPath];
-  //   }
-  // }
+  public resolve<T = any>(relatedData: any, subPath: string): T | undefined {
+    if (relatedData) {
+      if (subPath in relatedData) {
+        return relatedData[subPath];
+      }
+      const index = subPath.indexOf(ResolverFieldRenderer.SEPARATOR);
+      if (index > -1) {
+        const key = subPath.slice(0, index);
+        const newSubPath = subPath.slice(index + 1);
+        const newRelatedData = relatedData[key];
+        if (relatedData[key]) {
+          return this.resolve<T>(newRelatedData, newSubPath);
+        }
+      }
+    }
+    return undefined;
+  }
 
   public renderTableBodyCell(
     field: IProjectDataField,
@@ -54,25 +51,27 @@ export default class ResolverFieldRenderer extends FieldRendererBase {
     const relatedRenderer = relatedField
       ? getFieldRenderer(relatedField.type)
       : undefined;
-    const relatedData = relatedRenderer?.getData(field, record);
     const renderer = getFieldRenderer(field.asType || getDefaultFieldType());
     if (
       !field.relatedField ||
       !field.subPath ||
       !relatedField ||
       !relatedRenderer ||
-      !relatedData ||
       !renderer
     ) {
       return <></>;
     }
+    const relatedData = relatedRenderer.getData(relatedField, record);
+    const value = this.resolve(relatedData, field.subPath);
 
-    return (
-      // TODO: resolve field
-      <ResolverWrapper>
-        {renderer.renderTableBodyCellByStringValue(relatedData.toString())}
-      </ResolverWrapper>
-    );
+    if (typeof value === 'string') {
+      return (
+        <ResolverWrapper relatedField={relatedField} relatedRecord={record}>
+          {renderer.renderTableBodyCellByStringValue(value)}
+        </ResolverWrapper>
+      );
+    }
+    return <></>;
   }
 
   public renderCreateFieldExtra(props: {

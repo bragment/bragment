@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import Select, { Option } from 'rc-select';
 import { memo } from 'react';
-import { getFieldIcon } from '../../fields/renderers';
+import { getFieldIcon } from '../../fields';
 import { IProjectDataField } from '../../libs/client/types';
 import { useFormatMessage } from '../hooks';
 

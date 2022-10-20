@@ -1,4 +1,5 @@
 export enum EQueryKey {
+  LinkFieldData = 'LINK_FIELD_DATA',
   MyData = 'MY_DATA',
   MyProfile = 'MY_PROFILE',
   MyProjects = 'MY_PROJECTS',

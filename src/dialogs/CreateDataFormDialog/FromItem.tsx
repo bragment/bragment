@@ -4,10 +4,7 @@ import { memo, useCallback } from 'react';
 import { HiOutlineMinusCircle } from 'react-icons/hi';
 import AutoSizeTextArea from '../../components/AutoSizeTextArea';
 import { useFormatMessage } from '../../components/hooks';
-import {
-  checkIfFieldFullWidth,
-  getFieldRenderer,
-} from '../../fields/renderers';
+import { checkIfFieldFullWidth, getFieldRenderer } from '../../fields';
 import { EDataFormItemKey, IProjectDataField } from '../../libs/client/types';
 import FieldItem from './FieldItem';
 import styles from './index.module.scss';

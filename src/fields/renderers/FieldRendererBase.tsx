@@ -6,7 +6,7 @@ import {
   IRecordFieldData,
 } from '../../libs/client/types';
 import InputControl from '../controls/InputControl';
-import { EFieldCategory, IResolvablePath } from './types';
+import { EFieldCategory, IResolvablePath } from '../types';
 
 export default class FieldRendererBase {
   public category = EFieldCategory.Basic;
