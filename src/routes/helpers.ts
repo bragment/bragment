@@ -4,6 +4,17 @@ export function getWorkspaceInstancePath(id: string) {
   return ERoutePath.WorkspaceInstance.replace(ERoutePathName.WorkspaceId, id);
 }
 
+export function getWorkspaceProjectListPath(id: string) {
+  return ERoutePath.WorkspaceProjectList.replace(
+    ERoutePathName.WorkspaceId,
+    id
+  );
+}
+
+export function getWorkspaceMemberListPath(id: string) {
+  return ERoutePath.WorkspaceMemberList.replace(ERoutePathName.WorkspaceId, id);
+}
+
 export function getProjectInstancePath(id: string) {
   return ERoutePath.ProjectInstance.replace(ERoutePathName.ProjectId, id);
 }

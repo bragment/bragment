@@ -4,19 +4,20 @@ import { useCallback } from 'react';
 import { useFormatMessage, useUserStore } from '../../../components/hooks';
 import { IWorkspace } from '../../../libs/client/types';
 import { useUpdateMyDataMutation } from '../../../libs/react-query';
-import { useNavigateWorkspaceInstancePage } from '../../hooks';
+import { getWorkspaceProjectListPath } from '../../helpers';
+import { useNavigateToPage } from '../../hooks';
 import CreateWorkspaceForm from './CreateWorkspaceForm';
 
 function CreateWorkspaceView() {
   const f = useFormatMessage();
   const { me, updateMe } = useUserStore();
   const { mutateAsync } = useUpdateMyDataMutation();
-  const navigate = useNavigateWorkspaceInstancePage();
+  const navigateTo = useNavigateToPage();
 
   const handleFinish = useCallback(
     async (workspace: IWorkspace) => {
       const id = workspace._id;
-      navigate(id, { replace: true });
+      navigateTo(getWorkspaceProjectListPath(id), { replace: true });
       if (!me?.mainWorkspace) {
         const user = await mutateAsync({
           mainWorkspace: id,
@@ -24,7 +25,7 @@ function CreateWorkspaceView() {
         updateMe(user);
       }
     },
-    [me, mutateAsync, navigate, updateMe]
+    [me, mutateAsync, navigateTo, updateMe]
   );
 
   return (
@@ -34,7 +35,7 @@ function CreateWorkspaceView() {
         'w-full h-full min-h-[36rem] flex items-center justify-center'
       )}>
       <div className="w-96 mx-3 pb-16">
-        <label className="font-bold text-3xl">
+        <label className="font-bold text-3xl text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500">
           {f('workspace.createWorkspace')}
         </label>
         <CreateWorkspaceForm onFinish={handleFinish} />

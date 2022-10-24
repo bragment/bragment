@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { memo, useState } from 'react';
 import { useFormatMessage } from '../../../components/hooks';
+import PrimaryButton from '../../../components/PrimaryButton';
 import { ILocalMessage } from '../../../i18n/types';
 import { IWorkspace } from '../../../libs/client/types';
 import { useCreateWorkspaceMutation } from '../../../libs/react-query';
@@ -53,15 +54,11 @@ function CreateWorkspaceForm(props: ICreateWorkspaceFormProps) {
         placeholder={f('workspace.title')}
         className={classNames('input input-bordered', 'w-full')}
       />
-      <button
+      <PrimaryButton
         type="submit"
-        className={classNames(
-          'btn btn-primary',
-          'w-full',
-          isLoading && 'loading'
-        )}>
+        className={classNames('btn-block', isLoading && 'loading')}>
         {f('common.confirm')}
-      </button>
+      </PrimaryButton>
     </form>
   );
 }
