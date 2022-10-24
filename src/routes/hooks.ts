@@ -7,6 +7,16 @@ import {
   getWorkspaceInstancePath,
 } from './helpers';
 
+export function useNavigateToPage() {
+  const navigate = useNavigate();
+  return useCallback(
+    (path: string, options?: NavigateOptions) => {
+      navigate(path, options);
+    },
+    [navigate]
+  );
+}
+
 export function useNavigateWorkspaceInstancePage() {
   const navigate = useNavigate();
   return useCallback(

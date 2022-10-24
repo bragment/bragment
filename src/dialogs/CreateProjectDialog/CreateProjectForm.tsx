@@ -69,7 +69,7 @@ function CreateProjectForm(props: ICreateProjectFormProps) {
           autoFocus
           required
           placeholder={f('project.title')}
-          className={classNames('input input-bordered', 'w-full')}
+          className={classNames('input input-bordered', 'w-full focus:z-10')}
         />
         <BackgroundDropdown onChange={handleBgChange} />
       </div>

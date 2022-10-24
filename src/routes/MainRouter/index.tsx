@@ -1,11 +1,12 @@
 import { ErrorBoundary } from '@sentry/react';
 import { QueryErrorResetBoundary } from '@tanstack/react-query';
 import { memo } from 'react';
-import { HashRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import GlobalToast from '../../dialogs/GlobalToast';
 import AuthPage from '../AuthPage';
 import GithubForm from '../AuthPage/GithubForm';
 import SignInForm from '../AuthPage/SignInForm';
+import ErrorPage from '../ErrorPage';
 import HomePage from '../HomePage';
 import ProjectPage from '../ProjectPage';
 import DataModelView from '../ProjectPage/DataModelView';
@@ -28,16 +29,8 @@ function RootRouter() {
         <ErrorBoundary
           showDialog
           onReset={reset}
-          fallback={({ error, componentStack, resetError }) => (
-            <div className="p-6">
-              {/* TODO: handle error */}
-              <div>You have encountered an error</div>
-              <div>{error.toString()}</div>
-              <div>{componentStack}</div>
-              <button onClick={() => resetError()}>Click here to reset!</button>
-            </div>
-          )}>
-          <HashRouter>
+          fallback={(errorData) => <ErrorPage {...errorData} />}>
+          <BrowserRouter>
             <Routes>
               <Route path={ERoutePathName.Auth} element={<AuthPage />}>
                 <Route path={ERoutePathName.SignIn} element={<SignInForm />} />
@@ -50,7 +43,7 @@ function RootRouter() {
                     <RootPage />
                   </AuthGuard>
                 }>
-                <Route index element={<HomePage />} />
+                <Route path={ERoutePathName.Home} element={<HomePage />} />
                 <Route
                   path={ERoutePathName.Setting}
                   element={<SettingPage />}
@@ -65,7 +58,10 @@ function RootRouter() {
                   <Route
                     path={ERoutePathName.WorkspaceId}
                     element={<WorkspaceInstanceView />}>
-                    <Route index element={<ProjectListView />} />
+                    <Route
+                      path={ERoutePathName.ProjectList}
+                      element={<ProjectListView />}
+                    />
                   </Route>
                 </Route>
                 <Route path={ERoutePathName.Project} element={<ProjectPage />}>
@@ -86,7 +82,7 @@ function RootRouter() {
               </Route>
             </Routes>
             <GlobalToast />
-          </HashRouter>
+          </BrowserRouter>
         </ErrorBoundary>
       )}
     </QueryErrorResetBoundary>

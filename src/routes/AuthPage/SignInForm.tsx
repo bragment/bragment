@@ -8,9 +8,8 @@ import {
   useSettingStore,
   useUserStore,
 } from '../../components/hooks';
+import PrimaryButton from '../../components/PrimaryButton';
 import { ILocalMessage } from '../../i18n/types';
-import { parseApiErrorMessage } from '../../libs/client';
-import { EApiErrorMessage } from '../../libs/client/types';
 import { getGithubOauthUrl, githubClientId } from '../../libs/github';
 import {
   useAuthEmailPasscodeMutation,
@@ -86,10 +85,8 @@ function SignInForm() {
       const { user } = await signInMutateAsync(fields);
       setMe(user);
     } catch (error: any) {
-      const message = parseApiErrorMessage(error);
-      if (message === EApiErrorMessage.InvalidEmail) {
-        setErrorMessage('auth.invalidEmail');
-      } else if (message === EApiErrorMessage.InvalidPasscode) {
+      const status = error?.response?.status;
+      if (status === 400) {
         setErrorMessage('auth.invalidPasscode');
       } else {
         setErrorMessage('common.networkError');
@@ -161,14 +158,11 @@ function SignInForm() {
           <span className="label-text ml-2">{f('auth.rememberMe')}</span>
         </label>
       </div>
-      <button
+      <PrimaryButton
         type="submit"
-        className={classNames(
-          'btn btn-primary btn-block',
-          signInLoading && 'loading'
-        )}>
+        className={classNames('btn-block', signInLoading && 'loading')}>
         {f('auth.signInOrSignUp')}
-      </button>
+      </PrimaryButton>
       {githubClientId && (
         <ThirdPartyButton
           oauthUrl={getGithubOauthUrl()}

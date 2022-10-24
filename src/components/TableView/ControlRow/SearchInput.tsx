@@ -44,7 +44,7 @@ function SearchInput(props: ISearchInputProps) {
       <input
         ref={inputRef}
         type="text"
-        placeholder={f('dataView.search')}
+        placeholder={f('common.search')}
         className={classNames(
           'input input-bordered',
           'w-80 h-10 pl-10 pr-9',

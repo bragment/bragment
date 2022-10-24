@@ -1,0 +1,23 @@
+body {
+  .btn,
+  button,
+  input,
+  textarea {
+    outline: none !important;
+  }
+  .btn,
+  button,
+  input,
+  textarea {
+    &.focus,
+    &:focus {
+      @apply ring ring-secondary;
+      // NOTE: as @apply border-secondary;
+      border-color: hsl(var(--s) / var(--tw-border-opacity)) !important;
+    }
+  }
+}
+
+.alert {
+  animation: button-pop var(--animation-btn, 0.25s) ease-out;
+}
