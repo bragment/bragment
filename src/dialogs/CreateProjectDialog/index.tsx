@@ -11,7 +11,7 @@ import {
 } from '../../components/hooks';
 import ProgressiveBackground, {
   IProgressiveBackgroundProps,
-} from '../../components/ProgressiveBackground';
+} from '../../components/ProgressiveImage/Background';
 import {
   getMainColor,
   getMainImageUrl,

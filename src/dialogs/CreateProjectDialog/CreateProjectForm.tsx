@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { memo, useCallback, useState } from 'react';
 import { useFormatMessage } from '../../components/hooks';
+import PrimaryButton from '../../components/PrimaryButton';
 import { ILocalMessage } from '../../i18n/types';
 import {
   EProjectVisibility,
@@ -80,14 +81,13 @@ function CreateProjectForm(props: ICreateProjectFormProps) {
         placeholder={f('project.description')}
         className={classNames('input input-bordered', 'w-full')}
       />
-      <button
+      <PrimaryButton
         type="submit"
-        className={classNames(
-          'btn btn-primary btn-block',
-          isLoading && 'loading'
-        )}>
-        {f('common.confirm')}
-      </button>
+        fromColor="from-violet-500"
+        toColor="to-rose-500"
+        className={classNames('btn-block', isLoading && 'loading')}>
+        {f('auth.signInOrSignUp')}
+      </PrimaryButton>
     </form>
   );
 }

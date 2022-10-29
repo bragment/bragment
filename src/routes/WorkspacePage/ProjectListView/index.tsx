@@ -1,12 +1,8 @@
 import { observer } from 'mobx-react';
-import { useCallback, useMemo } from 'react';
-import { HiOutlineFolder, HiOutlinePlus } from 'react-icons/hi';
+import { useCallback } from 'react';
+import { HiOutlineFolder } from 'react-icons/hi';
 import { NavLink, useParams } from 'react-router-dom';
-import {
-  useDialogStore,
-  useFormatMessage,
-  useUserStore,
-} from '../../../components/hooks';
+import { useFormatMessage, useUserStore } from '../../../components/hooks';
 import ProjectItem from '../../../components/ProjectItem';
 import ProjectList from '../../../components/ProjectList';
 import { IProject } from '../../../libs/client/types';
@@ -19,7 +15,6 @@ import LoadingView from './LoadingView';
 import ProjectEmptyPrompt from './ProjectEmptyPrompt';
 
 function ProjectListView() {
-  const { setCreateProjectDialogVisible } = useDialogStore();
   const f = useFormatMessage();
   const { me } = useUserStore();
   const { workspaceId = '' } = useParams();
@@ -33,9 +28,6 @@ function ProjectListView() {
   );
   const isOwner = !!workspace?.owner.users.includes(me?._id || '');
 
-  const handelCreateNewProject = useCallback(() => {
-    setCreateProjectDialogVisible(true);
-  }, [setCreateProjectDialogVisible]);
   const renderProject = useCallback(
     (project: IProject) => (
       <NavLink key={project._id} to={getProjectInstancePath(project._id)}>
@@ -43,21 +35,6 @@ function ProjectListView() {
       </NavLink>
     ),
     []
-  );
-
-  const actions = useMemo(
-    () =>
-      isOwner
-        ? [
-            <button
-              key="createProject"
-              className="btn btn-ghost"
-              onClick={handelCreateNewProject}>
-              <HiOutlinePlus className="text-xl" />
-            </button>,
-          ]
-        : [],
-    [isOwner, handelCreateNewProject]
   );
 
   if (!projects && !isError) {
@@ -69,8 +46,7 @@ function ProjectListView() {
   return (
     <ProjectList
       title={f('workspace.allProject')}
-      icon={<HiOutlineFolder className="text-primary text-xl" />}
-      actions={actions}
+      icon={<HiOutlineFolder className="text-purple-600 text-xl" />}
       projects={projects}
       renderProject={renderProject}
     />

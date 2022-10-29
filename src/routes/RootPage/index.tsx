@@ -5,10 +5,10 @@ import { ERoutePath } from '../types';
 import Navigator from './Navigator';
 
 function RootPage() {
-  const location = useLocation();
+  const { pathname } = useLocation();
 
   // NOTE: default to workspace page
-  if (location.pathname === ERoutePath.Root) {
+  if (pathname === ERoutePath.Root) {
     return <Navigate to={ERoutePath.Workspace} replace />;
   }
 
