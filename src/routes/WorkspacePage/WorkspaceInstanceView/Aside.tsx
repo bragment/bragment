@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { HiOutlineFolder, HiOutlineUsers, HiSelector } from 'react-icons/hi';
 import { NavLink, useParams } from 'react-router-dom';
 import {
@@ -21,15 +21,37 @@ function Aside() {
   const { workspaceId = '' } = useParams();
   const { toastInfo } = useDialogStore();
   const { me } = useUserStore();
-  const { data: workspaces } = useMyWorkspaceListQuery(!!me);
-  const [workspace, setWorkspace] = useState<IWorkspace | null>(
-    workspaces?.find((el) => el._id === workspaceId) || null
+  const { data: workspaces, isLoading } = useMyWorkspaceListQuery(!!me);
+  const [workspace, setWorkspace] = useState<IWorkspace | null>(null);
+  const title = isLoading ? (
+    <>
+      <div
+        className={classNames(
+          'bg-base-content/60',
+          'w-8 h-8 mr-3 rounded-md animate-pulse'
+        )}
+      />
+      <div
+        className={classNames(
+          'bg-base-content/60',
+          'w-40 h-6 rounded animate-pulse'
+        )}
+      />
+    </>
+  ) : (
+    <>
+      <WorkspaceAvatar title={workspace?.title} className="mr-3" />
+      {workspace?.title}
+    </>
   );
 
-  const toastUnderConstruction = (e: React.SyntheticEvent) => {
-    e?.preventDefault();
-    e?.stopPropagation();
+  const toastUnderConstruction = () => {
     toastInfo(f('common.underConstruction'));
+  };
+
+  const showDropdownMenu = () => {
+    // TODO: show workspace menu
+    toastUnderConstruction();
   };
 
   const getActiveClassName = ({ isActive }: { isActive: boolean }): string =>
@@ -47,13 +69,12 @@ function Aside() {
         <div className={classNames('bg-base-100', 'rounded-lg px-4')}>
           <div className="h-16 flex items-center">
             <div className="flex-1 flex items-center text-xl font-bold">
-              <WorkspaceAvatar title={workspace?.title} className="mr-3" />
-              {workspace?.title}
+              {title}
             </div>
             <div className="flex-none">
               <button
                 className="btn btn-square btn-ghost btn-sm"
-                onClick={toastUnderConstruction}>
+                onClick={showDropdownMenu}>
                 <HiSelector className="text-xl" />
               </button>
             </div>
@@ -78,7 +99,7 @@ function Aside() {
               className={getActiveClassName}>
               <HiOutlineUsers className="text-xl text-green-600" />
               <span className="text-transparent font-bold bg-clip-text bg-gradient-to-r from-emerald-500 to-blue-500">
-                {f('workspace.projectList')}
+                {f('workspace.memberList')}
               </span>
             </NavLink>
           </li>

@@ -1,20 +1,6 @@
 import classNames from 'classnames';
-import { Component, CSSProperties, memo, ReactElement } from 'react';
-import ReactProgressiveImage, {
-  ProgressiveImageProps,
-  ProgressiveImageState,
-} from 'react-progressive-graceful-image';
-import styles from './index.module.scss';
-
-class FixedReactProgressiveImage extends Component<
-  ProgressiveImageProps & {
-    children: (src: string, loading: boolean) => ReactElement;
-  },
-  ProgressiveImageState
-> {}
-
-const ProgressiveImage =
-  ReactProgressiveImage as typeof FixedReactProgressiveImage;
+import { CSSProperties, memo } from 'react';
+import ProgressiveImage from './index';
 
 export interface IProgressiveBackgroundProps {
   className?: string;
@@ -40,7 +26,10 @@ function ProgressiveBackground(props: IProgressiveBackgroundProps) {
           }
           return (
             <div
-              className={classNames(styles.wrapper, className)}
+              className={classNames(
+                'w-full h-full bg-center bg-cover bg-no-repeat transition-transform',
+                className
+              )}
               style={style}
             />
           );
@@ -50,7 +39,10 @@ function ProgressiveBackground(props: IProgressiveBackgroundProps) {
   }
   return (
     <div
-      className={classNames(styles.wrapper, className)}
+      className={classNames(
+        'w-full h-full bg-center bg-cover bg-no-repeat transition-transform',
+        className
+      )}
       style={{
         backgroundColor: color,
         backgroundImage: image ? `url(${image})` : undefined,

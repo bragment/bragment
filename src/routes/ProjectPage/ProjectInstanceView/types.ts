@@ -1,0 +1,1 @@
+export const TOGGLE_ID = 'PROJECT_INSTANCE_VIEW_TOGGLE';

@@ -1,118 +1,77 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
-import {
-  HiDotsVertical,
-  HiOutlineOfficeBuilding,
-  HiOutlinePlus,
-} from 'react-icons/hi';
-import { useParams } from 'react-router-dom';
-import {
-  useDialogStore,
-  useFormatMessage,
-  useUserStore,
-} from '../../../components/hooks';
-import WorkspaceAvatar from '../../../components/WorkspaceAvatar';
-import {
-  useMyWorkspaceListQuery,
-  useUpdateMyDataMutation,
-  useWorkspaceQuery,
-} from '../../../libs/react-query';
-import WorkspaceMenu from './WorkspaceMenu';
+import { HiMenu, HiPlus, HiSearch } from 'react-icons/hi';
+import { useDialogStore, useFormatMessage } from '../../../components/hooks';
+import { TOGGLE_ID } from './types';
 
-interface INavBarProps {
-  className?: string;
-  suffix?: React.ReactNode;
-}
-
-function NavBar(props: INavBarProps) {
-  const { className, suffix } = props;
+function Header() {
   const f = useFormatMessage();
-  const { isLoading, mutateAsync } = useUpdateMyDataMutation();
-  const { me, myMainWorkspaceId, updateMe } = useUserStore();
-  const { setCreateWorkspaceDialogVisible, toastError } = useDialogStore();
-  const { workspaceId = '' } = useParams();
-  const { data: workspaces } = useMyWorkspaceListQuery(!!me);
-  const { data: workspace } = useWorkspaceQuery(
-    workspaceId,
-    !!(me && workspaceId)
-  );
-  const title = workspace ? (
-    <>
-      <WorkspaceAvatar title={workspace.title} className="mr-3" />
-      {workspace.title}
-    </>
-  ) : (
-    <div
-      className={classNames(
-        'bg-base-content',
-        'w-48 h-7 rounded animate-pulse'
-      )}
-    />
-  );
+  const { toastInfo } = useDialogStore();
+  const { setCreateProjectDialogVisible } = useDialogStore();
 
-  const handleCreateWorkspace = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const target = e.target as Element;
-    const button = target.closest('button');
-    button?.blur();
-    setCreateWorkspaceDialogVisible(true);
+  const toastUnderConstruction = () => {
+    toastInfo(f('common.underConstruction'));
   };
 
-  const handleSetMainWorkspace = async () => {
-    if (isLoading) {
-      return;
-    }
-    try {
-      const user = await mutateAsync({
-        mainWorkspace: workspaceId,
-      });
-      updateMe(user);
-    } catch (error) {
-      // TODO: handle request error
-      toastError(f('common.networkError'));
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      // TODO: keywords search
+      toastUnderConstruction();
     }
   };
 
   return (
-    <header className={classNames('navbar', 'gap-3 z-30', className)}>
-      <div className="flex-none">{suffix}</div>
-      <div className="flex-auto font-bold text-xl capitalize">{title}</div>
-      <div className="flex-none">
-        <div className={classNames('dropdown dropdown-end')}>
-          <label tabIndex={0} className="btn btn-square btn-ghost">
-            <HiDotsVertical className="text-xl" />
-          </label>
-          <div
-            tabIndex={0}
+    <header
+      className={classNames(
+        'bg-base-100 text-base-content',
+        'sticky top-0 z-30',
+        'w-full h-16 flex justify-center',
+        'bg-opacity-70 backdrop-blur transition-all duration-100'
+      )}>
+      <div className="navbar p-3">
+        <div className="flex-none mr-3 lg:hidden">
+          <label
+            htmlFor={TOGGLE_ID}
             className={classNames(
-              'dropdown-content rounded-box border-base-300 bg-base-100',
-              'w-56 mt-1 p-2 border shadow'
+              'btn btn-ghost btn-square',
+              'w-10 h-10 min-h-fit'
             )}>
-            {workspaceId && workspaceId !== myMainWorkspaceId && (
-              <button
-                className={classNames(
-                  'btn btn-ghost',
-                  'w-full mb-2 justify-start',
-                  isLoading && 'active loading'
-                )}
-                onClick={handleSetMainWorkspace}>
-                <HiOutlineOfficeBuilding className="text-lg mr-2" />
-                {f('workspace.setAsMainWorkspace')}
-              </button>
-            )}
-            {workspaces && workspaces.length < 3 && (
-              <button
-                className={classNames('btn btn-ghost', 'w-full justify-start')}
-                onClick={handleCreateWorkspace}>
-                <HiOutlinePlus className="text-lg mr-2" />
-                {f('workspace.createWorkspace')}
-              </button>
-            )}
-            {workspaces && <WorkspaceMenu workspaces={workspaces} />}
+            <HiMenu className="text-xl" />
+          </label>
+        </div>
+        <div className="flex-1">
+          <div className="relative flex items-center w-full max-w-xs [&:focus-within>:last-child]:invisible">
+            <input
+              className={classNames(
+                'input input-bordered',
+                'w-full h-10 pl-10'
+              )}
+              placeholder={f('common.search')}
+              onKeyDown={handleKeyDown}
+            />
+            <HiSearch className="absolute left-3 text-xl text-base-content/60 pointer-events-none" />
+            <div className="absolute right-3 flex items-center text-base-content/60 pointer-events-none">
+              <div className="w-6 h-8 bg-gradient-to-l from-base-100 to-transparent" />
+              <div className="w-auto bg-base-100">
+                <kbd className="kbd kbd-sm">⌘</kbd> +{' '}
+                <kbd className="kbd kbd-sm">K</kbd>
+              </div>
+            </div>
           </div>
+        </div>
+        <div className="flex-none ml-3">
+          <button
+            className={classNames(
+              'btn btn-ghost btn-square',
+              'w-10 h-10 min-h-fit'
+            )}
+            onClick={() => setCreateProjectDialogVisible(true)}>
+            <HiPlus className="text-xl" />
+          </button>
         </div>
       </div>
     </header>
   );
 }
 
-export default observer(NavBar);
+export default observer(Header);
