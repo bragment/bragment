@@ -4,14 +4,15 @@ import { useCallback } from 'react';
 import Dialog from '../../components/Dialog';
 import { useDialogStore, useFormatMessage } from '../../components/hooks';
 import { IWorkspace } from '../../libs/client/types';
-import { useNavigateWorkspaceInstancePage } from '../../routes/hooks';
+import { getWorkspaceInstancePath } from '../../routes/helpers';
+import { useNavigateToPage } from '../../routes/hooks';
 import CreateWorkspaceForm from '../../routes/WorkspacePage/CreateWorkspaceView/CreateWorkspaceForm';
 
 const DIALOG_ID = 'CREATE_WORKSPACE_DIALOG';
 
 function CreateWorkspaceDialog() {
   const f = useFormatMessage();
-  const navigate = useNavigateWorkspaceInstancePage();
+  const navigateTo = useNavigateToPage();
   const { createWorkspaceDialogVisible, setCreateWorkspaceDialogVisible } =
     useDialogStore();
 
@@ -22,9 +23,9 @@ function CreateWorkspaceDialog() {
   const handleFinish = useCallback(
     async (workspace: IWorkspace) => {
       setCreateWorkspaceDialogVisible(false);
-      navigate(workspace._id);
+      navigateTo(getWorkspaceInstancePath(workspace._id));
     },
-    [setCreateWorkspaceDialogVisible, navigate]
+    [setCreateWorkspaceDialogVisible, navigateTo]
   );
 
   return (

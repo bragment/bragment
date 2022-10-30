@@ -2,6 +2,15 @@
   --bgColor: hsl(var(--b1));
   --shadowSize: 2rem;
 
+  &.no-bars {
+    > div::-webkit-scrollbar {
+      display: none;
+    }
+    > div:not(:first-child) {
+      display: none;
+    }
+  }
+
   &.top-scrollable > div > .top-shadow,
   &.bottom-scrollable > div > .bottom-shadow,
   &.left-scrollable > div > .left-shadow,

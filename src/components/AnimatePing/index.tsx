@@ -19,13 +19,13 @@ function AnimatePing(props: IAnimatePingProps) {
           )}>
           <span
             className={classNames(
-              'bg-secondary-focus',
+              'bg-fuchsia-400',
               'animate-ping absolute inline-flex h-full w-full rounded-full opacity-75'
             )}
           />
           <span
             className={classNames(
-              'bg-secondary',
+              'bg-fuchsia-500',
               'relative inline-flex rounded-full h-3 w-3'
             )}
           />

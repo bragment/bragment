@@ -25,8 +25,9 @@ function Header() {
       className={classNames(
         'bg-base-100 text-base-content',
         'sticky top-0 z-30',
-        'w-full h-16 flex justify-center',
-        'bg-opacity-70 backdrop-blur transition-all duration-100'
+        'w-full h-16',
+        'bg-opacity-70 backdrop-blur transition-all duration-100',
+        'group-[&.top-scrollable]:shadow-sm'
       )}>
       <div className="navbar p-3">
         <div className="flex-none mr-3 lg:hidden">

@@ -22,9 +22,7 @@ function WorkspaceInstanceView() {
     <div className={classNames('drawer drawer-mobile', 'w-full h-full')}>
       <input id={TOGGLE_ID} type="checkbox" className="drawer-toggle" />
       <div className="drawer-content bg-base-100 text-base-content">
-        <ScrollContainer
-          className="[&.top-scrollable_header]:shadow-sm"
-          autoHide>
+        <ScrollContainer className="group" autoHide>
           <Header />
           <main>
             <Outlet />
