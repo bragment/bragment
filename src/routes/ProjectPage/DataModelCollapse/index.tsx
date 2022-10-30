@@ -1,10 +1,14 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
 import { useCallback, useEffect, useState } from 'react';
-import { HiOutlineDatabase, HiPlus } from 'react-icons/hi';
+import {
+  HiOutlineChevronDown,
+  HiOutlineChevronUp,
+  HiOutlinePlus,
+} from 'react-icons/hi';
 import { useMatch } from 'react-router-dom';
 import { useFormatMessage } from '../../../components/hooks';
-import { IProject } from '../../../libs/client/types';
+import { IProject, IProjectDataModel } from '../../../libs/client/types';
 import { getProjectInstancePath } from '../../helpers';
 import { useNavigateProjectDataModelPage } from '../../hooks';
 import CreateDataModelForm from './CreateDataModelForm';
@@ -12,27 +16,28 @@ import DataModelMenu from './DataModelMenu';
 
 import styles from './index.module.scss';
 
-const TOGGLE_ID = 'DATA_MODEL_LIST_TOGGLE';
+const TOGGLE_ID = 'DATA_MODEL_COLLAPSE_TOGGLE';
 
 interface IDataModelCollapseProps {
   projectId: string;
-  modelId: string;
-  project?: IProject;
+  selectedModelId: string;
+  models?: IProjectDataModel[];
 }
 
 function DataModelCollapse(props: IDataModelCollapseProps) {
-  const { projectId, modelId, project } = props;
+  const { projectId, selectedModelId, models = [] } = props;
   const f = useFormatMessage();
   const navigate = useNavigateProjectDataModelPage();
   const isProjectPath = useMatch(getProjectInstancePath(projectId));
-  const models = project?.models?.slice().reverse();
   const [checked, setChecked] = useState(true);
   const [creating, setCreating] = useState(false);
 
   const handleCheckboxChange = () => {
     setChecked((old) => !old);
   };
-  const handleButtonClick = () => {
+  const handleButtonClick: React.MouseEventHandler = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     setChecked(true);
     setCreating(true);
   };
@@ -51,24 +56,19 @@ function DataModelCollapse(props: IDataModelCollapseProps) {
   );
 
   useEffect(() => {
-    if (isProjectPath && !modelId && models?.length) {
+    if (isProjectPath && !selectedModelId && models?.length) {
       navigate(projectId, models[0]._id, {
         replace: true,
       });
     }
-  }, [navigate, isProjectPath, projectId, modelId, models]);
+  }, [navigate, isProjectPath, projectId, selectedModelId, models]);
 
   return (
-    <div
-      className={classNames(
-        'collapse collapse-arrow rounded-box',
-        'border border-base-300 bg-base-100',
-        styles.collapse
-      )}>
+    <div className="collapse">
       <input
         id={TOGGLE_ID}
         type="checkbox"
-        className="peer"
+        className="peer min-h-fit"
         checked={checked}
         onChange={handleCheckboxChange}
       />
@@ -76,21 +76,45 @@ function DataModelCollapse(props: IDataModelCollapseProps) {
         htmlFor={TOGGLE_ID}
         className={classNames(
           'collapse-title',
-          'h-16 leading-8 text-lg font-medium text-ellipsis whitespace-nowrap'
+          'h-8 min-h-fit p-0 pl-4 pr-12',
+          'text-base-content/40 hover:text-base-content/70',
+          'flex items-center justify-between'
         )}>
-        <HiOutlineDatabase className="inline-block text-xl text-warning align-middle mr-1" />
-        <span className="align-middle">{f('project.model')}</span>
+        <div className="text-sm leading-8 font-medium">
+          {f('project.model')}
+        </div>
+        <div
+          className={classNames(
+            'text-lg flex items-center',
+            !models.length && 'invisible'
+          )}>
+          <label className="swap swap-rotate">
+            <input
+              type="checkbox"
+              checked={checked}
+              onChange={() => undefined}
+            />
+            <HiOutlineChevronUp className="swap-on" />
+            <HiOutlineChevronDown className="swap-off" />
+          </label>
+        </div>
       </label>
-      <div className="collapse-content bg-base-100">
-        <button
-          aria-label={f('project.createModel')}
-          className={classNames('btn btn-ghost top-2 right-2', 'absolute')}
+      <div className={classNames('collapse-content', 'p-0 pb-0')}>
+        <div
+          className={classNames(
+            'text-base-content/40 text-lg top-0 right-4',
+            'h-8 flex items-center',
+            'absolute z-10 cursor-pointer hover:text-base-content/70'
+          )}
           onClick={handleButtonClick}>
-          <HiPlus className="text-xl" />
-        </button>
+          <HiOutlinePlus aria-label={f('project.createModel')} />
+        </div>
         {creating && (
           <div
-            className={classNames('mx-3 mt-1 mb-3', styles.modelFormWrapper)}>
+            className={classNames(
+              'mx-1 my-2 [&_input]:font-bold',
+              styles.modelFormWrapper
+            )}>
             <CreateDataModelForm
               singleInput
               projectId={projectId}

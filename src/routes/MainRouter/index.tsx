@@ -7,12 +7,11 @@ import AuthPage from '../AuthPage';
 import GithubForm from '../AuthPage/GithubForm';
 import SignInForm from '../AuthPage/SignInForm';
 import ErrorPage from '../ErrorPage';
-import HomePage from '../HomePage';
 import ProjectPage from '../ProjectPage';
 import DataModelView from '../ProjectPage/DataModelView';
+import DataModelEmptyPrompt from '../ProjectPage/DataModelView/EmptyPrompt';
 import DataViewSuspense from '../ProjectPage/DataViewSuspense';
-import ProjectEmptyView from '../ProjectPage/ProjectEmptyView';
-import ProjectInstanceViewSuspense from '../ProjectPage/ProjectInstanceViewSuspense';
+import ProjectInstanceViewSuspense from '../ProjectPage/ProjectInstanceView/Suspense';
 import RootPage from '../RootPage';
 import SettingPage from '../SettingPage';
 import { ERoutePath, ERoutePathName } from '../types';
@@ -43,7 +42,6 @@ function RootRouter() {
                     <RootPage />
                   </AuthGuard>
                 }>
-                <Route path={ERoutePathName.Home} element={<HomePage />} />
                 <Route
                   path={ERoutePathName.Setting}
                   element={<SettingPage />}
@@ -68,14 +66,19 @@ function RootRouter() {
                   <Route
                     path={ERoutePathName.ProjectId}
                     element={<ProjectInstanceViewSuspense />}>
-                    <Route index element={<ProjectEmptyView />} />
-                    <Route
-                      path={ERoutePathName.ModelId}
-                      element={<DataModelView />}>
+                    <Route path={ERoutePathName.Model}>
                       <Route
-                        path={ERoutePathName.ViewId}
-                        element={<DataViewSuspense />}
+                        path={ERoutePathName.Empty}
+                        element={<DataModelEmptyPrompt />}
                       />
+                      <Route
+                        path={ERoutePathName.ModelId}
+                        element={<DataModelView />}>
+                        <Route
+                          path={ERoutePathName.ViewId}
+                          element={<DataViewSuspense />}
+                        />
+                      </Route>
                     </Route>
                   </Route>
                 </Route>

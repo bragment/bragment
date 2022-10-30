@@ -1,7 +1,9 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
 import { useRef, useState } from 'react';
+import AnimateSpin from '../../../components/AnimateSpin';
 import { useDialogStore, useFormatMessage } from '../../../components/hooks';
+import PrimaryButton from '../../../components/PrimaryButton';
 import { ILocalMessage } from '../../../i18n/types';
 import { IProject } from '../../../libs/client/types';
 import { useCreateProjectDataModelMutation } from '../../../libs/react-query';
@@ -70,9 +72,8 @@ function CreateDataModelForm(props: ICreateDataModelFormProps) {
     <form
       className={classNames(
         'form-control',
-        'space-y-4',
-        singleInput && 'form-single-input',
-        isLoading && 'loading'
+        'relative space-y-4',
+        isLoading && 'loading pointer-events-none'
       )}
       onSubmit={handleSubmit}>
       {!singleInput && (
@@ -87,22 +88,30 @@ function CreateDataModelForm(props: ICreateDataModelFormProps) {
         autoFocus
         required
         placeholder={f('project.modelTitle')}
-        className={classNames('input input-bordered', 'w-full text-md')}
+        className={classNames(
+          'input input-bordered',
+          'w-full text-md',
+          singleInput && '!pr-9'
+        )}
         onCompositionStart={handleCompositionStart}
         onCompositionEnd={handleCompositionEnd}
         onKeyDown={handleKeyDown}
         onBlur={handleBlur}
       />
+      {singleInput && isLoading && (
+        <AnimateSpin
+          className="absolute top-1 right-2 w-6 h-auto text-base text-base-content/50"
+          bgColorClassName="bg-base-100"
+        />
+      )}
       {!singleInput && (
-        <button
+        <PrimaryButton
           type="submit"
-          className={classNames(
-            'btn btn-primary',
-            'w-full',
-            isLoading && 'loading'
-          )}>
+          className={classNames('btn-block', isLoading && 'loading')}
+          fromColor="from-orange-400"
+          toColor="to-fuchsia-500">
           {f('common.confirm')}
-        </button>
+        </PrimaryButton>
       )}
     </form>
   );

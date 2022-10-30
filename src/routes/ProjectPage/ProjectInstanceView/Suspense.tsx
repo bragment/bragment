@@ -1,7 +1,7 @@
 import { lazy, memo, Suspense } from 'react';
-import Skeleton from './ProjectInstanceView/Skeleton';
+import Skeleton from './Skeleton';
 
-const ProjectInstanceView = lazy(() => import('./ProjectInstanceView'));
+const ProjectInstanceView = lazy(() => import('./index'));
 
 function ProjectInstanceViewSuspense() {
   return (

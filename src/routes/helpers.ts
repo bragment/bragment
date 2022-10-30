@@ -19,6 +19,13 @@ export function getProjectInstancePath(id: string) {
   return ERoutePath.ProjectInstance.replace(ERoutePathName.ProjectId, id);
 }
 
+export function getProjectDataModelEmptyPath(projectId: string) {
+  return ERoutePath.ProjectDataModelEmpty.replace(
+    ERoutePathName.ProjectId,
+    projectId
+  );
+}
+
 export function getProjectDataModelPath(projectId: string, modelId: string) {
   return ERoutePath.ProjectDataModel.replace(
     ERoutePathName.ProjectId,
