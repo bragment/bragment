@@ -74,10 +74,12 @@ function RootRouter() {
                       <Route
                         path={ERoutePathName.ModelId}
                         element={<DataModelView />}>
-                        <Route
-                          path={ERoutePathName.ViewId}
-                          element={<DataViewSuspense />}
-                        />
+                        <Route path={ERoutePathName.View}>
+                          <Route
+                            path={ERoutePathName.ViewId}
+                            element={<DataViewSuspense />}
+                          />
+                        </Route>
                       </Route>
                     </Route>
                   </Route>

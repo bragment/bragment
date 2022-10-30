@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { memo, useEffect } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import { Navigate, Outlet, useLocation, useParams } from 'react-router-dom';
 import { setProjectFields } from '../../../fields';
 import {
@@ -17,6 +17,7 @@ import { TOGGLE_ID } from './types';
 function ProjectInstanceView() {
   const { projectId = '' } = useParams();
   const { pathname } = useLocation();
+  const toggleRef = useRef<HTMLInputElement>(null);
   const { data: project } = useProjectQuery(projectId, true, true);
   const models = project?.models;
   // NOTE: prefetch for data view
@@ -25,6 +26,12 @@ function ProjectInstanceView() {
   useEffect(() => {
     setProjectFields(project?.fields || []);
   }, [project]);
+
+  useEffect(() => {
+    if (toggleRef.current?.value) {
+      toggleRef.current.checked = false;
+    }
+  }, [pathname]);
 
   if (
     (pathname === getProjectDataModelEmptyPath(projectId) ||
@@ -46,7 +53,12 @@ function ProjectInstanceView() {
 
   return (
     <div className={classNames('drawer drawer-mobile', 'w-full h-full')}>
-      <input id={TOGGLE_ID} type="checkbox" className="drawer-toggle" />
+      <input
+        ref={toggleRef}
+        id={TOGGLE_ID}
+        type="checkbox"
+        className="drawer-toggle"
+      />
       <div className="drawer-content bg-base-100 text-base-content">
         <main>
           <Outlet />

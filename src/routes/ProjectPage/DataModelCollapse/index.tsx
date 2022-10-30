@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import {
   HiOutlineChevronDown,
   HiOutlineChevronUp,
@@ -9,8 +9,8 @@ import {
 import { useMatch } from 'react-router-dom';
 import { useFormatMessage } from '../../../components/hooks';
 import { IProject, IProjectDataModel } from '../../../libs/client/types';
-import { getProjectInstancePath } from '../../helpers';
-import { useNavigateProjectDataModelPage } from '../../hooks';
+import { getProjectDataModelPath, getProjectInstancePath } from '../../helpers';
+import { useNavigateToPage } from '../../hooks';
 import CreateDataModelForm from './CreateDataModelForm';
 import DataModelMenu from './DataModelMenu';
 
@@ -27,7 +27,7 @@ interface IDataModelCollapseProps {
 function DataModelCollapse(props: IDataModelCollapseProps) {
   const { projectId, selectedModelId, models = [] } = props;
   const f = useFormatMessage();
-  const navigate = useNavigateProjectDataModelPage();
+  const navigateTo = useNavigateToPage();
   const isProjectPath = useMatch(getProjectInstancePath(projectId));
   const [checked, setChecked] = useState(true);
   const [creating, setCreating] = useState(false);
@@ -47,21 +47,24 @@ function DataModelCollapse(props: IDataModelCollapseProps) {
   const handleFormFinish = useCallback(
     (data: IProject) => {
       const model = data.models[0];
-      setCreating(false);
       if (model) {
-        navigate(projectId, model._id);
+        navigateTo(getProjectDataModelPath(projectId, model._id));
       }
     },
-    [navigate, projectId]
+    [navigateTo, projectId]
   );
 
   useEffect(() => {
     if (isProjectPath && !selectedModelId && models?.length) {
-      navigate(projectId, models[0]._id, {
+      navigateTo(getProjectDataModelPath(projectId, models[0]._id), {
         replace: true,
       });
     }
-  }, [navigate, isProjectPath, projectId, selectedModelId, models]);
+  }, [navigateTo, isProjectPath, projectId, selectedModelId, models]);
+
+  useLayoutEffect(() => {
+    setCreating(false);
+  }, [models, selectedModelId]);
 
   return (
     <div className="collapse">

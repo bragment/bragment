@@ -14,6 +14,7 @@ export enum ERoutePathName {
   Setting = 'setting',
   SignIn = 'signIn',
   SignUp = 'signUp',
+  View = 'view',
   ViewId = ':viewId',
   Workspace = 'workspace',
   WorkspaceId = ':workspaceId',

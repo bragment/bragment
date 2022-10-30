@@ -12,6 +12,7 @@ import Scrollbars, { ScrollbarProps } from 'react-custom-scrollbars-2';
 import './index.scss';
 
 interface IScrollContainerProps extends ScrollbarProps {
+  forceHide?: boolean;
   withShadow?: boolean;
   onScroll?: React.UIEventHandler<any>;
 }
@@ -20,7 +21,14 @@ function ScrollContainer(
   props: IScrollContainerProps,
   ref: Ref<Scrollbars | null>
 ) {
-  const { className, children, withShadow, onScroll, ...otherProps } = props;
+  const {
+    className,
+    children,
+    forceHide,
+    withShadow,
+    onScroll,
+    ...otherProps
+  } = props;
   const scrollBarRef = useRef<Scrollbars>(null);
 
   const updateScrollable = useCallback(() => {
@@ -73,7 +81,11 @@ function ScrollContainer(
   return (
     <Scrollbars
       {...otherProps}
-      className={classNames(className, 'scroll-container')}
+      className={classNames(
+        className,
+        'scroll-container',
+        forceHide && 'no-bars'
+      )}
       ref={scrollBarRef}
       onScroll={handleScroll}>
       {withShadow && <div className="top-shadow" />}

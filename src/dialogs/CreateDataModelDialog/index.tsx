@@ -5,7 +5,8 @@ import { useParams } from 'react-router-dom';
 import Dialog from '../../components/Dialog';
 import { useDialogStore, useFormatMessage } from '../../components/hooks';
 import { IProject } from '../../libs/client/types';
-import { useNavigateProjectDataModelPage } from '../../routes/hooks';
+import { getProjectDataModelPath } from '../../routes/helpers';
+import { useNavigateToPage } from '../../routes/hooks';
 import CreateDataModelForm from '../../routes/ProjectPage/DataModelCollapse/CreateDataModelForm';
 
 const DIALOG_ID = 'CREATE_DATA_MODEL_DIALOG';
@@ -13,7 +14,7 @@ const DIALOG_ID = 'CREATE_DATA_MODEL_DIALOG';
 function CreateDataModelDialog() {
   const f = useFormatMessage();
   const { projectId = '' } = useParams();
-  const navigate = useNavigateProjectDataModelPage();
+  const navigateTo = useNavigateToPage();
   const { createDataModelDialogVisible, setCreateDataModelDialogVisible } =
     useDialogStore();
 
@@ -25,9 +26,11 @@ function CreateDataModelDialog() {
     async (project: IProject) => {
       setCreateDataModelDialogVisible(false);
       const model = project.models[0];
-      navigate(projectId, model._id, { replace: true });
+      navigateTo(getProjectDataModelPath(projectId, model._id), {
+        replace: true,
+      });
     },
-    [projectId, setCreateDataModelDialogVisible, navigate]
+    [projectId, setCreateDataModelDialogVisible, navigateTo]
   );
 
   return (

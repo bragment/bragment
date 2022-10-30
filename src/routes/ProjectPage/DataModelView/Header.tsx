@@ -1,108 +1,162 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
 import { useCallback, useEffect, useRef } from 'react';
-import { HiOutlinePlus } from 'react-icons/hi';
-import { useMatch, useParams } from 'react-router-dom';
+import Scrollbars from 'react-custom-scrollbars-2';
+import { HiMenu, HiPlus } from 'react-icons/hi';
+import { NavLink, useMatch, useParams } from 'react-router-dom';
 import AnimatePing from '../../../components/AnimatePing';
 import CreateDataViewDropdown from '../../../components/CreateDataViewDropdown';
+import { dataViewTypeRecord } from '../../../components/CreateDataViewDropdown/config';
 import { useFormatMessage, useUserStore } from '../../../components/hooks';
-import { IProject } from '../../../libs/client/types';
+import ScrollContainer from '../../../components/ScrollContainer';
+import { IProject, IProjectDataView } from '../../../libs/client/types';
 import { useProjectQuery } from '../../../libs/react-query';
-import { getProjectDataModelPath } from '../../helpers';
-import { useNavigateProjectViewPage } from '../../hooks';
-import DataViewTabs from './DataViewTabs';
-import styles from './index.module.scss';
+import { getProjectDataModelPath, getProjectDataViewPath } from '../../helpers';
+import { useNavigateToPage } from '../../hooks';
+import { TOGGLE_ID } from '../ProjectInstanceView/types';
 
 function WorkspaceInstanceView() {
   const f = useFormatMessage();
-  const navigate = useNavigateProjectViewPage();
-  const tabsWrapperRef = useRef<HTMLDivElement>(null);
+  const navigateTo = useNavigateToPage();
+  const scrollBarRef = useRef<Scrollbars>(null);
   const { me } = useUserStore();
   const { projectId = '', modelId = '', viewId = '' } = useParams();
   const isProjectModelPath = useMatch(
     getProjectDataModelPath(projectId, modelId)
   );
   const { data: project } = useProjectQuery(projectId, !!(me && projectId));
-  const model = project?.models.find((el) => el._id === modelId);
   const views = project?.views.filter((el) => el.model === modelId);
-  const title = model ? (
-    model.title
-  ) : (
-    <div
-      className={classNames(
-        'bg-base-content',
-        'w-48 h-7 rounded animate-pulse'
-      )}
-    />
-  );
-  // TODO: or be workspace owner
-  const isOwner = !!project?.owner.users.includes(me?._id || '');
+  const noViews = views?.length === 0;
+
+  const renderViewTabs = (_views?: IProjectDataView[]) => {
+    const getActiveClassName = ({ isActive }: { isActive: boolean }) =>
+      classNames(
+        'h-10 pl-3 pr-4 flex items-center',
+        'font-bold text-base-content/50 hover:text-base-content',
+        'group relative view-tab',
+        isActive && 'active pointer-events-none'
+      );
+    return _views?.map((view) => {
+      const Icon = dataViewTypeRecord[view.type]?.Icon;
+      return (
+        <NavLink
+          key={view._id}
+          to={getProjectDataViewPath(projectId, modelId, view._id)}
+          className={getActiveClassName}>
+          {Icon && (
+            <Icon
+              className={classNames(
+                'text-xl mr-2',
+                'group-[&.active]:text-sky-500'
+              )}
+            />
+          )}
+          <span
+            className={classNames(
+              'capitalize text-ellipsis overflow-hidden whitespace-nowrap',
+              'from-sky-500 to-fuchsia-500',
+              'group-[&.active]:!text-transparent group-[&.active]:bg-clip-text group-[&.active]:bg-gradient-to-r'
+            )}>
+            {view.title}
+          </span>
+          <div
+            className={classNames(
+              'absolute left-1 right-1 -bottom-2 border-b-4 border-transparent pointer-events-none',
+              'group-[&.view-tab:hover]:border-base-content/50 group-[&.active]:!border-secondary'
+            )}
+          />
+        </NavLink>
+      );
+    });
+  };
 
   const handleCreateViewFinish = useCallback(
     (data: IProject) => {
       const view = data.views[0];
-      const div = tabsWrapperRef.current;
-      if (div) {
-        setTimeout(() => (div.scrollLeft = div.scrollWidth + div.clientWidth));
+      const scrollBar = scrollBarRef.current;
+      if (scrollBar) {
+        setTimeout(() => scrollBar.scrollToRight());
       }
       if (view) {
-        navigate(projectId, modelId, view._id);
+        navigateTo(getProjectDataViewPath(projectId, modelId, view._id));
       }
     },
-    [navigate, projectId, modelId]
+    [navigateTo, projectId, modelId]
   );
 
   useEffect(() => {
     if (isProjectModelPath && !viewId && views?.length) {
-      navigate(projectId, modelId, views[0]._id, {
+      navigateTo(getProjectDataViewPath(projectId, modelId, views[0]._id), {
         replace: true,
       });
     }
-  }, [navigate, isProjectModelPath, projectId, modelId, viewId, views]);
+  }, [navigateTo, isProjectModelPath, projectId, modelId, viewId, views]);
 
   return (
-    <header className={classNames('navbar bg-base-200', 'h-16 py-0')}>
-      <div
-        className={classNames(
-          'border-base-200 border-r-2 z-10', // FIXED: safari sticky issue
-          'flex-none h-full font-bold text-xl capitalize pr-3 pl-[4.5rem]'
-        )}>
-        <div className="max-w-[12rem] text-ellipsis overflow-hidden whitespace-nowrap">
-          {title}
-        </div>
-      </div>
-      <div
-        ref={tabsWrapperRef}
-        className={classNames(
-          'h-16 basis-auto grow-0 shrink overflow-x-scroll whitespace-nowrap',
-          styles.tabsWrapper
-        )}>
-        <div className="inline-block from-base-200 pointer-events-none sticky top-0 left-0 h-16 w-8 bg-gradient-to-r to-transparent z-10" />
-        {views?.length === 0 ? (
-          <div className={classNames('text-base-content/50', 'inline-block')}>
-            {f('project.noViews')}
+    <header
+      className={classNames(
+        'bg-base-100 text-base-content',
+        'w-full h-16',
+        'shadow-sm'
+      )}>
+      <ScrollContainer
+        ref={scrollBarRef}
+        className="group [&>div:first-child]:flex [&>div:first-child]:flex-nowrap [&>div:first-child]:items-center"
+        forceHide>
+        <div
+          className={classNames(
+            'flex-none sticky left-0 z-10',
+            'flex items-center',
+            'group-[.left-scrollable]:shadow-sm'
+          )}>
+          <div className="h-16 px-3 flex items-center bg-base-100 bg-opacity-70 backdrop-blur">
+            <label
+              htmlFor={TOGGLE_ID}
+              className={classNames(
+                'btn btn-ghost btn-square',
+                'w-10 h-10 min-h-fit lg:hidden'
+              )}>
+              <HiMenu className="text-xl" />
+            </label>
           </div>
-        ) : (
-          <DataViewTabs views={views} />
-        )}
-        <div className="inline-block from-base-200 pointer-events-none sticky top-0 right-0 h-16 w-8 bg-gradient-to-l to-transparent" />
-      </div>
-      {isOwner && (
-        <div className="flex-none h-full pl-3">
-          <AnimatePing ping={views?.length === 0}>
-            <CreateDataViewDropdown
-              projectId={projectId}
-              modelId={modelId}
-              existingViews={views}
-              onFinish={handleCreateViewFinish}>
-              <button className={classNames('btn btn-sm', 'h-10')}>
-                <HiOutlinePlus className="text-base mr-2" />
-                {f('project.addView')}
-              </button>
-            </CreateDataViewDropdown>
-          </AnimatePing>
         </div>
-      )}
+        {renderViewTabs(views)}
+        <div
+          className={classNames(
+            'flex-none sticky right-0 z-10',
+            'flex items-center',
+            'group-[.right-scrollable]:shadow-sm'
+          )}>
+          <div
+            className={classNames(
+              'h-16 flex items-center bg-base-100 bg-opacity-70 backdrop-blur',
+              !noViews && 'px-3'
+            )}>
+            <AnimatePing ping={noViews}>
+              <CreateDataViewDropdown
+                projectId={projectId}
+                modelId={modelId}
+                existingViews={views}
+                onFinish={handleCreateViewFinish}>
+                {noViews ? (
+                  <button className={classNames('btn', 'h-10 min-h-fit')}>
+                    <HiPlus className="text-xl mr-3" />
+                    {f('project.addView')}
+                  </button>
+                ) : (
+                  <button
+                    className={classNames(
+                      'btn btn-ghost btn-square',
+                      'w-10 h-10 min-h-fit'
+                    )}>
+                    <HiPlus className="text-xl" />
+                  </button>
+                )}
+              </CreateDataViewDropdown>
+            </AnimatePing>
+          </div>
+        </div>
+      </ScrollContainer>
     </header>
   );
 }
