@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { memo, useCallback } from 'react';
+import { memo } from 'react';
 import { NavLink } from 'react-router-dom';
 import { IProjectDataModel } from '../../../libs/client/types';
 import { getProjectDataModelPath } from '../../helpers';
@@ -12,21 +12,16 @@ interface IDataModelMenuProps {
 function DataModelMenu(props: IDataModelMenuProps) {
   const { projectId, models } = props;
 
-  const getActiveClassName = useCallback(
-    ({ isActive }: { isActive: boolean }) =>
-      classNames(
-        'inline-block w-full text-ellipsis overflow-hidden whitespace-nowrap',
-        isActive && 'active',
-        isActive && 'pointer-events-none'
-      ),
-    []
-  );
+  const getActiveClassName = ({ isActive }: { isActive: boolean }): string =>
+    isActive
+      ? 'bg-base-content/10 pointer-events-none'
+      : '[&>span]:!text-base-content [&>span]:!bg-transparent';
 
   return (
     <ul
       className={classNames(
-        'menu rounded-box',
-        'pt-0',
+        'menu',
+        'p-4 px-0 py-0 [&>li]:my-1 [&>li]:w-full [&>li>a]:w-full',
         models?.length === 0 || 'p-2'
       )}>
       {models?.map((model) => (
@@ -34,7 +29,13 @@ function DataModelMenu(props: IDataModelMenuProps) {
           <NavLink
             to={getProjectDataModelPath(projectId, model._id)}
             className={getActiveClassName}>
-            {model.title}
+            <span
+              className={classNames(
+                'capitalize text-ellipsis overflow-hidden whitespace-nowrap',
+                'text-transparent font-bold bg-clip-text bg-gradient-to-r from-orange-400 to-fuchsia-500'
+              )}>
+              {model.title}
+            </span>
           </NavLink>
         </li>
       ))}

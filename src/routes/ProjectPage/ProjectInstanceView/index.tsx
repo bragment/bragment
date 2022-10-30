@@ -1,22 +1,24 @@
 import classNames from 'classnames';
-import { memo, useEffect, useState } from 'react';
-import { HiLogin, HiLogout } from 'react-icons/hi';
-import { Outlet, useParams } from 'react-router-dom';
-import ScrollContainer from '../../../components/ScrollContainer';
+import { memo, useEffect } from 'react';
+import { Navigate, Outlet, useLocation, useParams } from 'react-router-dom';
 import { setProjectFields } from '../../../fields';
 import {
   useProjectDataRecordListQuery,
   useProjectQuery,
 } from '../../../libs/react-query';
-import DataModelCollapse from '../DataModelCollapse';
-import styles from './index.module.scss';
+import {
+  getProjectDataModelEmptyPath,
+  getProjectDataModelPath,
+  getProjectInstancePath,
+} from '../../helpers';
+import Aside from './Aside';
+import { TOGGLE_ID } from './types';
 
 function ProjectInstanceView() {
-  const [checked, setChecked] = useState(true);
-  const expanded = checked;
-  const handleCheckboxChange = () => setChecked((old) => !old);
-  const { projectId = '', modelId = '' } = useParams();
+  const { projectId = '' } = useParams();
+  const { pathname } = useLocation();
   const { data: project } = useProjectQuery(projectId, true, true);
+  const models = project?.models;
   // NOTE: prefetch for data view
   useProjectDataRecordListQuery(projectId, true, true);
 
@@ -24,54 +26,36 @@ function ProjectInstanceView() {
     setProjectFields(project?.fields || []);
   }, [project]);
 
+  if (
+    (pathname === getProjectDataModelEmptyPath(projectId) ||
+      pathname === getProjectInstancePath(projectId)) &&
+    models?.length
+  ) {
+    const model = models[models.length - 1];
+    return (
+      <Navigate to={getProjectDataModelPath(projectId, model._id)} replace />
+    );
+  }
+
+  if (
+    pathname !== getProjectDataModelEmptyPath(projectId) &&
+    models?.length === 0
+  ) {
+    return <Navigate to={getProjectDataModelEmptyPath(projectId)} replace />;
+  }
+
   return (
-    <div className={classNames('w-full h-full flex', styles.wrapper)}>
-      <aside
-        className={classNames(
-          'bg-base-200 text-base-content',
-          'flex-none relative border-r border-base-300',
-          expanded ? 'w-80' : 'w-0'
-        )}>
-        <ScrollContainer autoHide style={{ overflowX: 'hidden' }}>
-          <header
-            className={classNames(
-              'navbar bg-base-200 text-base-content',
-              'p-4 bg-opacity-70 backdrop-blur',
-              'sticky top-0 z-30'
-            )}>
-            <div className="flex-auto font-bold text-xl capitalize">
-              {project?.title}
-            </div>
-          </header>
-          <div className="p-4">
-            <DataModelCollapse
-              projectId={projectId}
-              modelId={modelId}
-              project={project}
-            />
-          </div>
-          <div className="from-base-200 pointer-events-none sticky bottom-0 flex h-20 bg-gradient-to-t to-transparent" />
-        </ScrollContainer>
-        <label
-          className={classNames(
-            'btn btn-ghost swap swap-rotate',
-            'absolute top-2 -right-16 z-20 text-xl'
-          )}>
-          <input
-            type="checkbox"
-            checked={expanded}
-            onChange={handleCheckboxChange}
-          />
-          <HiLogin className={classNames('swap-on')} />
-          <HiLogout className={classNames('swap-off')} />
-        </label>
-      </aside>
-      <main
-        className={classNames('bg-base-100 text-base-content', 'flex-auto')}>
-        <ScrollContainer autoHide>
+    <div className={classNames('drawer drawer-mobile', 'w-full h-full')}>
+      <input id={TOGGLE_ID} type="checkbox" className="drawer-toggle" />
+      <div className="drawer-content bg-base-100 text-base-content">
+        <main>
           <Outlet />
-        </ScrollContainer>
-      </main>
+        </main>
+      </div>
+      <div className="drawer-side">
+        <label htmlFor={TOGGLE_ID} className="drawer-overlay" />
+        <Aside />
+      </div>
     </div>
   );
 }

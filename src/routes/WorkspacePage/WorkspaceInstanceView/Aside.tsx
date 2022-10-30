@@ -82,7 +82,11 @@ function Aside() {
         </div>
       </header>
       <main>
-        <ul className={classNames('menu', 'p-4 py-2 px-5 [&>li]:m-1')}>
+        <ul
+          className={classNames(
+            'menu',
+            'p-4 py-2 px-5 [&>li]:my-1 [&>li]:w-full [&>li>a]:w-full'
+          )}>
           <li>
             <NavLink
               to={getWorkspaceProjectListPath(workspaceId)}

@@ -14,7 +14,7 @@ function Dialog(props: IDialogProps) {
   const { id, children, className, visible, onClose } = props;
 
   return (
-    <div className={classNames(!visible && 'content-visibility-hidden')}>
+    <div className={classNames(!visible && 'content-hidden')}>
       <input
         id={id}
         type="checkbox"

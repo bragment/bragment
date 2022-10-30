@@ -11,8 +11,8 @@ import {
   useWorkspaceQuery,
 } from '../../../libs/react-query';
 import { getProjectInstancePath } from '../../helpers';
+import ProjectEmptyPrompt from './EmptyPrompt';
 import LoadingView from './LoadingView';
-import ProjectEmptyPrompt from './ProjectEmptyPrompt';
 
 function ProjectListView() {
   const f = useFormatMessage();
