@@ -188,10 +188,14 @@ function SortingButton(props: ISortingButtonProps) {
         </div>
       }>
       <button
-        className={classNames('btn btn-sm', 'h-10 my-1', loading && 'loading')}>
+        className={classNames(
+          'btn btn-sm btn-ghost max-md:btn-square',
+          '!h-10 max-md:!w-10',
+          loading && 'loading'
+        )}>
         {!loading && <HiOutlineSwitchVertical className="text-base" />}
-        <span className="ml-2">{f('dataView.sorting')}</span>
-        {!!count && <div className="badge ml-2">{count}</div>}
+        <span className="ml-2 hidden md:block">{f('dataView.sorting')}</span>
+        {!!count && <div className="badge ml-2 hidden md:block">{count}</div>}
       </button>
     </Dropdown>
   );

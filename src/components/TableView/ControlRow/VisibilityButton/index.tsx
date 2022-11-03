@@ -15,9 +15,9 @@ import FieldItem from './FieldItem';
 interface IVisibilityButtonProps {
   projectId: string;
   modelId: string;
-  mainFieldId: string;
   modelFields: IProjectDataField[];
   visibleFieldIds: string[];
+  mainFieldId?: string;
   count?: number;
   loading?: boolean;
   onChange: (fieldIds: string[]) => void;
@@ -35,7 +35,7 @@ function initializeVisibleFieldRecord(visibleFieldIds: string[]) {
 function initializeOrderingFieldList(
   modelFields: IProjectDataField[],
   visibleFieldIds: string[],
-  mainFieldId: string
+  mainFieldId?: string
 ) {
   const record = modelFields.reduce<Record<string, IProjectDataField>>(
     (prev, el) => {
@@ -201,13 +201,16 @@ function VisibilityButton(props: IVisibilityButtonProps) {
         }>
         <button
           className={classNames(
-            'btn btn-sm',
-            'relative h-10 my-1 z-10',
+            'btn btn-sm btn-ghost max-md:btn-square',
+            '!h-10 max-md:!w-10',
+            'relative z-10', // NOTE: cover the toggle of CreateDataFieldDropdown
             loading && 'loading'
           )}>
           {!loading && <HiOutlineEye className="text-base" />}
-          <span className="ml-2">{f('dataView.fieldVisibility')}</span>
-          {!!count && <div className="badge ml-2">{count}</div>}
+          <span className="ml-2 hidden md:block">
+            {f('dataView.fieldVisibility')}
+          </span>
+          {!!count && <div className="badge ml-2 hidden md:block">{count}</div>}
         </button>
       </Dropdown>
     </div>

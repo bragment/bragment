@@ -56,8 +56,8 @@ const filterFn: FilterFn<IProjectDataRecord> = (
 
 export function createColumns(
   projectId: string,
-  mainFieldId: string,
-  modelFields: IProjectDataField[]
+  modelFields: IProjectDataField[],
+  mainFieldId?: string
 ) {
   const columnHelper = createColumnHelper<IProjectDataRecord>();
   return modelFields.map((field) => {
