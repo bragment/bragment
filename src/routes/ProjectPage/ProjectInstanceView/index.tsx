@@ -60,9 +60,7 @@ function ProjectInstanceView() {
         className="drawer-toggle"
       />
       <div className="drawer-content bg-base-100 text-base-content">
-        <main>
-          <Outlet />
-        </main>
+        <Outlet />
       </div>
       <div className="drawer-side">
         <label htmlFor={TOGGLE_ID} className="drawer-overlay" />

@@ -85,15 +85,3 @@
     background-image: linear-gradient(to left, var(--bgColor), transparent);
   }
 }
-
-.searchInput {
-  &:hover,
-  &:focus-within {
-    .action {
-      display: block;
-    }
-  }
-  .action {
-    display: none;
-  }
-}

@@ -64,7 +64,6 @@ function TableView(props: ITableViewProps) {
   const { _id: projectId } = project;
   const { _id: modelId } = model;
   const { _id: viewId, filters = [], sorters = [] } = view;
-  const mainFieldId = model.mainField || fields[0]?._id;
   const modelFields = useMemo(
     () => fields.filter((field) => field.model === modelId),
     [fields, modelId]
@@ -88,7 +87,11 @@ function TableView(props: ITableViewProps) {
   const [columnFilters, setColumnFilters] = useNestedState(
     convertToColumnFilters(filters)
   );
-  const columnPinning = useMemo(() => ({ left: [mainFieldId] }), [mainFieldId]);
+  const mainFieldId = model.mainField || modelFields[0]?._id || undefined;
+  const columnPinning = useMemo(
+    () => ({ left: mainFieldId ? [mainFieldId] : undefined }),
+    [mainFieldId]
+  );
   const [columnVisibility, setColumnVisibility] = useNestedState(
     convertToColumnVisibility(
       modelFields.map((el) => el._id),
@@ -236,8 +239,8 @@ function TableView(props: ITableViewProps) {
   }, [setSorting, sorters]);
 
   const columns = useMemo(
-    () => createColumns(projectId, mainFieldId, modelFields),
-    [projectId, mainFieldId, modelFields]
+    () => createColumns(projectId, modelFields, mainFieldId),
+    [projectId, modelFields, mainFieldId]
   );
 
   const table = useReactTable({
@@ -264,58 +267,66 @@ function TableView(props: ITableViewProps) {
   const rowModel = table.getRowModel();
 
   return (
-    <ScrollContainer className={classNames(styles.wrapper)} ref={scrollBarRef}>
-      <ControlRow
-        projectId={projectId}
-        modelId={modelId}
-        mainFieldId={mainFieldId}
-        modelFields={modelFields}
-        modelForms={modelForms}
-        visibleFieldIds={visibleFieldIds}
-        visibleFieldCount={
-          view.visibleFields?.length ? columnOrder.length : undefined
-        }
-        filters={filters}
-        sorters={sorters}
-        onFiltersChange={handleFiltersChange}
-        onSortingChange={handleSortingChange}
-        onVisibilityChange={handleVisibilityChange}
-        onShouldUpdateFilters={updateFilters}
-        onShouldUpdateSorting={updateSorting}
-        onShouldUpdateVisibility={updateVisibleFields}
-        onSearchInputChange={handleSearchInputChange}
-        onCreateDateFieldFinish={handleCreateDateFieldFinish}
-      />
-      {headerGroups.map((headerGroup) => (
-        <HeadRow
-          key={viewId}
-          headers={headerGroup.headers}
-          projectId={projectId}
-          modelId={modelId}
-          modelFields={modelFields}
-          onCreateDateFieldFinish={handleCreateDateFieldFinish}
-        />
-      ))}
-      {rowModel.rows.map((row) => (
-        <BodyRow
-          key={row.id}
-          index={row.index}
-          cells={row.getVisibleCells()}
-          borderedTop
-        />
-      ))}
-
-      {modelFields.length > 0 && (
-        <TailRow
+    <div className="w-full h-full flex flex-col">
+      <div className="flex-none">
+        <ControlRow
           projectId={projectId}
           modelId={modelId}
           mainFieldId={mainFieldId}
           modelFields={modelFields}
-          borderedTop={rowModel.rows.length > 0}
-          borderedBottom
+          modelForms={modelForms}
+          visibleFieldIds={visibleFieldIds}
+          visibleFieldCount={
+            view.visibleFields?.length ? columnOrder.length : undefined
+          }
+          filters={filters}
+          sorters={sorters}
+          onFiltersChange={handleFiltersChange}
+          onSortingChange={handleSortingChange}
+          onVisibilityChange={handleVisibilityChange}
+          onShouldUpdateFilters={updateFilters}
+          onShouldUpdateSorting={updateSorting}
+          onShouldUpdateVisibility={updateVisibleFields}
+          onSearchInputChange={handleSearchInputChange}
+          onCreateDateFieldFinish={handleCreateDateFieldFinish}
         />
-      )}
-    </ScrollContainer>
+      </div>
+      <div className="flex-auto">
+        <ScrollContainer
+          className={classNames(styles.wrapper)}
+          ref={scrollBarRef}>
+          {headerGroups.map((headerGroup) => (
+            <HeadRow
+              key={viewId}
+              headers={headerGroup.headers}
+              projectId={projectId}
+              modelId={modelId}
+              modelFields={modelFields}
+              onCreateDateFieldFinish={handleCreateDateFieldFinish}
+            />
+          ))}
+          {rowModel.rows.map((row) => (
+            <BodyRow
+              key={row.id}
+              index={row.index}
+              cells={row.getVisibleCells()}
+              borderedTop
+            />
+          ))}
+
+          {modelFields.length > 0 && mainFieldId && (
+            <TailRow
+              projectId={projectId}
+              modelId={modelId}
+              mainFieldId={mainFieldId}
+              modelFields={modelFields}
+              borderedTop={rowModel.rows.length > 0}
+              borderedBottom
+            />
+          )}
+        </ScrollContainer>
+      </div>
+    </div>
   );
 }
 export default observer(TableView);

@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import { memo } from 'react';
 import {
   IDataFilter,
@@ -16,11 +15,11 @@ import VisibilityButton from './VisibilityButton';
 interface IControlRowProps {
   projectId: string;
   modelId: string;
-  mainFieldId: string;
   modelFields: IProjectDataField[];
   modelForms: IProjectDataForm[];
   visibleFieldIds: string[];
   visibleFieldCount?: number;
+  mainFieldId?: string;
   sorters: IDataSorter[];
   filters: IDataFilter[];
   onSearchInputChange: (value: string) => void;
@@ -55,51 +54,44 @@ function ControlRow(props: IControlRowProps) {
   } = props;
 
   return (
-    <div
-      className={classNames(
-        'bg-base-200 border-base-300',
-        'sticky left-0 top-0 z-40',
-        'h-12 px-2 border-t',
-        'flex items-center gap-2'
-      )}>
-      <SearchInput onChange={onSearchInputChange} />
-      {!!modelFields.length && (
-        <>
-          <CreateButton
-            projectId={projectId}
-            modelId={modelId}
-            mainFieldId={mainFieldId}
-            modelFields={modelFields}
-            visibleFieldIds={visibleFieldIds}
-            modelForms={modelForms}
-          />
-          <FilterButton
-            modelFields={modelFields}
-            visibleFieldIds={visibleFieldIds}
-            filters={filters}
-            onChange={onFiltersChange}
-            onClose={onShouldUpdateFilters}
-          />
-          <SortingButton
-            modelFields={modelFields}
-            visibleFieldIds={visibleFieldIds}
-            sorters={sorters}
-            onChange={onSortingChange}
-            onClose={onShouldUpdateSorting}
-          />
-          <VisibilityButton
-            projectId={projectId}
-            modelId={modelId}
-            mainFieldId={mainFieldId}
-            modelFields={modelFields}
-            visibleFieldIds={visibleFieldIds}
-            count={visibleFieldCount}
-            onChange={onVisibilityChange}
-            onClose={onShouldUpdateVisibility}
-            onCreateDateFieldFinish={onCreateDateFieldFinish}
-          />
-        </>
-      )}
+    <div className="flex flex-wrap items-center justify-between">
+      <div className="p-3 flex-none flex items-center justify-start gap-3">
+        <CreateButton
+          projectId={projectId}
+          modelId={modelId}
+          modelFields={modelFields}
+          visibleFieldIds={visibleFieldIds}
+          modelForms={modelForms}
+        />
+        <FilterButton
+          modelFields={modelFields}
+          visibleFieldIds={visibleFieldIds}
+          filters={filters}
+          onChange={onFiltersChange}
+          onClose={onShouldUpdateFilters}
+        />
+        <SortingButton
+          modelFields={modelFields}
+          visibleFieldIds={visibleFieldIds}
+          sorters={sorters}
+          onChange={onSortingChange}
+          onClose={onShouldUpdateSorting}
+        />
+        <VisibilityButton
+          projectId={projectId}
+          modelId={modelId}
+          mainFieldId={mainFieldId}
+          modelFields={modelFields}
+          visibleFieldIds={visibleFieldIds}
+          count={visibleFieldCount}
+          onChange={onVisibilityChange}
+          onClose={onShouldUpdateVisibility}
+          onCreateDateFieldFinish={onCreateDateFieldFinish}
+        />
+      </div>
+      <div className="px-3 flex-auto flex items-center justify-end">
+        <SearchInput onChange={onSearchInputChange} />
+      </div>
     </div>
   );
 }

@@ -5,7 +5,12 @@ const plugin = require('tailwindcss/plugin');
 module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
-    extend: {},
+    extend: {
+      screens: {
+        'mmd-lg': { min: '868px', max: '1023px' },
+        'sm-md': { min: '640px', max: '767px' },
+      },
+    },
   },
   plugins: [
     require('daisyui'),

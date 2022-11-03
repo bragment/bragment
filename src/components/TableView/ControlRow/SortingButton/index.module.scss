@@ -1,8 +1,3 @@
-.selectContent {
-  position: fixed !important;
-  left: 3.25rem;
-  width: 12.5rem;
-}
 :global(.dragging) {
   .fieldItemWrapper {
     @apply bg-base-100;

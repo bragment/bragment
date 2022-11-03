@@ -17,7 +17,6 @@ interface ICreateButtonProps {
   modelForms: IProjectDataForm[];
   projectId: string;
   modelId: string;
-  mainFieldId: string;
   modelFields: IProjectDataField[];
   visibleFieldIds?: string[];
 }
