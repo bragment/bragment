@@ -3,33 +3,33 @@ import { memo } from 'react';
 
 function Skeleton() {
   return (
-    <div className={classNames('border-base-300', 'w-full px-6 py-0 border-t')}>
-      <div className="w-full h-12 py-1">
+    <div className="w-full px-6">
+      <div className="w-full h-16 py-3">
         <div
           className={classNames(
-            'bg-base-content',
-            'w-1/2 h-full rounded animate-pulse'
+            'bg-base-content/60',
+            'w-1/2 h-10 rounded animate-pulse'
           )}
         />
       </div>
       <div className="w-full h-12 py-3">
         <div
           className={classNames(
-            'bg-base-content',
+            'bg-base-content/60',
             'w-full h-full rounded animate-pulse'
           )}
         />
       </div>
       <div
         className={classNames(
-          'bg-base-content',
-          'w-full h-36 rounded animate-pulse'
+          'bg-base-content/60',
+          'w-full h-48 rounded animate-pulse'
         )}
       />
       <div className="w-full h-12 py-3">
         <div
           className={classNames(
-            'bg-base-content',
+            'bg-base-content/60',
             'w-full h-full rounded animate-pulse'
           )}
         />

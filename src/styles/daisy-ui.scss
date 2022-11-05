@@ -26,6 +26,7 @@ body {
 
 // NOTE: add clickable style like button
 .clickable {
+  cursor: pointer;
   animation: button-pop var(--animation-btn, 0.25s) ease-out;
   text-transform: var(--btn-text-case, uppercase);
   &:active:hover,

@@ -66,7 +66,7 @@ function VisibilityButton(props: IVisibilityButtonProps) {
   } = props;
   const f = useFormatMessage();
   const scrollBarsRef = useRef<Scrollbars>(null);
-  const dropdownRef = useRef<IDropdownRef>(null);
+  const dropdownRef = useRef<IRCDropdownRef>(null);
   const createDataFieldDropdownTriggerRef = useRef<HTMLDivElement>(null);
   const [visibleFieldRecord, setVisibleFieldRecord] = useState(
     initializeVisibleFieldRecord(visibleFieldIds)
@@ -169,7 +169,7 @@ function VisibilityButton(props: IVisibilityButtonProps) {
           <div
             className={classNames(
               'bg-base-100 border-base-300',
-              'w-64 px-0 py-2 border overflow-hidden rounded-box shadow'
+              'w-64 px-0 py-2 border overflow-hidden rounded-xl shadow'
             )}
             onClick={stopEventPropagation}>
             <ScrollContainer
@@ -213,7 +213,11 @@ function VisibilityButton(props: IVisibilityButtonProps) {
           <span className="ml-2 hidden md:block">
             {f('dataView.fieldVisibility')}
           </span>
-          {!!count && <div className="badge ml-2 hidden md:block">{count}</div>}
+          {!!count && (
+            <div className={classNames('badge', 'ml-2 hidden md:inline-flex')}>
+              {count}
+            </div>
+          )}
         </button>
       </Dropdown>
     </div>

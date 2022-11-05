@@ -8,6 +8,7 @@ interface ITextAreaControlProps {
   className?: string;
   autoFocus?: boolean;
   loading?: boolean;
+  bordered?: boolean;
   onCancel?: () => void;
   onChange?: (value: string) => void;
 }
@@ -36,6 +37,7 @@ function TextAreaControl(props: ITextAreaControlProps) {
     className,
     autoFocus,
     loading,
+    bordered,
     onCancel,
     onChange,
   } = props;
@@ -82,7 +84,9 @@ function TextAreaControl(props: ITextAreaControlProps) {
         name={name}
         style={{ height }}
         className={classNames(
-          'textarea no-shadow',
+          'textarea',
+          bordered === true && 'textarea-bordered',
+          bordered === false && 'border-0 no-shadow',
           'min-h-0 block resize-none text-base bg-transparent',
           className
         )}

@@ -57,7 +57,7 @@ function SortingButton(props: ISortingButtonProps) {
     props;
   const f = useFormatMessage();
   const scrollBarsRef = useRef<Scrollbars>(null);
-  const dropdownRef = useRef<IDropdownRef>(null);
+  const dropdownRef = useRef<IRCDropdownRef>(null);
   const [innerSorterList, setInnerSorterList] = useNestedState(
     initializeInnerSorterList(modelFields, sorters)
   );
@@ -156,7 +156,7 @@ function SortingButton(props: ISortingButtonProps) {
         <div
           className={classNames(
             'bg-base-100 border-base-300',
-            'w-80 px-0 py-2 border overflow-hidden rounded-box shadow'
+            'w-80 px-0 py-2 border overflow-hidden rounded-xl shadow'
           )}
           onClick={stopEventPropagation}>
           <ScrollContainer
@@ -198,7 +198,11 @@ function SortingButton(props: ISortingButtonProps) {
         )}>
         {!loading && <HiOutlineSwitchVertical className="text-base" />}
         <span className="ml-2 hidden md:block">{f('dataView.sorting')}</span>
-        {!!count && <div className="badge ml-2 hidden md:block">{count}</div>}
+        {!!count && (
+          <div className={classNames('badge', 'ml-2 hidden md:inline-flex')}>
+            {count}
+          </div>
+        )}
       </button>
     </Dropdown>
   );

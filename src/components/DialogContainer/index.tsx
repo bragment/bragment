@@ -1,19 +1,32 @@
-import { memo } from 'react';
-import CreateDataFormDialog from '../../dialogs/CreateDataFormDialog';
-import CreateDataModelDialog from '../../dialogs/CreateDataModelDialog';
-import CreateDataRecordDialog from '../../dialogs/CreateDataRecordDialog';
-import CreateProjectDialog from '../../dialogs/CreateProjectDialog';
-import CreateWorkspaceDialog from '../../dialogs/CreateWorkspaceDialog';
+import { lazy, memo, Suspense } from 'react';
+
+const CreateDataFormDialog = lazy(
+  () => import('../../dialogs/CreateDataFormDialog')
+);
+const CreateDataModelDialog = lazy(
+  () => import('../../dialogs/CreateDataModelDialog')
+);
+const CreateDataRecordDialog = lazy(
+  () => import('../../dialogs/CreateDataRecordDialog')
+);
+const CreateProjectDialog = lazy(
+  () => import('../../dialogs/CreateProjectDialog')
+);
+const CreateWorkspaceDialog = lazy(
+  () => import('../../dialogs/CreateWorkspaceDialog')
+);
 
 function DialogContainer() {
   return (
-    <>
-      <CreateWorkspaceDialog />
-      <CreateProjectDialog />
-      <CreateDataModelDialog />
-      <CreateDataFormDialog />
-      <CreateDataRecordDialog />
-    </>
+    <Suspense fallback={<></>}>
+      <section>
+        <CreateWorkspaceDialog />
+        <CreateProjectDialog />
+        <CreateDataModelDialog />
+        <CreateDataFormDialog />
+        <CreateDataRecordDialog />
+      </section>
+    </Suspense>
   );
 }
 

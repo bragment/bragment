@@ -10,11 +10,11 @@ import ErrorPage from '../ErrorPage';
 import ProjectPage from '../ProjectPage';
 import DataModelView from '../ProjectPage/DataModelView';
 import DataModelEmptyPrompt from '../ProjectPage/DataModelView/EmptyPrompt';
-import DataViewSuspense from '../ProjectPage/DataViewSuspense';
+import DataViewSuspense from '../ProjectPage/DataView/Suspense';
 import ProjectInstanceViewSuspense from '../ProjectPage/ProjectInstanceView/Suspense';
 import RootPage from '../RootPage';
-import SettingPage from '../SettingPage';
 import { ERoutePath, ERoutePathName } from '../types';
+import UnderConstructionPage from '../UnderConstructionPage';
 import WorkspacePage from '../WorkspacePage';
 import CreateWorkspaceView from '../WorkspacePage/CreateWorkspaceView';
 import ProjectListView from '../WorkspacePage/ProjectListView';
@@ -44,7 +44,7 @@ function RootRouter() {
                 }>
                 <Route
                   path={ERoutePathName.Setting}
-                  element={<SettingPage />}
+                  element={<UnderConstructionPage />}
                 />
                 <Route
                   path={ERoutePathName.Workspace}
@@ -59,6 +59,10 @@ function RootRouter() {
                     <Route
                       path={ERoutePathName.ProjectList}
                       element={<ProjectListView />}
+                    />
+                    <Route
+                      path={ERoutePathName.MemberList}
+                      element={<UnderConstructionPage />}
                     />
                   </Route>
                 </Route>

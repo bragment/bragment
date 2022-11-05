@@ -30,7 +30,7 @@ function CreateDataFieldDropdown(props: ICreateDataFieldButtonProps) {
   } = props;
   const f = useFormatMessage();
   const [loading, setLoading] = useState(false);
-  const dropdownRef = useRef<IDropdownRef>(null);
+  const dropdownRef = useRef<IRCDropdownRef>(null);
   const formRef = useRef<ICreateDataFieldFormRef>(null);
 
   const handleFinish = useCallback(

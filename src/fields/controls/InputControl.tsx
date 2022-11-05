@@ -9,6 +9,7 @@ interface IInputControlProps {
   className?: string;
   autoFocus?: boolean;
   loading?: boolean;
+  bordered?: boolean;
   onCancel?: () => void;
   onChange?: (value: string) => void;
 }
@@ -21,6 +22,7 @@ function InputControl(props: IInputControlProps) {
     className,
     autoFocus,
     loading,
+    bordered,
     onCancel,
     onChange,
   } = props;
@@ -46,7 +48,9 @@ function InputControl(props: IInputControlProps) {
         type={type}
         name={name}
         className={classNames(
-          'input no-shadow',
+          'input',
+          bordered === true && 'input-bordered',
+          bordered === false && 'border-0 no-shadow',
           'h-10 text-base bg-transparent',
           className
         )}

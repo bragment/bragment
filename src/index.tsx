@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import { initializeSentry } from './libs/sentry';
+import { initializeVercelAnalytics } from './libs/vercel/analytics';
 import { sendToVercelAnalytics } from './libs/vercel/vitals';
 import reportWebVitals from './reportWebVitals';
 import MainRouter from './routes/MainRouter';
@@ -9,6 +10,7 @@ import './styles/index.scss';
 import { checkIfSafari } from './utils';
 
 initializeSentry();
+initializeVercelAnalytics();
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

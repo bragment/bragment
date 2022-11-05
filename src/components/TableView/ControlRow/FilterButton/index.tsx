@@ -60,7 +60,7 @@ function FilterButton(props: IFilterButtonProps) {
     props;
   const f = useFormatMessage();
   const scrollBarsRef = useRef<Scrollbars>(null);
-  const dropdownRef = useRef<IDropdownRef>(null);
+  const dropdownRef = useRef<IRCDropdownRef>(null);
   const [innerFilterList, setInnerFilterList] = useNestedState(
     initializeInnerFilterList(modelFields, filters)
   );
@@ -156,7 +156,7 @@ function FilterButton(props: IFilterButtonProps) {
         <div
           className={classNames(
             'bg-base-100 border-base-300',
-            'w-96 px-0 py-2 border overflow-hidden rounded-box shadow'
+            'w-96 px-0 py-2 border overflow-hidden rounded-xl shadow'
           )}
           onClick={stopEventPropagation}
           onKeyDown={stopEventPropagation}>
@@ -190,7 +190,11 @@ function FilterButton(props: IFilterButtonProps) {
         )}>
         {!loading && <HiOutlineFilter className="text-base" />}
         <div className="ml-2 hidden md:block">{f('dataView.filter')}</div>
-        {!!count && <div className="badge ml-2 hidden md:block">{count}</div>}
+        {!!count && (
+          <div className={classNames('badge', 'ml-2 hidden md:inline-flex')}>
+            {count}
+          </div>
+        )}
       </button>
     </Dropdown>
   );

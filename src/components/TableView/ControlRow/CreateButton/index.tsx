@@ -116,7 +116,7 @@ function CreateButton(props: ICreateButtonProps) {
           <div
             className={classNames(
               'bg-base-100 border-base-300',
-              'w-56 px-0 py-2 border overflow-hidden rounded-box shadow'
+              'w-56 px-0 py-2 border overflow-hidden rounded-xl shadow'
             )}
             onClick={stopEventPropagation}
             onKeyDown={stopEventPropagation}>

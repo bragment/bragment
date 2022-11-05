@@ -1,7 +1,7 @@
 import { lazy, memo, Suspense } from 'react';
-import Skeleton from './DataView/Skeleton';
+import Skeleton from './Skeleton';
 
-const DataView = lazy(() => import('./DataView'));
+const DataView = lazy(() => import('./index'));
 
 function DataViewSuspense() {
   return (

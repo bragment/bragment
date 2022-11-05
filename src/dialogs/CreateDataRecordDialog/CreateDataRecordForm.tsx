@@ -90,6 +90,7 @@ function CreateDataRecordForm(
           <label className={classNames('swap', 'pl-4 mb-6')}>
             <input
               type="checkbox"
+              className="no-shadow"
               checked={hiddenItemsVisible}
               onChange={handleHiddenItemVisibleChange}
             />
