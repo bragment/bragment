@@ -46,8 +46,8 @@ function InputControl(props: IInputControlProps) {
         type={type}
         name={name}
         className={classNames(
-          'input input-bordered',
-          'h-10 text-base outline-none active:outline-none focus:outline-none',
+          'input no-shadow',
+          'h-10 text-base bg-transparent',
           className
         )}
         autoFocus={autoFocus}

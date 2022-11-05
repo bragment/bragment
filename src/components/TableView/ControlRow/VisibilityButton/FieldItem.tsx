@@ -29,7 +29,9 @@ function FieldItem(props: IFieldItemProps) {
       <div
         className={classNames(
           'rounded-lg pl-2 pr-4 py-2 flex items-center',
-          main ? 'text-info' : 'text-base-content',
+          'text-base-content',
+          main && 'text-info',
+          !main && !visible && 'text-base-content/40',
           styles.fieldItem
         )}>
         <DragHandle

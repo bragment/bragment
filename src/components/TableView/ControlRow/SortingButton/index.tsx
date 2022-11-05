@@ -178,7 +178,10 @@ function SortingButton(props: ISortingButtonProps) {
           {!!otherFieldList.length && (
             <div className="w-full px-2">
               <button
-                className={classNames('btn btn-ghost', 'w-full justify-start')}
+                className={classNames(
+                  'btn btn-sm btn-ghost',
+                  'w-full h-10 justify-start'
+                )}
                 onClick={handleAddSorter}>
                 <HiOutlinePlus className="text-base mr-2" />
                 {f('dataView.addSorter')}

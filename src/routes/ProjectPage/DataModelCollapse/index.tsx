@@ -14,8 +14,6 @@ import { useNavigateToPage } from '../../hooks';
 import CreateDataModelForm from './CreateDataModelForm';
 import DataModelMenu from './DataModelMenu';
 
-import styles from './index.module.scss';
-
 const TOGGLE_ID = 'DATA_MODEL_COLLAPSE_TOGGLE';
 
 interface IDataModelCollapseProps {
@@ -113,11 +111,7 @@ function DataModelCollapse(props: IDataModelCollapseProps) {
           <HiOutlinePlus aria-label={f('project.createModel')} />
         </div>
         {creating && (
-          <div
-            className={classNames(
-              'mx-1 my-2 [&_input]:font-bold',
-              styles.modelFormWrapper
-            )}>
+          <div className={classNames('mx-1 my-2 [&_input]:font-bold')}>
             <CreateDataModelForm
               singleInput
               projectId={projectId}

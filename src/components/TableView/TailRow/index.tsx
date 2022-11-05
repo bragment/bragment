@@ -62,7 +62,11 @@ function TailRow(props: ITailRowProps) {
           />
         )}
       </div>
-      <div className={classNames('flex-auto py-1')}>
+      <div
+        className={classNames(
+          'flex-auto py-1',
+          'focus-within:ring-inset focus-within:ring-4 focus-within:ring-secondary'
+        )}>
         {mainField && (
           <CreateDataRecordForm
             ref={formRef}

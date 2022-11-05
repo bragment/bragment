@@ -7,26 +7,22 @@ import {
   IProjectDataField,
   IProjectDataRecord,
 } from '../../../libs/client/types';
-import AnimatePing from '../../AnimatePing';
 import CreateDataFieldDropdown from '../../CreateDataFieldDropdown';
 import { useFormatMessage } from '../../hooks';
 import styles from '../index.module.scss';
-
-export const CREATE_FIELD_MODAL_TOGGLE_ID = 'CREATE_FIELD_MODAL_TOGGLE';
 
 interface IHeadRowProps {
   projectId: string;
   modelId: string;
   modelFields: IProjectDataField[];
   headers: Header<IProjectDataRecord, unknown>[];
-  onCreateDateFieldFinish: (project: IProject) => void;
+  onCreateDataFieldFinish: (project: IProject) => void;
 }
 
 function HeadRow(props: IHeadRowProps) {
   const f = useFormatMessage();
-  const { projectId, modelId, modelFields, headers, onCreateDateFieldFinish } =
+  const { projectId, modelId, modelFields, headers, onCreateDataFieldFinish } =
     props;
-  const hasNoField = headers.length === 0;
 
   return (
     <div
@@ -52,11 +48,6 @@ function HeadRow(props: IHeadRowProps) {
           )
         );
       })}
-      {hasNoField && (
-        <div className={classNames('w-52', 'justify-center', styles.cell)}>
-          {f('project.noFields')}
-        </div>
-      )}
       <div
         className={classNames(
           'sticky right-0 z-10',
@@ -65,20 +56,17 @@ function HeadRow(props: IHeadRowProps) {
           styles.cell,
           styles.rightScrollable
         )}>
-        <AnimatePing ping={hasNoField}>
-          <CreateDataFieldDropdown
-            projectId={projectId}
-            modelId={modelId}
-            existingFields={modelFields}
-            onFinish={onCreateDateFieldFinish}>
-            <button
-              id={CREATE_FIELD_MODAL_TOGGLE_ID}
-              title={f('dataView.addField')}
-              className={classNames('btn btn-ghost btn-sm', 'h-10')}>
-              <HiPlus aria-label={f('dataView.addField')} className="text-lg" />
-            </button>
-          </CreateDataFieldDropdown>
-        </AnimatePing>
+        <CreateDataFieldDropdown
+          projectId={projectId}
+          modelId={modelId}
+          existingFields={modelFields}
+          onFinish={onCreateDataFieldFinish}>
+          <button
+            title={f('dataView.addField')}
+            className={classNames('btn btn-ghost btn-sm', 'h-10')}>
+            <HiPlus aria-label={f('dataView.addField')} className="text-lg" />
+          </button>
+        </CreateDataFieldDropdown>
       </div>
     </div>
   );

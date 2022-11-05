@@ -113,10 +113,7 @@ function CreateDataRecordForm(
         placeholder={f('dataView.addData')}
         value={data[mainField._id]?.value || ''}
         onChange={handleInputChange}
-        className={classNames(
-          'input',
-          'w-full h-10 bg-transparent outline-none active:outline-none focus:outline-none'
-        )}
+        className={classNames('input no-shadow', 'w-full h-10 bg-transparent')}
       />
     </form>
   );
