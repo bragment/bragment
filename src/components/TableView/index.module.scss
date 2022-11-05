@@ -14,7 +14,7 @@
 .headRow,
 .bodyRow,
 .tailRow {
-  @apply border-base-300 text-base-content;
+  @apply bg-base-100 border-base-300 text-base-content;
   @apply h-12;
   @apply flex items-center;
   .cell {

@@ -63,6 +63,7 @@ export default class FieldRendererBase {
     props?: {
       className?: string;
       loading?: boolean;
+      bordered?: boolean;
       onCancel?: () => void;
       onChange?: (value: string) => void;
     }
@@ -83,6 +84,7 @@ export default class FieldRendererBase {
     defaultValue = '',
     props?: {
       className?: string;
+      bordered?: boolean;
     }
   ) {
     return (

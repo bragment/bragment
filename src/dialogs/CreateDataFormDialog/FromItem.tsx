@@ -116,6 +116,7 @@ function FromItem(props: IFromItemProps) {
             className: classNames(
               checkIfFieldFullWidth(field.type) && 'w-full'
             ),
+            bordered: true,
           }
         )}
       </div>

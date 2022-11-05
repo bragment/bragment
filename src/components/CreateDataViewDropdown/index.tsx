@@ -24,7 +24,7 @@ function CreateDataViewDropdown(props: ICreateDataViewDropdownProps) {
   const { projectId, modelId, children, existingViews, onFinish } = props;
   const f = useFormatMessage();
   const { toastError } = useDialogStore();
-  const dropdownRef = useRef<IDropdownRef>(null);
+  const dropdownRef = useRef<IRCDropdownRef>(null);
   const viewTypeRef = useRef(EDataViewType.Table);
   const { isLoading, mutateAsync } = useCreateProjectDataViewMutation();
 

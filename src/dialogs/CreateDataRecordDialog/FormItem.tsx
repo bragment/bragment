@@ -29,6 +29,7 @@ function FormItem(props: IFormItemProps) {
       <div className="my-1">
         {renderer?.renderFormItem(field, name, defaultValue, {
           className: classNames(checkIfFieldFullWidth(field.type) && 'w-full'),
+          bordered: true,
         })}
       </div>
     </div>

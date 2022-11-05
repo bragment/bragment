@@ -37,6 +37,8 @@
     }
     &.select-sm {
       @apply p-0;
+      height: 2rem;
+      min-height: 2rem;
       .rc-select-selection-item,
       .rc-select-selection-placeholder {
         @apply pl-3 pr-9;
@@ -69,7 +71,7 @@
     &-option {
       @apply h-10 relative rounded-lg;
       &.option-sm {
-        @apply h-[1.875rem];
+        height: 30px;
       }
 
       &-content {

@@ -174,6 +174,10 @@ function TableView(props: ITableViewProps) {
     ]
   );
 
+  const handleCreateDataRecordFinish = useCallback(() => {
+    requestAnimationFrame(() => scrollBarRef.current?.scrollToBottom());
+  }, []);
+
   const handleSearchInputChange = useCallback((value: string) => {
     setGlobalFilter({
       updatedAt: new Date().toISOString(),
@@ -322,6 +326,7 @@ function TableView(props: ITableViewProps) {
               modelFields={modelFields}
               borderedTop={rowModel.rows.length > 0}
               borderedBottom
+              onCreateDataRecordFinish={handleCreateDataRecordFinish}
             />
           )}
         </ScrollContainer>

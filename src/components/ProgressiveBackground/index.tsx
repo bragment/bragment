@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { CSSProperties, memo } from 'react';
-import ProgressiveImage from './index';
+import ProgressiveImage from 'react-progressive-graceful-image';
 
 export interface IProgressiveBackgroundProps {
   className?: string;
@@ -15,7 +15,7 @@ function ProgressiveBackground(props: IProgressiveBackgroundProps) {
   if (image && placeholder) {
     return (
       <ProgressiveImage src={image} placeholder={placeholder}>
-        {(src: string, loading: boolean) => {
+        {(src: string, loading?: boolean) => {
           const style: CSSProperties = {
             backgroundColor: color,
             backgroundImage: `url(${src})`,

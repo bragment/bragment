@@ -26,7 +26,7 @@ function Aside() {
   return (
     <aside className={classNames('bg-base-200 text-base-content', 'w-80')}>
       <header className="p-3">
-        <div className="rounded-lg">
+        <div className="rounded-box overflow-hidden">
           <div
             className={classNames(
               'card image-full bg-base-100',

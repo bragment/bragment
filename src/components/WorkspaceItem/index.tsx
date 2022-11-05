@@ -15,7 +15,7 @@ function WorkspaceItem(props: IWorkspaceItemProps) {
     <div
       className={classNames(
         'card bg-base-100 border-base-300',
-        'w-full border cursor-pointer hover:shadow-xl',
+        'w-full border hover:shadow-xl',
         'clickable'
       )}>
       <div className={classNames('card-body', 'h-15 p-4')}>

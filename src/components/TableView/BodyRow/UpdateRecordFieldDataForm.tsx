@@ -63,6 +63,7 @@ function UpdateRecordFieldDataForm(props: IUpdateRecordFieldDataFormProps) {
         renderer.renderEditingTableBodyCell(field, record, {
           loading: isLoading,
           className: 'w-full',
+          bordered: false,
           onCancel,
           onChange,
         })}

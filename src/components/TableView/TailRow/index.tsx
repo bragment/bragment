@@ -1,7 +1,10 @@
 import classNames from 'classnames';
 import { memo, useCallback, useRef, useState } from 'react';
 import { HiPlus } from 'react-icons/hi';
-import { IProjectDataField } from '../../../libs/client/types';
+import {
+  IProjectDataField,
+  IProjectDataRecord,
+} from '../../../libs/client/types';
 import AnimateSpin from '../../AnimateSpin';
 import { useFormatMessage } from '../../hooks';
 import CreateDataRecordForm, {
@@ -16,6 +19,7 @@ interface ITailRowProps {
   modelFields: IProjectDataField[];
   borderedTop?: boolean;
   borderedBottom?: boolean;
+  onCreateDataRecordFinish?: (record: IProjectDataRecord) => void;
 }
 
 function TailRow(props: ITailRowProps) {
@@ -26,6 +30,7 @@ function TailRow(props: ITailRowProps) {
     modelFields,
     borderedTop,
     borderedBottom,
+    onCreateDataRecordFinish,
   } = props;
   const f = useFormatMessage();
   const mainField = modelFields.find((field) => field._id === mainFieldId);
@@ -74,6 +79,7 @@ function TailRow(props: ITailRowProps) {
             modelId={modelId}
             mainField={mainField}
             onLoadingChange={handleLoadingChange}
+            onFinish={onCreateDataRecordFinish}
           />
         )}
       </div>

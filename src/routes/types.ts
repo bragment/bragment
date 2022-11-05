@@ -6,6 +6,7 @@ export enum ERoutePathName {
   ForgotPassword = 'forgotPassword',
   Github = 'github',
   Home = 'home',
+  MemberList = 'members',
   Model = 'model',
   ModelId = ':modelId',
   Project = 'project',

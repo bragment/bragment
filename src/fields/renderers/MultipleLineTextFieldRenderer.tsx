@@ -23,6 +23,7 @@ export default class MultipleLineTextFieldRenderer extends FieldRendererBase {
     props: {
       className?: string;
       loading?: boolean;
+      bordered?: boolean;
       onCancel?: () => void;
       onChange?: (value: string) => void;
     }
@@ -42,6 +43,7 @@ export default class MultipleLineTextFieldRenderer extends FieldRendererBase {
     defaultValue: string,
     props: {
       className?: string;
+      bordered?: boolean;
     }
   ) {
     return (

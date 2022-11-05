@@ -8,35 +8,38 @@ function Skeleton() {
       <aside
         className={classNames(
           'bg-base-200',
-          'w-80 flex-none border-r border-base-300'
+          'w-80 flex-none',
+          'hidden',
+          'lg:block'
         )}>
-        <header className={classNames('navbar bg-base-200', 'p-4')}>
+        <header className={classNames('navbar bg-base-200', 'p-3')}>
           <div className="flex-auto">
             <div
               className={classNames(
-                'bg-base-content',
-                'w-48 h-7 rounded animate-pulse'
-              )}
-            />
+                'bg-base-content/60',
+                'w-full p-4 rounded-box animate-pulse'
+              )}>
+              <p className="h-9" />
+            </div>
           </div>
         </header>
         <div className="p-4">
-          <div className="h-16 p-4">
+          <div className="pt-1 px-2">
             <div
               className={classNames(
-                'bg-base-content',
-                'w-full h-full rounded animate-pulse'
+                'bg-base-content/60',
+                'w-full h-6 rounded animate-pulse'
               )}
             />
           </div>
-          {Array(3)
+          {Array(4)
             .fill(0)
             .map((_, i) => (
-              <div className="h-12 px-4 py-3" key={i}>
+              <div className="px-4 py-2 mt-2" key={i}>
                 <div
                   className={classNames(
-                    'bg-base-content',
-                    'w-3/5 h-full rounded animate-pulse'
+                    'bg-base-content/60',
+                    'w-full h-8 rounded animate-pulse'
                   )}
                 />
               </div>
@@ -44,39 +47,19 @@ function Skeleton() {
         </div>
       </aside>
       <main className={classNames('bg-base-100', 'flex-auto')}>
-        <header className={classNames('navbar bg-base-200', 'px-6')}>
-          <div>
-            <div
-              className={classNames(
-                'bg-base-content',
-                'w-48 h-7 rounded animate-pulse'
-              )}
-            />
-          </div>
-          <div className="flex-none ml-6">
-            <div
-              className={classNames(
-                'bg-base-content',
-                'w-20 h-10 rounded animate-pulse'
-              )}
-            />
-          </div>
-          <div className="flex-none ml-6">
-            <div
-              className={classNames(
-                'bg-base-content',
-                'w-20 h-10 rounded animate-pulse'
-              )}
-            />
-          </div>
-          <div className="flex-none ml-6">
-            <div
-              className={classNames(
-                'bg-base-content',
-                'w-20 h-10 rounded animate-pulse'
-              )}
-            />
-          </div>
+        <header className={classNames('navbar', 'px-6')}>
+          {Array(3)
+            .fill(0)
+            .map((_, i) => (
+              <div className="flex-none mr-6" key={i}>
+                <div
+                  className={classNames(
+                    'bg-base-content/60',
+                    'w-24 h-10 rounded animate-pulse'
+                  )}
+                />
+              </div>
+            ))}
         </header>
         <DataViewSkeleton />
       </main>
