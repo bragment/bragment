@@ -22,7 +22,7 @@ interface IVisibilityButtonProps {
   loading?: boolean;
   onChange: (fieldIds: string[]) => void;
   onClose?: () => void;
-  onCreateDateFieldFinish?: (project: IProject) => void;
+  onCreateDataFieldFinish?: (project: IProject) => void;
 }
 
 function initializeVisibleFieldRecord(visibleFieldIds: string[]) {
@@ -62,7 +62,7 @@ function VisibilityButton(props: IVisibilityButtonProps) {
     loading,
     onChange,
     onClose,
-    onCreateDateFieldFinish,
+    onCreateDataFieldFinish,
   } = props;
   const f = useFormatMessage();
   const scrollBarsRef = useRef<Scrollbars>(null);
@@ -155,7 +155,7 @@ function VisibilityButton(props: IVisibilityButtonProps) {
         projectId={projectId}
         modelId={modelId}
         existingFields={modelFields}
-        onFinish={onCreateDateFieldFinish}>
+        onFinish={onCreateDataFieldFinish}>
         <div
           ref={createDataFieldDropdownTriggerRef}
           className="absolute w-full h-10 my-1 top-0 left-0 z-0"
@@ -191,7 +191,10 @@ function VisibilityButton(props: IVisibilityButtonProps) {
             </ScrollContainer>
             <div className="w-full px-2">
               <button
-                className={classNames('btn btn-ghost', 'w-full justify-start')}
+                className={classNames(
+                  'btn btn-sm btn-ghost',
+                  'w-full h-10 justify-start'
+                )}
                 onClick={handleAddField}>
                 <HiOutlinePlus className="text-base mr-2" />
                 {f('dataView.addField')}

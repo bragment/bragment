@@ -9,11 +9,13 @@ body {
   button,
   input,
   textarea {
-    &.focus,
-    &:focus {
-      @apply ring ring-secondary;
-      // NOTE: as @apply border-secondary;
-      border-color: hsl(var(--s) / 1) !important;
+    &:not(.no-shadow) {
+      &.focus,
+      &:focus {
+        @apply ring ring-secondary;
+        // NOTE: as @apply border-secondary;
+        border-color: hsl(var(--s) / 1) !important;
+      }
     }
   }
 }

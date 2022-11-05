@@ -67,8 +67,9 @@ function Cell(props: IItermProps) {
       {editing && (
         <div
           className={classNames(
+            'bg-base-100',
             'absolute top-0 left-0 z-20',
-            'h-full',
+            'h-full p-1 ring-4 ring-inset ring-secondary',
             'flex items-center'
           )}>
           <UpdateDataFieldTitleForm

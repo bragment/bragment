@@ -10,6 +10,7 @@ import {
   useState,
 } from 'react';
 import { getDefaultFieldType, getFieldRenderer } from '../../fields';
+import FieldRendererBase from '../../fields/renderers/FieldRendererBase';
 import {
   EDataFieldType,
   IProject,
@@ -24,6 +25,7 @@ interface ICreateDataFieldFormProps {
   projectId: string;
   modelId: string;
   existingFields?: IProjectDataField[];
+  fieldFilter?: (field: FieldRendererBase) => boolean;
   onFinish?: (project: IProject) => void;
 }
 
@@ -35,7 +37,7 @@ function CreateDataFieldForm(
   props: ICreateDataFieldFormProps,
   ref: Ref<ICreateDataFieldFormRef>
 ) {
-  const { projectId, modelId, existingFields, onFinish } = props;
+  const { projectId, modelId, existingFields, fieldFilter, onFinish } = props;
   const f = useFormatMessage();
   const formRef = useRef<HTMLFormElement>(null);
   const titleInputRef = useRef<HTMLInputElement>(null);
@@ -124,7 +126,11 @@ function CreateDataFieldForm(
         placeholder={f('project.fieldTitle')}
         className={classNames('input input-bordered', 'w-full')}
       />
-      <DataFieldTypeSelect value={fieldType} onChange={handleFieldTypeChange} />
+      <DataFieldTypeSelect
+        value={fieldType}
+        filter={fieldFilter}
+        onChange={handleFieldTypeChange}
+      />
       {extra}
       {/* NOTE: padding bottom */}
       <div />

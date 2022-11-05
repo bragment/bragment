@@ -136,7 +136,7 @@ function TableView(props: ITableViewProps) {
     }
   }, [updateViewMutateAsync, filters, columnFilters, projectId, viewId]);
 
-  const handleCreateDateFieldFinish = useCallback(
+  const handleCreateDataFieldFinish = useCallback(
     (data: IProject) => {
       const field = data.fields[0];
       if (field && !model.mainField) {
@@ -288,7 +288,7 @@ function TableView(props: ITableViewProps) {
           onShouldUpdateSorting={updateSorting}
           onShouldUpdateVisibility={updateVisibleFields}
           onSearchInputChange={handleSearchInputChange}
-          onCreateDateFieldFinish={handleCreateDateFieldFinish}
+          onCreateDataFieldFinish={handleCreateDataFieldFinish}
         />
       </div>
       <div className="flex-auto">
@@ -302,7 +302,7 @@ function TableView(props: ITableViewProps) {
               projectId={projectId}
               modelId={modelId}
               modelFields={modelFields}
-              onCreateDateFieldFinish={handleCreateDateFieldFinish}
+              onCreateDataFieldFinish={handleCreateDataFieldFinish}
             />
           ))}
           {rowModel.rows.map((row) => (

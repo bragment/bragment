@@ -82,8 +82,8 @@ function TextAreaControl(props: ITextAreaControlProps) {
         name={name}
         style={{ height }}
         className={classNames(
-          'textarea textarea-bordered',
-          'min-h-0 resize-none text-base outline-none active:outline-none focus:outline-none',
+          'textarea no-shadow',
+          'min-h-0 block resize-none text-base bg-transparent',
           className
         )}
         autoFocus={autoFocus}

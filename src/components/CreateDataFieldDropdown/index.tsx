@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import Dropdown from 'rc-dropdown';
 import React, { memo, useCallback, useRef, useState } from 'react';
+import FieldRendererBase from '../../fields/renderers/FieldRendererBase';
 import { IProject, IProjectDataField } from '../../libs/client/types';
 import { stopEventPropagation } from '../../utils';
 import { useFormatMessage } from '../hooks';
@@ -14,11 +15,19 @@ interface ICreateDataFieldButtonProps {
   modelId: string;
   children: React.ReactElement;
   existingFields?: IProjectDataField[];
+  fieldFilter?: (field: FieldRendererBase) => boolean;
   onFinish?: (project: IProject) => void;
 }
 
 function CreateDataFieldDropdown(props: ICreateDataFieldButtonProps) {
-  const { projectId, modelId, children, existingFields, onFinish } = props;
+  const {
+    projectId,
+    modelId,
+    children,
+    existingFields,
+    fieldFilter,
+    onFinish,
+  } = props;
   const f = useFormatMessage();
   const [loading, setLoading] = useState(false);
   const dropdownRef = useRef<IDropdownRef>(null);
@@ -68,6 +77,7 @@ function CreateDataFieldDropdown(props: ICreateDataFieldButtonProps) {
                 projectId={projectId}
                 modelId={modelId}
                 existingFields={existingFields}
+                fieldFilter={fieldFilter}
                 onFinish={handleFinish}
               />
             </div>

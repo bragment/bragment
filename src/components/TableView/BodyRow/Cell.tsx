@@ -61,8 +61,9 @@ function Cell(props: IItermProps) {
         {editing && (
           <div
             className={classNames(
-              'absolute top-0 left-0 z-20',
-              'w-full h-full pt-1',
+              'bg-base-100',
+              'absolute top-0 left-0 z-30',
+              'w-full min-h-full p-1 ring-4 ring-inset ring-secondary',
               'flex items-start'
             )}>
             <UpdateRecordFieldDataForm

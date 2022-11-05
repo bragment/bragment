@@ -29,7 +29,7 @@ interface IControlRowProps {
   onShouldUpdateVisibility?: () => void;
   onShouldUpdateSorting?: () => void;
   onShouldUpdateFilters?: () => void;
-  onCreateDateFieldFinish?: (project: IProject) => void;
+  onCreateDataFieldFinish?: (project: IProject) => void;
 }
 
 function ControlRow(props: IControlRowProps) {
@@ -50,7 +50,7 @@ function ControlRow(props: IControlRowProps) {
     onShouldUpdateFilters,
     onShouldUpdateVisibility,
     onShouldUpdateSorting,
-    onCreateDateFieldFinish,
+    onCreateDataFieldFinish,
   } = props;
 
   return (
@@ -86,7 +86,7 @@ function ControlRow(props: IControlRowProps) {
           count={visibleFieldCount}
           onChange={onVisibilityChange}
           onClose={onShouldUpdateVisibility}
-          onCreateDateFieldFinish={onCreateDateFieldFinish}
+          onCreateDataFieldFinish={onCreateDataFieldFinish}
         />
       </div>
       <div className="px-3 flex-auto flex items-center justify-end">

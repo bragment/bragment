@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import { memo } from 'react';
 import { IProject, IProjectDataField } from '../../../libs/client/types';
 import { useUpdateProjectDataFieldMutation } from '../../../libs/react-query';
+import AnimateSpin from '../../AnimateSpin';
 import { useDialogStore, useFormatMessage } from '../../hooks';
 
 interface IUpdateDataFieldTitleFormProps {
@@ -66,14 +67,14 @@ function UpdateDataFieldTitleForm(props: IUpdateDataFieldTitleFormProps) {
   return (
     <form
       className={classNames(
-        'form-control form-single-input',
-        isLoading && 'loading'
+        'form-control',
+        isLoading && 'relative pointer-events-none'
       )}
       onSubmit={handleSubmit}>
       <input
         className={classNames(
-          'input input-bordered',
-          'w-full h-10 pl-[2.625rem] pr-8 text-base outline-none active:outline-none focus:outline-none'
+          'input no-shadow',
+          'w-full h-10 pl-[37px] pr-3 text-base bg-transparent'
         )}
         name="title"
         autoComplete="off"
@@ -82,6 +83,12 @@ function UpdateDataFieldTitleForm(props: IUpdateDataFieldTitleFormProps) {
         onBlur={onCancel}
         onKeyDown={handleKeyDown}
       />
+      {isLoading && (
+        <AnimateSpin
+          className="absolute top-1 right-2 bottom-1 w-6 h-auto text-base"
+          bgColorClassName="bg-base-100"
+        />
+      )}
     </form>
   );
 }
