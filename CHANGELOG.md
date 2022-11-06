@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.7.0](https://github.com/bragment/bragment/compare/v0.6.0-0...v0.7.0) (2022-11-06)
+
+### Features
+
+- **components:** adjust ControlRow ([c7271d1](https://github.com/bragment/bragment/commit/c7271d1ab08bd168b9809091f6db0fb16abad886))
+- **components:** use rc-dropdown ([d31fd46](https://github.com/bragment/bragment/commit/d31fd468a169acc5ec9bce92f15c76ae5a5b24cf))
+- **components:** use rc-select ([163994a](https://github.com/bragment/bragment/commit/163994a2e56889437d9c92171fce9e127afddb57))
+- **components:** virtual table rows ([fcd3e75](https://github.com/bragment/bragment/commit/fcd3e75dfd850d62e1ae0c3b7e7c81681f892ecd))
+- **fields:** add image field ([f084e80](https://github.com/bragment/bragment/commit/f084e80876ebdc46dc359a609a285f66a5d46b50))
+- **fields:** add ResolverFieldRenderer ([4799dde](https://github.com/bragment/bragment/commit/4799dde4d1a53329cacc6d7d7d26fdb86771bf63))
+- **fields:** fetch link field data ([2a858c5](https://github.com/bragment/bragment/commit/2a858c53dd61dfb093d406bf14c00c53b4ac2777))
+
 ## [0.6.0](https://github.com/bragment/bragment/compare/v0.5.0-0...v0.6.0) (2022-09-26)
 
 ### Features
