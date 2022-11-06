@@ -77,6 +77,7 @@ export enum EDataViewType {
 export enum EDataFieldType {
   Date = 'DATE',
   HttpLink = 'HTTP_LINK',
+  Image = 'IMAGE',
   MultipleLineText = 'MULTIPLE_LINE_TEXT',
   Number = 'NUMBER',
   Resolver = 'RESOLVER',

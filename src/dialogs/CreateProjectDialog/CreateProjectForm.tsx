@@ -86,7 +86,7 @@ function CreateProjectForm(props: ICreateProjectFormProps) {
         fromColor="from-violet-500"
         toColor="to-rose-500"
         className={classNames('btn-block', isLoading && 'loading')}>
-        {f('auth.signInOrSignUp')}
+        {f('common.confirm')}
       </PrimaryButton>
     </form>
   );

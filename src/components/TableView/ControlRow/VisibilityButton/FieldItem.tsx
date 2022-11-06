@@ -30,7 +30,7 @@ function FieldItem(props: IFieldItemProps) {
         className={classNames(
           'rounded-lg pl-2 pr-4 py-2 flex items-center',
           'text-base-content',
-          main && 'text-info',
+          main && 'text-primary',
           !main && !visible && 'text-base-content/40',
           styles.fieldItem
         )}>
@@ -45,14 +45,14 @@ function FieldItem(props: IFieldItemProps) {
         {main ? (
           <div
             className={classNames(
-              'badge badge-info',
+              'badge badge-secondary text-white',
               'flex-none relative -right-2',
               styles.mainFieldBadge
             )}>
             {f('dataView.mainField')}
             <div
               className={classNames(
-                'badge badge-info',
+                'badge badge-secondary text-white',
                 'absolute right-0 opacity-0 whitespace-nowrap pointer-events-none'
               )}>
               {f('dataView.mainFieldVisibleFirst')}

@@ -44,6 +44,10 @@ export function checkIfFieldResolvable(type: string) {
   return !!fieldRendererMap.get(type)?.resolvable;
 }
 
+export function checkIfFieldFormable(type: string) {
+  return !!fieldRendererMap.get(type)?.editable;
+}
+
 export function getResolvablePaths(type: string) {
   return fieldRendererMap.get(type)?.resolvablePaths || [];
 }
