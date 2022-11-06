@@ -4,6 +4,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import { useVirtualizer } from '@tanstack/react-virtual';
 import classNames from 'classnames';
 import isEqual from 'lodash/isEqual';
 import { observer } from 'mobx-react';
@@ -270,6 +271,22 @@ function TableView(props: ITableViewProps) {
   const headerGroups = table.getHeaderGroups();
   const rowModel = table.getRowModel();
 
+  // NOTE: virtual rows
+  const rowHeight = 48;
+  const rowVirtualizer = useVirtualizer({
+    count: rowModel.rows.length,
+    overscan: Math.ceil(document.body.clientHeight / rowHeight),
+    getScrollElement: () => scrollBarRef.current?.container.firstElementChild,
+    estimateSize: () => rowHeight,
+  });
+  const virtualRows = rowVirtualizer.getVirtualItems();
+  const totalSize = rowVirtualizer.getTotalSize();
+  const paddingTop = virtualRows.length > 0 ? virtualRows?.[0]?.start || 0 : 0;
+  const paddingBottom =
+    virtualRows.length > 0
+      ? totalSize - (virtualRows?.[virtualRows.length - 1]?.end || 0)
+      : 0;
+
   return (
     <div className="w-full h-full flex flex-col">
       <div className="flex-none">
@@ -309,14 +326,20 @@ function TableView(props: ITableViewProps) {
               onCreateDataFieldFinish={handleCreateDataFieldFinish}
             />
           ))}
-          {rowModel.rows.map((row) => (
-            <BodyRow
-              key={row.id}
-              index={row.index}
-              cells={row.getVisibleCells()}
-              borderedTop
-            />
-          ))}
+
+          {paddingTop > 0 && <div style={{ height: paddingTop }} />}
+          {rowVirtualizer.getVirtualItems().map((virtualItem) => {
+            const row = rowModel.rows[virtualItem.index];
+            return (
+              <BodyRow
+                key={row.id}
+                index={virtualItem.index}
+                cells={row.getVisibleCells()}
+                borderedTop
+              />
+            );
+          })}
+          {paddingBottom > 0 && <div style={{ height: paddingBottom }} />}
 
           {modelFields.length > 0 && mainFieldId && (
             <TailRow
