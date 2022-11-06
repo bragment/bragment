@@ -4,29 +4,17 @@ import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import Dialog from '../../components/Dialog';
 import { useDialogStore, useFormatMessage } from '../../components/hooks';
 import ScrollContainer from '../../components/ScrollContainer';
-import { IProjectDataField, IProjectDataForm } from '../../libs/client/types';
 import { useCreateProjectDataRecordMutation } from '../../libs/react-query';
-import { generateFormItem, initializeFormItems } from '../CreateDataFormDialog';
 import { IInnerDataFormItem } from '../CreateDataFormDialog/CreateForm';
+import {
+  initializeFormItems,
+  initializeHiddenItems,
+} from '../CreateDataFormDialog/helpers';
 import CreateDataRecordForm, {
   ICreateDataRecordFormRef,
 } from './CreateDataRecordForm';
 
 const DIALOG_ID = 'CREATE_RECORD_FORM_DIALOG';
-
-function initializeHiddenItems(
-  modelFields: IProjectDataField[],
-  visibleFieldIds?: string[],
-  modelForm?: IProjectDataForm
-) {
-  if (!visibleFieldIds || modelForm) {
-    return [];
-  }
-  const visibleSet = new Set(visibleFieldIds);
-  return modelFields
-    .filter((el) => !visibleSet.has(el._id))
-    .map((el) => generateFormItem(el));
-}
 
 function CreateDataRecordDialog() {
   const f = useFormatMessage();

@@ -48,7 +48,7 @@ function Cell(props: IItermProps) {
         'justify-start',
         borderedLeft && 'border-l',
         borderedRight && 'border-r',
-        main ? 'text-info' : 'text-base-content',
+        main ? 'text-primary' : 'text-base-content',
         className,
         styles.cell
       )}

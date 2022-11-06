@@ -10,7 +10,7 @@ import Scrollbars from 'react-custom-scrollbars-2';
 import Dialog from '../../components/Dialog';
 import { useDialogStore, useFormatMessage } from '../../components/hooks';
 import ScrollContainer from '../../components/ScrollContainer';
-import { IProjectDataField, IProjectDataForm } from '../../libs/client/types';
+import { IProjectDataField } from '../../libs/client/types';
 import {
   useCreateProjectDataFormMutation,
   useUpdateProjectDataFormMutation,
@@ -21,51 +21,13 @@ import CreateForm, {
   IInnerDataFormItem,
 } from './CreateForm';
 import FieldList, { USABLE_FIELD_LIST_ID } from './FieldList';
+import {
+  generateFormItem,
+  initializeFormItems,
+  initializeUsableFields,
+} from './helpers';
 
 const DIALOG_ID = 'CREATE_DATA_FORM_DIALOG';
-
-function initializeUsableFields(
-  modelFields: IProjectDataField[],
-  formItems: IInnerDataFormItem[]
-) {
-  const set = new Set(formItems.map((el) => el.field._id));
-  return modelFields.filter((el) => !set.has(el._id));
-}
-
-export function initializeFormItems(
-  modelFields: IProjectDataField[],
-  visibleFieldIds?: string[],
-  modelForm?: IProjectDataForm
-) {
-  const record: Record<string, IProjectDataField> = {};
-  modelFields.forEach((el) => (record[el._id] = el));
-  if (modelForm) {
-    return modelForm.items
-      .filter((el) => !!record[el.field])
-      .map((el) => ({
-        ...el,
-        field: record[el.field],
-      }));
-  }
-  let visibleFields: IProjectDataField[] = [];
-  if (visibleFieldIds && visibleFieldIds.length > 0) {
-    visibleFields = visibleFieldIds
-      .map((id) => record[id])
-      .filter((el) => !!el);
-  }
-  return (visibleFields.length ? visibleFields : modelFields).map((el) =>
-    generateFormItem(el)
-  );
-}
-
-export function generateFormItem(field: IProjectDataField) {
-  return {
-    field: field,
-    label: field.title,
-    required: false,
-    defaultValue: '',
-  };
-}
 
 function CreateDataFormDialog() {
   const f = useFormatMessage();

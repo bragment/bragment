@@ -22,6 +22,8 @@ export default class HttpLinkFieldRenderer extends FieldRendererBase {
   public resolvablePaths: IResolvablePath[] = [
     { name: 'dataField.title', value: 'metadata.title' },
     { name: 'dataField.description', value: 'metadata.description' },
+    { name: 'dataField.image', value: 'metadata.image' },
+    { name: 'dataField.provider', value: 'metadata.provider' },
   ];
 
   public renderTableBodyCellByStringValue(value: string): JSX.Element {
