@@ -22,6 +22,7 @@ export default class ImageFieldRenderer extends FieldRendererBase {
     return (
       <img
         className="w-full h-full object-cover pointer-events-none"
+        loading="lazy"
         src={value}
         alt=""
       />

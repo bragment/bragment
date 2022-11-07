@@ -78,7 +78,7 @@ function DataModelCollapse(props: IDataModelCollapseProps) {
         className={classNames(
           'collapse-title',
           'h-8 min-h-fit p-0 pl-4 pr-12',
-          'text-base-content/40 hover:text-base-content/70',
+          'text-base-content/40 peer-hover:text-base-content/70',
           'flex items-center justify-between'
         )}>
         <div className="text-sm leading-8 font-medium">
@@ -103,8 +103,8 @@ function DataModelCollapse(props: IDataModelCollapseProps) {
       <div className={classNames('collapse-content', 'p-0 pb-0')}>
         <div
           className={classNames(
-            'text-base-content/40 text-lg top-0 right-4',
-            'h-8 flex items-center',
+            'text-base-content/40 text-lg top-0 right-2',
+            'w-8 h-8 flex items-center justify-center',
             'absolute z-10 cursor-pointer hover:text-base-content/70'
           )}
           onClick={handleButtonClick}>
