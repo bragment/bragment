@@ -1,10 +1,10 @@
 import { memo } from 'react';
-import { getFieldRenderer } from '../../../fields';
 import {
   IProjectDataField,
   IProjectDataRecord,
   IRecordFieldData,
 } from '../../../libs/client/types';
+import { getFieldRenderer } from '../../../libs/fields';
 import { useUpdateProjectDataRecordMutation } from '../../../libs/react-query';
 import { useDialogStore, useFormatMessage } from '../../hooks';
 

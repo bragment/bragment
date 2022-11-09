@@ -1,7 +1,7 @@
 import { memo } from 'react';
-import { IProjectDataField, IProjectDataRecord } from '../../libs/client/types';
-import { useLinkFieldDataQuery } from '../../libs/react-query';
-import { checkIfHttpLink } from '../../utils';
+import { checkIfHttpLink } from '../../../utils';
+import { IProjectDataField, IProjectDataRecord } from '../../client/types';
+import { useLinkFieldDataQuery } from '../../react-query';
 
 interface ILinkWrapperProps {
   children: JSX.Element;

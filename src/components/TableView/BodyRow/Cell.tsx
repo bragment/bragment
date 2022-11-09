@@ -1,11 +1,11 @@
 import classNames from 'classnames';
 import { memo, useCallback, useState } from 'react';
-import { getFieldRenderer } from '../../../fields';
 import {
   IProjectDataField,
   IProjectDataRecord,
   IRecordFieldData,
 } from '../../../libs/client/types';
+import { getFieldRenderer } from '../../../libs/fields';
 import UpdateRecordFieldDataForm from './UpdateRecordFieldDataForm';
 import styles from '../index.module.scss';
 

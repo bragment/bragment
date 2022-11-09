@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import Dropdown from 'rc-dropdown';
 import React, { memo, useCallback, useRef, useState } from 'react';
-import FieldRendererBase from '../../fields/renderers/FieldRendererBase';
 import { IProject, IProjectDataField } from '../../libs/client/types';
+import FieldRendererBase from '../../libs/fields/renderers/FieldRendererBase';
 import { stopEventPropagation } from '../../utils';
 import { useFormatMessage } from '../hooks';
 import ScrollContainer from '../ScrollContainer';

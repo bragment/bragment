@@ -60,6 +60,7 @@ export default {
   'dataView.descending': 'Descending',
   'dataView.fieldVisibility': 'Field Visibility',
   'dataView.filter': 'Filter',
+  'dataView.list': 'List',
   'dataView.mainField': 'Main',
   'dataView.mainFieldVisibleFirst': 'Main field is always visible first.',
   'dataView.sorting': 'Sorting',

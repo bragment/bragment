@@ -59,6 +59,7 @@ export default {
   'dataView.descending': '降序',
   'dataView.fieldVisibility': '显示字段',
   'dataView.filter': '过滤',
+  'dataView.list': '列表',
   'dataView.mainField': '主字段',
   'dataView.mainFieldVisibleFirst': '主字段总是最先显示',
   'dataView.sorting': '排序',

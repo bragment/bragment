@@ -3,7 +3,7 @@ import {
   EDataFieldType,
   IProjectDataField,
   IProjectDataRecord,
-} from '../../../libs/client/types';
+} from '../../../client/types';
 import ResolverWrapper from '../../controls/ResolverWrapper';
 import { EFieldCategory } from '../../types';
 import {

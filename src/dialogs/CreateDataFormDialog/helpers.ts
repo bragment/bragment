@@ -1,5 +1,5 @@
-import { checkIfFieldFormable } from '../../fields';
 import { IProjectDataField, IProjectDataForm } from '../../libs/client/types';
+import { checkIfFieldFormable } from '../../libs/fields';
 import { IInnerDataFormItem } from './CreateForm';
 
 export function initializeUsableFields(

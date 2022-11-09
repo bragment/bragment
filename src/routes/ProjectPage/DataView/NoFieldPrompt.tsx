@@ -4,9 +4,9 @@ import { HiPlus } from 'react-icons/hi';
 import AnimatePing from '../../../components/AnimatePing';
 import CreateDataFieldDropdown from '../../../components/CreateDataFieldDropdown';
 import { useFormatMessage } from '../../../components/hooks';
-import FieldRendererBase from '../../../fields/renderers/FieldRendererBase';
-import { EFieldCategory } from '../../../fields/types';
 import { IProject } from '../../../libs/client/types';
+import FieldRendererBase from '../../../libs/fields/renderers/FieldRendererBase';
+import { EFieldCategory } from '../../../libs/fields/types';
 import { useUpdateProjectDataModelMutation } from '../../../libs/react-query';
 
 interface INoFieldPromptProps {

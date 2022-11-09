@@ -1,13 +1,13 @@
 import classNames from 'classnames';
 import Select, { OptGroup, Option } from 'rc-select';
 import { memo, useMemo } from 'react';
+import { ILocalMessage } from '../../i18n/types';
+import { EDataFieldType } from '../../libs/client/types';
 import {
   getAllCategoryFieldRenderers,
   getCategoryMessageId,
-} from '../../fields';
-import type FieldRendererBase from '../../fields/renderers/FieldRendererBase';
-import { ILocalMessage } from '../../i18n/types';
-import { EDataFieldType } from '../../libs/client/types';
+} from '../../libs/fields';
+import type FieldRendererBase from '../../libs/fields/renderers/FieldRendererBase';
 import { useFormatMessage } from '../hooks';
 
 interface IDataFieldTypeSelectProps {

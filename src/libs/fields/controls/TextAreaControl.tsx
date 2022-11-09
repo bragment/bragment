@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { memo, useRef, useState } from 'react';
-import AnimateSpin from '../../components/AnimateSpin';
+import AnimateSpin from '../../../components/AnimateSpin';
 
 interface ITextAreaControlProps {
   defaultValue: string;

@@ -4,7 +4,7 @@ import {
   IProjectDataField,
   IProjectDataRecord,
   IRecordFieldData,
-} from '../../libs/client/types';
+} from '../../client/types';
 import InputControl from '../controls/InputControl';
 import { EFieldCategory, IResolvablePath } from '../types';
 

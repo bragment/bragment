@@ -1,16 +1,17 @@
 import classNames from 'classnames';
 import Dropdown from 'rc-dropdown';
 import { memo, useRef } from 'react';
+import { ILocalMessage } from '../../i18n/types';
 import {
   EDataViewType,
   IProject,
   IProjectDataView,
 } from '../../libs/client/types';
 import { useCreateProjectDataViewMutation } from '../../libs/react-query';
+import { getAllViewRenderers } from '../../libs/views';
 import { getAvailableTitle } from '../../utils';
 import AnimateSpin from '../AnimateSpin';
 import { useDialogStore, useFormatMessage } from '../hooks';
-import { dataViewTypes } from './config';
 
 interface ICreateDataViewDropdownProps {
   projectId: string;
@@ -27,6 +28,8 @@ function CreateDataViewDropdown(props: ICreateDataViewDropdownProps) {
   const dropdownRef = useRef<IRCDropdownRef>(null);
   const viewTypeRef = useRef(EDataViewType.Table);
   const { isLoading, mutateAsync } = useCreateProjectDataViewMutation();
+
+  const viewRenderers = getAllViewRenderers();
 
   const handleClick: React.MouseEventHandler<HTMLUListElement> = async (
     event
@@ -73,24 +76,28 @@ function CreateDataViewDropdown(props: ICreateDataViewDropdownProps) {
             'w-52 p-2 border overflow-hidden rounded-box shadow'
           )}
           onClick={handleClick}>
-          {dataViewTypes.map(({ type, title, Icon }) => (
-            <li key={type}>
-              <span
-                className={classNames(
-                  'relative',
-                  'action',
-                  viewTypeRef.current === type && isLoading && 'active'
-                )}
-                data-type={type}
-                data-title={f(title)}>
-                <Icon className="text-xl" />
-                {f(title)}
-                {viewTypeRef.current === type && isLoading && (
-                  <AnimateSpin className="absolute w-4 h-4 right-4" />
-                )}
-              </span>
-            </li>
-          ))}
+          {viewRenderers.map((renderer) => {
+            const { type, Icon } = renderer;
+            const title = f(renderer.getName() as ILocalMessage);
+            return (
+              <li key={type}>
+                <span
+                  className={classNames(
+                    'relative',
+                    'action',
+                    viewTypeRef.current === type && isLoading && 'active'
+                  )}
+                  data-type={type}
+                  data-title={title}>
+                  <Icon className="text-xl" />
+                  {title}
+                  {viewTypeRef.current === type && isLoading && (
+                    <AnimateSpin className="absolute w-4 h-4 right-4" />
+                  )}
+                </span>
+              </li>
+            );
+          })}
         </ul>
       }>
       {children}

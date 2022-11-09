@@ -3,7 +3,7 @@ import {
   EDataFieldType,
   IProjectDataField,
   IProjectDataRecord,
-} from '../../libs/client/types';
+} from '../../client/types';
 import TextAreaControl from '../controls/TextAreaControl';
 import { EFieldCategory } from '../types';
 import FieldRendererBase from './FieldRendererBase';

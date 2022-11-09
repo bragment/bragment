@@ -4,7 +4,7 @@ import {
   EDataFieldType,
   IProjectDataField,
   IProjectDataRecord,
-} from '../../libs/client/types';
+} from '../../client/types';
 import LinkWrapper from '../controls/LinkWrapper';
 import { EFieldCategory, IResolvablePath } from '../types';
 import FieldRendererBase from './FieldRendererBase';

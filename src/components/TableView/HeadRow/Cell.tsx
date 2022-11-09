@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { memo, useCallback, useState } from 'react';
-import { getFieldIcon } from '../../../fields';
 import { IProjectDataField } from '../../../libs/client/types';
+import { getFieldIcon } from '../../../libs/fields';
 import UpdateDataFieldTitleForm from './UpdateDataFieldTitleForm';
 import styles from '../index.module.scss';
 

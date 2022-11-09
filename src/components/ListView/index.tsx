@@ -6,21 +6,19 @@ import {
 } from '@tanstack/react-table';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import classNames from 'classnames';
-import { memo, useCallback, useLayoutEffect, useRef } from 'react';
+import { memo, useCallback, useLayoutEffect, useMemo, useRef } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
-import { IProject } from '../../libs/client/types';
+import { IProject, IProjectDataField } from '../../libs/client/types';
 import {
   useUpdateProjectDataModelMutation,
   useUpdateProjectDataViewMutation,
 } from '../../libs/react-query';
 import ScrollContainer from '../ScrollContainer';
-import BodyRow from './BodyRow';
-import ControlRow from './ControlRow';
-import HeadRow from './HeadRow';
-import { getColumnCanGlobalFilter, globalFilterFn } from './helpers';
-import { useViewControlProps } from './hooks';
-import TailRow from './TailRow';
-import { IViewControlProps } from './types';
+import ControlRow from '../TableView/ControlRow';
+import { getColumnCanGlobalFilter, globalFilterFn } from '../TableView/helpers';
+import { useViewControlProps } from '../TableView/hooks';
+import { IViewControlProps } from '../TableView/types';
+import Item from './Item';
 import styles from './index.module.scss';
 
 function TableView(props: IViewControlProps) {
@@ -62,6 +60,14 @@ function TableView(props: IViewControlProps) {
     useUpdateProjectDataModelMutation();
   const { mutateAsync: updateViewMutateAsync } =
     useUpdateProjectDataViewMutation();
+  const modelFieldMap = useMemo(
+    () =>
+      modelFields.reduce(
+        (prev, el) => prev.set(el._id, el),
+        new Map<string, IProjectDataField>()
+      ),
+    [modelFields]
+  );
 
   const handleCreateDataFieldFinish = useCallback(
     (data: IProject) => {
@@ -101,10 +107,6 @@ function TableView(props: IViewControlProps) {
     ]
   );
 
-  const handleCreateDataRecordFinish = useCallback(() => {
-    requestAnimationFrame(() => scrollBarRef.current?.scrollToBottom());
-  }, []);
-
   useLayoutEffect(() => {
     scrollBarRef.current?.scrollToTop();
     scrollBarRef.current?.scrollToLeft();
@@ -130,11 +132,10 @@ function TableView(props: IViewControlProps) {
     debugHeaders: process.env.NODE_ENV === 'development',
     debugColumns: process.env.NODE_ENV === 'development',
   });
-  const headerGroups = table.getHeaderGroups();
   const rowModel = table.getRowModel();
 
   // NOTE: virtual rows
-  const rowHeight = 48;
+  const rowHeight = 96;
   const rowVirtualizer = useVirtualizer({
     count: rowModel.rows.length,
     overscan: Math.ceil(document.body.clientHeight / rowHeight),
@@ -151,7 +152,7 @@ function TableView(props: IViewControlProps) {
 
   return (
     <div className="w-full h-full flex flex-col">
-      <div className="flex-none">
+      <div className="flex-none border-b border-base-300">
         <ControlRow
           projectId={projectId}
           modelId={modelId}
@@ -178,42 +179,22 @@ function TableView(props: IViewControlProps) {
         <ScrollContainer
           className={classNames(styles.wrapper)}
           ref={scrollBarRef}>
-          {headerGroups.map((headerGroup) => (
-            <HeadRow
-              key={viewId}
-              headers={headerGroup.headers}
-              projectId={projectId}
-              modelId={modelId}
-              modelFields={modelFields}
-              onCreateDataFieldFinish={handleCreateDataFieldFinish}
-            />
-          ))}
-
           {paddingTop > 0 && <div style={{ height: paddingTop }} />}
           {rowVirtualizer.getVirtualItems().map((virtualItem) => {
             const row = rowModel.rows[virtualItem.index];
+            const mainField = mainFieldId
+              ? modelFieldMap.get(mainFieldId)
+              : undefined;
             return (
-              <BodyRow
+              <Item
                 key={row.id}
                 index={virtualItem.index}
-                cells={row.getVisibleCells()}
-                borderedTop
+                record={row.original}
+                mainField={mainField}
               />
             );
           })}
           {paddingBottom > 0 && <div style={{ height: paddingBottom }} />}
-
-          {modelFields.length > 0 && mainFieldId && (
-            <TailRow
-              projectId={projectId}
-              modelId={modelId}
-              mainFieldId={mainFieldId}
-              modelFields={modelFields}
-              borderedTop={rowModel.rows.length > 0}
-              borderedBottom
-              onCreateDataRecordFinish={handleCreateDataRecordFinish}
-            />
-          )}
         </ScrollContainer>
       </div>
     </div>

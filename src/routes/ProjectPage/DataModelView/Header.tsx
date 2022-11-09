@@ -6,11 +6,11 @@ import { HiMenu, HiPlus } from 'react-icons/hi';
 import { NavLink, useMatch, useParams } from 'react-router-dom';
 import AnimatePing from '../../../components/AnimatePing';
 import CreateDataViewDropdown from '../../../components/CreateDataViewDropdown';
-import { dataViewTypeRecord } from '../../../components/CreateDataViewDropdown/config';
 import { useFormatMessage, useUserStore } from '../../../components/hooks';
 import ScrollContainer from '../../../components/ScrollContainer';
 import { IProject, IProjectDataView } from '../../../libs/client/types';
 import { useProjectQuery } from '../../../libs/react-query';
+import { getViewRenderer } from '../../../libs/views';
 import { getProjectDataModelPath, getProjectDataViewPath } from '../../helpers';
 import { useNavigateToPage } from '../../hooks';
 import { TOGGLE_ID } from '../ProjectInstanceView/types';
@@ -37,7 +37,7 @@ function WorkspaceInstanceView() {
         isActive && 'active pointer-events-none'
       );
     return _views?.map((view) => {
-      const Icon = dataViewTypeRecord[view.type]?.Icon;
+      const Icon = getViewRenderer(view.type)?.Icon;
       return (
         <NavLink
           key={view._id}

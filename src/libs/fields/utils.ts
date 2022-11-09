@@ -1,5 +1,5 @@
-import { ILocalMessage } from '../i18n/types';
-import { IProjectDataField } from '../libs/client/types';
+import { ILocalMessage } from '../../i18n/types';
+import { IProjectDataField } from '../client/types';
 import type FieldRendererBase from './renderers/FieldRendererBase';
 import { EFieldCategory } from './types';
 

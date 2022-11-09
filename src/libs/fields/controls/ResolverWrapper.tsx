@@ -1,11 +1,11 @@
 import { memo } from 'react';
+import { checkIfHttpLink } from '../../../utils';
 import {
   EDataFieldType,
   IProjectDataField,
   IProjectDataRecord,
-} from '../../libs/client/types';
-import { useLinkFieldDataQuery } from '../../libs/react-query';
-import { checkIfHttpLink } from '../../utils';
+} from '../../client/types';
+import { useLinkFieldDataQuery } from '../../react-query';
 
 interface IResolverWrapperProps {
   children: JSX.Element;

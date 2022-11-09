@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { memo, useEffect, useRef } from 'react';
 import { Navigate, Outlet, useLocation, useParams } from 'react-router-dom';
-import { setProjectFields } from '../../../fields';
+import { setProjectFields } from '../../../libs/fields';
 import {
   useProjectDataRecordListQuery,
   useProjectQuery,

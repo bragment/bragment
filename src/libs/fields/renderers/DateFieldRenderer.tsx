@@ -1,5 +1,5 @@
 import { HiCalendar } from 'react-icons/hi';
-import { EDataFieldType } from '../../libs/client/types';
+import { EDataFieldType } from '../../client/types';
 import { EFieldCategory } from '../types';
 import FieldRendererBase from './FieldRendererBase';
 

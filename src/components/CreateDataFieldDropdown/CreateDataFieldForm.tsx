@@ -9,13 +9,13 @@ import {
   useRef,
   useState,
 } from 'react';
-import { getDefaultFieldType, getFieldRenderer } from '../../fields';
-import FieldRendererBase from '../../fields/renderers/FieldRendererBase';
 import {
   EDataFieldType,
   IProject,
   IProjectDataField,
 } from '../../libs/client/types';
+import { getDefaultFieldType, getFieldRenderer } from '../../libs/fields';
+import FieldRendererBase from '../../libs/fields/renderers/FieldRendererBase';
 import { useCreateProjectDataFieldMutation } from '../../libs/react-query';
 import { getAvailableTitle } from '../../utils';
 import DataFieldTypeSelect from '../DataFieldTypeSelect';

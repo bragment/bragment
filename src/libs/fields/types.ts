@@ -1,4 +1,4 @@
-import { ILocalMessage } from '../i18n/types';
+import { ILocalMessage } from '../../i18n/types';
 
 export enum EFieldCategory {
   Basic = 'BASIC',
