@@ -70,7 +70,7 @@ function CreateDataFieldDropdown(props: ICreateDataFieldButtonProps) {
             )}>
             {f('dataView.addField')}
           </h3>
-          <ScrollContainer autoHeight withShadow autoHeightMax={280}>
+          <ScrollContainer autoHeight withVerticalShadow autoHeightMax={280}>
             <div className="w-full px-6">
               <CreateDataFieldForm
                 ref={formRef}

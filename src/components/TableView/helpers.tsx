@@ -25,7 +25,11 @@ export function createFieldDataAccessor(field: IProjectDataField) {
   return (record: IProjectDataRecord) => record.data[field._id];
 }
 
-const sortingFn: SortingFn<IProjectDataRecord> = (rowA, rowB, columnId) => {
+export const sortingFn: SortingFn<IProjectDataRecord> = (
+  rowA,
+  rowB,
+  columnId
+) => {
   const a =
     rowA.getValue<IRecordFieldData | undefined>(columnId)?.value.toString() ||
     '';
@@ -39,7 +43,7 @@ const sortingFn: SortingFn<IProjectDataRecord> = (rowA, rowB, columnId) => {
   return a > b ? 1 : -1;
 };
 
-const filterFn: FilterFn<IProjectDataRecord> = (
+export const filterFn: FilterFn<IProjectDataRecord> = (
   row,
   columnId,
   filterValue = {}

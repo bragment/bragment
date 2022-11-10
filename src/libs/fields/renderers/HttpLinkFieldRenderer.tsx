@@ -36,7 +36,7 @@ export default class HttpLinkFieldRenderer extends FieldRendererBase {
         href={value}
         target="_blank"
         rel="noopener noreferrer">
-        {value}
+        {decodeURI(value)}
       </a>
     );
   }
@@ -49,6 +49,41 @@ export default class HttpLinkFieldRenderer extends FieldRendererBase {
       <LinkWrapper field={field} record={record}>
         {this.renderTableBodyCellByStringValue(
           this.getStringValue(field, record)
+        )}
+      </LinkWrapper>
+    );
+  }
+
+  public renderListItemCellByStringValue(value: string, main = false) {
+    return (
+      <div
+        className="flex items-center"
+        style={{ height: this.listItemCellHeight }}>
+        <a
+          className={classNames(
+            main ? 'text-lg font-bold' : 'text-base',
+            'link link-primary',
+            'text-ellipsis overflow-hidden whitespace-nowrap'
+          )}
+          href={value}
+          target="_blank"
+          rel="noopener noreferrer">
+          {decodeURI(value)}
+        </a>
+      </div>
+    );
+  }
+
+  public renderListItemCell(
+    field: IProjectDataField,
+    record: IProjectDataRecord,
+    main = false
+  ) {
+    return (
+      <LinkWrapper field={field} record={record}>
+        {this.renderListItemCellByStringValue(
+          this.getStringValue(field, record),
+          main
         )}
       </LinkWrapper>
     );

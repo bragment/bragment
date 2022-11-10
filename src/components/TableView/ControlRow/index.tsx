@@ -54,8 +54,8 @@ function ControlRow(props: IControlRowProps) {
   } = props;
 
   return (
-    <div className="flex flex-wrap items-center justify-between">
-      <div className="p-3 flex-none flex items-center justify-start gap-3">
+    <div className="px-3 pb-3 flex flex-wrap items-center justify-between">
+      <div className="mt-3 flex-none flex items-center justify-start gap-3">
         <CreateButton
           projectId={projectId}
           modelId={modelId}
@@ -89,7 +89,7 @@ function ControlRow(props: IControlRowProps) {
           onCreateDataFieldFinish={onCreateDataFieldFinish}
         />
       </div>
-      <div className="px-3 flex-auto flex items-center justify-end">
+      <div className="mt-3 flex-auto flex items-center justify-end">
         <SearchInput onChange={onSearchInputChange} />
       </div>
     </div>

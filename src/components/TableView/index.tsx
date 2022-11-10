@@ -6,24 +6,24 @@ import {
 } from '@tanstack/react-table';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import classNames from 'classnames';
-import { memo, useCallback, useLayoutEffect, useRef } from 'react';
+import { memo, useLayoutEffect, useMemo, useRef } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
-import { IProject } from '../../libs/client/types';
-import {
-  useUpdateProjectDataModelMutation,
-  useUpdateProjectDataViewMutation,
-} from '../../libs/react-query';
 import ScrollContainer from '../ScrollContainer';
 import BodyRow from './BodyRow';
 import ControlRow from './ControlRow';
 import HeadRow from './HeadRow';
-import { getColumnCanGlobalFilter, globalFilterFn } from './helpers';
+import {
+  createColumns,
+  getColumnCanGlobalFilter,
+  globalFilterFn,
+} from './helpers';
 import { useViewControlProps } from './hooks';
 import TailRow from './TailRow';
 import { IViewControlProps } from './types';
 import styles from './index.module.scss';
 
 function TableView(props: IViewControlProps) {
+  const scrollBarRef = useRef<Scrollbars>(null);
   const { project, model, view } = props;
   const { _id: projectId } = project;
   const { _id: modelId } = model;
@@ -38,15 +38,12 @@ function TableView(props: IViewControlProps) {
     sorters,
     visibleFieldIds,
 
-    columns,
     columnFilters,
     columnOrder,
     columnPinning,
     columnVisibility,
     globalFilter,
     sorting,
-    setColumnOrder,
-    setColumnVisibility,
 
     updateFilters,
     updateSorting,
@@ -55,55 +52,15 @@ function TableView(props: IViewControlProps) {
     handleSearchInputChange,
     handleSortingChange,
     handleVisibilityChange,
-  } = useViewControlProps(props);
 
-  const scrollBarRef = useRef<Scrollbars>(null);
-  const { mutateAsync: updateModelMutateAsync } =
-    useUpdateProjectDataModelMutation();
-  const { mutateAsync: updateViewMutateAsync } =
-    useUpdateProjectDataViewMutation();
+    handleCreateDataFieldFinish,
+    handleCreateDataRecordFinish,
+  } = useViewControlProps(props, scrollBarRef);
 
-  const handleCreateDataFieldFinish = useCallback(
-    (data: IProject) => {
-      const field = data.fields[0];
-      if (field && !model.mainField) {
-        updateModelMutateAsync({
-          projectId: data._id,
-          modelId: model._id,
-          mainField: field._id,
-        });
-      }
-      if (view.visibleFields?.length) {
-        const fieldIds = [...view.visibleFields, field._id];
-        updateViewMutateAsync({
-          projectId: data._id,
-          viewId: view._id,
-          visibleFields: fieldIds,
-        });
-      }
-      // NOTE: update the state optimistically, do it after modelFields update
-      requestAnimationFrame(() => {
-        setColumnOrder((order) => [...order, field._id]);
-        setColumnVisibility((visibility) => ({
-          ...visibility,
-          [field._id]: true,
-        }));
-        requestAnimationFrame(() => scrollBarRef.current?.scrollToRight());
-      });
-    },
-    [
-      setColumnOrder,
-      setColumnVisibility,
-      updateModelMutateAsync,
-      updateViewMutateAsync,
-      model,
-      view,
-    ]
+  const columns = useMemo(
+    () => createColumns(projectId, modelFields, mainFieldId),
+    [projectId, modelFields, mainFieldId]
   );
-
-  const handleCreateDataRecordFinish = useCallback(() => {
-    requestAnimationFrame(() => scrollBarRef.current?.scrollToBottom());
-  }, []);
 
   useLayoutEffect(() => {
     scrollBarRef.current?.scrollToTop();

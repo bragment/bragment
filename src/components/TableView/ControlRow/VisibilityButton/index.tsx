@@ -78,7 +78,16 @@ function VisibilityButton(props: IVisibilityButtonProps) {
 
   const updateVisibleFieldRecord = useCallback(
     (field: IProjectDataField, visible: boolean) => {
-      setVisibleFieldRecord((record) => ({ ...record, [field._id]: visible }));
+      setVisibleFieldRecord((record) => {
+        let total = 0;
+        for (const key in record) {
+          total += record[key] ? 1 : 0;
+        }
+        if (total <= 1 && visible === false) {
+          return record;
+        }
+        return { ...record, [field._id]: visible };
+      });
     },
     []
   );
@@ -175,7 +184,7 @@ function VisibilityButton(props: IVisibilityButtonProps) {
             <ScrollContainer
               ref={scrollBarsRef}
               autoHeight
-              withShadow
+              withVerticalShadow
               autoHeightMax={280}>
               <div className="px-2">{mainFieldItem}</div>
               <SortableList
@@ -193,7 +202,7 @@ function VisibilityButton(props: IVisibilityButtonProps) {
               <button
                 className={classNames(
                   'btn btn-sm btn-ghost',
-                  'w-full h-10 justify-start'
+                  'h-10 justify-start'
                 )}
                 onClick={handleAddField}>
                 <HiOutlinePlus className="text-base mr-2" />

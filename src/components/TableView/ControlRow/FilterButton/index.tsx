@@ -163,7 +163,7 @@ function FilterButton(props: IFilterButtonProps) {
           <ScrollContainer
             ref={scrollBarsRef}
             autoHeight
-            withShadow
+            withVerticalShadow
             autoHeightMax={280}>
             <ul className="px-2">{innerFilterList.map(renderItem)}</ul>
           </ScrollContainer>
@@ -172,7 +172,7 @@ function FilterButton(props: IFilterButtonProps) {
               <button
                 className={classNames(
                   'btn btn-sm btn-ghost',
-                  'w-full h-10 justify-start'
+                  'h-10 justify-start'
                 )}
                 onClick={handleAddFilter}>
                 <HiOutlinePlus className="text-base mr-2" />

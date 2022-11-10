@@ -6,22 +6,27 @@ import {
 } from '@tanstack/react-table';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import classNames from 'classnames';
-import { memo, useCallback, useLayoutEffect, useMemo, useRef } from 'react';
+import { memo, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
-import { IProject, IProjectDataField } from '../../libs/client/types';
-import {
-  useUpdateProjectDataModelMutation,
-  useUpdateProjectDataViewMutation,
-} from '../../libs/react-query';
+import { IProjectDataField } from '../../libs/client/types';
 import ScrollContainer from '../ScrollContainer';
 import ControlRow from '../TableView/ControlRow';
 import { getColumnCanGlobalFilter, globalFilterFn } from '../TableView/helpers';
 import { useViewControlProps } from '../TableView/hooks';
 import { IViewControlProps } from '../TableView/types';
+import { calculateListItemHeight, createColumns } from './helpers';
 import Item from './Item';
-import styles from './index.module.scss';
 
-function TableView(props: IViewControlProps) {
+function getVisibleFields(
+  visibleFieldIds: string[],
+  modelFields: IProjectDataField[]
+) {
+  const set = new Set(visibleFieldIds);
+  return modelFields.filter((el) => set.has(el._id));
+}
+
+function ListView(props: IViewControlProps) {
+  const scrollBarRef = useRef<Scrollbars>(null);
   const { project, model, view } = props;
   const { _id: projectId } = project;
   const { _id: modelId } = model;
@@ -36,15 +41,12 @@ function TableView(props: IViewControlProps) {
     sorters,
     visibleFieldIds,
 
-    columns,
     columnFilters,
     columnOrder,
     columnPinning,
     columnVisibility,
     globalFilter,
     sorting,
-    setColumnOrder,
-    setColumnVisibility,
 
     updateFilters,
     updateSorting,
@@ -53,58 +55,12 @@ function TableView(props: IViewControlProps) {
     handleSearchInputChange,
     handleSortingChange,
     handleVisibilityChange,
-  } = useViewControlProps(props);
+    handleCreateDataFieldFinish,
+  } = useViewControlProps(props, scrollBarRef);
 
-  const scrollBarRef = useRef<Scrollbars>(null);
-  const { mutateAsync: updateModelMutateAsync } =
-    useUpdateProjectDataModelMutation();
-  const { mutateAsync: updateViewMutateAsync } =
-    useUpdateProjectDataViewMutation();
-  const modelFieldMap = useMemo(
-    () =>
-      modelFields.reduce(
-        (prev, el) => prev.set(el._id, el),
-        new Map<string, IProjectDataField>()
-      ),
-    [modelFields]
-  );
-
-  const handleCreateDataFieldFinish = useCallback(
-    (data: IProject) => {
-      const field = data.fields[0];
-      if (field && !model.mainField) {
-        updateModelMutateAsync({
-          projectId: data._id,
-          modelId: model._id,
-          mainField: field._id,
-        });
-      }
-      if (view.visibleFields?.length) {
-        const fieldIds = [...view.visibleFields, field._id];
-        updateViewMutateAsync({
-          projectId: data._id,
-          viewId: view._id,
-          visibleFields: fieldIds,
-        });
-      }
-      // NOTE: update the state optimistically, do it after modelFields update
-      requestAnimationFrame(() => {
-        setColumnOrder((order) => [...order, field._id]);
-        setColumnVisibility((visibility) => ({
-          ...visibility,
-          [field._id]: true,
-        }));
-        requestAnimationFrame(() => scrollBarRef.current?.scrollToRight());
-      });
-    },
-    [
-      setColumnOrder,
-      setColumnVisibility,
-      updateModelMutateAsync,
-      updateViewMutateAsync,
-      model,
-      view,
-    ]
+  const columns = useMemo(
+    () => createColumns(projectId, modelFields, mainFieldId),
+    [projectId, modelFields, mainFieldId]
   );
 
   useLayoutEffect(() => {
@@ -134,21 +90,29 @@ function TableView(props: IViewControlProps) {
   });
   const rowModel = table.getRowModel();
 
-  // NOTE: virtual rows
-  const rowHeight = 96;
-  const rowVirtualizer = useVirtualizer({
+  // NOTE: virtual items
+  const itemHeightRef = useRef<number>(
+    24 + calculateListItemHeight(getVisibleFields(visibleFieldIds, modelFields))
+  );
+  const itemVirtualizer = useVirtualizer({
     count: rowModel.rows.length,
-    overscan: Math.ceil(document.body.clientHeight / rowHeight),
+    overscan: Math.ceil(document.body.clientHeight / itemHeightRef.current),
     getScrollElement: () => scrollBarRef.current?.container.firstElementChild,
-    estimateSize: () => rowHeight,
+    estimateSize: () => itemHeightRef.current,
   });
-  const virtualRows = rowVirtualizer.getVirtualItems();
-  const totalSize = rowVirtualizer.getTotalSize();
+  const virtualRows = itemVirtualizer.getVirtualItems();
+  const totalSize = itemVirtualizer.getTotalSize();
   const paddingTop = virtualRows.length > 0 ? virtualRows?.[0]?.start || 0 : 0;
   const paddingBottom =
     virtualRows.length > 0
       ? totalSize - (virtualRows?.[virtualRows.length - 1]?.end || 0)
       : 0;
+
+  useEffect(() => {
+    itemHeightRef.current =
+      24 +
+      calculateListItemHeight(getVisibleFields(visibleFieldIds, modelFields));
+  }, [visibleFieldIds, modelFields]);
 
   return (
     <div className="w-full h-full flex flex-col">
@@ -176,21 +140,16 @@ function TableView(props: IViewControlProps) {
         />
       </div>
       <div className="flex-auto">
-        <ScrollContainer
-          className={classNames(styles.wrapper)}
-          ref={scrollBarRef}>
+        <ScrollContainer ref={scrollBarRef} withVerticalShadow>
           {paddingTop > 0 && <div style={{ height: paddingTop }} />}
-          {rowVirtualizer.getVirtualItems().map((virtualItem) => {
+          {itemVirtualizer.getVirtualItems().map((virtualItem) => {
             const row = rowModel.rows[virtualItem.index];
-            const mainField = mainFieldId
-              ? modelFieldMap.get(mainFieldId)
-              : undefined;
             return (
               <Item
                 key={row.id}
                 index={virtualItem.index}
-                record={row.original}
-                mainField={mainField}
+                cells={row.getVisibleCells()}
+                className={classNames('border-base-300', 'px-6 py-3 border-b')}
               />
             );
           })}
@@ -200,4 +159,4 @@ function TableView(props: IViewControlProps) {
     </div>
   );
 }
-export default memo(TableView);
+export default memo(ListView);

@@ -13,7 +13,8 @@ import './index.scss';
 
 interface IScrollContainerProps extends ScrollbarProps {
   forceHide?: boolean;
-  withShadow?: boolean;
+  withVerticalShadow?: boolean;
+  withHorizontalShadow?: boolean;
   onScroll?: React.UIEventHandler<any>;
 }
 
@@ -25,7 +26,8 @@ function ScrollContainer(
     className,
     children,
     forceHide,
-    withShadow,
+    withVerticalShadow,
+    withHorizontalShadow,
     onScroll,
     ...otherProps
   } = props;
@@ -88,11 +90,11 @@ function ScrollContainer(
       )}
       ref={scrollBarRef}
       onScroll={handleScroll}>
-      {withShadow && <div className="top-shadow" />}
-      {withShadow && <div className="left-shadow" />}
+      {withVerticalShadow && <div className="top-shadow" />}
+      {withHorizontalShadow && <div className="left-shadow" />}
       {children}
-      {withShadow && <div className="right-shadow" />}
-      {withShadow && <div className="bottom-shadow" />}
+      {withHorizontalShadow && <div className="right-shadow" />}
+      {withVerticalShadow && <div className="bottom-shadow" />}
     </Scrollbars>
   );
 }

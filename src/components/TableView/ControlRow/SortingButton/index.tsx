@@ -162,7 +162,7 @@ function SortingButton(props: ISortingButtonProps) {
           <ScrollContainer
             ref={scrollBarsRef}
             autoHeight
-            withShadow
+            withVerticalShadow
             autoHeightMax={280}>
             <SortableList
               customDragHandle
@@ -180,7 +180,7 @@ function SortingButton(props: ISortingButtonProps) {
               <button
                 className={classNames(
                   'btn btn-sm btn-ghost',
-                  'w-full h-10 justify-start'
+                  'h-10 justify-start'
                 )}
                 onClick={handleAddSorter}>
                 <HiOutlinePlus className="text-base mr-2" />

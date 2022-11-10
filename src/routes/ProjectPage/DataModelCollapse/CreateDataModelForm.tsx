@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
-import { useRef, useState } from 'react';
+import { forwardRef, Ref, useImperativeHandle, useRef, useState } from 'react';
 import AnimateSpin from '../../../components/AnimateSpin';
 import { useDialogStore, useFormatMessage } from '../../../components/hooks';
 import PrimaryButton from '../../../components/PrimaryButton';
@@ -15,9 +15,17 @@ interface ICreateDataModelFormProps {
   onCancel?: () => void;
 }
 
-function CreateDataModelForm(props: ICreateDataModelFormProps) {
+export interface ICreateDataModelFormRef {
+  focus: () => void;
+}
+
+function CreateDataModelForm(
+  props: ICreateDataModelFormProps,
+  ref: Ref<ICreateDataModelFormRef>
+) {
   const { singleInput, projectId, onFinish, onCancel } = props;
   const f = useFormatMessage();
+  const inputRef = useRef<HTMLInputElement>(null);
   const composingRef = useRef(false);
   const { toastError } = useDialogStore();
   const [errorMessage, setErrorMessage] = useState<ILocalMessage | undefined>();
@@ -61,12 +69,20 @@ function CreateDataModelForm(props: ICreateDataModelFormProps) {
 
   const handleBlur = () => {
     if (!isLoading && singleInput && onCancel) {
-      onCancel();
+      setTimeout(() => {
+        if (!inputRef.current || inputRef.current !== document.activeElement) {
+          onCancel();
+        }
+      }, 20);
     }
   };
 
   const handleCompositionStart = () => (composingRef.current = true);
   const handleCompositionEnd = () => (composingRef.current = false);
+
+  useImperativeHandle(ref, () => ({
+    focus: () => inputRef.current?.focus(),
+  }));
 
   return (
     <form
@@ -82,6 +98,7 @@ function CreateDataModelForm(props: ICreateDataModelFormProps) {
         </label>
       )}
       <input
+        ref={inputRef}
         name="title"
         type="text"
         autoComplete="off"
@@ -117,4 +134,4 @@ function CreateDataModelForm(props: ICreateDataModelFormProps) {
   );
 }
 
-export default observer(CreateDataModelForm);
+export default observer(forwardRef(CreateDataModelForm));

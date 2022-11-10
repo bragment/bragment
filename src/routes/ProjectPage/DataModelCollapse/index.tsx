@@ -1,6 +1,12 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
-import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import {
   HiOutlineChevronDown,
   HiOutlineChevronUp,
@@ -11,7 +17,9 @@ import { useFormatMessage } from '../../../components/hooks';
 import { IProject, IProjectDataModel } from '../../../libs/client/types';
 import { getProjectDataModelPath, getProjectInstancePath } from '../../helpers';
 import { useNavigateToPage } from '../../hooks';
-import CreateDataModelForm from './CreateDataModelForm';
+import CreateDataModelForm, {
+  ICreateDataModelFormRef,
+} from './CreateDataModelForm';
 import DataModelMenu from './DataModelMenu';
 
 const TOGGLE_ID = 'DATA_MODEL_COLLAPSE_TOGGLE';
@@ -25,6 +33,7 @@ interface IDataModelCollapseProps {
 function DataModelCollapse(props: IDataModelCollapseProps) {
   const { projectId, selectedModelId, models = [] } = props;
   const f = useFormatMessage();
+  const formRef = useRef<ICreateDataModelFormRef>(null);
   const navigateTo = useNavigateToPage();
   const isProjectPath = useMatch(getProjectInstancePath(projectId));
   const [checked, setChecked] = useState(true);
@@ -36,8 +45,12 @@ function DataModelCollapse(props: IDataModelCollapseProps) {
   const handleButtonClick: React.MouseEventHandler = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    setChecked(true);
-    setCreating(true);
+    if (creating) {
+      formRef.current?.focus();
+    } else {
+      setChecked(true);
+      setCreating(true);
+    }
   };
   const handleFormCancel = useCallback(() => {
     setCreating(false);
@@ -113,6 +126,7 @@ function DataModelCollapse(props: IDataModelCollapseProps) {
         {creating && (
           <div className={classNames('mx-1 my-2 [&_input]:font-bold')}>
             <CreateDataModelForm
+              ref={formRef}
               singleInput
               projectId={projectId}
               onCancel={handleFormCancel}

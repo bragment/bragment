@@ -123,7 +123,7 @@ function CreateButton(props: ICreateButtonProps) {
             <ScrollContainer
               ref={scrollBarsRef}
               autoHeight
-              withShadow
+              withVerticalShadow
               autoHeightMax={280}>
               <ul className="px-2">{modelForms.map(renderItem)}</ul>
             </ScrollContainer>
@@ -131,7 +131,7 @@ function CreateButton(props: ICreateButtonProps) {
               <button
                 className={classNames(
                   'btn btn-sm btn-ghost',
-                  'w-full h-10 justify-start'
+                  'h-10 justify-start'
                 )}
                 onClick={handleCreateFormClick}>
                 <HiOutlinePlus className="text-base mr-2" />

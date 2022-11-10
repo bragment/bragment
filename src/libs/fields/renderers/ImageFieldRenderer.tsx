@@ -4,7 +4,6 @@ import {
   IProjectDataField,
   IProjectDataRecord,
 } from '../../client/types';
-import LinkWrapper from '../controls/LinkWrapper';
 import { EFieldCategory } from '../types';
 import FieldRendererBase from './FieldRendererBase';
 
@@ -17,15 +16,20 @@ export default class ImageFieldRenderer extends FieldRendererBase {
   public editable = false;
   public fullWidth = true;
   public inputType = 'url';
+  public listItemCellHeight = 96;
 
   public renderTableBodyCellByStringValue(value: string): JSX.Element {
     return (
-      <img
-        className="w-full h-full object-cover pointer-events-none"
-        loading="lazy"
-        src={value}
-        alt=""
-      />
+      <div className="w-full h-full p-1">
+        {value && (
+          <img
+            className="w-full h-full rounded object-cover object-center pointer-events-none"
+            loading="lazy"
+            src={value}
+            alt=""
+          />
+        )}
+      </div>
     );
   }
 
@@ -33,12 +37,36 @@ export default class ImageFieldRenderer extends FieldRendererBase {
     field: IProjectDataField,
     record: IProjectDataRecord
   ) {
+    return this.renderTableBodyCellByStringValue(
+      this.getStringValue(field, record)
+    );
+  }
+
+  public renderListItemCellByStringValue(value: string, _main?: boolean) {
     return (
-      <LinkWrapper field={field} record={record}>
-        {this.renderTableBodyCellByStringValue(
-          this.getStringValue(field, record)
+      <div
+        className="w-full p-1"
+        style={{ height: this.listItemCellHeight, maxWidth: 160 }}>
+        {value && (
+          <img
+            className="w-full h-full rounded object-cover object-left pointer-events-none"
+            loading="lazy"
+            src={value}
+            alt=""
+          />
         )}
-      </LinkWrapper>
+      </div>
+    );
+  }
+
+  public renderListItemCell(
+    field: IProjectDataField,
+    record: IProjectDataRecord,
+    main?: boolean
+  ) {
+    return this.renderListItemCellByStringValue(
+      this.getStringValue(field, record),
+      main
     );
   }
 }

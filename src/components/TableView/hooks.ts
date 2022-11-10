@@ -1,21 +1,28 @@
 import isEqual from 'lodash/isEqual';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { RefObject, useCallback, useEffect, useMemo, useState } from 'react';
+import Scrollbars from 'react-custom-scrollbars-2';
 import {
   EDataFilterConjunction,
   IDataFilter,
   IDataSorter,
+  IProject,
 } from '../../libs/client/types';
-import { useUpdateProjectDataViewMutation } from '../../libs/react-query';
+import {
+  useUpdateProjectDataModelMutation,
+  useUpdateProjectDataViewMutation,
+} from '../../libs/react-query';
 import { useNestedState } from '../hooks';
 import {
   convertToColumnFilters,
   convertToColumnSorting,
   convertToColumnVisibility,
-  createColumns,
 } from './helpers';
 import { IGlobalFilter, IViewControlProps } from './types';
 
-export function useViewControlProps(props: IViewControlProps) {
+export function useViewControlProps(
+  props: IViewControlProps,
+  scrollBarRef: RefObject<Scrollbars>
+) {
   const { project, model, view, fields, forms, records } = props;
   const { _id: projectId } = project;
   const { _id: modelId } = model;
@@ -61,6 +68,8 @@ export function useViewControlProps(props: IViewControlProps) {
   });
   const [sorting, setSorting] = useNestedState(convertToColumnSorting(sorters));
 
+  const { mutateAsync: updateModelMutateAsync } =
+    useUpdateProjectDataModelMutation();
   const { mutateAsync: updateViewMutateAsync } =
     useUpdateProjectDataViewMutation();
 
@@ -131,6 +140,49 @@ export function useViewControlProps(props: IViewControlProps) {
     [setColumnFilters]
   );
 
+  const handleCreateDataFieldFinish = useCallback(
+    (data: IProject) => {
+      const field = data.fields[0];
+      if (field && !model.mainField) {
+        updateModelMutateAsync({
+          projectId: data._id,
+          modelId: model._id,
+          mainField: field._id,
+        });
+      }
+      if (view.visibleFields?.length) {
+        const fieldIds = [...view.visibleFields, field._id];
+        updateViewMutateAsync({
+          projectId: data._id,
+          viewId: view._id,
+          visibleFields: fieldIds,
+        });
+      }
+      // NOTE: update the state optimistically, do it after modelFields update
+      requestAnimationFrame(() => {
+        setColumnOrder((order) => [...order, field._id]);
+        setColumnVisibility((visibility) => ({
+          ...visibility,
+          [field._id]: true,
+        }));
+        requestAnimationFrame(() => scrollBarRef.current?.scrollToRight());
+      });
+    },
+    [
+      setColumnOrder,
+      setColumnVisibility,
+      updateModelMutateAsync,
+      updateViewMutateAsync,
+      model,
+      view,
+      scrollBarRef,
+    ]
+  );
+
+  const handleCreateDataRecordFinish = useCallback(() => {
+    requestAnimationFrame(() => scrollBarRef.current?.scrollToBottom());
+  }, [scrollBarRef]);
+
   useEffect(() => {
     setColumnOrder(visibleFieldIds);
     setColumnVisibility(
@@ -149,11 +201,6 @@ export function useViewControlProps(props: IViewControlProps) {
     setSorting(convertToColumnSorting(sorters));
   }, [setSorting, sorters]);
 
-  const columns = useMemo(
-    () => createColumns(projectId, modelFields, mainFieldId),
-    [projectId, modelFields, mainFieldId]
-  );
-
   return {
     mainFieldId,
     modelFields,
@@ -163,15 +210,12 @@ export function useViewControlProps(props: IViewControlProps) {
     sorters,
     visibleFieldIds,
 
-    columns,
     columnFilters,
     columnPinning,
     columnVisibility,
     columnOrder,
     globalFilter,
     sorting,
-    setColumnOrder,
-    setColumnVisibility,
 
     updateFilters,
     updateSorting,
@@ -180,5 +224,8 @@ export function useViewControlProps(props: IViewControlProps) {
     handleSearchInputChange,
     handleSortingChange,
     handleVisibilityChange,
+
+    handleCreateDataFieldFinish,
+    handleCreateDataRecordFinish,
   };
 }

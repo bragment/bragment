@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { HiAnnotation } from 'react-icons/hi';
 import {
   EDataFieldType,
@@ -19,6 +20,7 @@ export default class FieldRendererBase {
   public inputType = 'text';
   public resolvable = false;
   public resolvablePaths: IResolvablePath[] = [];
+  public listItemCellHeight = 32;
 
   public getInputType(_field: IProjectDataField) {
     return this.inputType;
@@ -75,6 +77,35 @@ export default class FieldRendererBase {
         defaultValue={this.getStringValue(field, record)}
         {...props}
       />
+    );
+  }
+
+  public renderListItemCellByStringValue(value: string, main = false) {
+    return (
+      <div
+        className="flex items-center"
+        style={{ height: this.listItemCellHeight }}>
+        <div
+          className={classNames(
+            main
+              ? 'text-lg font-bold text-base-content'
+              : 'text-base text-base-content/80',
+            'text-ellipsis overflow-hidden whitespace-nowrap'
+          )}>
+          {value.slice(0, 256)}
+        </div>
+      </div>
+    );
+  }
+
+  public renderListItemCell(
+    field: IProjectDataField,
+    record: IProjectDataRecord,
+    main = false
+  ) {
+    return this.renderListItemCellByStringValue(
+      this.getStringValue(field, record),
+      main
     );
   }
 

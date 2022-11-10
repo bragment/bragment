@@ -41,7 +41,7 @@ export default class ResolverFieldRenderer extends FieldRendererBase {
     return undefined;
   }
 
-  public renderTableBodyCell(
+  public resolveRendererProps<T = any>(
     field: IProjectDataField,
     record: IProjectDataRecord
   ) {
@@ -59,19 +59,47 @@ export default class ResolverFieldRenderer extends FieldRendererBase {
       !relatedRenderer ||
       !renderer
     ) {
-      return <></>;
+      return null;
     }
     const relatedData = relatedRenderer.getData(relatedField, record);
-    const value = this.resolve(relatedData, field.subPath);
+    const value = this.resolve<T>(relatedData, field.subPath);
+    return {
+      value,
+      relatedField,
+      renderer,
+    };
+  }
 
-    if (typeof value === 'string') {
-      return (
-        <ResolverWrapper relatedField={relatedField} relatedRecord={record}>
-          {renderer.renderTableBodyCellByStringValue(value)}
-        </ResolverWrapper>
-      );
+  public renderTableBodyCell(
+    field: IProjectDataField,
+    record: IProjectDataRecord
+  ) {
+    const props = this.resolveRendererProps(field, record);
+    if (!props) {
+      return <></>;
     }
-    return <></>;
+    const { value, relatedField, renderer } = props;
+    return (
+      <ResolverWrapper relatedField={relatedField} relatedRecord={record}>
+        {renderer.renderTableBodyCellByStringValue(value || '')}
+      </ResolverWrapper>
+    );
+  }
+
+  public renderListItemCell(
+    field: IProjectDataField,
+    record: IProjectDataRecord
+  ) {
+    const props = this.resolveRendererProps(field, record);
+    if (!props) {
+      return <></>;
+    }
+    const { value, relatedField, renderer } = props;
+    return (
+      <ResolverWrapper relatedField={relatedField} relatedRecord={record}>
+        {renderer.renderListItemCellByStringValue(value || '')}
+      </ResolverWrapper>
+    );
   }
 
   public renderCreateFieldExtra(props: {
