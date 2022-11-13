@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import { memo } from 'react';
+import DataModelViewSkeleton from '../DataModelView/Skeleton';
 import DataViewSkeleton from '../DataView/Skeleton';
 
 function Skeleton() {
@@ -47,20 +48,7 @@ function Skeleton() {
         </div>
       </aside>
       <main className={classNames('bg-base-100', 'flex-auto')}>
-        <header className={classNames('navbar', 'px-6')}>
-          {Array(3)
-            .fill(0)
-            .map((_, i) => (
-              <div className="flex-none mr-6" key={i}>
-                <div
-                  className={classNames(
-                    'bg-base-content/60',
-                    'w-24 h-10 rounded animate-pulse'
-                  )}
-                />
-              </div>
-            ))}
-        </header>
+        <DataModelViewSkeleton />
         <DataViewSkeleton />
       </main>
     </div>

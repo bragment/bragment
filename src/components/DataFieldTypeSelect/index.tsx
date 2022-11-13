@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import Select, { OptGroup, Option } from 'rc-select';
 import { memo, useMemo } from 'react';
 import { ILocalMessage } from '../../i18n/types';
 import { EDataFieldType } from '../../libs/client/types';
@@ -9,6 +8,7 @@ import {
 } from '../../libs/fields';
 import type FieldRendererBase from '../../libs/fields/renderers/FieldRendererBase';
 import { useFormatMessage } from '../hooks';
+import Select, { OptGroup, Option } from '../Select';
 
 interface IDataFieldTypeSelectProps {
   className?: string;

@@ -8,8 +8,8 @@ import GithubForm from '../AuthPage/GithubForm';
 import SignInForm from '../AuthPage/SignInForm';
 import ErrorPage from '../ErrorPage';
 import ProjectPage from '../ProjectPage';
-import DataModelView from '../ProjectPage/DataModelView';
 import DataModelEmptyPrompt from '../ProjectPage/DataModelView/EmptyPrompt';
+import DataModelViewSuspense from '../ProjectPage/DataModelView/Suspense';
 import DataViewSuspense from '../ProjectPage/DataView/Suspense';
 import ProjectInstanceViewSuspense from '../ProjectPage/ProjectInstanceView/Suspense';
 import RootPage from '../RootPage';
@@ -77,7 +77,7 @@ function RootRouter() {
                       />
                       <Route
                         path={ERoutePathName.ModelId}
-                        element={<DataModelView />}>
+                        element={<DataModelViewSuspense />}>
                         <Route path={ERoutePathName.View}>
                           <Route
                             path={ERoutePathName.ViewId}

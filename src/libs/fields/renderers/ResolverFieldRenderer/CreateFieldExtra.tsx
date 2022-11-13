@@ -1,8 +1,8 @@
-import Select, { Option } from 'rc-select';
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import DataFieldSelect from '../../../../components/DataFieldSelect';
 import DataFieldTypeSelect from '../../../../components/DataFieldTypeSelect';
 import { useFormatMessage } from '../../../../components/hooks';
+import Select, { Option } from '../../../../components/Select';
 import { EDataFieldType, IProjectDataField } from '../../../client/types';
 import { EFieldCategory } from '../../types';
 import {

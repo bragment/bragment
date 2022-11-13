@@ -1,9 +1,9 @@
 import classNames from 'classnames';
-import Select, { Option } from 'rc-select';
 import { memo } from 'react';
 import { IProjectDataField } from '../../libs/client/types';
 import { getFieldIcon } from '../../libs/fields';
 import { useFormatMessage } from '../hooks';
+import Select, { Option } from '../Select';
 
 interface IDataFieldSelectProps {
   fields: IProjectDataField[];

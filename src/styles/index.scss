@@ -35,3 +35,7 @@ body {
     @include _svgMark(url(../assets/feature-mark.svg));
   }
 }
+
+.disabled-scroll {
+  overflow: hidden !important;
+}
