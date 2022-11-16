@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import type { RefObject } from 'react';
 import { HiAnnotation } from 'react-icons/hi';
 import {
   EDataFieldType,
@@ -7,7 +8,12 @@ import {
   IRecordFieldData,
 } from '../../client/types';
 import InputControl from '../controls/InputControl';
-import { EFieldCategory, IResolvablePath } from '../types';
+import {
+  EFieldCategory,
+  ICreateFieldExtraProps,
+  ICreateFieldExtraRef,
+  IResolvablePath,
+} from '../types';
 
 export default class FieldRendererBase {
   public category = EFieldCategory.Basic;
@@ -128,9 +134,10 @@ export default class FieldRendererBase {
     );
   }
 
-  public renderCreateFieldExtra(_props: {
-    existingFields?: IProjectDataField[];
-  }): JSX.Element | null {
+  public renderCreateFieldExtra(
+    _props: ICreateFieldExtraProps,
+    _ref: RefObject<ICreateFieldExtraRef>
+  ): JSX.Element | null {
     return null;
   }
 }

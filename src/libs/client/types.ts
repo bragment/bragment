@@ -79,9 +79,11 @@ export enum EDataFieldType {
   HttpLink = 'HTTP_LINK',
   Image = 'IMAGE',
   MultipleLineText = 'MULTIPLE_LINE_TEXT',
+  MultipleSelect = 'MULTIPLE_SELECT',
   Number = 'NUMBER',
   Resolver = 'RESOLVER',
   SingleLineText = 'SINGLE_LINE_TEXT',
+  SingleSelect = 'SINGLE_SELECT',
 }
 
 export enum EDataFilterOperator {
@@ -117,6 +119,12 @@ export enum EDataFormItemKey {
   label = 'label',
   defaultValue = 'defaultValue',
   required = 'required',
+}
+
+export interface IDataFieldOption {
+  _id: string;
+  title: string;
+  color: string;
 }
 
 export type IRecordFieldAnyData = any;
@@ -165,6 +173,7 @@ export interface IProjectDataField {
   asType?: EDataFieldType;
   relatedField?: string;
   subPath?: string;
+  options: IDataFieldOption[];
 }
 
 export interface IProjectDataForm {

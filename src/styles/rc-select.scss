@@ -20,6 +20,7 @@
   &-open {
     &::before {
       content: '';
+      cursor: default;
       position: fixed;
       top: 0;
       right: 0;

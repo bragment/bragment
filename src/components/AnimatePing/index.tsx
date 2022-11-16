@@ -1,8 +1,8 @@
 import classNames from 'classnames';
-import { memo } from 'react';
+import { memo, ReactNode } from 'react';
 
 export interface IAnimatePingProps {
-  children: React.ReactNode;
+  children: ReactNode;
   ping?: boolean;
 }
 

@@ -4,7 +4,7 @@ import {
   Droppable,
 } from '@hello-pangea/dnd';
 import classNames from 'classnames';
-import { memo } from 'react';
+import { memo, useCallback } from 'react';
 
 export interface IDragDropProps<T> {
   droppableId: string;
@@ -40,6 +40,50 @@ function DragDropList<T>(props: IDragDropListProps<T>) {
     renderItem,
   } = props;
 
+  const generateDraggableItem = useCallback(
+    (data: T, index: number) => (
+      <Draggable
+        key={getItemId(data)}
+        index={index}
+        draggableId={getItemId(data)}
+        isDragDisabled={getItemDraggable ? !getItemDraggable(data) : false}>
+        {(draggableProvided) => {
+          const { draggableProps, dragHandleProps, innerRef } =
+            draggableProvided;
+          const { style } = draggableProps;
+          const diff = offsetDiffRef.current || { x: 0, y: 0 };
+          let dragging = false;
+          if (style) {
+            dragging = 'position' in style;
+            if ('top' in style) {
+              style.top -= diff.y;
+            }
+            if ('left' in style) {
+              style.left -= diff.x;
+            }
+          }
+          return (
+            <li
+              className={classNames(dragging && 'dragging', itemClassName)}
+              ref={innerRef}
+              {...draggableProps}
+              {...(customDragHandle ? null : dragHandleProps)}>
+              {renderItem(data, index, dragHandleProps)}
+            </li>
+          );
+        }}
+      </Draggable>
+    ),
+    [
+      customDragHandle,
+      getItemDraggable,
+      getItemId,
+      itemClassName,
+      offsetDiffRef,
+      renderItem,
+    ]
+  );
+
   return (
     <Droppable droppableId={droppableId} isDropDisabled={!droppable}>
       {(droppableProvided) => (
@@ -47,44 +91,7 @@ function DragDropList<T>(props: IDragDropListProps<T>) {
           className={listClassName}
           ref={droppableProvided.innerRef}
           {...droppableProvided.droppableProps}>
-          {list.map((data, index) => (
-            <Draggable
-              key={getItemId(data)}
-              index={index}
-              draggableId={getItemId(data)}
-              isDragDisabled={
-                getItemDraggable ? !getItemDraggable(data) : false
-              }>
-              {(draggableProvided) => {
-                const { draggableProps, dragHandleProps, innerRef } =
-                  draggableProvided;
-                const { style } = draggableProps;
-                const diff = offsetDiffRef.current || { x: 0, y: 0 };
-                let dragging = false;
-                if (style) {
-                  dragging = 'position' in style;
-                  if ('top' in style) {
-                    style.top -= diff.y;
-                  }
-                  if ('left' in style) {
-                    style.left -= diff.x;
-                  }
-                }
-                return (
-                  <li
-                    className={classNames(
-                      dragging && 'dragging',
-                      itemClassName
-                    )}
-                    ref={innerRef}
-                    {...draggableProps}
-                    {...(customDragHandle ? null : dragHandleProps)}>
-                    {renderItem(data, index, dragHandleProps)}
-                  </li>
-                );
-              }}
-            </Draggable>
-          ))}
+          {list.map(generateDraggableItem)}
           {droppableProvided.placeholder}
         </ul>
       )}

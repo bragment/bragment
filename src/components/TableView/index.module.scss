@@ -30,6 +30,7 @@
   }
   &:hover,
   &:focus-within {
+    @apply bg-base-content/5;
     .content {
       &::before {
         content: '';

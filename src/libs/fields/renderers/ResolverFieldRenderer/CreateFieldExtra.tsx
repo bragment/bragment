@@ -3,17 +3,13 @@ import DataFieldSelect from '../../../../components/DataFieldSelect';
 import DataFieldTypeSelect from '../../../../components/DataFieldTypeSelect';
 import { useFormatMessage } from '../../../../components/hooks';
 import Select, { Option } from '../../../../components/Select';
-import { EDataFieldType, IProjectDataField } from '../../../client/types';
-import { EFieldCategory } from '../../types';
+import { EDataFieldType } from '../../../client/types';
+import { EFieldCategory, ICreateFieldExtraProps } from '../../types';
 import {
   checkIfFieldResolvable,
   getDefaultFieldType,
   getResolvablePaths,
 } from '../../utils';
-
-interface ICreateFieldExtraProps {
-  existingFields?: IProjectDataField[];
-}
 
 function CreateFieldExtra(props: ICreateFieldExtraProps) {
   const { existingFields } = props;
