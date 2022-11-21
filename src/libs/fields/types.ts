@@ -19,3 +19,11 @@ export interface ICreateFieldExtraProps {
 export interface ICreateFieldExtraRef {
   getExtraData: () => Partial<IProjectDataField>;
 }
+
+export interface IEditingTableBodyCellProps {
+  className?: string;
+  loading?: boolean;
+  bordered?: boolean;
+  onCancel?: () => void;
+  onChange?: (value: string) => void;
+}

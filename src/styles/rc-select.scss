@@ -1,8 +1,4 @@
 .rc-select {
-  @apply select border border-base-content/20;
-  @apply inline-block relative p-0;
-  @apply text-base font-normal;
-
   // ============== Selector ===============
   .rc-select-selection-placeholder {
     @apply text-gray-400 pointer-events-none;
@@ -32,6 +28,9 @@
 
   // ============== Single ==============
   &-single {
+    @apply select border border-base-content/20;
+    @apply inline-block relative p-0;
+    @apply text-base font-normal;
     .rc-select-selector {
       @apply w-full h-full flex relative;
       .rc-select-selection-search {
@@ -59,6 +58,25 @@
     }
   }
 
+  // -------------- Multiple ---------------
+  &-multiple {
+    .rc-select-selector {
+      @apply w-full flex flex-wrap relative;
+      .rc-select-selection-search {
+        &-input {
+          display: none;
+        }
+      }
+
+      .rc-select-selection-overflow {
+        @apply p-2 flex flex-wrap items-center w-full gap-2;
+        &-item {
+          @apply flex-none max-w-full;
+        }
+      }
+    }
+  }
+
   // ============== Dropdown ===============
   &-dropdown {
     @apply absolute z-50 overflow-hidden;
@@ -66,10 +84,6 @@
     @apply bg-base-300/60 backdrop-blur-xl;
     &-hidden {
       @apply hidden;
-    }
-
-    .rc-select-item-option-content {
-      @apply pr-4;
     }
   }
 
@@ -88,7 +102,7 @@
       }
 
       &-content {
-        @apply w-full;
+        @apply pr-4 w-full;
       }
 
       &-grouped {

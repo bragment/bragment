@@ -1,16 +1,12 @@
 import classNames from 'classnames';
 import { memo, useRef, useState } from 'react';
 import AnimateSpin from '../../../components/AnimateSpin';
+import { IEditingTableBodyCellProps } from '../types';
 
-interface ITextAreaControlProps {
+interface ITextAreaControlProps extends IEditingTableBodyCellProps {
   defaultValue: string;
   name?: string;
-  className?: string;
   autoFocus?: boolean;
-  loading?: boolean;
-  bordered?: boolean;
-  onCancel?: () => void;
-  onChange?: (value: string) => void;
 }
 
 const MAX_LINE = 5;

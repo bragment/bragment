@@ -48,7 +48,7 @@ function CreateFieldExtra(props: ICreateFieldExtraProps) {
 
   return (
     <div>
-      <div className="divider my-0" />
+      <div className="border-base-content/10 border-t border-b-0 mb-4" />
       <input type="hidden" name="relatedField" value={relatedField} />
       <input type="hidden" name="subPath" value={subPath} />
       <input type="hidden" name="asType" value={asType} />

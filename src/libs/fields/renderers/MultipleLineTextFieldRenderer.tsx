@@ -5,7 +5,7 @@ import {
   IProjectDataRecord,
 } from '../../client/types';
 import TextAreaControl from '../controls/TextAreaControl';
-import { EFieldCategory } from '../types';
+import { EFieldCategory, IEditingTableBodyCellProps } from '../types';
 import FieldRendererBase from './FieldRendererBase';
 
 export default class MultipleLineTextFieldRenderer extends FieldRendererBase {
@@ -20,13 +20,7 @@ export default class MultipleLineTextFieldRenderer extends FieldRendererBase {
   public renderEditingTableBodyCell(
     field: IProjectDataField,
     record: IProjectDataRecord,
-    props: {
-      className?: string;
-      loading?: boolean;
-      bordered?: boolean;
-      onCancel?: () => void;
-      onChange?: (value: string) => void;
-    }
+    props: IEditingTableBodyCellProps
   ) {
     return (
       <TextAreaControl

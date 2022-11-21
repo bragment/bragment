@@ -1,7 +1,8 @@
 import { DraggableProvidedDragHandleProps } from '@hello-pangea/dnd';
 import classNames from 'classnames';
-import { ChangeEventHandler, memo } from 'react';
+import { ChangeEventHandler, memo, useCallback } from 'react';
 import { HiTrash } from 'react-icons/hi';
+import ColorSelect from '../../../../../components/ColorSelect';
 import { useFormatMessage } from '../../../../../components/hooks';
 import DragHandle from '../../../../../components/SortableList/DragHandle';
 import { IDataFieldOption } from '../../../../client/types';
@@ -10,13 +11,21 @@ interface IItemProps {
   index: number;
   option: IDataFieldOption;
   dragHandleProps: DraggableProvidedDragHandleProps | null;
+  deletable?: boolean;
   onChange: (index: number, option: IDataFieldOption) => void;
   onDelete: (index: number) => void;
 }
 
 function Item(props: IItemProps) {
-  const { index, option, dragHandleProps, onChange, onDelete } = props;
-  const { title } = option;
+  const {
+    index,
+    option,
+    dragHandleProps,
+    deletable = true,
+    onChange,
+    onDelete,
+  } = props;
+  const { title, color } = option;
   const f = useFormatMessage();
   const handleDelete = () => {
     onDelete(index);
@@ -25,6 +34,12 @@ function Item(props: IItemProps) {
     const value = event.currentTarget.value.trim();
     onChange(index, { ...option, title: value });
   };
+  const handleColorChange = useCallback(
+    (value: string) => {
+      onChange(index, { ...option, color: value });
+    },
+    [onChange, option, index]
+  );
 
   return (
     <div className={classNames('rounded-lg')}>
@@ -36,7 +51,9 @@ function Item(props: IItemProps) {
           dragHandleProps={dragHandleProps}
           className={'h-8 px-1 mr-2 text-xl'}
         />
-        <div className="flex-none mr-2" />
+        <div className="flex-none mr-3">
+          <ColorSelect value={color} onChange={handleColorChange} />
+        </div>
         <div className="flex-auto mr-2">
           <input
             autoFocus
@@ -46,16 +63,18 @@ function Item(props: IItemProps) {
             onChange={handleInputChange}
           />
         </div>
-        <button
-          type="button"
-          aria-label={f('common.delete')}
-          className={classNames(
-            'btn btn-sm btn-ghost btn-square text-error',
-            'px-2 text-lg'
-          )}
-          onClick={handleDelete}>
-          <HiTrash />
-        </button>
+        {deletable && (
+          <button
+            type="button"
+            aria-label={f('common.delete')}
+            className={classNames(
+              'btn btn-sm btn-ghost',
+              'px-2 text-lg text-error'
+            )}
+            onClick={handleDelete}>
+            <HiTrash />
+          </button>
+        )}
       </div>
     </div>
   );

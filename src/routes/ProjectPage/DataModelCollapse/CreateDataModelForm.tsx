@@ -117,7 +117,7 @@ function CreateDataModelForm(
       />
       {singleInput && isLoading && (
         <AnimateSpin
-          className="absolute top-1 right-2 w-6 h-auto text-base text-base-content/50"
+          className="absolute top-2 right-2 w-6 h-auto text-base text-base-content/50"
           bgColorClassName="bg-base-100"
         />
       )}

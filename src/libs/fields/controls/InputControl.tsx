@@ -1,17 +1,13 @@
 import classNames from 'classnames';
 import { memo, useRef } from 'react';
 import AnimateSpin from '../../../components/AnimateSpin';
+import { IEditingTableBodyCellProps } from '../types';
 
-interface IInputControlProps {
+interface IInputControlProps extends IEditingTableBodyCellProps {
   type: string;
   defaultValue: string;
   name?: string;
-  className?: string;
   autoFocus?: boolean;
-  loading?: boolean;
-  bordered?: boolean;
-  onCancel?: () => void;
-  onChange?: (value: string) => void;
 }
 
 function InputControl(props: IInputControlProps) {

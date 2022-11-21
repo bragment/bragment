@@ -173,7 +173,7 @@ export interface IProjectDataField {
   asType?: EDataFieldType;
   relatedField?: string;
   subPath?: string;
-  options: IDataFieldOption[];
+  options?: IDataFieldOption[];
 }
 
 export interface IProjectDataForm {

@@ -12,6 +12,7 @@ interface IOptionListProps {
 
 function OptionList(props: IOptionListProps) {
   const { options, onChange } = props;
+  const deletable = options.length > 1;
 
   const getItemId = useCallback((option: IDataFieldOption) => {
     return option._id;
@@ -58,13 +59,14 @@ function OptionList(props: IOptionListProps) {
               index={index}
               option={option}
               dragHandleProps={dragHandleProps}
+              deletable={deletable}
               onChange={handleOptionChange}
               onDelete={handleOptionDelete}
             />
           </div>
         );
       },
-      [handleOptionChange, handleOptionDelete]
+      [handleOptionChange, handleOptionDelete, deletable]
     );
 
   return (

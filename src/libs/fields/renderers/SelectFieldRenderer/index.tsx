@@ -1,5 +1,5 @@
 import { RefObject } from 'react';
-import { BiCheckSquare } from 'react-icons/bi';
+import { HiTag } from 'react-icons/hi';
 import { EDataFieldType } from '../../../client/types';
 import {
   EFieldCategory,
@@ -13,7 +13,7 @@ export default class SelectFieldRenderer extends FieldRendererBase {
   public category = EFieldCategory.Basic;
   public name = 'dataField.multipleSelect';
   public type = EDataFieldType.MultipleSelect;
-  public Icon = BiCheckSquare;
+  public Icon = HiTag;
 
   public editable = true;
   public fullWidth = true;

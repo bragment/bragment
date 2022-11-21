@@ -13,6 +13,7 @@ import {
   useState,
 } from 'react';
 import { HiPlus } from 'react-icons/hi';
+import { getRandomColor } from '../../../../components/ColorSelect/helpers';
 import { useFormatMessage } from '../../../../components/hooks';
 import { getAvailableTitle } from '../../../../utils';
 import { IDataFieldOption } from '../../../client/types';
@@ -28,7 +29,7 @@ function CreateFieldExtra(
   const f = useFormatMessage();
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [options, setOptions] = useState<IDataFieldOption[]>([]);
-  const handleButtonClick = useMemo(
+  const handleAddButtonClick = useMemo(
     () =>
       debounce<MouseEventHandler<HTMLButtonElement>>((event) => {
         const { target } = event;
@@ -52,7 +53,7 @@ function CreateFieldExtra(
               f('dataField.option'),
               list?.map((el) => el.title)
             ),
-            color: '',
+            color: getRandomColor(),
           },
         ]);
       }, 60),
@@ -81,14 +82,14 @@ function CreateFieldExtra(
 
   return (
     <div>
-      <div className="divider my-0" />
+      <div className="border-base-content/10 border-t border-b-0 mb-4" />
       <OptionList options={options} onChange={handleChange} />
       {options.length < MAX_OPTION_COUNT && (
         <button
           ref={buttonRef}
           type="button"
-          className={classNames('btn btn-ghost btn-sm', 'mt-2 ml-[50px]')}
-          onClick={handleButtonClick}>
+          className={classNames('btn btn-ghost btn-sm', 'mt-2 ml-[0px]')}
+          onClick={handleAddButtonClick}>
           <HiPlus className="mr-2" />
           {f('dataField.addOption')}
         </button>

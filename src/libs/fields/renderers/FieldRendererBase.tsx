@@ -12,6 +12,7 @@ import {
   EFieldCategory,
   ICreateFieldExtraProps,
   ICreateFieldExtraRef,
+  IEditingTableBodyCellProps,
   IResolvablePath,
 } from '../types';
 
@@ -68,13 +69,7 @@ export default class FieldRendererBase {
   public renderEditingTableBodyCell(
     field: IProjectDataField,
     record: IProjectDataRecord,
-    props?: {
-      className?: string;
-      loading?: boolean;
-      bordered?: boolean;
-      onCancel?: () => void;
-      onChange?: (value: string) => void;
-    }
+    props: IEditingTableBodyCellProps
   ) {
     return (
       <InputControl

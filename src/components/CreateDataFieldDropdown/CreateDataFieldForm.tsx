@@ -136,8 +136,6 @@ function CreateDataFieldForm(
         onChange={handleFieldTypeChange}
       />
       {extra}
-      {/* NOTE: padding bottom */}
-      <div />
     </form>
   );
 }
