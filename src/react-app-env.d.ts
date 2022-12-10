@@ -5,3 +5,5 @@ declare interface IRCDropdownRef {
   setPopupVisible: (visible: boolean) => void;
   close: () => void;
 }
+
+declare type TypeOfClass<T, A = any[]> = { new (...args: A): T };

@@ -1,31 +1,13 @@
 import classNames from 'classnames';
 import { memo, useRef, useState } from 'react';
 import AnimateSpin from '../../../components/AnimateSpin';
-import { IEditingTableBodyCellProps } from '../types';
+import { IControlProps } from '../types';
 
-interface ITextAreaControlProps extends IEditingTableBodyCellProps {
+interface ITextAreaControlProps extends IControlProps {
   autoFocus?: boolean;
   defaultValue: string;
   name?: string;
-  minHeight?: number;
   singleLine?: boolean;
-}
-
-const MAX_LINE = 5;
-const LINE_HEIGHT = 24;
-const MIN_HEIGHT = 40;
-const MAX_HEIGHT = MIN_HEIGHT + LINE_HEIGHT * (MAX_LINE - 1);
-
-function calculateTextLine(text: string) {
-  return text.split('\n').length;
-}
-
-function calculateTextAreaHeight(text: string, minHeight = MIN_HEIGHT) {
-  const line = calculateTextLine(text);
-  return Math.max(
-    minHeight,
-    minHeight + LINE_HEIGHT * (Math.min(MAX_LINE, line) - 1)
-  );
 }
 
 function TextAreaControl(props: ITextAreaControlProps) {
@@ -35,37 +17,26 @@ function TextAreaControl(props: ITextAreaControlProps) {
     bordered,
     defaultValue,
     loading,
-    minHeight,
     name,
     singleLine,
     onCancel,
     onChange,
   } = props;
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const [height, setHeight] = useState(
-    calculateTextAreaHeight(defaultValue, minHeight)
-  );
+  const [value, setValue] = useState(defaultValue);
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setValue(e.target.value);
+  };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
-    const { key, target } = event;
+    const { key } = event;
     if (key === 'Escape') {
       inputRef.current?.blur();
-      return;
-    }
-    if (key === 'Backspace') {
-      if (target instanceof HTMLTextAreaElement) {
-        requestAnimationFrame(() =>
-          setHeight(calculateTextAreaHeight(target.value, minHeight))
-        );
-      }
       return;
     }
 
     if (key === 'Enter') {
       if (event.shiftKey && !singleLine) {
-        if (height < MAX_HEIGHT) {
-          setHeight((current) => current + LINE_HEIGHT);
-        }
         return;
       }
       if (onChange) {
@@ -79,18 +50,33 @@ function TextAreaControl(props: ITextAreaControlProps) {
   return (
     <div
       className={classNames(
-        'w-full',
-        loading && 'relative pointer-events-none'
+        'w-full relative',
+        loading && 'pointer-events-none'
       )}>
+      <div
+        className={classNames(
+          'inline-block max-w-full h-fit py-2',
+          'pointer-events-none invisible'
+        )}>
+        {value.split('\n').map((el, i) => (
+          <div
+            key={i}
+            className={classNames('whitespace-normal break-words', className)}>
+            {el
+              .replace(/ ( +)/g, (match) => ' '.padEnd(match.length, '.'))
+              .replace(/ $/, '.') || '.'}
+          </div>
+        ))}
+      </div>
       <textarea
         ref={inputRef}
         name={name}
-        style={{ height }}
         className={classNames(
           'textarea',
+          'absolute top-0 left-0 w-full h-full',
+          'min-h-0 block resize-none text-base bg-transparent',
           bordered === true && 'textarea-bordered',
           bordered === false && 'border-0 no-shadow',
-          'min-h-0 block resize-none text-base bg-transparent',
           className
         )}
         autoFocus={autoFocus}
@@ -98,10 +84,11 @@ function TextAreaControl(props: ITextAreaControlProps) {
         defaultValue={defaultValue}
         onBlur={onCancel}
         onKeyDown={handleKeyDown}
+        onChange={handleChange}
       />
       {loading && (
         <AnimateSpin
-          className="absolute top-[1px] bottom-[7px] right-3 w-4 h-auto text-base"
+          className="absolute top-0 bottom-0 right-1 w-4 h-auto text-base"
           bgColorClassName="bg-base-100"
         />
       )}

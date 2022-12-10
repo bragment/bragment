@@ -81,6 +81,7 @@ export enum EDataFieldType {
   MultipleLineText = 'MULTIPLE_LINE_TEXT',
   MultipleSelect = 'MULTIPLE_SELECT',
   Number = 'NUMBER',
+  Plain = 'PLAIN',
   Resolver = 'RESOLVER',
   SingleLineText = 'SINGLE_LINE_TEXT',
   SingleSelect = 'SINGLE_SELECT',
