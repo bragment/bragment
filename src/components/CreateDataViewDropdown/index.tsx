@@ -19,10 +19,18 @@ interface ICreateDataViewDropdownProps {
   children: React.ReactElement;
   existingViews?: IProjectDataView[];
   onFinish?: (project: IProject) => void;
+  onVisibleChange?: (visible: boolean) => void;
 }
 
 function CreateDataViewDropdown(props: ICreateDataViewDropdownProps) {
-  const { projectId, modelId, children, existingViews, onFinish } = props;
+  const {
+    projectId,
+    modelId,
+    children,
+    existingViews,
+    onFinish,
+    onVisibleChange,
+  } = props;
   const f = useFormatMessage();
   const { toastError } = useDialogStore();
   const dropdownRef = useRef<IRCDropdownRef>(null);
@@ -69,6 +77,7 @@ function CreateDataViewDropdown(props: ICreateDataViewDropdownProps) {
     <Dropdown
       ref={dropdownRef}
       trigger="click"
+      onVisibleChange={onVisibleChange}
       overlay={
         <ul
           className={classNames(

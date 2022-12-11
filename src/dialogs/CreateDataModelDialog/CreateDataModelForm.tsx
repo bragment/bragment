@@ -1,12 +1,12 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
 import { forwardRef, Ref, useImperativeHandle, useRef, useState } from 'react';
-import AnimateSpin from '../../../components/AnimateSpin';
-import { useDialogStore, useFormatMessage } from '../../../components/hooks';
-import PrimaryButton from '../../../components/PrimaryButton';
-import { ILocalMessage } from '../../../i18n/types';
-import { IProject } from '../../../libs/client/types';
-import { useCreateProjectDataModelMutation } from '../../../libs/react-query';
+import AnimateSpin from '../../components/AnimateSpin';
+import { useDialogStore, useFormatMessage } from '../../components/hooks';
+import PrimaryButton from '../../components/PrimaryButton';
+import { ILocalMessage } from '../../i18n/types';
+import { IProject } from '../../libs/client/types';
+import { useCreateProjectDataModelMutation } from '../../libs/react-query';
 
 interface ICreateDataModelFormProps {
   singleInput?: boolean;

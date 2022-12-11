@@ -7,7 +7,7 @@ import { useDialogStore, useFormatMessage } from '../../components/hooks';
 import { IProject } from '../../libs/client/types';
 import { getProjectDataModelPath } from '../../routes/helpers';
 import { useNavigateToPage } from '../../routes/hooks';
-import CreateDataModelForm from '../../routes/ProjectPage/DataModelCollapse/CreateDataModelForm';
+import CreateDataModelForm from './CreateDataModelForm';
 
 const DIALOG_ID = 'CREATE_DATA_MODEL_DIALOG';
 

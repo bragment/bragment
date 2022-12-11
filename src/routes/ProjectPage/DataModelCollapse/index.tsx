@@ -1,142 +1,104 @@
+import { Collapse, CollapseProps } from 'antd';
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { HiChevronRight, HiPlus } from 'react-icons/hi2';
+import CreateDataViewDropdown from '../../../components/CreateDataViewDropdown';
 import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react';
-import {
-  HiOutlineChevronDown,
-  HiOutlineChevronUp,
-  HiOutlinePlus,
-} from 'react-icons/hi';
-import { useMatch } from 'react-router-dom';
-import { useFormatMessage } from '../../../components/hooks';
-import { IProject, IProjectDataModel } from '../../../libs/client/types';
-import { getProjectDataModelPath, getProjectInstancePath } from '../../helpers';
+  IProject,
+  IProjectDataModel,
+  IProjectDataView,
+} from '../../../libs/client/types';
+import { disableScrollContainerByChildElement } from '../../../libs/utils';
+import { stopEventPropagation } from '../../../utils';
+import { getProjectDataViewPath } from '../../helpers';
 import { useNavigateToPage } from '../../hooks';
-import CreateDataModelForm, {
-  ICreateDataModelFormRef,
-} from './CreateDataModelForm';
-import DataModelMenu from './DataModelMenu';
+import DataViewMenu from './DataViewMenu';
+import styles from './index.module.scss';
 
-const TOGGLE_ID = 'DATA_MODEL_COLLAPSE_TOGGLE';
+const { Panel } = Collapse;
 
 interface IDataModelCollapseProps {
   projectId: string;
-  selectedModelId: string;
-  models?: IProjectDataModel[];
+  model: IProjectDataModel;
+  views?: IProjectDataView[];
 }
 
 function DataModelCollapse(props: IDataModelCollapseProps) {
-  const { projectId, selectedModelId, models = [] } = props;
-  const f = useFormatMessage();
-  const formRef = useRef<ICreateDataModelFormRef>(null);
+  const { projectId, model, views = [] } = props;
+  const modelId = model._id;
+  const noViews = !views.length;
+  const extraDivRef = useRef<HTMLDivElement>(null);
+  const [dropdownVisible, setDropdownVisible] = useState(false);
   const navigateTo = useNavigateToPage();
-  const isProjectPath = useMatch(getProjectInstancePath(projectId));
-  const [checked, setChecked] = useState(true);
-  const [creating, setCreating] = useState(false);
-
-  const handleCheckboxChange = () => {
-    setChecked((old) => !old);
-  };
-  const handleButtonClick: React.MouseEventHandler = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (creating) {
-      formRef.current?.focus();
-    } else {
-      setChecked(true);
-      setCreating(true);
-    }
-  };
-  const handleFormCancel = useCallback(() => {
-    setCreating(false);
-  }, []);
-  const handleFormFinish = useCallback(
+  const handleCreateViewFinish = useCallback(
     (data: IProject) => {
-      const model = data.models[0];
-      if (model) {
-        navigateTo(getProjectDataModelPath(projectId, model._id));
-      }
+      const view = data.views[0];
+      navigateTo(getProjectDataViewPath(projectId, view.model, view._id));
     },
-    [navigateTo, projectId]
+    [projectId, navigateTo]
   );
+  const handleDropdownVisibleChange = (visible: boolean) => {
+    setDropdownVisible(visible);
+  };
+
+  const renderExpandIcon: CollapseProps['expandIcon'] = ({ isActive }) => {
+    return (
+      <div
+        className={classNames(
+          '!text-lg',
+          isActive && 'rotate-90 transform-gpu'
+        )}>
+        <HiChevronRight />
+      </div>
+    );
+  };
 
   useEffect(() => {
-    if (isProjectPath && !selectedModelId && models?.length) {
-      navigateTo(getProjectDataModelPath(projectId, models[0]._id), {
-        replace: true,
-      });
+    if (dropdownVisible) {
+      return disableScrollContainerByChildElement(extraDivRef.current);
     }
-  }, [navigateTo, isProjectPath, projectId, selectedModelId, models]);
-
-  useLayoutEffect(() => {
-    setCreating(false);
-  }, [models, selectedModelId]);
+  }, [dropdownVisible]);
 
   return (
-    <div className="collapse">
-      <input
-        id={TOGGLE_ID}
-        type="checkbox"
-        className="peer min-h-fit"
-        checked={checked}
-        onChange={handleCheckboxChange}
-      />
-      <label
-        htmlFor={TOGGLE_ID}
-        className={classNames(
-          'collapse-title',
-          'h-8 min-h-fit p-0 pl-4 pr-12',
-          'text-base-content/40 peer-hover:text-base-content/70',
-          'flex items-center justify-between'
-        )}>
-        <div className="text-sm leading-8 font-medium">
-          {f('project.model')}
-        </div>
-        <div
-          className={classNames(
-            'text-lg flex items-center',
-            !models.length && 'invisible'
-          )}>
-          <label className="swap swap-rotate">
-            <input
-              type="checkbox"
-              checked={checked}
-              onChange={() => undefined}
-            />
-            <HiOutlineChevronUp className="swap-on" />
-            <HiOutlineChevronDown className="swap-off" />
-          </label>
-        </div>
-      </label>
-      <div className={classNames('collapse-content', 'p-0 pb-0')}>
-        <div
-          className={classNames(
-            'text-base-content/40 text-lg top-0 right-2',
-            'w-8 h-8 flex items-center justify-center',
-            'absolute z-10 cursor-pointer hover:text-base-content/70'
-          )}
-          onClick={handleButtonClick}>
-          <HiOutlinePlus aria-label={f('project.createModel')} />
-        </div>
-        {creating && (
-          <div className={classNames('mx-1 my-2 [&_input]:font-bold')}>
-            <CreateDataModelForm
-              ref={formRef}
-              singleInput
-              projectId={projectId}
-              onCancel={handleFormCancel}
-              onFinish={handleFormFinish}
-            />
+    <Collapse
+      className={styles.wrapper}
+      defaultActiveKey={[model._id]}
+      ghost
+      collapsible={noViews ? 'disabled' : undefined}
+      expandIcon={renderExpandIcon}>
+      <Panel
+        key={model._id}
+        showArrow={!noViews}
+        header={
+          <div
+            className={classNames(
+              '!text-base font-medium',
+              'text-ellipsis overflow-hidden whitespace-nowrap'
+            )}>
+            {model.title}
           </div>
-        )}
-        <DataModelMenu projectId={projectId} models={models} />
-      </div>
-    </div>
+        }
+        extra={
+          <div
+            ref={extraDivRef}
+            className={classNames(dropdownVisible && '!block')}
+            onClick={stopEventPropagation}>
+            <CreateDataViewDropdown
+              projectId={projectId}
+              modelId={modelId}
+              existingViews={views}
+              onFinish={handleCreateViewFinish}
+              onVisibleChange={handleDropdownVisibleChange}>
+              <button className="btn btn-ghost btn-square btn-sm">
+                <HiPlus className="text-lg" />
+              </button>
+            </CreateDataViewDropdown>
+          </div>
+        }>
+        <DataViewMenu projectId={projectId} views={views} />
+      </Panel>
+    </Collapse>
   );
 }
 

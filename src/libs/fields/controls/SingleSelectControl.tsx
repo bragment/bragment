@@ -12,6 +12,7 @@ import {
   useState,
 } from 'react';
 import { IDataFieldOption } from '../../client/types';
+import { disableScrollContainerByChildElement } from '../../utils';
 
 interface ISingleSelectControlProps {
   options?: IDataFieldOption[];
@@ -67,16 +68,7 @@ function SingleSelectControl(props: ISingleSelectControlProps) {
   }, [options, keyword]);
 
   useLayoutEffect(() => {
-    const wrapperDom = wrapperRef.current;
-    const scrollContainer =
-      wrapperDom instanceof HTMLElement
-        ? (wrapperDom.closest('.scroll-container') as HTMLElement)
-        : undefined;
-    const scrollDom = scrollContainer?.firstElementChild;
-    scrollDom?.classList.add('disabled-scroll');
-    return () => {
-      scrollDom?.classList.remove('disabled-scroll');
-    };
+    return disableScrollContainerByChildElement(wrapperRef.current);
   }, []);
 
   return (

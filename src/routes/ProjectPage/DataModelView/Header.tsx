@@ -15,7 +15,7 @@ import { getProjectDataModelPath, getProjectDataViewPath } from '../../helpers';
 import { useNavigateToPage } from '../../hooks';
 import { TOGGLE_ID } from '../ProjectInstanceView/types';
 
-function WorkspaceInstanceView() {
+function Header() {
   const f = useFormatMessage();
   const navigateTo = useNavigateToPage();
   const scrollBarRef = useRef<Scrollbars>(null);
@@ -161,4 +161,4 @@ function WorkspaceInstanceView() {
   );
 }
 
-export default observer(WorkspaceInstanceView);
+export default observer(Header);

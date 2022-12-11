@@ -4,6 +4,7 @@ import SelectBase, {
   SelectProps,
 } from 'rc-select';
 import { memo, useCallback, useRef } from 'react';
+import { setScrollContainerDisabledByChildElement } from '../../libs/utils';
 
 export const OptGroup = OptGroupBase;
 export const Option = OptionBase;
@@ -20,20 +21,7 @@ function Select(props: SelectProps) {
   const handleDropdownVisibleChange = useCallback((open: boolean) => {
     openRef.current = open;
     requestAnimationFrame(() => {
-      const dom = domRef.current;
-      const visible = openRef.current;
-      const scrollContainer =
-        dom instanceof HTMLElement
-          ? (dom.closest('.scroll-container') as HTMLDivElement)
-          : undefined;
-      const div = scrollContainer?.firstElementChild;
-      if (div instanceof HTMLDivElement) {
-        if (visible) {
-          div.classList.add('disabled-scroll');
-        } else {
-          div.classList.remove('disabled-scroll');
-        }
-      }
+      setScrollContainerDisabledByChildElement(domRef.current, openRef.current);
     });
   }, []);
 
