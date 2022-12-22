@@ -7,8 +7,8 @@ import {
   IProject,
   IProjectDataView,
 } from '../../libs/client/types';
+import { modelRenderer } from '../../libs/model-renderer';
 import { useCreateProjectDataViewMutation } from '../../libs/react-query';
-import { getAllViewRenderers } from '../../libs/views';
 import { getAvailableTitle } from '../../utils';
 import AnimateSpin from '../AnimateSpin';
 import { useDialogStore, useFormatMessage } from '../hooks';
@@ -37,7 +37,7 @@ function CreateDataViewDropdown(props: ICreateDataViewDropdownProps) {
   const viewTypeRef = useRef(EDataViewType.Table);
   const { isLoading, mutateAsync } = useCreateProjectDataViewMutation();
 
-  const viewRenderers = getAllViewRenderers();
+  const viewRendererClasses = modelRenderer.getAllViewRendererClasses();
 
   const handleClick: React.MouseEventHandler<HTMLUListElement> = async (
     event
@@ -85,9 +85,8 @@ function CreateDataViewDropdown(props: ICreateDataViewDropdownProps) {
             'w-52 p-2 border overflow-hidden rounded-box shadow'
           )}
           onClick={handleClick}>
-          {viewRenderers.map((renderer) => {
-            const { type, Icon } = renderer;
-            const title = f(renderer.getName() as ILocalMessage);
+          {viewRendererClasses.map(({ title, type, icon }) => {
+            const localTitle = f(title as ILocalMessage);
             return (
               <li key={type}>
                 <span
@@ -97,9 +96,9 @@ function CreateDataViewDropdown(props: ICreateDataViewDropdownProps) {
                     viewTypeRef.current === type && isLoading && 'active'
                   )}
                   data-type={type}
-                  data-title={title}>
-                  <Icon className="text-xl" />
-                  {title}
+                  data-title={localTitle}>
+                  <span className="text-xl">{icon}</span>
+                  {localTitle}
                   {viewTypeRef.current === type && isLoading && (
                     <AnimateSpin className="absolute w-4 h-4 right-4" />
                   )}

@@ -6,6 +6,10 @@ export default class BasicFieldRenderer extends AbstractFieldRenderer<
   null,
   IFieldProps
 > {
+  public static title = 'dataField.plain';
+  public static type = EDataFieldType.Plain;
+  public static icon = (<></>);
+
   public type = EDataFieldType.Plain;
   public editable = false;
   public filterable = false;

@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import { memo, useCallback } from 'react';
 import { NavLink } from 'react-router-dom';
 import { IProjectDataView } from '../../../libs/client/types';
+import { modelRenderer } from '../../../libs/model-renderer';
 import { getProjectDataViewPath } from '../../helpers';
 
 interface IDataViewMenuProps {
@@ -31,6 +32,9 @@ function DataViewMenu(props: IDataViewMenuProps) {
           <NavLink
             to={getProjectDataViewPath(projectId, view.model, view._id)}
             className={getActiveClassName}>
+            <span className="text-lg">
+              {modelRenderer.getViewRendererIconByType(view.type)}
+            </span>
             <span
               className={classNames(
                 'capitalize text-ellipsis overflow-hidden whitespace-nowrap',

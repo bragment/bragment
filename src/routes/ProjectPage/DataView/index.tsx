@@ -2,11 +2,11 @@ import { observer } from 'mobx-react';
 import { useEffect, useMemo, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { IProjectDataView } from '../../../libs/client/types';
+import TableViewRenderer from '../../../libs/model-renderer/TableViewRenderer';
 import {
   useProjectDataRecordListQuery,
   useProjectQuery,
 } from '../../../libs/react-query';
-import TableViewRenderer from '../../../libs/views/TableViewRenderer';
 import NoFieldPrompt from './NoFieldPrompt';
 
 function DataView() {
@@ -33,7 +33,10 @@ function DataView() {
   const renderer = useMemo(() => {
     if (!view) {
       rendererRef.current = null;
-    } else if (!rendererRef.current || rendererRef.current.type !== view.type) {
+    } else if (
+      !rendererRef.current ||
+      rendererRef.current.getType() !== view.type
+    ) {
       rendererRef.current = new TableViewRenderer();
       rendererRef.current.commonStore.updateViewData({
         view,

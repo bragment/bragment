@@ -5,14 +5,17 @@ import {
 } from '@tanstack/react-table';
 import isEqual from 'lodash/isEqual';
 import { makeAutoObservable } from 'mobx';
-import { convertToColumnSorting } from '../../components/TableView/helpers';
 import {
   IProjectDataField,
   IProjectDataModel,
   IProjectDataRecord,
   IProjectDataView,
 } from '../client/types';
-import { convertToFieldFilters, convertToFieldVisibility } from './helpers';
+import {
+  convertToFieldFilters,
+  convertToFieldSorting,
+  convertToFieldVisibility,
+} from './helpers';
 
 interface IUnobservableData {
   projectId: string;
@@ -121,7 +124,7 @@ export default class CommonStore {
     this.setFieldPinning({
       left: mainFieldId ? [mainFieldId] : undefined,
     });
-    this.setFieldSorting(convertToColumnSorting(sorters));
+    this.setFieldSorting(convertToFieldSorting(sorters));
     this.setFieldVisibility(
       convertToFieldVisibility(modelFieldIds, visibleFieldIds)
     );

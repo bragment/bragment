@@ -6,6 +6,10 @@ export default abstract class AbstractFieldRenderer<
   S = any,
   P extends IFieldProps = IFieldProps
 > {
+  public static title: string;
+  public static type: EDataFieldType;
+  public static icon: React.ReactNode;
+
   public abstract type: EDataFieldType;
   public abstract editable: boolean;
   public abstract filterable: boolean;

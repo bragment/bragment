@@ -1,12 +1,14 @@
 import { createColumnHelper } from '@tanstack/react-table';
+import { HiTableCells } from 'react-icons/hi2';
 import {
   EDataFieldType,
   EDataViewType,
   IProjectDataField,
   IProjectDataRecord,
 } from '../../client/types';
-import AbstractViewRenderer from '../AbstractViewRenderer';
-import AbstractFieldRenderer from '../AbstractViewRenderer/AbstractFieldRenderer';
+import AbstractViewRenderer, {
+  IFieldRendererClass,
+} from '../AbstractViewRenderer';
 import { filterFn, sortingFn } from '../helpers';
 import { IControlProps, IFieldProps, IViewProps } from '../types';
 import TableView from './components/TableView';
@@ -20,12 +22,12 @@ export default class TableViewRenderer extends AbstractViewRenderer<
   TableViewStore,
   ITableFieldProps
 > {
-  public static fieldRendererClassMap = new Map<
-    string,
-    TypeOfClass<AbstractFieldRenderer>
-  >();
+  public static title = 'dataView.table';
+  public static type = EDataViewType.Table;
+  public static icon = (<HiTableCells className="text-green-500" />);
 
-  public type = EDataViewType.Table;
+  public static fieldRendererClassMap = new Map<string, IFieldRendererClass>();
+
   public editable = true;
   public store = new TableViewStore();
   public render(props: IViewProps) {

@@ -9,8 +9,8 @@ import CreateDataViewDropdown from '../../../components/CreateDataViewDropdown';
 import { useFormatMessage, useUserStore } from '../../../components/hooks';
 import ScrollContainer from '../../../components/ScrollContainer';
 import { IProject, IProjectDataView } from '../../../libs/client/types';
+import { modelRenderer } from '../../../libs/model-renderer';
 import { useProjectQuery } from '../../../libs/react-query';
-import { getViewRenderer } from '../../../libs/views';
 import { getProjectDataModelPath, getProjectDataViewPath } from '../../helpers';
 import { useNavigateToPage } from '../../hooks';
 import { TOGGLE_ID } from '../ProjectInstanceView/types';
@@ -37,20 +37,20 @@ function Header() {
         isActive && 'active pointer-events-none'
       );
     return _views?.map((view) => {
-      const Icon = getViewRenderer(view.type)?.Icon;
+      const icon = modelRenderer.getViewRendererIconByType(view.type);
       return (
         <NavLink
           key={view._id}
           to={getProjectDataViewPath(projectId, modelId, view._id)}
           className={getActiveClassName}>
-          {Icon && (
-            <Icon
-              className={classNames(
-                'text-xl mr-2',
-                'group-[&.active]:text-sky-500'
-              )}
-            />
-          )}
+          <span
+            className={classNames(
+              'text-xl mr-2',
+              'group-[&.active]:text-sky-500'
+            )}>
+            {icon}
+          </span>
+
           <span
             className={classNames(
               'capitalize text-ellipsis overflow-hidden whitespace-nowrap',
