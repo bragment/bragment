@@ -38,9 +38,12 @@ function ProjectInstanceView() {
       pathname === getProjectInstancePath(projectId)) &&
     models?.length
   ) {
-    const model = models[models.length - 1];
+    const firstModel = models[0];
     return (
-      <Navigate to={getProjectDataModelPath(projectId, model._id)} replace />
+      <Navigate
+        to={getProjectDataModelPath(projectId, firstModel._id)}
+        replace
+      />
     );
   }
 

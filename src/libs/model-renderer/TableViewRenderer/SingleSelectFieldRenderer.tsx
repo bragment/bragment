@@ -1,21 +1,18 @@
 import classNames from 'classnames';
 import { Option } from 'rc-select';
 import { EDataFieldType, IProjectDataField } from '../../client/types';
-import {
-  generateForegroundColorHexFrom,
-  generateOpacityColorHexFrom,
-} from '../../color';
+import { generateForegroundColorHexFrom } from '../../color';
 import AbstractViewRenderer from '../AbstractViewRenderer';
 import AbstractFieldRenderer from '../AbstractViewRenderer/AbstractFieldRenderer';
 import SelectField from './components/SelectField';
 import { ICurrentFieldProps, ICurrentViewStore } from './types';
 
-export default class MultipleSelectFieldRenderer extends AbstractFieldRenderer<
+export default class SingleSelectFieldRenderer extends AbstractFieldRenderer<
   ICurrentViewStore,
   ICurrentFieldProps
 > {
-  public static type = EDataFieldType.MultipleSelect;
-  public type = EDataFieldType.MultipleSelect;
+  public static type = EDataFieldType.SingleSelect;
+  public type = EDataFieldType.SingleSelect;
   public filterable = true;
   public editable = true;
   public sortable = true;
@@ -35,13 +32,12 @@ export default class MultipleSelectFieldRenderer extends AbstractFieldRenderer<
             className="flex items-center pl-2 pr-3">
             <div
               className={classNames(
-                'rounded px-2 border',
+                'rounded px-2',
                 'overflow-hidden text-ellipsis whitespace-nowrap'
               )}
               style={{
-                borderColor: el.color,
-                backgroundColor: generateOpacityColorHexFrom(el.color),
-                color: generateForegroundColorHexFrom(el.color, 0.9),
+                backgroundColor: el.color,
+                color: generateForegroundColorHexFrom(el.color),
               }}>
               {el.title}
             </div>
@@ -52,6 +48,6 @@ export default class MultipleSelectFieldRenderer extends AbstractFieldRenderer<
   }
 
   public render(props: ICurrentFieldProps) {
-    return <SelectField {...props} renderer={this} />;
+    return <SelectField {...props} singleValue renderer={this} />;
   }
 }

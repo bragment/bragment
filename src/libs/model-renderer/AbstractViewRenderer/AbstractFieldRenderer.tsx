@@ -17,6 +17,7 @@ export default abstract class AbstractFieldRenderer<
   public abstract render(props: P): React.ReactNode;
 
   public field: IProjectDataField;
+  public options: React.ReactNode;
   public viewRenderer: AbstractViewRenderer<S, P>;
   public constructor(
     field: IProjectDataField,

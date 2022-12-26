@@ -53,6 +53,7 @@ function BodyCell(props: ICellProps) {
     if (!activeOrEditing) {
       setActiveCell(recordId, fieldId, true);
     } else if (active && fieldRenderer?.editable) {
+      setActiveCell(recordId, fieldId, false);
       setEditingCell(recordId, fieldId, true);
     }
   };

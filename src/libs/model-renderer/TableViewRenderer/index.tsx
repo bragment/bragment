@@ -1,7 +1,6 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import { HiTableCells } from 'react-icons/hi2';
 import {
-  EDataFieldType,
   EDataViewType,
   IProjectDataField,
   IProjectDataRecord,
@@ -12,8 +11,10 @@ import AbstractViewRenderer, {
 import { filterFn, sortingFn } from '../helpers';
 import { IControlProps, IFieldProps, IViewProps } from '../types';
 import TableView from './components/TableView';
+import MultipleLineTextFieldRenderer from './MultipleLineTextFieldRenderer';
 import MultipleSelectFieldRenderer from './MultipleSelectFieldRenderer';
 import SingleLineTextFieldRenderer from './SingleLineTextFieldRenderer';
+import SingleSelectFieldRenderer from './SingleSelectFieldRenderer';
 import TableViewStore from './TableViewStore';
 
 export interface ITableFieldProps extends IFieldProps, IControlProps {}
@@ -54,11 +55,21 @@ export default class TableViewRenderer extends AbstractViewRenderer<
 }
 
 TableViewRenderer.registerFieldRendererClass(
-  EDataFieldType.SingleLineText,
+  SingleLineTextFieldRenderer.type,
   SingleLineTextFieldRenderer
 );
 
 TableViewRenderer.registerFieldRendererClass(
-  EDataFieldType.MultipleLineText,
+  MultipleLineTextFieldRenderer.type,
+  MultipleLineTextFieldRenderer
+);
+
+TableViewRenderer.registerFieldRendererClass(
+  SingleSelectFieldRenderer.type,
+  SingleSelectFieldRenderer
+);
+
+TableViewRenderer.registerFieldRendererClass(
+  MultipleSelectFieldRenderer.type,
   MultipleSelectFieldRenderer
 );

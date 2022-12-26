@@ -19,8 +19,12 @@ function DataFieldSelect(props: IDataFieldSelectProps) {
 
   return (
     <Select
-      className={classNames(className, size === 'sm' && 'select-sm')}
-      dropdownClassName="py-2"
+      className={classNames(
+        'select select-bordered',
+        size === 'sm' && 'select-sm',
+        className
+      )}
+      dropdownClassName="[&>div]:py-2"
       showArrow={false}
       dropdownMatchSelectWidth={240}
       placeholder={<div className="w-full">{f('project.fieldType')}</div>}

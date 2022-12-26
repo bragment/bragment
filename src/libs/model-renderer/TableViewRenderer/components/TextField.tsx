@@ -1,16 +1,16 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
 import Highlighter from 'react-highlight-words';
+import AbstractFieldRenderer from '../../AbstractViewRenderer/AbstractFieldRenderer';
 import TextAreaControl from '../../controls/TextAeraControl';
-import type SingleLineTextFieldRenderer from '../SingleLineTextFieldRenderer';
 import { ICurrentFieldProps } from '../types';
 
-interface ISingleLineTextFieldProps extends ICurrentFieldProps {
+interface ITextFieldProps extends ICurrentFieldProps {
   singleLine?: boolean;
-  renderer: SingleLineTextFieldRenderer;
+  renderer: AbstractFieldRenderer;
 }
 
-function TextField(props: ISingleLineTextFieldProps) {
+function TextField(props: ITextFieldProps) {
   const {
     data,
     renderer,

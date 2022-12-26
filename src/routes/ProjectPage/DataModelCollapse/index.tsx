@@ -38,11 +38,13 @@ function DataModelCollapse(props: IDataModelCollapseProps) {
     },
     [projectId, navigateTo]
   );
-  const handleDropdownVisibleChange = (visible: boolean) => {
+  const handleDropdownVisibleChange = useCallback((visible: boolean) => {
     setDropdownVisible(visible);
-  };
+  }, []);
 
-  const renderExpandIcon: CollapseProps['expandIcon'] = ({ isActive }) => {
+  const renderExpandIcon = useCallback<
+    Exclude<CollapseProps['expandIcon'], undefined>
+  >(({ isActive }) => {
     return (
       <div
         className={classNames(
@@ -52,7 +54,7 @@ function DataModelCollapse(props: IDataModelCollapseProps) {
         <HiChevronRight />
       </div>
     );
-  };
+  }, []);
 
   useEffect(() => {
     if (dropdownVisible) {

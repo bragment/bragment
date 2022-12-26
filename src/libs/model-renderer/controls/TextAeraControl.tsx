@@ -88,7 +88,7 @@ function TextAreaControl(props: ITextAreaControlProps) {
       />
       {loading && (
         <AnimateSpin
-          className="absolute top-0 bottom-0 right-1 w-4 h-auto text-base"
+          className="absolute top-0 bottom-0 right-2 w-4 h-auto text-base"
           bgColorClassName="bg-base-100"
         />
       )}
