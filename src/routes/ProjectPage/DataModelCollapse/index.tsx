@@ -1,6 +1,6 @@
-import { Collapse, CollapseProps } from 'antd';
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
+import Collapse from 'rc-collapse';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { HiChevronRight, HiPlus } from 'react-icons/hi2';
 import CreateDataViewDropdown from '../../../components/CreateDataViewDropdown';
@@ -42,14 +42,12 @@ function DataModelCollapse(props: IDataModelCollapseProps) {
     setDropdownVisible(visible);
   }, []);
 
-  const renderExpandIcon = useCallback<
-    Exclude<CollapseProps['expandIcon'], undefined>
-  >(({ isActive }) => {
+  const renderExpandIcon = useCallback((iconProps: any) => {
     return (
       <div
         className={classNames(
           '!text-lg',
-          isActive && 'rotate-90 transform-gpu'
+          iconProps.isActive && 'rotate-90 transform-gpu'
         )}>
         <HiChevronRight />
       </div>
@@ -66,7 +64,6 @@ function DataModelCollapse(props: IDataModelCollapseProps) {
     <Collapse
       className={styles.wrapper}
       defaultActiveKey={[model._id]}
-      ghost
       collapsible={noViews ? 'disabled' : undefined}
       expandIcon={renderExpandIcon}>
       <Panel

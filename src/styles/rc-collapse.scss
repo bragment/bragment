@@ -1,0 +1,50 @@
+.rc-collapse-motion {
+  transition: height 0.3s, opacity 0.3s;
+}
+.rc-collapse-content-hidden {
+  display: none;
+}
+
+.rc-collapse {
+  font-size: 14px;
+
+  > .rc-collapse-item {
+    > .rc-collapse-header {
+      display: flex;
+      align-items: center;
+      line-height: 22px;
+      cursor: pointer;
+      > .rc-collapse-expand-icon {
+        height: 22px;
+        display: flex;
+        align-items: center;
+        padding-inline-end: 12px;
+      }
+    }
+    > .rc-collapse-content {
+      overflow: hidden;
+      line-height: 22px;
+    }
+    > .rc-collapse-item-content {
+      > .rc-collapse-item-content-box {
+        padding-block: 12px;
+      }
+    }
+
+    .rc-collapse-header-collapsible-only {
+      cursor: default;
+      .rc-collapse-header-text {
+        cursor: pointer;
+      }
+      .rc-collapse-expand-icon {
+        cursor: pointer;
+      }
+    }
+    .rc-collapse-icon-collapsible-only {
+      cursor: default;
+      .rc-collapse-expand-icon {
+        cursor: pointer;
+      }
+    }
+  }
+}

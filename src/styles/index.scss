@@ -1,5 +1,4 @@
 // NOTE: import tailwindcss
-@import 'antd/dist/reset.css';
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
@@ -7,6 +6,7 @@
 // NOTE: import custom
 @import './mixins.scss';
 @import './daisy-ui.scss';
+@import './rc-collapse.scss';
 @import './rc-dropdown.scss';
 @import './rc-select.scss';
 
