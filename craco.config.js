@@ -1,3 +1,4 @@
+const path = require('path');
 const { DefinePlugin } = require('webpack');
 const packageData = require('./package.json');
 require('dotenv').config();
@@ -21,7 +22,12 @@ const environmentVariablesWebpackPlugin = new DefinePlugin({
   ),
 });
 
-const webpackConfig = { plugins: [environmentVariablesWebpackPlugin] };
+const webpackConfig = {
+  alias: {
+    '@': path.resolve(__dirname, 'src/'),
+  },
+  plugins: [environmentVariablesWebpackPlugin],
+};
 const pluginList = [];
 
 module.exports = {

@@ -4,9 +4,11 @@
     "autorun",
     "bragment",
     "browserslist",
+    "clsx",
     "commitlint",
     "craco",
     "daisyui",
+    "lucide",
     "passcode",
     "tailwindcss"
   ],

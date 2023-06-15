@@ -1,12 +1,12 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
+import {
+  AlertCircleIcon,
+  CheckCircle2Icon,
+  InfoIcon,
+  XCircleIcon,
+} from 'lucide-react';
 import { observer } from 'mobx-react';
 import { useMemo } from 'react';
-import {
-  HiOutlineCheckCircle,
-  HiOutlineExclamationCircle,
-  HiOutlineInformationCircle,
-  HiOutlineXCircle,
-} from 'react-icons/hi';
 import { useDialogStore } from '../../components/hooks';
 import { EToastType } from '../../stores/types';
 
@@ -15,10 +15,10 @@ function GlobalToast() {
 
   const toastIconRecord = useMemo(
     () => ({
-      [EToastType.Error]: <HiOutlineXCircle />,
-      [EToastType.Info]: <HiOutlineInformationCircle className="text-info" />,
-      [EToastType.Success]: <HiOutlineCheckCircle />,
-      [EToastType.Warning]: <HiOutlineExclamationCircle />,
+      [EToastType.Error]: XCircleIcon,
+      [EToastType.Info]: InfoIcon,
+      [EToastType.Success]: CheckCircle2Icon,
+      [EToastType.Warning]: AlertCircleIcon,
     }),
     []
   );
@@ -26,7 +26,7 @@ function GlobalToast() {
   const toastClassNameRecord = useMemo(
     () => ({
       [EToastType.Error]: 'alert-error',
-      [EToastType.Info]: 'border border-base-300',
+      [EToastType.Info]: '[&>svg]:text-info',
       [EToastType.Success]: 'alert-success',
       [EToastType.Warning]: 'alert-warning',
     }),
@@ -34,21 +34,22 @@ function GlobalToast() {
   );
 
   return (
-    <div className={classNames('toast toast-top toast-center', 'z-50')}>
-      {toastList.map(({ content, key, type }) => (
-        <div
-          className={classNames(
-            'alert shadow-lg',
-            'w-auto',
-            toastClassNameRecord[type]
-          )}
-          key={key}>
-          <div>
-            <div className="text-2xl">{toastIconRecord[type]}</div>
-            <div className="max-w-xs whitespace-pre">{content}</div>
+    <div className={clsx('toast toast-top toast-center', 'z-50')}>
+      {toastList.map(({ content, key, type }) => {
+        const Icon = toastIconRecord[type];
+        return (
+          <div
+            className={clsx(
+              'alert shadow-lg',
+              'w-fit mx-auto',
+              toastClassNameRecord[type]
+            )}
+            key={key}>
+            <Icon className="text-2xl" />
+            <span>{content}</span>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

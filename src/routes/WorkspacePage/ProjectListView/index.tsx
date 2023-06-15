@@ -1,6 +1,6 @@
+import { FolderIcon } from 'lucide-react';
 import { observer } from 'mobx-react';
 import { useCallback } from 'react';
-import { HiOutlineFolder } from 'react-icons/hi';
 import { NavLink, useParams } from 'react-router-dom';
 import { useFormatMessage, useUserStore } from '../../../components/hooks';
 import ProjectItem from '../../../components/ProjectItem';
@@ -46,7 +46,7 @@ function ProjectListView() {
   return (
     <ProjectList
       title={f('workspace.allProject')}
-      icon={<HiOutlineFolder className="text-purple-600 text-xl" />}
+      icon={<FolderIcon className="text-primary text-2xl" />}
       projects={projects}
       renderProject={renderProject}
     />

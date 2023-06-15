@@ -1,6 +1,8 @@
 import { observer } from 'mobx-react';
+import { useEffect } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { useUserStore } from '../../components/hooks';
+import { useHandleServerApiError, useUserStore } from '../../components/hooks';
+import { useMyProfileQuery } from '../../libs/react-query';
 import { setTheRoutePathBeforeSignIn } from '../AuthPage/helpers';
 import { ERoutePath } from '../types';
 
@@ -10,8 +12,22 @@ interface IAuthGuardProps {
 
 function AuthGuard(props: IAuthGuardProps) {
   const { children } = props;
-  const { signedIn } = useUserStore();
+  const { setMe, signedIn } = useUserStore();
+  const { data, error } = useMyProfileQuery(signedIn);
   const location = useLocation();
+  const handleServerApiError = useHandleServerApiError();
+
+  useEffect(() => {
+    if (error) {
+      handleServerApiError(error);
+    }
+  }, [error, handleServerApiError]);
+
+  useEffect(() => {
+    if (data) {
+      setMe(data.user);
+    }
+  }, [data, setMe]);
 
   if (!signedIn) {
     setTheRoutePathBeforeSignIn(
