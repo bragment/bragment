@@ -4,11 +4,6 @@ body {
   input,
   textarea {
     outline: none !important;
-  }
-  .btn,
-  button,
-  input,
-  textarea {
     &:not(.no-shadow) {
       &.focus,
       &:focus {
@@ -32,9 +27,6 @@ body {
   &:active:hover,
   &:active:focus {
     animation: none;
-  }
-  &:active:hover,
-  &:active:focus {
     transform: scale(var(--btn-focus-scale, 0.95));
   }
 }

@@ -1,4 +1,4 @@
-const themes = require('daisyui/src/colors/themes');
+const themes = require('daisyui/src/theming/themes');
 const plugin = require('tailwindcss/plugin');
 
 /** @type {import('tailwindcss').Config} */
