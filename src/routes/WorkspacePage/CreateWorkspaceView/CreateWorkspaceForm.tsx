@@ -1,10 +1,10 @@
 import classNames from 'classnames';
 import { memo, useState } from 'react';
-import { useFormatMessage } from '../../../components/hooks';
-import PrimaryButton from '../../../components/PrimaryButton';
-import { ILocalMessage } from '../../../i18n/types';
-import { IWorkspace } from '../../../libs/client/types';
-import { useCreateWorkspaceMutation } from '../../../libs/react-query';
+import { useFormatMessage } from '@/components/hooks';
+import PrimaryButton from '@/components/PrimaryButton';
+import { ILocalMessage } from '@/i18n/types';
+import { IWorkspace } from '@/libs/client/types';
+import { useCreateWorkspaceMutation } from '@/libs/react-query';
 
 interface ICreateWorkspaceFormProps {
   onFinish?: (workspace: IWorkspace) => void;

@@ -1,22 +1,22 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
+import { GithubIcon } from 'lucide-react';
 import { observer } from 'mobx-react';
 import { useEffect, useRef, useState } from 'react';
-import { AiFillGithub } from 'react-icons/ai';
+import ThirdPartyButton from './ThirdPartyButton';
 import {
   useDialogStore,
   useFormatMessage,
   useSettingStore,
   useUserStore,
-} from '../../components/hooks';
-import PrimaryButton from '../../components/PrimaryButton';
-import { ILocalMessage } from '../../i18n/types';
-import { getGithubOauthUrl, githubClientId } from '../../libs/github';
+} from '@/components/hooks';
+import PrimaryButton from '@/components/PrimaryButton';
+import { ILocalMessage } from '@/i18n/types';
+import { getGithubOauthUrl, githubClientId } from '@/libs/github';
 import {
   useAuthEmailPasscodeMutation,
   useAuthSignInMutation,
-} from '../../libs/react-query';
-import { verifyEmail } from '../../utils';
-import ThirdPartyButton from './ThirdPartyButton';
+} from '@/libs/react-query';
+import { verifyEmail } from '@/utils';
 
 function SignInForm() {
   const f = useFormatMessage();
@@ -109,10 +109,8 @@ function SignInForm() {
   }, [waitingSeconds]);
 
   return (
-    <form
-      className={classNames('form-control', 'space-y-4')}
-      onSubmit={handleSubmit}>
-      <label className={classNames('label text-error', 'pt-0 pb-0 h-6')}>
+    <form className={clsx('form-control', 'space-y-4')} onSubmit={handleSubmit}>
+      <label className={clsx('label text-error', 'pt-0 pb-0 h-6')}>
         {errorMessage && f(errorMessage)}
       </label>
       <input
@@ -123,7 +121,7 @@ function SignInForm() {
         autoComplete="email"
         maxLength={64}
         placeholder={f('auth.yourEmail')}
-        className={classNames('input input-bordered', 'w-full')}
+        className={clsx('input input-bordered', 'w-full')}
         onKeyDown={handleEmailInputKeyDown}
       />
       <div className="relative flex justify-between items-center">
@@ -135,20 +133,21 @@ function SignInForm() {
           autoComplete="off"
           maxLength={6}
           placeholder={f('auth.passcode')}
-          className={classNames('input input-bordered', 'w-full')}
+          className={clsx('input input-bordered', 'w-full')}
         />
         <button
           type="button"
           disabled={isWaiting}
-          className={classNames('btn', 'ml-4', passcodeLoading && 'loading')}
+          className={clsx('btn', 'ml-4')}
           onClick={getPasscode}>
+          {passcodeLoading && <span className="loading loading-spinner" />}
           {isWaiting
             ? f('auth.waitingSeconds', { seconds: waitingSeconds })
             : f('auth.getPasscode')}
         </button>
       </div>
       <div className="flex justify-between items-center">
-        <label className={classNames('label', ' cursor-pointer ')}>
+        <label className={clsx('label', ' cursor-pointer ')}>
           <input
             name="remember"
             type="checkbox"
@@ -160,14 +159,15 @@ function SignInForm() {
       </div>
       <PrimaryButton
         type="submit"
-        className={classNames('btn-block', signInLoading && 'loading')}>
+        loading={signInLoading}
+        className={clsx('btn-block')}>
         {f('auth.signInOrSignUp')}
       </PrimaryButton>
       {githubClientId && (
         <ThirdPartyButton
           oauthUrl={getGithubOauthUrl()}
           title={f('auth.continueWithGithub')}
-          icon={<AiFillGithub className="text-xl mr-1" />}
+          icon={<GithubIcon className="w-5 h-5" />}
         />
       )}
     </form>

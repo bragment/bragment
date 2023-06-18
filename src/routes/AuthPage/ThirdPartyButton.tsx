@@ -1,7 +1,7 @@
 import { memo } from 'react';
-import { useDialogStore, useFormatMessage } from '../../components/hooks';
-import { EApiErrorMessage } from '../../libs/client/types';
 import { AUTHENTICATED, THIRD_PARTY_AUTH } from './types';
+import { useDialogStore, useFormatMessage } from '@/components/hooks';
+import { EApiErrorMessage } from '@/libs/client/types';
 
 interface IThirdPartyButtonProps {
   oauthUrl: string;

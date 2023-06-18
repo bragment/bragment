@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import { memo } from 'react';
 import { HiOutlineFolderAdd, HiOutlinePlus } from 'react-icons/hi';
-import { useDialogStore, useFormatMessage } from '../../../components/hooks';
-import PrimaryButton from '../../../components/PrimaryButton';
+import { useDialogStore, useFormatMessage } from '@/components/hooks';
+import PrimaryButton from '@/components/PrimaryButton';
 
 interface IProjectEmptyPromptProps {
   creatable?: boolean;

@@ -1,11 +1,11 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
+import { GithubIcon } from 'lucide-react';
 import { memo, useCallback, useEffect, useRef } from 'react';
-import { AiFillGithub } from 'react-icons/ai';
-import { useUserStore } from '../../components/hooks';
-import { parseApiErrorMessage } from '../../libs/client';
-import { useAuthGithubLoginMutation } from '../../libs/react-query';
-import { getCurrentSearchParam } from '../../utils';
 import { AUTHENTICATED, THIRD_PARTY_AUTH } from './types';
+import { useUserStore } from '@/components/hooks';
+import { parseApiErrorMessage } from '@/libs/client';
+import { useAuthGithubLoginMutation } from '@/libs/react-query';
+import { getCurrentSearchParam } from '@/utils';
 
 function GithubForm() {
   const ranRef = useRef(false);
@@ -41,13 +41,13 @@ function GithubForm() {
     <div className="w-full h-20 mt-7 mb-4 flex items-center justify-center">
       <div className="relative">
         <span
-          className={classNames(
+          className={clsx(
             'animate-ping',
-            'h-24 w-24 absolute inline-flex rounded-full bg-base-content opacity-30'
+            'h-20 w-20 absolute inline-flex rounded-full bg-base-content opacity-30'
           )}
         />
-        <div className="text-base-content">
-          <AiFillGithub className="text-8xl" />
+        <div className="text-base-content opacity-50">
+          <GithubIcon className="w-20 h-20" />
         </div>
       </div>
     </div>

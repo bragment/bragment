@@ -1,9 +1,9 @@
 import { memo } from 'react';
 import { Navigate, Outlet, useLocation, useParams } from 'react-router-dom';
-import { useUserStore } from '../../components/hooks';
-import { useMyWorkspaceListQuery } from '../../libs/react-query';
 import { getWorkspaceInstancePath } from '../helpers';
 import { ERoutePath } from '../types';
+import { useUserStore } from '@/components/hooks';
+import { useMyWorkspaceListQuery } from '@/libs/react-query';
 
 function WorkspacePage() {
   const { workspaceId = '' } = useParams();

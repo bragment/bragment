@@ -1,4 +1,4 @@
-const ROUTE_BEFORE_SIGN_IN = 'ROUTE_BEFORE_SIGN_IN';
+import { ROUTE_BEFORE_SIGN_IN } from './types';
 
 export function getTheRoutePathBeforeSignIn(once = false) {
   const item = window.sessionStorage.getItem(ROUTE_BEFORE_SIGN_IN);

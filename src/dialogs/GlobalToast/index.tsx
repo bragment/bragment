@@ -45,7 +45,7 @@ function GlobalToast() {
               toastClassNameRecord[type]
             )}
             key={key}>
-            <Icon className="text-2xl" />
+            <Icon className="h-6 w-6" />
             <span>{content}</span>
           </div>
         );

@@ -2,17 +2,17 @@ import { FolderIcon } from 'lucide-react';
 import { observer } from 'mobx-react';
 import { useCallback } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
-import { useFormatMessage, useUserStore } from '../../../components/hooks';
-import ProjectItem from '../../../components/ProjectItem';
-import ProjectList from '../../../components/ProjectList';
-import { IProject } from '../../../libs/client/types';
-import {
-  useWorkspaceProjectListQuery,
-  useWorkspaceQuery,
-} from '../../../libs/react-query';
 import { getProjectInstancePath } from '../../helpers';
 import ProjectEmptyPrompt from './EmptyPrompt';
 import LoadingView from './LoadingView';
+import { useFormatMessage, useUserStore } from '@/components/hooks';
+import ProjectItem from '@/components/ProjectItem';
+import ProjectList from '@/components/ProjectList';
+import { IProject } from '@/libs/client/types';
+import {
+  useWorkspaceProjectListQuery,
+  useWorkspaceQuery,
+} from '@/libs/react-query';
 
 function ProjectListView() {
   const f = useFormatMessage();
@@ -46,7 +46,7 @@ function ProjectListView() {
   return (
     <ProjectList
       title={f('workspace.allProject')}
-      icon={<FolderIcon className="text-primary text-2xl" />}
+      icon={<FolderIcon className="h-6 w-6 text-primary" />}
       projects={projects}
       renderProject={renderProject}
     />

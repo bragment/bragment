@@ -1,12 +1,12 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
 import { useCallback } from 'react';
-import { useFormatMessage, useUserStore } from '../../../components/hooks';
-import { IWorkspace } from '../../../libs/client/types';
-import { useUpdateMyDataMutation } from '../../../libs/react-query';
-import { getWorkspaceProjectListPath } from '../../helpers';
-import { useNavigateToPage } from '../../hooks';
 import CreateWorkspaceForm from './CreateWorkspaceForm';
+import { useFormatMessage, useUserStore } from '@/components/hooks';
+import { IWorkspace } from '@/libs/client/types';
+import { useUpdateMyDataMutation } from '@/libs/react-query';
+import { getWorkspaceProjectListPath } from '@/routes/helpers';
+import { useNavigateToPage } from '@/routes/hooks';
 
 function CreateWorkspaceView() {
   const f = useFormatMessage();
