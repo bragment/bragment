@@ -104,7 +104,10 @@ const CommandGroup = React.forwardRef<
     ref={ref}
     className={cn(
       // 'overflow-hidden p-1 text-foreground [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground',
-      '[&_[cmdk-group-heading]]:px-4 [&_[cmdk-group-heading]]:py-2 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-bold [&_[cmdk-group-heading]]:text-base-content/40',
+      'overflow-hidden',
+      '[&_[cmdk-group-heading]]:px-4 [&_[cmdk-group-heading]]:py-2 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-bold',
+      '[&_[cmdk-group-heading]]:overflow-hidden [&_[cmdk-group-heading]]:text-ellipsis [&_[cmdk-group-heading]]:whitespace-nowrap',
+      '[&_[cmdk-group-heading]]:text-base-content/40',
       className
     )}
     {...props}

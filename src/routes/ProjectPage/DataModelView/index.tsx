@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Outlet } from 'react-router-dom';
+// import { Outlet } from 'react-router-dom';
 import Header from './Header';
 
 function DataModelView() {
@@ -8,9 +8,7 @@ function DataModelView() {
       <div className="flex-none">
         <Header />
       </div>
-      <div className="flex-auto">
-        <Outlet />
-      </div>
+      <div className="flex-auto">{/* <Outlet /> */}</div>
     </main>
   );
 }

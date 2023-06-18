@@ -1,20 +1,25 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { observer } from 'mobx-react';
-import { useMemo, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { HiPlus } from 'react-icons/hi2';
-import { useParams } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
+import { IModelViewGroup } from '@/components/DataViewSwitcher/types';
 import {
   useDialogStore,
   useFormatMessage,
   useUserStore,
-} from '../../../components/hooks';
-import ScrollContainer from '../../../components/ScrollContainer';
-import { IProject, IProjectDataView } from '../../../libs/client/types';
-import { useProjectQuery } from '../../../libs/react-query';
-import { getSmallImageUrl } from '../../../libs/unsplash';
-import DataModelCollapse from '../DataModelCollapse';
+} from '@/components/hooks';
+import { IProject, IWorkspace } from '@/libs/client/types';
+import { ScrollArea } from '@/libs/radix-ui/scroll-area';
+import { useProjectQuery } from '@/libs/react-query';
+import { getSmallImageUrl } from '@/libs/unsplash';
+import {
+  getProjectDataViewPath,
+  getWorkspaceProjectListPath,
+} from '@/routes/helpers';
 
-function Aside() {
+function Aside(props: { modelViewGroups: IModelViewGroup[] }) {
+  const { modelViewGroups } = props;
   const { projectId = '' } = useParams();
   const mainRef = useRef<HTMLElement>(null);
   const f = useFormatMessage();
@@ -22,46 +27,33 @@ function Aside() {
   const { setCreateDataModelDialogVisible } = useDialogStore();
   const { data: project } = useProjectQuery(projectId, !!me);
   const title = project?.title;
+  const workspaceTitle = (project?.workspace as IWorkspace)?.title;
+  const workspaceId = (project?.workspace as IWorkspace)?._id;
   const { image, color } =
-    project?.background || ({} as IProject['background']);
+    project?.background ?? ({} as IProject['background']);
   const [imageVisible, setImageVisible] = useState(!!image);
   const handleImageError = () => {
     setImageVisible(false);
   };
   const showCreateDataModelDialog = () => setCreateDataModelDialogVisible(true);
 
-  const models = useMemo(() => {
-    return project?.models || [];
-  }, [project?.models]);
-
-  const views = useMemo(() => {
-    return project?.views || [];
-  }, [project?.views]);
-
-  const modelViewRecord = useMemo(() => {
-    return views.reduce<Record<string, IProjectDataView[]>>((prev, view) => {
-      const id = view.model;
-      if (!prev[id]) {
-        prev[id] = [];
-      }
-      prev[id].push(view);
-      return prev;
-    }, {});
-  }, [views]);
-
   return (
-    <aside className={classNames('bg-base-200', 'w-80')}>
-      <ScrollContainer className="[&.top-scrollable_header]:shadow-sm" autoHide>
+    <aside className={clsx('bg-base-200', 'h-full w-80')}>
+      <ScrollArea
+        className="w-full h-full"
+        viewportClassName="[&[data-top-scrollable]>div>header]:border-b"
+        verticalBarClassName="z-30"
+        vertical>
         <header
-          className={classNames(
-            'bg-base-200 bg-opacity-70 backdrop-blur',
+          className={clsx(
+            'bg-base-200 bg-opacity-70 backdrop-blur border-base-content/10',
             'sticky top-0 z-10',
             'h-36 p-3',
             'transition-all duration-100'
           )}>
           <div className="rounded-box overflow-hidden">
             <div
-              className={classNames(
+              className={clsx(
                 'card image-full bg-base-100',
                 'w-full h-auto',
                 'z-10 rounded-box before:!rounded-none'
@@ -70,9 +62,7 @@ function Aside() {
                 style={{ backgroundColor: !imageVisible ? color : undefined }}>
                 {imageVisible && (
                   <img
-                    className={classNames(
-                      'h-full w-full absolute object-center'
-                    )}
+                    className={clsx('h-full w-full absolute object-center')}
                     src={image ? getSmallImageUrl(image) : undefined}
                     alt=""
                     loading="eager"
@@ -81,19 +71,24 @@ function Aside() {
                   />
                 )}
               </figure>
-              <div className={classNames('card-body', 'h-full p-5')}>
-                <h2
-                  className={classNames(
-                    'card-title',
-                    'capitalize text-3xl mr-auto'
-                  )}>
-                  {title}
-                </h2>
+              <div className={clsx('card-body', 'h-full px-6 py-4')}>
+                <div className="flex flex-col items-start">
+                  <div className="capitalize text-neutral-content text-2xl font-semibold">
+                    {title}
+                  </div>
+                  {workspaceTitle && (
+                    <NavLink
+                      className="link capitalize text-neutral-content/60 text-sm font-normal"
+                      to={getWorkspaceProjectListPath(workspaceId)}>
+                      {workspaceTitle}
+                    </NavLink>
+                  )}
+                </div>
               </div>
             </div>
           </div>
           <div
-            className={classNames(
+            className={clsx(
               'text-base-content/70',
               'w-full h-12 px-4',
               'absolute left-0 bottom-0',
@@ -111,24 +106,41 @@ function Aside() {
             </div>
           </div>
         </header>
-        <main ref={mainRef} className="px-5">
-          {models.map((model) => (
-            <DataModelCollapse
-              key={model._id}
-              projectId={projectId}
-              model={model}
-              views={modelViewRecord[model._id]}
-            />
-          ))}
+        <main ref={mainRef} className="w-80 px-5">
+          <ul className="menu bg-base-200 rounded-box">
+            {modelViewGroups.map((group) => (
+              <li className="w-full" key={group.model._id}>
+                {group.views && group.views.length > 0 ? (
+                  <details className="w-full" key={group.model._id} open>
+                    <summary className="w-full">
+                      <div className="w-52 overflow-hidden text-ellipsis whitespace-nowrap">
+                        {group.model.title}
+                      </div>
+                    </summary>
+                    <ul>
+                      {group.views.map((view) => (
+                        <li key={view._id}>
+                          <NavLink
+                            className="w-60 overflow-hidden text-ellipsis whitespace-nowrap"
+                            to={getProjectDataViewPath(
+                              projectId,
+                              group.model._id,
+                              view._id
+                            )}>
+                            {view.title}
+                          </NavLink>
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
+                ) : (
+                  <div>{group.model.title}</div>
+                )}
+              </li>
+            ))}
+          </ul>
         </main>
-        <footer
-          className={classNames(
-            'sticky bottom-0',
-            'w-full h-20',
-            'bg-gradient-to-t from-base-200 to-transparent'
-          )}
-        />
-      </ScrollContainer>
+      </ScrollArea>
     </aside>
   );
 }

@@ -1,6 +1,6 @@
-import { ErrorBoundary } from '@sentry/react';
+import { ErrorBoundary, FallbackRender } from '@sentry/react';
 import { QueryErrorResetBoundary } from '@tanstack/react-query';
-import { memo } from 'react';
+import { memo, useCallback } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import GlobalToast from '../../dialogs/GlobalToast';
 import AuthPage from '../AuthPage';
@@ -22,13 +22,14 @@ import WorkspaceInstanceView from '../WorkspacePage/WorkspaceInstanceView';
 import AuthGuard from './AuthGuard';
 
 function RootRouter() {
+  const fallback = useCallback<FallbackRender>(
+    (errorData) => <ErrorPage {...errorData} />,
+    []
+  );
   return (
     <QueryErrorResetBoundary>
       {({ reset }) => (
-        <ErrorBoundary
-          showDialog
-          onReset={reset}
-          fallback={(errorData) => <ErrorPage {...errorData} />}>
+        <ErrorBoundary showDialog onReset={reset} fallback={fallback}>
           <BrowserRouter>
             <Routes>
               <Route path={ERoutePathName.Auth} element={<AuthPage />}>

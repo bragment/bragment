@@ -22,7 +22,7 @@ const PopoverContent = React.forwardRef<
         // NOTE: animation
         'animate-in',
         // NOTE: daisy ui style
-        'bg-base-100 dropdown-content',
+        'bg-base-100 dropdown-content border border-base-content/10',
         className
       )}
       {...props}

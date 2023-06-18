@@ -50,12 +50,12 @@ function WorkspaceInstanceView() {
         )}>
         <ScrollArea
           className="h-full w-full"
-          viewportClassName="[&[data-top-scrollable]>div>header]:shadow-sm"
+          viewportClassName="[&[data-top-scrollable]>div>header]:border-b"
           verticalBarClassName="z-30"
           vertical>
           <header
             className={clsx(
-              'bg-base-100 text-base-content',
+              'bg-base-100 text-base-content border-base-content/10',
               'sticky top-0 z-20',
               'bg-opacity-70 backdrop-blur transition-all duration-100'
             )}>
@@ -74,7 +74,7 @@ function WorkspaceInstanceView() {
                     'menu menu-horizontal',
                     'py-0',
                     '[&>li>a]:!bg-transparent [&>li>a]:text-lg [&>li>a]:font-semibold',
-                    '[&>li>a]:text-base-content/50 [&>li>a:hover:not(.active)]:text-base-content/75 [&>li>a.active]:text-base-content'
+                    '[&>li>a]:text-base-content/50 [&>li>a:hover:not(.active)]:text-base-content/75 [&>li>a.active]:!text-base-content'
                   )}>
                   <li>
                     <NavLink to={getWorkspaceProjectListPath(workspaceId)}>

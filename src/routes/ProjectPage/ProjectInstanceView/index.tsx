@@ -1,18 +1,21 @@
-import classNames from 'classnames';
-import { memo, useEffect, useRef } from 'react';
+import clsx from 'clsx';
+import { memo, useEffect, useMemo, useRef } from 'react';
 import { Navigate, Outlet, useLocation, useParams } from 'react-router-dom';
-import { setProjectFields } from '../../../libs/fields';
+import Aside from './Aside';
+import Header from './Header';
+import { TOGGLE_ID } from './types';
+import { IModelViewGroup } from '@/components/DataViewSwitcher/types';
+import { IProjectDataView } from '@/libs/client/types';
+import { setProjectFields } from '@/libs/fields';
 import {
   useProjectDataRecordListQuery,
   useProjectQuery,
-} from '../../../libs/react-query';
+} from '@/libs/react-query';
 import {
   getProjectDataModelEmptyPath,
-  getProjectDataModelPath,
+  getProjectDataViewPath,
   getProjectInstancePath,
-} from '../../helpers';
-import Aside from './Aside';
-import { TOGGLE_ID } from './types';
+} from '@/routes/helpers';
 
 function ProjectInstanceView() {
   const { projectId = '' } = useParams();
@@ -20,6 +23,26 @@ function ProjectInstanceView() {
   const toggleRef = useRef<HTMLInputElement>(null);
   const { data: project } = useProjectQuery(projectId, true, true);
   const models = project?.models;
+  const views = project?.views;
+  const modelViewGroups = useMemo<IModelViewGroup[]>(() => {
+    const record = views?.reduce<Record<string, IProjectDataView[]>>(
+      (prev, view) => {
+        const id = view.model;
+        if (!prev[id]) {
+          prev[id] = [];
+        }
+        prev[id].push(view);
+        return prev;
+      },
+      {}
+    );
+    return (
+      models?.map((model) => ({
+        model,
+        views: record ? record[model._id] ?? [] : [],
+      })) ?? []
+    );
+  }, [models, views]);
   // NOTE: prefetch for data view
   useProjectDataRecordListQuery(projectId, true, true);
 
@@ -36,12 +59,12 @@ function ProjectInstanceView() {
   if (
     (pathname === getProjectDataModelEmptyPath(projectId) ||
       pathname === getProjectInstancePath(projectId)) &&
-    models?.length
+    views?.length
   ) {
-    const firstModel = models[0];
+    const firstView = views[0];
     return (
       <Navigate
-        to={getProjectDataModelPath(projectId, firstModel._id)}
+        to={getProjectDataViewPath(projectId, firstView.model, firstView._id)}
         replace
       />
     );
@@ -55,7 +78,7 @@ function ProjectInstanceView() {
   }
 
   return (
-    <div className={classNames('drawer drawer-mobile', 'w-full h-full')}>
+    <div className={clsx('drawer lg:drawer-open', 'w-full h-full')}>
       <input
         ref={toggleRef}
         id={TOGGLE_ID}
@@ -63,11 +86,18 @@ function ProjectInstanceView() {
         className="drawer-toggle"
       />
       <div className="drawer-content bg-base-100 text-base-content">
-        <Outlet />
+        <main className="w-full h-full flex flex-col">
+          <div className="flex-none">
+            <Header modelViewGroups={modelViewGroups} />
+          </div>
+          <div className="flex-auto">
+            <Outlet />
+          </div>
+        </main>
       </div>
       <div className="drawer-side">
         <label htmlFor={TOGGLE_ID} className="drawer-overlay" />
-        <Aside />
+        <Aside modelViewGroups={modelViewGroups} />
       </div>
     </div>
   );

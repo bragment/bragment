@@ -90,6 +90,7 @@ export default {
   'project.noFields': 'No Fields',
   'project.noModels': 'No Data Sources',
   'project.noViews': 'No Views',
+  'project.noViewsFound': 'No views found.',
   'project.showOtherFields': 'Show other fields.',
   'project.title': 'Project Title',
   'workspace.allProject': 'All Project',

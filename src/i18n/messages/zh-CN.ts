@@ -89,6 +89,7 @@ export default {
   'project.noFields': '暂无字段',
   'project.noModels': '暂无数据源',
   'project.noViews': '暂无视图',
+  'project.noViewsFound': '没有找到视图',
   'project.showOtherFields': '显示其他字段',
   'project.title': '项目名称',
   'workspace.allProject': '所有项目',
