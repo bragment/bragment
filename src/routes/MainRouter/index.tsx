@@ -8,9 +8,9 @@ import GithubForm from '../AuthPage/GithubForm';
 import SignInForm from '../AuthPage/SignInForm';
 import ErrorPage from '../ErrorPage';
 import ProjectPage from '../ProjectPage';
-import DataModelEmptyPrompt from '../ProjectPage/DataModelView/EmptyPrompt';
-// import DataModelViewSuspense from '../ProjectPage/DataModelView/Suspense';
-// import DataViewSuspense from '../ProjectPage/DataView/Suspense';
+import DataViewSuspense from '../ProjectPage/DataView/Suspense';
+import ModelEmptyPrompt from '../ProjectPage/ModelView/EmptyPrompt';
+import ModelViewSuspense from '../ProjectPage/ModelView/Suspense';
 import ProjectInstanceViewSuspense from '../ProjectPage/ProjectInstanceView/Suspense';
 import RootPage from '../RootPage';
 import { ERoutePath, ERoutePathName } from '../types';
@@ -74,11 +74,16 @@ function RootRouter() {
                     <Route path={ERoutePathName.Model}>
                       <Route
                         path={ERoutePathName.Empty}
-                        element={<DataModelEmptyPrompt />}
+                        element={<ModelEmptyPrompt />}
                       />
-                      <Route path={ERoutePathName.ModelId}>
+                      <Route
+                        path={ERoutePathName.ModelId}
+                        element={<ModelViewSuspense />}>
                         <Route path={ERoutePathName.View}>
-                          <Route path={ERoutePathName.ViewId} />
+                          <Route
+                            path={ERoutePathName.ViewId}
+                            element={<DataViewSuspense />}
+                          />
                         </Route>
                       </Route>
                     </Route>

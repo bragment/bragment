@@ -1,14 +1,14 @@
 import { lazy, memo, Suspense } from 'react';
 import Skeleton from './Skeleton';
 
-const DataModelView = lazy(() => import('./index'));
+const ModelView = lazy(() => import('./index'));
 
-function DataModelViewSuspense() {
+function ModelViewSuspense() {
   return (
     <Suspense fallback={<Skeleton />}>
-      <DataModelView />
+      <ModelView />
     </Suspense>
   );
 }
 
-export default memo(DataModelViewSuspense);
+export default memo(ModelViewSuspense);

@@ -176,7 +176,7 @@ function SortingButton(props: ISortingButtonProps) {
   }, [setOtherFieldList, modelFields, fieldOrder, innerSorterList]);
 
   useEffect(() => {
-    if (dropdownRef.current?.state.popupVisible) {
+    if (dropdownRef.current?.state?.popupVisible) {
       setFieldSorting(
         innerSorterList.map((el) => ({
           id: el.field._id,

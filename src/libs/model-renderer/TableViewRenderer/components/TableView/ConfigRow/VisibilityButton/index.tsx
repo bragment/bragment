@@ -159,7 +159,7 @@ function VisibilityButton(props: IVisibilityButtonProps) {
   };
 
   useEffect(() => {
-    if (dropdownRef.current?.state.popupVisible) {
+    if (dropdownRef.current?.state?.popupVisible) {
       let fieldIds = orderingFieldList
         .filter((el) => visibleFieldRecord[el._id])
         .map((el) => el._id);

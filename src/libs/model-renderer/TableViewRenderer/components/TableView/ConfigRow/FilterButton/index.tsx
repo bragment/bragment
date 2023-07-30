@@ -188,7 +188,7 @@ function FilterButton(props: IFilterButtonProps) {
   }, [setOtherFieldList, modelFields, fieldOrder, innerFilterList]);
 
   useEffect(() => {
-    if (dropdownRef.current?.state.popupVisible) {
+    if (dropdownRef.current?.state?.popupVisible) {
       setFieldFilters(
         innerFilterList.map(({ field, ...others }) => ({
           id: field._id,

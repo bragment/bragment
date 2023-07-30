@@ -113,7 +113,8 @@ function TableView(props: ITableViewProps) {
   const rowVirtualizer = useVirtualizer({
     count: rowModel.rows.length,
     overscan: Math.ceil(document.body.clientHeight / rowHeight),
-    getScrollElement: () => scrollBarRef.current?.container.firstElementChild,
+    getScrollElement: () =>
+      scrollBarRef.current?.container.firstElementChild || null,
     estimateSize: () => rowHeight,
   });
   const virtualRows = rowVirtualizer.getVirtualItems();

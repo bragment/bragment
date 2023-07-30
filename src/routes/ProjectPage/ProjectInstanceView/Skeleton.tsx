@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { memo } from 'react';
-import DataModelViewSkeleton from '../DataModelView/Skeleton';
 import DataViewSkeleton from '../DataView/Skeleton';
+import ModelViewSkeleton from '../ModelView/Skeleton';
 
 function Skeleton() {
   return (
@@ -48,7 +48,7 @@ function Skeleton() {
         </div>
       </aside>
       <main className={classNames('bg-base-100', 'flex-auto')}>
-        <DataModelViewSkeleton />
+        <ModelViewSkeleton />
         <DataViewSkeleton />
       </main>
     </div>

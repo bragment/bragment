@@ -4,7 +4,7 @@ import { HiOutlineDatabase, HiOutlinePlus } from 'react-icons/hi';
 import { useDialogStore, useFormatMessage } from '../../../components/hooks';
 import PrimaryButton from '../../../components/PrimaryButton';
 
-function DataModelEmptyPrompt() {
+function ModelEmptyPrompt() {
   const f = useFormatMessage();
   const { setCreateDataModelDialogVisible } = useDialogStore();
   const handleCreate = () => setCreateDataModelDialogVisible(true);
@@ -29,4 +29,4 @@ function DataModelEmptyPrompt() {
   );
 }
 
-export default memo(DataModelEmptyPrompt);
+export default memo(ModelEmptyPrompt);
