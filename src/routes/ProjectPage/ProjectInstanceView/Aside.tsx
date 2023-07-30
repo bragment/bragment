@@ -113,7 +113,7 @@ function Aside(props: { modelViewGroups: IModelViewGroup[] }) {
                 {group.views && group.views.length > 0 ? (
                   <details className="w-full" key={group.model._id} open>
                     <summary className="w-full">
-                      <div className="w-52 overflow-hidden text-ellipsis whitespace-nowrap">
+                      <div className="w-54 overflow-hidden capitalize text-ellipsis whitespace-nowrap">
                         {group.model.title}
                       </div>
                     </summary>
@@ -121,7 +121,7 @@ function Aside(props: { modelViewGroups: IModelViewGroup[] }) {
                       {group.views.map((view) => (
                         <li key={view._id}>
                           <NavLink
-                            className="w-60 overflow-hidden text-ellipsis whitespace-nowrap"
+                            className="w-60 overflow-hidden capitalize text-ellipsis whitespace-nowrap"
                             to={getProjectDataViewPath(
                               projectId,
                               group.model._id,
@@ -134,7 +134,11 @@ function Aside(props: { modelViewGroups: IModelViewGroup[] }) {
                     </ul>
                   </details>
                 ) : (
-                  <div>{group.model.title}</div>
+                  <div className="w-full">
+                    <div className="w-60 overflow-hidden capitalize text-ellipsis whitespace-nowrap">
+                      {group.model.title}
+                    </div>
+                  </div>
                 )}
               </li>
             ))}

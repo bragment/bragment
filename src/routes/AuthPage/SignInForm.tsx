@@ -1,7 +1,7 @@
 import clsx from 'clsx';
-import { GithubIcon } from 'lucide-react';
 import { observer } from 'mobx-react';
 import { useEffect, useRef, useState } from 'react';
+import { AiFillGithub } from 'react-icons/ai';
 import ThirdPartyButton from './ThirdPartyButton';
 import {
   useDialogStore,
@@ -167,7 +167,7 @@ function SignInForm() {
         <ThirdPartyButton
           oauthUrl={getGithubOauthUrl()}
           title={f('auth.continueWithGithub')}
-          icon={<GithubIcon className="w-5 h-5" />}
+          icon={<AiFillGithub className="w-5 h-5" />}
         />
       )}
     </form>

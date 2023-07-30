@@ -1,7 +1,7 @@
 import clsx from 'clsx';
-import { CheckIcon, ChevronsUpDownIcon, PlusCircleIcon } from 'lucide-react';
 import { observer } from 'mobx-react';
 import { useCallback, useMemo, useState } from 'react';
+import { HiCheck, HiChevronUpDown, HiPlusCircle } from 'react-icons/hi2';
 import { useParams } from 'react-router-dom';
 import { useDialogStore, useFormatMessage } from '../hooks';
 import { IModelViewGroup } from './types';
@@ -63,7 +63,7 @@ function DataViewSwitcher(props: { modelViewGroups: IModelViewGroup[] }) {
         <button
           className={clsx(
             'btn btn-ghost border-base-content/20 hover:border-transparent no-shadow',
-            'w-56',
+            'max-w-[280px]',
             opened && 'bg-base-content/20 border-transparent'
           )}>
           <div className="w-full flex items-center">
@@ -77,7 +77,7 @@ function DataViewSwitcher(props: { modelViewGroups: IModelViewGroup[] }) {
               title={currentView?.title}>
               {currentView?.title}
             </div>
-            <ChevronsUpDownIcon className="flex-none h-5 w-5 opacity-50 ml-2" />
+            <HiChevronUpDown className="flex-none h-5 w-5 opacity-50 ml-2" />
           </div>
         </button>
       </PopoverTrigger>
@@ -112,7 +112,7 @@ function DataViewSwitcher(props: { modelViewGroups: IModelViewGroup[] }) {
                           view._id
                         )}>
                         {view.title}
-                        <CheckIcon
+                        <HiCheck
                           className={clsx(
                             'ml-auto h-4 w-4',
                             view._id === viewId ? 'opacity-100' : 'opacity-0'
@@ -129,7 +129,7 @@ function DataViewSwitcher(props: { modelViewGroups: IModelViewGroup[] }) {
           <CommandList className="px-2">
             <CommandGroup>
               <CommandItem className="h-11 my-2" onSelect={createDataView}>
-                <PlusCircleIcon className="mr-2 h-6 w-6" />
+                <HiPlusCircle className="mr-2 h-6 w-6" />
                 {f('project.addView')}
               </CommandItem>
             </CommandGroup>

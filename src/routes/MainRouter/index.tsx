@@ -9,8 +9,8 @@ import SignInForm from '../AuthPage/SignInForm';
 import ErrorPage from '../ErrorPage';
 import ProjectPage from '../ProjectPage';
 import DataModelEmptyPrompt from '../ProjectPage/DataModelView/EmptyPrompt';
-import DataModelViewSuspense from '../ProjectPage/DataModelView/Suspense';
-import DataViewSuspense from '../ProjectPage/DataView/Suspense';
+// import DataModelViewSuspense from '../ProjectPage/DataModelView/Suspense';
+// import DataViewSuspense from '../ProjectPage/DataView/Suspense';
 import ProjectInstanceViewSuspense from '../ProjectPage/ProjectInstanceView/Suspense';
 import RootPage from '../RootPage';
 import { ERoutePath, ERoutePathName } from '../types';
@@ -76,14 +76,9 @@ function RootRouter() {
                         path={ERoutePathName.Empty}
                         element={<DataModelEmptyPrompt />}
                       />
-                      <Route
-                        path={ERoutePathName.ModelId}
-                        element={<DataModelViewSuspense />}>
+                      <Route path={ERoutePathName.ModelId}>
                         <Route path={ERoutePathName.View}>
-                          <Route
-                            path={ERoutePathName.ViewId}
-                            element={<DataViewSuspense />}
-                          />
+                          <Route path={ERoutePathName.ViewId} />
                         </Route>
                       </Route>
                     </Route>

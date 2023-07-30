@@ -1,6 +1,6 @@
-import { FolderIcon } from 'lucide-react';
 import { observer } from 'mobx-react';
 import { useCallback } from 'react';
+import { HiFolder } from 'react-icons/hi2';
 import { NavLink, useParams } from 'react-router-dom';
 import { getProjectInstancePath } from '../../helpers';
 import ProjectEmptyPrompt from './EmptyPrompt';
@@ -46,7 +46,7 @@ function ProjectListView() {
   return (
     <ProjectList
       title={f('workspace.allProject')}
-      icon={<FolderIcon className="h-6 w-6 text-primary" />}
+      icon={<HiFolder className="h-6 w-6 text-primary" />}
       projects={projects}
       renderProject={renderProject}
     />

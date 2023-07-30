@@ -1,6 +1,6 @@
 import clsx from 'clsx';
-import { GithubIcon } from 'lucide-react';
 import { memo, useCallback, useEffect, useRef } from 'react';
+import { AiFillGithub } from 'react-icons/ai';
 import { AUTHENTICATED, THIRD_PARTY_AUTH } from './types';
 import { useUserStore } from '@/components/hooks';
 import { parseApiErrorMessage } from '@/libs/client';
@@ -47,7 +47,7 @@ function GithubForm() {
           )}
         />
         <div className="text-base-content opacity-50">
-          <GithubIcon className="w-20 h-20" />
+          <AiFillGithub className="w-20 h-20" />
         </div>
       </div>
     </div>

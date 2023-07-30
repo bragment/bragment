@@ -18,12 +18,17 @@ import {
 } from '@/routes/helpers';
 
 function ProjectInstanceView() {
-  const { projectId = '' } = useParams();
+  const { projectId = '', modelId = '' } = useParams();
   const { pathname } = useLocation();
   const toggleRef = useRef<HTMLInputElement>(null);
   const { data: project } = useProjectQuery(projectId, true, true);
   const models = project?.models;
   const views = project?.views;
+
+  const currentModel = useMemo(
+    () => models?.find((el) => el._id === modelId),
+    [models, modelId]
+  );
   const modelViewGroups = useMemo<IModelViewGroup[]>(() => {
     const record = views?.reduce<Record<string, IProjectDataView[]>>(
       (prev, view) => {
@@ -37,12 +42,13 @@ function ProjectInstanceView() {
       {}
     );
     return (
-      models?.map((model) => ({
-        model,
-        views: record ? record[model._id] ?? [] : [],
+      models?.map((el) => ({
+        model: el,
+        views: record ? record[el._id] ?? [] : [],
       })) ?? []
     );
   }, [models, views]);
+
   // NOTE: prefetch for data view
   useProjectDataRecordListQuery(projectId, true, true);
 
@@ -88,7 +94,10 @@ function ProjectInstanceView() {
       <div className="drawer-content bg-base-100 text-base-content">
         <main className="w-full h-full flex flex-col">
           <div className="flex-none">
-            <Header modelViewGroups={modelViewGroups} />
+            <Header
+              currentModel={currentModel}
+              modelViewGroups={modelViewGroups}
+            />
           </div>
           <div className="flex-auto">
             <Outlet />

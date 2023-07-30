@@ -1,5 +1,5 @@
-import { FolderIcon } from 'lucide-react';
 import { memo, useCallback } from 'react';
+import { HiFolder } from 'react-icons/hi2';
 import { useFormatMessage } from '@/components/hooks';
 import ProjectItemSkeleton from '@/components/ProjectItem/Skeleton';
 import ProjectList from '@/components/ProjectList';
@@ -14,7 +14,7 @@ function LoadingView() {
   return (
     <ProjectList
       title={f('workspace.allProject')}
-      icon={<FolderIcon className="h-6 w-6 text-primary" />}
+      icon={<HiFolder className="h-6 w-6 text-primary" />}
       projects={Array(4).fill({})}
       renderProject={renderProjectSkeleton}
     />

@@ -1,12 +1,12 @@
 import clsx from 'clsx';
-import {
-  AlertCircleIcon,
-  CheckCircle2Icon,
-  InfoIcon,
-  XCircleIcon,
-} from 'lucide-react';
 import { observer } from 'mobx-react';
 import { useMemo } from 'react';
+import {
+  HiCheckCircle,
+  HiExclamationCircle,
+  HiExclamationTriangle,
+  HiInformationCircle,
+} from 'react-icons/hi2';
 import { useDialogStore } from '../../components/hooks';
 import { EToastType } from '../../stores/types';
 
@@ -15,10 +15,10 @@ function GlobalToast() {
 
   const toastIconRecord = useMemo(
     () => ({
-      [EToastType.Error]: XCircleIcon,
-      [EToastType.Info]: InfoIcon,
-      [EToastType.Success]: CheckCircle2Icon,
-      [EToastType.Warning]: AlertCircleIcon,
+      [EToastType.Error]: HiExclamationCircle,
+      [EToastType.Info]: HiInformationCircle,
+      [EToastType.Success]: HiCheckCircle,
+      [EToastType.Warning]: HiExclamationTriangle,
     }),
     []
   );

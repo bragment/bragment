@@ -1,16 +1,14 @@
 import clsx from 'clsx';
-import { CheckIcon, ChevronsUpDownIcon, PlusCircleIcon } from 'lucide-react';
 import { observer } from 'mobx-react';
 import { useCallback, useMemo, useState } from 'react';
+import { HiCheck, HiChevronDown, HiPlusCircle } from 'react-icons/hi2';
 import { useParams } from 'react-router-dom';
 import { useDialogStore, useFormatMessage, useUserStore } from '../hooks';
 import { IWorkspace } from '@/libs/client/types';
 import { Avatar, AvatarFallback } from '@/libs/radix-ui/avatar';
 import {
   Command,
-  CommandEmpty,
   CommandGroup,
-  CommandInput,
   CommandItem,
   CommandList,
   CommandSeparator,
@@ -73,33 +71,28 @@ function WorkspaceSwitcher() {
       <PopoverTrigger asChild>
         <button
           className={clsx(
-            'btn btn-ghost border-base-content/20 hover:border-transparent no-shadow',
-            'w-56',
+            'btn btn-ghost hover:border-transparent no-shadow',
+            'max-w-[280px]',
             opened && 'bg-base-content/20 border-transparent'
           )}>
           <div className="w-full flex items-center">
-            <Avatar className="flex-none w-7 h-7 mr-2">
+            <Avatar className="flex-none w-8 h-8 mr-2 rounded-lg">
               <AvatarFallback className="bg-secondary text-secondary-content">
                 {getFirstChar(currentWorkspace?.title || '')}
               </AvatarFallback>
             </Avatar>
             <div
-              className="flex-auto text-ellipsis overflow-hidden whitespace-nowrap text-left"
+              className="flex-auto text-ellipsis overflow-hidden whitespace-nowrap text-left text-lg"
               title={currentWorkspace?.title}>
               {currentWorkspace?.title}
             </div>
-            <ChevronsUpDownIcon className="flex-none h-5 w-5 opacity-50 ml-2" />
+            <HiChevronDown className="flex-none h-5 w-5 opacity-50 ml-2" />
           </div>
         </button>
       </PopoverTrigger>
-      <PopoverContent align="start" className="w-56">
+      <PopoverContent align="start" className="w-64">
         <Command>
           <CommandList>
-            <div className="px-2">
-              <CommandInput placeholder={f('common.search')} />
-            </div>
-
-            <CommandEmpty>{f('workspace.noWorkspacesFound')}</CommandEmpty>
             <ScrollArea
               className="px-2"
               viewportClassName="max-h-56"
@@ -113,7 +106,7 @@ function WorkspaceSwitcher() {
                       onSelect={selectWorkspace.bind(undefined, el._id)}
                       className={'text-sm'}>
                       {el.title}
-                      <CheckIcon
+                      <HiCheck
                         className={clsx(
                           'ml-auto h-4 w-4',
                           el._id === workspaceId ? 'opacity-100' : 'opacity-0'
@@ -130,7 +123,7 @@ function WorkspaceSwitcher() {
           <CommandList className="px-2">
             <CommandGroup>
               <CommandItem className="h-11 my-2" onSelect={createWorkspace}>
-                <PlusCircleIcon className="mr-2 h-6 w-6" />
+                <HiPlusCircle className="mr-2 h-6 w-6" />
                 {f('workspace.createWorkspace')}
               </CommandItem>
             </CommandGroup>

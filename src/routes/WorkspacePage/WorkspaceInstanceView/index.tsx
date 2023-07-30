@@ -1,6 +1,6 @@
 import clsx from 'clsx';
-import { MenuIcon } from 'lucide-react';
 import { memo, useEffect, useRef } from 'react';
+import { HiBars3 } from 'react-icons/hi2';
 import {
   Navigate,
   NavLink,
@@ -62,8 +62,11 @@ function WorkspaceInstanceView() {
             <div className="navbar">
               <div className="flex-none lg:hidden">
                 <label htmlFor={TOGGLE_ID} className="btn btn-square btn-ghost">
-                  <MenuIcon className="w-6 h-6" />
+                  <HiBars3 className="w-6 h-6" />
                 </label>
+              </div>
+              <div className="flex-none w-36 h-10 mx-4 hidden lg:block">
+                <div className={clsx('logo-text-mark', 'w-full h-full')} />
               </div>
               <div className="flex-none px-2 lg:px-4">
                 <WorkspaceSwitcher />
