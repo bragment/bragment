@@ -100,8 +100,9 @@ const ScrollBar = React.forwardRef<
     {...props}>
     <ScrollAreaPrimitive.ScrollAreaThumb
       className={cn(
-        'relative flex-1 rounded-full',
+        'relative rounded-full',
         'bg-neutral-content',
+        orientation === 'horizontal' ? ' flex-initial' : 'flex-1',
         thumbClassName
       )}
     />

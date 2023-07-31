@@ -72,7 +72,7 @@ function WorkspaceSwitcher() {
         <button
           className={clsx(
             'btn btn-ghost hover:border-transparent no-shadow',
-            'max-w-[280px]',
+            'max-w-[18rem]',
             opened && 'bg-base-content/20 border-transparent'
           )}>
           <div className="w-full flex items-center">

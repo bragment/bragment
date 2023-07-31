@@ -21,7 +21,7 @@ function Header(props: IHeaderProps) {
           </label>
         </div>
         <div className="flex-none px-2 ml-2 hidden lg:flex justify-center">
-          <div className="max-w-[200px] overflow-hidden text-ellipsis capitalize font-semibold text-lg">
+          <div className="max-w-[13rem] overflow-hidden text-ellipsis capitalize font-semibold text-lg">
             {currentModel?.title}
           </div>
         </div>

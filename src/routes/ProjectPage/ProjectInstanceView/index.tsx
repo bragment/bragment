@@ -91,7 +91,11 @@ function ProjectInstanceView() {
         type="checkbox"
         className="drawer-toggle"
       />
-      <div className="drawer-content bg-base-100 text-base-content">
+      <div
+        className={clsx(
+          'drawer-content bg-base-100 text-base-content',
+          'lg:w-[calc(100vw-20rem)] w-screen z-0'
+        )}>
         <main className="w-full h-full flex flex-col">
           <div className="flex-none">
             <Header
@@ -99,7 +103,7 @@ function ProjectInstanceView() {
               modelViewGroups={modelViewGroups}
             />
           </div>
-          <div className="flex-auto">
+          <div className="flex-auto h-[calc(100vh-4rem)]">
             <Outlet />
           </div>
         </main>

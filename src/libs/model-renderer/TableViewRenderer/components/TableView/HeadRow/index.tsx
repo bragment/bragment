@@ -31,12 +31,7 @@ function HeadRow(props: IHeadRowProps) {
   const { projectId, modelId } = renderer.commonStore.unobservable;
 
   return (
-    <div
-      className={classNames(
-        className,
-        'w-fit min-w-full border-t border-b',
-        styles.headRow
-      )}>
+    <div className={classNames(className, 'w-fit min-w-full', styles.headRow)}>
       <div
         className={classNames(
           'sticky left-0 z-10',
