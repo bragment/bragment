@@ -27,7 +27,6 @@ import BodyRow from './BodyRow';
 import ConfigRow from './ConfigRow';
 import HeadRow from './HeadRow';
 import TailRow from './TailRow';
-import { ScrollArea } from '@/libs/radix-ui/scroll-area';
 import styles from './index.module.scss';
 
 interface ITableViewProps extends IViewProps {
@@ -125,37 +124,6 @@ function TableView(props: ITableViewProps) {
     virtualRows.length > 0
       ? totalSize - (virtualRows?.[virtualRows.length - 1]?.end || 0)
       : 0;
-
-  return (
-    <div className="w-full h-full p-1">
-      <ScrollArea
-        className="h-full"
-        viewportClassName="max-w-full max-h-full"
-        horizontal
-        horizontalBarClassName="h-2"
-        verticalBarClassName="w-2"
-        vertical>
-        {headerGroups.map((group, i) => {
-          return (
-            <HeadRow
-              className="sticky top-0 z-30"
-              key={group.id}
-              index={i}
-              headers={
-                group.headers as Header<
-                  IProjectDataRecord,
-                  IRecordFieldData | undefined
-                >[]
-              }
-              renderer={renderer}
-              modelFields={modelFields}
-              onCreateDataFieldFinish={handleCreateDataFieldFinish}
-            />
-          );
-        })}
-      </ScrollArea>
-    </div>
-  );
 
   return (
     <ScrollContainer className={classNames(styles.wrapper)} ref={scrollBarRef}>

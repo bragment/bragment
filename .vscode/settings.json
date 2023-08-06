@@ -12,6 +12,7 @@
     "passcode",
     "tailwindcss"
   ],
+  "css.customData": [".vscode/tailwind.json"],
   "editor.formatOnSave": true,
   "editor.tabSize": 2,
   "eslint.format.enable": true,
