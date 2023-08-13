@@ -1,12 +1,18 @@
 import {
+  ColumnPinningState,
   getCoreRowModel,
   getFilteredRowModel,
   getSortedRowModel,
 } from '@tanstack/react-table';
-import { memo } from 'react';
-import { createColumns } from './helpers';
+import { memo, useMemo, useState } from 'react';
+import {
+  createColumns,
+  getColumnOrder,
+  getColumnPinning,
+  getColumnVisibility,
+} from './helpers';
 import './index.scss';
-
+import { ITableHeaderMenuItem } from './types';
 import {
   IProjectDataField,
   IProjectDataRecord,
@@ -21,23 +27,46 @@ interface ITableViewProps {
   view: IProjectDataView;
   modelFields: IProjectDataField[];
   modelRecords: IProjectDataRecord[];
+  headerMenuItems: ITableHeaderMenuItem[];
 }
 
-function TableView({ modelFields, modelRecords }: ITableViewProps) {
-  const columns = createColumns(modelFields);
+function TableView({
+  view,
+  modelFields,
+  modelRecords,
+  headerMenuItems,
+}: ITableViewProps) {
+  const modelFieldIds = modelFields.map((el) => el._id);
+  const { visibleFields } = view;
+  const columns = useMemo(
+    () => createColumns(modelFields, { headerMenuItems }),
+    [modelFields, headerMenuItems]
+  );
+
+  const [columnOrder, setColumnOrder] = useState(
+    getColumnOrder(modelFieldIds, visibleFields)
+  );
+
+  const [columnPinning, setColumnPinning] = useState<ColumnPinningState>(
+    getColumnPinning()
+  );
+
+  const [columnVisibility, setColumnVisibility] = useState(
+    getColumnVisibility(modelFieldIds, visibleFields)
+  );
 
   const tableOptions: DataTableProps<IProjectDataRecord, IRecordFieldData> = {
     data: modelRecords,
     columns,
     columnResizeMode: 'onChange',
     state: {
-      columnPinning: { left: ['_SEQUENCE_'], right: ['_ADD_'] },
-      // columnFilters: fieldFilters,
-      // columnOrder: fieldOrder,
-      // columnPinning: fieldPinning,
-      // columnVisibility: fieldVisibility,
-      // sorting: fieldSorting,
+      columnOrder,
+      columnPinning,
+      columnVisibility,
     },
+    onColumnOrderChange: setColumnOrder,
+    onColumnPinningChange: setColumnPinning,
+    onColumnVisibilityChange: setColumnVisibility,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),

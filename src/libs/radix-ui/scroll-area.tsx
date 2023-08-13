@@ -39,6 +39,10 @@ const ScrollArea = React.forwardRef<
       }
     }, []);
     React.useEffect(() => {
+      window.addEventListener('resize', handleScroll);
+      return () => window.removeEventListener('resize', handleScroll);
+    }, [handleScroll]);
+    React.useEffect(() => {
       if (viewportRef.current) {
         updateElementScrollable(viewportRef.current);
       }

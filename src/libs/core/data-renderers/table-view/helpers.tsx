@@ -1,21 +1,35 @@
 import { createColumnHelper } from '@tanstack/react-table';
-import { HiMiniHashtag } from 'react-icons/hi2';
+import { LuHash, LuText } from 'react-icons/lu';
 import AddColumn from './AddColumn';
 import Cell from './Cell';
 import Header from './Header';
+import {
+  COLUMN_ADD,
+  COLUMN_ADD_WIDTH,
+  COLUMN_SEQUENCE,
+  COLUMN_SEQUENCE_WIDTH,
+  COLUMN_WIDTH_MAX,
+  COLUMN_WIDTH_MIN,
+  ITableHeaderMenuItem,
+} from './types';
 import { IProjectDataField, IProjectDataRecord } from '@/libs/client/types';
 
-export function createColumns(modelFields: IProjectDataField[]) {
+export function createColumns(
+  modelFields: IProjectDataField[],
+  options: {
+    headerMenuItems: ITableHeaderMenuItem[];
+  }
+) {
   const helper = createColumnHelper<IProjectDataRecord>();
   return [
     // NOTE: start action columns
     helper.display({
-      id: '_SEQUENCE_',
-      size: 64,
+      id: COLUMN_SEQUENCE,
+      size: COLUMN_SEQUENCE_WIDTH,
       enableResizing: false,
       header: () => (
         <div className="text-base text-center">
-          <HiMiniHashtag className="inline-block" />
+          <LuHash className="inline-block" />
         </div>
       ),
       cell: ({ row }) => (
@@ -30,19 +44,55 @@ export function createColumns(modelFields: IProjectDataField[]) {
           id: field._id,
           enableGlobalFilter: false,
           enableResizing: true,
-          minSize: 120,
-          maxSize: 600,
-          header: (props) => <Header title={field.title} {...props} />,
+          minSize: COLUMN_WIDTH_MIN,
+          maxSize: COLUMN_WIDTH_MAX,
+          header: (props) => (
+            <Header
+              {...props}
+              title={field.title}
+              menuItems={options.headerMenuItems}
+              Icon={LuText}
+            />
+          ),
           cell: (props) => <Cell {...props} />,
         }
       );
     }),
     // NOTE: end action columns
     helper.display({
-      id: '_ADD_',
-      size: 64,
+      id: COLUMN_ADD,
+      size: COLUMN_ADD_WIDTH,
       enableResizing: false,
-      header: (props) => <AddColumn title="add column" {...props} />,
+      header: (props) => <AddColumn {...props} title="add column" />,
     }),
   ];
+}
+
+export function getColumnOrder(
+  modelFieldIds: string[],
+  visibleFields?: string[]
+) {
+  return !visibleFields?.length ? modelFieldIds : visibleFields;
+}
+
+export function getColumnPinning(
+  leftPinning?: string[],
+  rightPinning?: string[]
+) {
+  return {
+    left: [COLUMN_SEQUENCE].concat(leftPinning || []),
+    right: [COLUMN_ADD].concat(rightPinning || []),
+  };
+}
+
+export function getColumnVisibility(
+  modelFieldIds: string[],
+  visibleFields?: string[]
+) {
+  const visibleIds = getColumnOrder(modelFieldIds, visibleFields);
+  const visibleIdSet = new Set(visibleIds);
+  return modelFieldIds.reduce<Record<string, boolean>>((prev, el) => {
+    prev[el] = visibleIdSet.has(el);
+    return prev;
+  }, {});
 }

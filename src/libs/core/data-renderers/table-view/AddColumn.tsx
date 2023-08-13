@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { useState } from 'react';
-import { HiMiniPlus } from 'react-icons/hi2';
+import { LuPlus } from 'react-icons/lu';
 import {
   Popover,
   PopoverContent,
@@ -24,7 +24,7 @@ function AddColumn({ title }: IAddColumnProps) {
             'no-shadow',
             opened && 'bg-base-content/20'
           )}>
-          <HiMiniPlus className="text-xl" />
+          <LuPlus className="text-lg" />
         </button>
       </PopoverTrigger>
       <PopoverContent align="start">
