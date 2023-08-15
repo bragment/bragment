@@ -24,7 +24,10 @@ function TableHeader<TData, TValue>({
 
   return (
     <th
-      className={clsx('relative', sticky ? 'sticky bg-base-100 z-[1]' : 'z-0')}
+      className={clsx(
+        'relative px-2 py-1.5',
+        sticky ? 'sticky bg-base-100 z-[1]' : 'z-0'
+      )}
       data-first-centered={firstCentered || undefined}
       data-last-centered={lastCentered || undefined}
       data-first-left-pinned={firstLeftPinned || undefined}

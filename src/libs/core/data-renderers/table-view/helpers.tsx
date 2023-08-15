@@ -1,5 +1,6 @@
 import { createColumnHelper } from '@tanstack/react-table';
-import { LuHash, LuText } from 'react-icons/lu';
+import { LuHash } from 'react-icons/lu';
+import { getFieldRenderer } from '../../field-renderers';
 import AddColumn from './AddColumn';
 import Cell from './Cell';
 import Header from './Header';
@@ -51,7 +52,7 @@ export function createColumns(
               {...props}
               title={field.title}
               menuItems={options.headerMenuItems}
-              Icon={LuText}
+              Icon={getFieldRenderer(field.type).Icon}
             />
           ),
           cell: (props) => <Cell {...props} />,
