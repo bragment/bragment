@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import {
   LuChevronLeftSquare,
   LuChevronRightSquare,
@@ -11,9 +11,16 @@ import { useParams } from 'react-router-dom';
 import {
   useProjectDataRecordListQuery,
   useProjectQuery,
+  useUpdateProjectDataViewMutation,
 } from '../../../libs/react-query';
 import { useFormatMessage } from '@/components/hooks';
-import { TableView } from '@/libs/core/data-renderers/table-view';
+import {
+  getViewFieldWidth,
+  getViewLeftPinnedFields,
+  getViewVisibleFields,
+  ITableViewProps,
+  TableView,
+} from '@/libs/core/data-renderers/table-view';
 import { ITableHeaderMenuItem } from '@/libs/core/data-renderers/table-view/types';
 import {
   checkIfLeftMovable,
@@ -27,6 +34,8 @@ import {
 
 function DataView() {
   const f = useFormatMessage();
+  const { mutateAsync: updateViewMutateAsync } =
+    useUpdateProjectDataViewMutation();
   const { projectId = '', modelId = '', viewId = '' } = useParams();
   const { data: records } = useProjectDataRecordListQuery(
     projectId,
@@ -84,6 +93,38 @@ function DataView() {
     [f]
   );
 
+  const handleFieldWidthChange = useCallback<
+    NonNullable<ITableViewProps['onFieldWidthChange']>
+  >(
+    (table, columnId) => {
+      const width = getViewFieldWidth(table, columnId);
+      if (width) {
+        updateViewMutateAsync({
+          projectId,
+          viewId,
+          fieldWidth: { [columnId]: width },
+        });
+      }
+    },
+    [projectId, viewId, updateViewMutateAsync]
+  );
+
+  const handleVisibleFieldsChange = useCallback<
+    NonNullable<ITableViewProps['onVisibleFieldsChange']>
+  >(
+    (table) => {
+      const visibleFields = getViewVisibleFields(table);
+      const leftPinnedFields = getViewLeftPinnedFields(table);
+      updateViewMutateAsync({
+        projectId,
+        viewId,
+        visibleFields,
+        leftPinnedFields,
+      });
+    },
+    [projectId, viewId, updateViewMutateAsync]
+  );
+
   if (!view) {
     return null;
   }
@@ -94,6 +135,8 @@ function DataView() {
       modelFields={modelFields}
       modelRecords={modelRecords}
       headerMenuItems={headerMenuItems}
+      onFieldWidthChange={handleFieldWidthChange}
+      onVisibleFieldsChange={handleVisibleFieldsChange}
     />
   );
 }

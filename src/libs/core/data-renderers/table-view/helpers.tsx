@@ -18,10 +18,12 @@ import { IProjectDataField, IProjectDataRecord } from '@/libs/client/types';
 export function createColumns(
   modelFields: IProjectDataField[],
   options: {
+    fieldWidth: Record<string, number>;
     headerMenuItems: ITableHeaderMenuItem[];
   }
 ) {
   const helper = createColumnHelper<IProjectDataRecord>();
+  const { fieldWidth, headerMenuItems } = options;
   return [
     // NOTE: start action columns
     helper.display({
@@ -45,13 +47,14 @@ export function createColumns(
           id: field._id,
           enableGlobalFilter: false,
           enableResizing: true,
+          size: fieldWidth[field._id],
           minSize: COLUMN_WIDTH_MIN,
           maxSize: COLUMN_WIDTH_MAX,
           header: (props) => (
             <Header
               {...props}
               title={field.title}
-              menuItems={options.headerMenuItems}
+              menuItems={headerMenuItems}
               Icon={getFieldRenderer(field.type).Icon}
             />
           ),
@@ -82,7 +85,7 @@ export function getColumnPinning(
 ) {
   return {
     left: [COLUMN_SEQUENCE].concat(leftPinning || []),
-    right: [COLUMN_ADD].concat(rightPinning || []),
+    right: (rightPinning || []).concat([COLUMN_ADD]),
   };
 }
 

@@ -6,7 +6,15 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import clsx from 'clsx';
-import { memo, useEffect, useLayoutEffect, useRef } from 'react';
+import {
+  forwardRef,
+  memo,
+  Ref,
+  useEffect,
+  useImperativeHandle,
+  useLayoutEffect,
+  useRef,
+} from 'react';
 import { ScrollArea } from '../scroll-area';
 import TableBodyRow from './TableBodyRow';
 import TableHeadRow from './TableHeadRow';
@@ -24,18 +32,27 @@ function updateLastTableColumnWidth<TData, TValue>(
   }
 }
 
-export interface DataTableProps<TData, TValue> extends TableOptions<TData> {
-  columns: ColumnDef<TData, TValue>[];
+export interface IDataTableRef<TData> {
+  getTable(): Table<TData>;
 }
 
-function DataTable<TData, TValue>(props: DataTableProps<TData, TValue>) {
+export interface IDataTableProps<TData, TValue> extends TableOptions<TData> {
+  columns: ColumnDef<TData, TValue>[];
+  onResizeColumnEnd?: (resizingColumn: string) => void;
+}
+
+function DataTable<TData, TValue>(
+  { onResizeColumnEnd, ...others }: IDataTableProps<TData, TValue>,
+  ref: Ref<IDataTableRef<TData>>
+) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const lastColumnRef = useRef<HTMLTableColElement>(null);
 
-  const table = useReactTable(props);
+  const table = useReactTable(others);
   const leafHeaders = table.getLeafHeaders();
   const rowModel = table.getRowModel();
   const { isResizingColumn } = table.getState().columnSizingInfo;
+  const resizingColumnRef = useRef(isResizingColumn || '');
 
   useLayoutEffect(() => {
     updateLastTableColumnWidth(
@@ -57,6 +74,25 @@ function DataTable<TData, TValue>(props: DataTableProps<TData, TValue>) {
     window.addEventListener('resize', handleWindowResize);
     return () => window.removeEventListener('resize', handleWindowResize);
   }, [table, leafHeaders]);
+
+  useEffect(() => {
+    if (
+      onResizeColumnEnd &&
+      resizingColumnRef.current &&
+      isResizingColumn === false
+    ) {
+      onResizeColumnEnd(resizingColumnRef.current);
+    }
+    resizingColumnRef.current = isResizingColumn || '';
+  }, [isResizingColumn, onResizeColumnEnd]);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      getTable: () => table,
+    }),
+    [table]
+  );
 
   return (
     <div ref={wrapperRef} className="w-full h-full">
@@ -90,5 +126,7 @@ function DataTable<TData, TValue>(props: DataTableProps<TData, TValue>) {
     </div>
   );
 }
-
-export default memo(DataTable) as typeof DataTable;
+type IDataTableComponent = <TData, TValue>(
+  props: IDataTableProps<TData, TValue> & { ref: Ref<IDataTableRef<TData>> }
+) => JSX.Element;
+export default memo(forwardRef(DataTable)) as IDataTableComponent;

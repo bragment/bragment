@@ -164,6 +164,8 @@ export interface IProjectDataView {
   filters?: IDataFilter[];
   sorters?: IDataSorter[];
   visibleFields?: string[];
+  leftPinnedFields?: string[];
+  fieldWidth?: Record<string, number>;
 }
 
 export interface IProjectDataField {
