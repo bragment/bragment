@@ -1,4 +1,4 @@
-import { createColumnHelper } from '@tanstack/react-table';
+import { createColumnHelper, HeaderContext } from '@tanstack/react-table';
 import { LuHash } from 'react-icons/lu';
 import { getFieldRenderer } from '../../field-renderers';
 import AddColumn from './AddColumn';
@@ -11,19 +11,21 @@ import {
   COLUMN_SEQUENCE_WIDTH,
   COLUMN_WIDTH_MAX,
   COLUMN_WIDTH_MIN,
-  ITableHeaderMenuItem,
+  ICreateColumnListOptions,
 } from './types';
-import { IProjectDataField, IProjectDataRecord } from '@/libs/client/types';
+import {
+  IProjectDataField,
+  IProjectDataRecord,
+  IRecordFieldData,
+} from '@/libs/client/types';
 
-export function createColumns(
-  modelFields: IProjectDataField[],
-  options: {
-    fieldWidth: Record<string, number>;
-    headerMenuItems: ITableHeaderMenuItem[];
-  }
+export function createColumnList(
+  fields: IProjectDataField[],
+  options: ICreateColumnListOptions
 ) {
   const helper = createColumnHelper<IProjectDataRecord>();
-  const { fieldWidth, headerMenuItems } = options;
+  const { view, headerMenuItems = [] } = options;
+  const { fieldWidth = {} } = view;
   return [
     // NOTE: start action columns
     helper.display({
@@ -40,7 +42,7 @@ export function createColumns(
       ),
     }),
     // NOTE: data columns
-    ...modelFields.map((field) => {
+    ...fields.map((field) => {
       return helper.accessor(
         (record: IProjectDataRecord) => record.data[field._id],
         {
@@ -67,7 +69,9 @@ export function createColumns(
       id: COLUMN_ADD,
       size: COLUMN_ADD_WIDTH,
       enableResizing: false,
-      header: (props) => <AddColumn {...props} title="add column" />,
+      header: (props: HeaderContext<IProjectDataRecord, IRecordFieldData>) => (
+        <AddColumn {...props} {...options} />
+      ),
     }),
   ];
 }

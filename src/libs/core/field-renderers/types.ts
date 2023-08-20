@@ -8,7 +8,6 @@ export enum EFieldCategory {
 }
 
 export interface IFieldRenderer {
-  key: string;
   type: EDataFieldType;
   category: EFieldCategory;
   Icon: IconType;

@@ -132,7 +132,7 @@ function CreateDataFieldForm(
       />
       <DataFieldTypeSelect
         value={fieldType}
-        filter={fieldFilter}
+        filter={fieldFilter as any}
         onChange={handleFieldTypeChange}
       />
       {extra}

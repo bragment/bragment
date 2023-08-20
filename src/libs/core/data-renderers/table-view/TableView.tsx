@@ -3,80 +3,80 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   getSortedRowModel,
-  Table,
 } from '@tanstack/react-table';
 import { isEqual } from 'lodash';
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
 import {
-  createColumns,
+  createColumnList,
   getColumnOrder,
   getColumnPinning,
   getColumnVisibility,
 } from './helpers';
 import './index.scss';
 import { useDeepState } from './hookts';
-import { ITableHeaderMenuItem } from './types';
-import {
-  IProjectDataField,
-  IProjectDataRecord,
-  IProjectDataView,
-  IRecordFieldData,
-} from '@/libs/client/types';
+import { ITableViewProps } from './types';
+import { IProjectDataRecord, IRecordFieldData } from '@/libs/client/types';
 import DataTable, {
   IDataTableProps,
   IDataTableRef,
 } from '@/libs/radix-ui/data-table/DataTable';
 
-export interface ITableViewProps {
-  view: IProjectDataView;
-  modelFields: IProjectDataField[];
-  modelRecords: IProjectDataRecord[];
-  headerMenuItems: ITableHeaderMenuItem[];
-  onFieldWidthChange?: (
-    table: Table<IProjectDataRecord>,
-    columnId: string
-  ) => void;
-  onVisibleFieldsChange?: (table: Table<IProjectDataRecord>) => void;
-}
-
 function TableView({
+  project,
   view,
-  modelFields,
-  modelRecords,
+  records,
   headerMenuItems,
+  CreateFieldForm,
   onVisibleFieldsChange,
   onFieldWidthChange,
 }: ITableViewProps) {
   const dataTableRef = useRef<IDataTableRef<IProjectDataRecord>>(null);
-  const modelFieldIds = modelFields.map((el) => el._id);
-  const { fieldWidth, leftPinnedFields, visibleFields } = view;
-  const columns = useMemo(
-    () =>
-      createColumns(modelFields, {
-        fieldWidth: fieldWidth || {},
-        headerMenuItems,
-      }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [modelFields, headerMenuItems]
+  const { model: modelId, leftPinnedFields, visibleFields } = view;
+
+  const modelFields = useMemo(
+    () => project.fields.filter((el) => el.model === modelId) || [],
+    [modelId, project.fields]
+  );
+  const modelRecords = useMemo(
+    () => records?.filter((el) => el.model === modelId) || [],
+    [modelId, records]
   );
 
+  const columns = useMemo(
+    () =>
+      createColumnList(modelFields, {
+        project,
+        view,
+        records,
+        headerMenuItems,
+        CreateFieldForm,
+      }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [modelFields, headerMenuItems, CreateFieldForm]
+  );
+
+  const modelFieldIds = modelFields.map((el) => el._id);
   const [columnOrder, setColumnOrder] = useDeepState(
     getColumnOrder(modelFieldIds, visibleFields)
   );
-
   const [columnPinning, setColumnPinning] = useDeepState<ColumnPinningState>(
     getColumnPinning(leftPinnedFields)
   );
-
   const [columnVisibility, setColumnVisibility] = useDeepState(
     getColumnVisibility(modelFieldIds, visibleFields)
   );
 
+  const columnCountRef = useRef(modelFields.length);
   const columnOrderRef = useRef(columnOrder);
   const columnPinningRef = useRef(columnPinning);
   const columnVisibilityRef = useRef(columnVisibility);
   useEffect(() => {
+    const added = columnCountRef.current !== modelFields.length;
+    if (added) {
+      dataTableRef.current?.scrollToRight();
+    }
     const changed =
+      added ||
       !isEqual(columnOrderRef.current, columnOrder) ||
       !isEqual(columnPinningRef.current, columnPinning) ||
       !isEqual(columnVisibilityRef.current, columnVisibility);
@@ -87,7 +87,13 @@ function TableView({
     columnOrderRef.current = columnOrder;
     columnPinningRef.current = columnPinning;
     columnVisibilityRef.current = columnVisibility;
-  }, [columnOrder, columnPinning, columnVisibility, onVisibleFieldsChange]);
+  }, [
+    modelFields.length,
+    columnOrder,
+    columnPinning,
+    columnVisibility,
+    onVisibleFieldsChange,
+  ]);
 
   const dataTableProps: IDataTableProps<IProjectDataRecord, IRecordFieldData> =
     {

@@ -10,3 +10,7 @@ export function registerFieldRenderer(renderer: IFieldRenderer) {
 export function resolveFieldRenderer(type: EDataFieldType) {
   return fieldRendererMap.get(type);
 }
+
+export function getAllFieldRenderers() {
+  return Array.from(fieldRendererMap.values());
+}

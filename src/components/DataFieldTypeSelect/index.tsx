@@ -1,77 +1,80 @@
-import classNames from 'classnames';
+import { clsx } from 'clsx';
 import { memo, useMemo } from 'react';
-import { ILocalMessage } from '../../i18n/types';
-import { EDataFieldType } from '../../libs/client/types';
-import {
-  getAllCategoryFieldRenderers,
-  getCategoryMessageId,
-} from '../../libs/fields';
-import type FieldRendererBase from '../../libs/fields/renderers/FieldRendererBase';
 import { useFormatMessage } from '../hooks';
-import Select, { OptGroup, Option } from '../Select';
+import {
+  fieldCategoryMessageIdRecord,
+  fieldTypeMessageIdRecord,
+} from './types';
+import { EDataFieldType } from '@/libs/client/types';
+import { getAllCategoryFieldRenderers } from '@/libs/core/field-renderers';
+import {
+  EFieldCategory,
+  IFieldRenderer,
+} from '@/libs/core/field-renderers/types';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@/libs/radix-ui/select';
 
 interface IDataFieldTypeSelectProps {
   className?: string;
   size?: 'sm';
   value?: EDataFieldType;
   onChange?: (value: EDataFieldType) => void;
-  filter?: (field: FieldRendererBase) => boolean;
+  filter?: (field: IFieldRenderer) => boolean;
+}
+
+export function getCategoryMessageId(category: EFieldCategory) {
+  return fieldCategoryMessageIdRecord[category];
+}
+
+export function getFieldTypeMessageId(fieldType: EDataFieldType) {
+  return fieldTypeMessageIdRecord[fieldType];
 }
 
 function DataFieldTypeSelect(props: IDataFieldTypeSelectProps) {
-  const { className, size, value, onChange, filter } = props;
+  const { className, value, onChange, filter } = props;
   const f = useFormatMessage();
 
   const allRendererGroups = useMemo(() => {
     const groups = getAllCategoryFieldRenderers();
-    return filter
-      ? groups.map((el) => ({
-          ...el,
-          renderers: el.renderers.filter(filter),
-        }))
-      : groups;
+    return (
+      filter
+        ? groups.map((el) => ({
+            ...el,
+            renderers: el.renderers.filter(filter),
+          }))
+        : groups
+    ).filter((el) => el.renderers.length);
   }, [filter]);
 
   return (
-    <Select
-      className={classNames(
-        'select select-bordered',
-        size === 'sm' && 'select-sm',
-        className
-      )}
-      dropdownClassName="[&>div]:py-2"
-      showArrow={false}
-      placeholder={<div className="w-full">{f('project.fieldType')}</div>}
-      value={value}
-      onChange={onChange}>
-      {allRendererGroups
-        .filter((el) => el.renderers.length)
-        .map(({ category, renderers }) => (
-          <OptGroup key={category} label={f(getCategoryMessageId(category))}>
-            {renderers.map((renderer) => {
-              const { type, Icon } = renderer;
-              const title = f(renderer.getName() as ILocalMessage);
-              return (
-                <Option
-                  key={type}
-                  value={type}
-                  className={classNames(
-                    'mx-2 px-2 flex items-center',
-                    size === 'sm' && 'option-sm'
-                  )}>
-                  <div className="w-full flex items-center">
-                    <Icon className="flex-none mr-2 text-lg" />
-                    <div
-                      className="flex-auto text-ellipsis overflow-hidden whitespace-nowrap"
-                      title={title}>
-                      {title}
-                    </div>
+    <Select value={value} onValueChange={onChange}>
+      <SelectTrigger className={clsx(className)}>
+        <SelectValue placeholder={f('dataField.selectAFieldType')} />
+      </SelectTrigger>
+      <SelectContent>
+        {allRendererGroups.map(({ category, renderers }) => (
+          <SelectGroup key={category}>
+            <SelectLabel>{f(getCategoryMessageId(category))}</SelectLabel>
+            {renderers.map(({ Icon, type }) => (
+              <SelectItem key={type} value={type}>
+                <div className="max-w-full flex flex-row gap-1 items-center">
+                  {Icon && <Icon className="flex-none" />}
+                  <div className="flex-auto overflow-hidden text-ellipsis whitespace-nowrap">
+                    {f(getFieldTypeMessageId(type))}
                   </div>
-                </Option>
-              );
-            })}
-          </OptGroup>
+                </div>
+              </SelectItem>
+            ))}
+          </SelectGroup>
         ))}
+      </SelectContent>
     </Select>
   );
 }

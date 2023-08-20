@@ -13,15 +13,18 @@ import {
   useProjectQuery,
   useUpdateProjectDataViewMutation,
 } from '../../../libs/react-query';
+import CreateFieldForm from './CreateFieldForm';
 import { useFormatMessage } from '@/components/hooks';
 import {
   getViewFieldWidth,
   getViewLeftPinnedFields,
   getViewVisibleFields,
-  ITableViewProps,
   TableView,
 } from '@/libs/core/data-renderers/table-view';
-import { ITableHeaderMenuItem } from '@/libs/core/data-renderers/table-view/types';
+import {
+  ITableHeaderMenuItem,
+  ITableViewProps,
+} from '@/libs/core/data-renderers/table-view/types';
 import {
   checkIfLeftMovable,
   checkIfPinned,
@@ -36,7 +39,7 @@ function DataView() {
   const f = useFormatMessage();
   const { mutateAsync: updateViewMutateAsync } =
     useUpdateProjectDataViewMutation();
-  const { projectId = '', modelId = '', viewId = '' } = useParams();
+  const { projectId = '', viewId = '' } = useParams();
   const { data: records } = useProjectDataRecordListQuery(
     projectId,
     true,
@@ -44,14 +47,6 @@ function DataView() {
   );
   const { data: project } = useProjectQuery(projectId, true, true);
   const view = project?.views.find((el) => el._id === viewId);
-  const modelFields = useMemo(
-    () => project?.fields.filter((el) => el.model === modelId) || [],
-    [modelId, project?.fields]
-  );
-  const modelRecords = useMemo(
-    () => records?.filter((el) => el.model === modelId) || [],
-    [records, modelId]
-  );
 
   const headerMenuItems = useMemo<ITableHeaderMenuItem[]>(
     () => [
@@ -125,16 +120,17 @@ function DataView() {
     [projectId, viewId, updateViewMutateAsync]
   );
 
-  if (!view) {
+  if (!project || !view || !records) {
     return null;
   }
 
   return (
     <TableView
+      project={project}
       view={view}
-      modelFields={modelFields}
-      modelRecords={modelRecords}
+      records={records}
       headerMenuItems={headerMenuItems}
+      CreateFieldForm={CreateFieldForm}
       onFieldWidthChange={handleFieldWidthChange}
       onVisibleFieldsChange={handleVisibleFieldsChange}
     />

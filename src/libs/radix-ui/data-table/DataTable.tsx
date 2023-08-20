@@ -34,6 +34,7 @@ function updateLastTableColumnWidth<TData, TValue>(
 
 export interface IDataTableRef<TData> {
   getTable(): Table<TData>;
+  scrollToRight(): void;
 }
 
 export interface IDataTableProps<TData, TValue> extends TableOptions<TData> {
@@ -90,6 +91,14 @@ function DataTable<TData, TValue>(
     ref,
     () => ({
       getTable: () => table,
+      scrollToRight: () => {
+        const div = wrapperRef.current?.querySelector(
+          '[data-radix-scroll-area-viewport]'
+        );
+        if (div) {
+          div.scrollLeft = div.scrollWidth - div.clientWidth;
+        }
+      },
     }),
     [table]
   );
@@ -97,7 +106,7 @@ function DataTable<TData, TValue>(
   return (
     <div ref={wrapperRef} className="w-full h-full">
       <ScrollArea
-        className="h-full border-t border-base-200"
+        className={clsx('border-base-200', 'h-full border-t')}
         viewportClassName="max-w-full max-h-full"
         horizontal
         vertical>

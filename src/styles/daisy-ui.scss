@@ -8,7 +8,7 @@ body {
     &:not(.no-shadow) {
       &.focus,
       &:focus {
-        @apply ring ring-secondary;
+        @apply ring ring-secondary ring-inset;
         // NOTE: as @apply border-secondary;
         border-color: hsl(var(--s) / 1) !important;
       }
