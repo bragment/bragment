@@ -24,6 +24,7 @@ import DataTable, {
 
 function TableView({
   project,
+  model,
   view,
   records,
   headerMenuItems,
@@ -32,7 +33,8 @@ function TableView({
   onFieldWidthChange,
 }: IViewProps) {
   const dataTableRef = useRef<IDataTableRef<IProjectDataRecord>>(null);
-  const { model: modelId, leftPinnedFields, visibleFields } = view;
+  const modelId = model._id;
+  const { leftPinnedFields, visibleFields } = view;
 
   const modelFields = useMemo(
     () => project.fields.filter((el) => el.model === modelId) || [],
@@ -47,6 +49,7 @@ function TableView({
     () =>
       createColumnList(modelFields, {
         project,
+        model,
         view,
         records,
         headerMenuItems,

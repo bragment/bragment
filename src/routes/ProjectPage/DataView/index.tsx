@@ -4,6 +4,7 @@ import {
   LuChevronLeftSquare,
   LuChevronRightSquare,
   LuEyeOff,
+  LuKey,
   LuPin,
   LuPinOff,
 } from 'react-icons/lu';
@@ -11,6 +12,7 @@ import { useParams } from 'react-router-dom';
 import {
   useProjectDataRecordListQuery,
   useProjectQuery,
+  useUpdateProjectDataModelMutation,
   useUpdateProjectDataViewMutation,
 } from '../../../libs/react-query';
 import CreateFieldForm from './CreateFieldForm';
@@ -37,9 +39,11 @@ import {
 
 function DataView() {
   const f = useFormatMessage();
+  const { mutateAsync: updateModelMutateAsync } =
+    useUpdateProjectDataModelMutation();
   const { mutateAsync: updateViewMutateAsync } =
     useUpdateProjectDataViewMutation();
-  const { projectId = '', viewId = '' } = useParams();
+  const { projectId = '', modelId = '', viewId = '' } = useParams();
   const { data: records } = useProjectDataRecordListQuery(
     projectId,
     true,
@@ -47,45 +51,60 @@ function DataView() {
   );
   const { data: project } = useProjectQuery(projectId, true, true);
   const view = project?.views.find((el) => el._id === viewId);
+  const model = project?.models.find((el) => el._id === modelId);
+  const mainFieldId = model?.mainField;
 
   const headerMenuItems = useMemo<IColumnHeaderMenuItem[]>(
     () => [
       {
-        key: 'tableView.moveLeft',
-        title: f('tableView.moveLeft'),
+        key: 'dataView.setAsMainField',
+        title: f('dataView.setAsMainField'),
+        Icon: LuKey,
+        disabled: (header) => header.column.id === mainFieldId,
+        onSelect: (header) => {
+          updateModelMutateAsync({
+            projectId,
+            modelId,
+            mainField: header.column.id,
+          });
+        },
+      },
+      {
+        key: 'dataView.moveLeft',
+        title: f('dataView.moveLeft'),
         Icon: LuChevronLeftSquare,
-        disabled: (...args) => !checkIfLeftMovable(...args),
+        disabled: (header, table) => !checkIfLeftMovable(header, table),
         onSelect: moveLeft,
       },
       {
-        key: 'tableView.moveRight',
-        title: f('tableView.moveRight'),
+        key: 'dataView.moveRight',
+        title: f('dataView.moveRight'),
         Icon: LuChevronRightSquare,
-        disabled: (...args) => !checkIfRightMovable(...args),
+        disabled: (header, table) => !checkIfRightMovable(header, table),
         onSelect: moveRight,
       },
       {
-        key: 'tableView.pin',
-        title: f('tableView.pin'),
-        hidden: (header) => !!checkIfPinned(header),
+        key: 'dataView.pin',
+        title: f('dataView.pin'),
         Icon: LuPin,
+        hidden: (header) => !!checkIfPinned(header),
         onSelect: pinLeft,
       },
       {
-        key: 'tableView.unpin',
-        title: f('tableView.unpin'),
-        hidden: (header) => !checkIfPinned(header),
+        key: 'dataView.unpin',
+        title: f('dataView.unpin'),
         Icon: LuPinOff,
+        hidden: (header) => !checkIfPinned(header),
         onSelect: unpin,
       },
       {
-        key: 'tableView.hide',
-        title: f('tableView.hide'),
+        key: 'dataView.hide',
+        title: f('dataView.hide'),
         Icon: LuEyeOff,
         onSelect: (header) => header.column.toggleVisibility(),
       },
     ],
-    [f]
+    [mainFieldId, projectId, modelId, updateModelMutateAsync, f]
   );
 
   const handleFieldWidthChange = useCallback<
@@ -120,7 +139,8 @@ function DataView() {
     [projectId, viewId, updateViewMutateAsync]
   );
 
-  if (!project || !view || !records) {
+  if (!project || !model || !view || !records || model._id !== view.model) {
+    // TODO: give some tips
     return null;
   }
 
@@ -129,6 +149,7 @@ function DataView() {
   return (
     <View
       project={project}
+      model={model}
       view={view}
       records={records}
       headerMenuItems={headerMenuItems}

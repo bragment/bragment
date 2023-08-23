@@ -66,7 +66,7 @@ const DropdownMenuContent = React.forwardRef<
         // NOTE: adjust for align
         'data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
         // NOTE: animation
-        'data-[state=open]:animate-in data-[state=closed]:animate-out',
+        'data-[state=open]:animate-in',
         // NOTE: daisy ui style
         'bg-base-100 dropdown-content border border-base-content/10',
         className

@@ -4,6 +4,7 @@ import {
   EDataViewType,
   IProject,
   IProjectDataField,
+  IProjectDataModel,
   IProjectDataRecord,
   IProjectDataView,
   IRecordFieldData,
@@ -42,6 +43,7 @@ export interface ICreateFieldFormProps {
 
 export interface ICreateColumnListOptions {
   project: IProject;
+  model: IProjectDataModel;
   view: IProjectDataView;
   records: IProjectDataRecord[];
   headerMenuItems: IColumnHeaderMenuItem[];

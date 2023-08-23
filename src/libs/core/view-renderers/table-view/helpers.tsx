@@ -24,8 +24,9 @@ export function createColumnList(
   options: ICreateColumnListOptions
 ) {
   const helper = createColumnHelper<IProjectDataRecord>();
-  const { view, headerMenuItems = [] } = options;
+  const { model, view, headerMenuItems = [] } = options;
   const { fieldWidth = {} } = view;
+
   return [
     // NOTE: start action columns
     helper.display({
@@ -57,6 +58,7 @@ export function createColumnList(
               {...props}
               title={field.title}
               menuItems={headerMenuItems}
+              main={model.mainField === field._id}
               Icon={getFieldRenderer(field.type).Icon}
             />
           ),
