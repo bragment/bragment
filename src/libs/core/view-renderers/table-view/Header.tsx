@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { useState } from 'react';
 import { IconType } from 'react-icons/lib';
 import { LuChevronsUpDown, LuPin } from 'react-icons/lu';
-import { ITableHeaderMenuItem } from './types';
+import { IColumnHeaderMenuItem } from '../types';
 import { IProjectDataRecord, IRecordFieldData } from '@/libs/client/types';
 import {
   DropdownMenu,
@@ -15,7 +15,7 @@ import {
 interface IHeaderProps
   extends HeaderContext<IProjectDataRecord, IRecordFieldData> {
   title: string;
-  menuItems: ITableHeaderMenuItem[];
+  menuItems: IColumnHeaderMenuItem[];
   Icon?: IconType;
 }
 

@@ -15,16 +15,16 @@ import {
 } from '../../../libs/react-query';
 import CreateFieldForm from './CreateFieldForm';
 import { useFormatMessage } from '@/components/hooks';
+import { getViewRenderer } from '@/libs/core/view-renderers';
+import {
+  IColumnHeaderMenuItem,
+  IViewProps,
+} from '@/libs/core/view-renderers/types';
 import {
   getViewFieldWidth,
   getViewLeftPinnedFields,
   getViewVisibleFields,
-  TableView,
-} from '@/libs/core/data-renderers/table-view';
-import {
-  ITableHeaderMenuItem,
-  ITableViewProps,
-} from '@/libs/core/data-renderers/table-view/types';
+} from '@/libs/core/view-renderers/utils';
 import {
   checkIfLeftMovable,
   checkIfPinned,
@@ -48,7 +48,7 @@ function DataView() {
   const { data: project } = useProjectQuery(projectId, true, true);
   const view = project?.views.find((el) => el._id === viewId);
 
-  const headerMenuItems = useMemo<ITableHeaderMenuItem[]>(
+  const headerMenuItems = useMemo<IColumnHeaderMenuItem[]>(
     () => [
       {
         key: 'tableView.moveLeft',
@@ -89,7 +89,7 @@ function DataView() {
   );
 
   const handleFieldWidthChange = useCallback<
-    NonNullable<ITableViewProps['onFieldWidthChange']>
+    NonNullable<IViewProps['onFieldWidthChange']>
   >(
     (table, columnId) => {
       const width = getViewFieldWidth(table, columnId);
@@ -105,7 +105,7 @@ function DataView() {
   );
 
   const handleVisibleFieldsChange = useCallback<
-    NonNullable<ITableViewProps['onVisibleFieldsChange']>
+    NonNullable<IViewProps['onVisibleFieldsChange']>
   >(
     (table) => {
       const visibleFields = getViewVisibleFields(table);
@@ -124,8 +124,10 @@ function DataView() {
     return null;
   }
 
+  const { View } = getViewRenderer(view.type);
+
   return (
-    <TableView
+    <View
       project={project}
       view={view}
       records={records}

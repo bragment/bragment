@@ -2,7 +2,7 @@ import { HeaderContext } from '@tanstack/react-table';
 import clsx from 'clsx';
 import { useCallback, useMemo, useState } from 'react';
 import { LuPlus } from 'react-icons/lu';
-import { ICreateColumnListOptions } from './types';
+import { ICreateColumnListOptions } from '../types';
 import { IProjectDataRecord, IRecordFieldData } from '@/libs/client/types';
 import {
   Popover,

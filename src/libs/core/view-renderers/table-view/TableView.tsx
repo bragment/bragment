@@ -6,6 +6,8 @@ import {
 } from '@tanstack/react-table';
 import { isEqual } from 'lodash';
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
+import { useDeepState } from '../../hooks';
+import { IViewProps } from '../types';
 import {
   createColumnList,
   getColumnOrder,
@@ -13,8 +15,7 @@ import {
   getColumnVisibility,
 } from './helpers';
 import './index.scss';
-import { useDeepState } from './hookts';
-import { ITableViewProps } from './types';
+
 import { IProjectDataRecord, IRecordFieldData } from '@/libs/client/types';
 import DataTable, {
   IDataTableProps,
@@ -29,7 +30,7 @@ function TableView({
   CreateFieldForm,
   onVisibleFieldsChange,
   onFieldWidthChange,
-}: ITableViewProps) {
+}: IViewProps) {
   const dataTableRef = useRef<IDataTableRef<IProjectDataRecord>>(null);
   const { model: modelId, leftPinnedFields, visibleFields } = view;
 
@@ -129,4 +130,4 @@ function TableView({
   return <DataTable ref={dataTableRef} {...dataTableProps} />;
 }
 
-export default memo(TableView);
+export default memo(TableView) as typeof TableView;

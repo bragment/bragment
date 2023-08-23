@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import DataFieldTypeSelect from '@/components/DataFieldTypeSelect';
 import { defaultFieldType } from '@/components/DataFieldTypeSelect/types';
 import { useDialogStore, useFormatMessage } from '@/components/hooks';
-import { ICreateFieldFormProps } from '@/libs/core/data-renderers/table-view/types';
+import { ICreateFieldFormProps } from '@/libs/core/view-renderers/types';
 import { useCreateProjectDataFieldMutation } from '@/libs/react-query';
 import { getAvailableTitle } from '@/utils';
 

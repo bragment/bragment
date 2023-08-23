@@ -22,3 +22,5 @@ export function getAllCategoryFieldRenderers() {
   });
   return list;
 }
+
+export { getAllFieldRenderers } from './helpers';

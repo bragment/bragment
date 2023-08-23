@@ -1,9 +1,6 @@
 import { createColumnHelper, HeaderContext } from '@tanstack/react-table';
 import { LuHash } from 'react-icons/lu';
 import { getFieldRenderer } from '../../field-renderers';
-import AddColumn from './AddColumn';
-import Cell from './Cell';
-import Header from './Header';
 import {
   COLUMN_ADD,
   COLUMN_ADD_WIDTH,
@@ -12,7 +9,10 @@ import {
   COLUMN_WIDTH_MAX,
   COLUMN_WIDTH_MIN,
   ICreateColumnListOptions,
-} from './types';
+} from '../types';
+import AddColumn from './AddColumn';
+import Cell from './Cell';
+import Header from './Header';
 import {
   IProjectDataField,
   IProjectDataRecord,

@@ -1,6 +1,7 @@
 import { Header, Table } from '@tanstack/react-table';
 import { IconType } from 'react-icons/lib';
 import {
+  EDataViewType,
   IProject,
   IProjectDataField,
   IProjectDataRecord,
@@ -15,7 +16,7 @@ export const COLUMN_ADD_WIDTH = 64;
 export const COLUMN_WIDTH_MIN = 120;
 export const COLUMN_WIDTH_MAX = 600;
 
-export interface ITableHeaderMenuItem<
+export interface IColumnHeaderMenuItem<
   TData = IProjectDataRecord,
   TValue = IRecordFieldData
 > {
@@ -43,11 +44,17 @@ export interface ICreateColumnListOptions {
   project: IProject;
   view: IProjectDataView;
   records: IProjectDataRecord[];
-  headerMenuItems: ITableHeaderMenuItem[];
+  headerMenuItems: IColumnHeaderMenuItem[];
   CreateFieldForm?(props: ICreateFieldFormProps): JSX.Element;
 }
 
-export interface ITableViewProps extends ICreateColumnListOptions {
+export interface IViewProps extends ICreateColumnListOptions {
   onFieldWidthChange?(table: Table<IProjectDataRecord>, columnId: string): void;
   onVisibleFieldsChange?(table: Table<IProjectDataRecord>): void;
+}
+
+export interface IViewRenderer {
+  type: EDataViewType;
+  Icon: IconType;
+  View(props: IViewProps): JSX.Element;
 }
