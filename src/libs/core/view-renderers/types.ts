@@ -1,9 +1,13 @@
 import { Header, Table } from '@tanstack/react-table';
+import {
+  ForwardRefExoticComponent,
+  PropsWithoutRef,
+  RefAttributes,
+} from 'react';
 import { IconType } from 'react-icons/lib';
 import {
   EDataViewType,
   IProject,
-  IProjectDataField,
   IProjectDataModel,
   IProjectDataRecord,
   IProjectDataView,
@@ -34,20 +38,35 @@ export interface IColumnHeaderMenuItem<
   onSelect?: (header: Header<TData, TValue>, table: Table<TData>) => void;
 }
 
-export interface ICreateFieldFormProps {
-  projectId: string;
-  modelId: string;
-  existingFields: IProjectDataField[];
-  onFinish(data: IProject): void;
-}
-
-export interface ICreateColumnListOptions {
+interface IProjectDataBaseProps {
   project: IProject;
   model: IProjectDataModel;
   view: IProjectDataView;
+}
+export interface ICreateFieldFormProps extends IProjectDataBaseProps {
+  onFinish?(data: IProject): void;
+  onLoadingChange?(loading: boolean): void;
+}
+export interface ICreateFieldFormRef {
+  focus: () => void;
+  submit: () => Promise<void>;
+}
+export interface ICreateRecordInputProps extends IProjectDataBaseProps {
+  onFinish?(data: IProjectDataRecord): void;
+  onLoadingChange?(loading: boolean): void;
+}
+export interface ICreateRecordInputRef extends ICreateFieldFormRef {}
+
+export interface ICreateColumnListOptions extends IProjectDataBaseProps {
   records: IProjectDataRecord[];
   headerMenuItems: IColumnHeaderMenuItem[];
-  CreateFieldForm?(props: ICreateFieldFormProps): JSX.Element;
+  CreateFieldForm?: ForwardRefExoticComponent<
+    PropsWithoutRef<ICreateFieldFormProps> & RefAttributes<ICreateFieldFormRef>
+  >;
+  CreateRecordInput?: ForwardRefExoticComponent<
+    PropsWithoutRef<ICreateRecordInputProps> &
+      RefAttributes<ICreateRecordInputRef>
+  >;
 }
 
 export interface IViewProps extends ICreateColumnListOptions {

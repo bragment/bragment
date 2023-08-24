@@ -63,6 +63,7 @@ export default {
   'dataView.ascending': '升序',
   'dataView.board': '看板',
   'dataView.descending': '降序',
+  'dataView.enterAFieldToAddNewRow': '输入 {field} 来新建一行',
   'dataView.fieldVisibility': '显示字段',
   'dataView.filter': '过滤',
   'dataView.hide': '隐藏',

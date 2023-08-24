@@ -28,6 +28,7 @@ function TableHeader<TData, TValue>({
         'relative px-2 py-1.5',
         sticky ? 'sticky bg-base-100 z-[1]' : 'z-0'
       )}
+      data-header-id={header.id}
       data-first-centered={firstCentered || undefined}
       data-last-centered={lastCentered || undefined}
       data-first-left-pinned={firstLeftPinned || undefined}

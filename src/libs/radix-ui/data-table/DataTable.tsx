@@ -17,6 +17,7 @@ import {
 } from 'react';
 import { ScrollArea } from '../scroll-area';
 import TableBodyRow from './TableBodyRow';
+import TableFootRow from './TableFootRow';
 import TableHeadRow from './TableHeadRow';
 
 function updateLastTableColumnWidth<TData, TValue>(
@@ -106,7 +107,7 @@ function DataTable<TData, TValue>(
   return (
     <div ref={wrapperRef} className="w-full h-full">
       <ScrollArea
-        className={clsx('border-base-200', 'h-full border-t')}
+        className={clsx('border-base-200 border-t', 'h-full')}
         viewportClassName="max-w-full max-h-full"
         horizontal
         vertical>
@@ -130,6 +131,9 @@ function DataTable<TData, TValue>(
               return <TableBodyRow key={row.id} row={row} />;
             })}
           </tbody>
+          <tfoot className={clsx('bg-base-100', 'sticky bottom-0 z-10')}>
+            <TableFootRow footers={leafHeaders} />
+          </tfoot>
         </table>
       </ScrollArea>
     </div>

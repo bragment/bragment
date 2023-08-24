@@ -16,7 +16,7 @@ function TableBodyRow<TData>({ row }: ITableBodyRowProps<TData>) {
   );
 
   return (
-    <tr className="hover">
+    <tr className="hover" data-row-id={row.id}>
       {leftCells.map((cell, i) => (
         <TableCell
           key={cell.id}

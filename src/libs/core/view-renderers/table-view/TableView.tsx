@@ -13,6 +13,7 @@ import {
   getColumnOrder,
   getColumnPinning,
   getColumnVisibility,
+  getRowId,
 } from './helpers';
 import './index.scss';
 
@@ -29,6 +30,7 @@ function TableView({
   records,
   headerMenuItems,
   CreateFieldForm,
+  CreateRecordInput,
   onVisibleFieldsChange,
   onFieldWidthChange,
 }: IViewProps) {
@@ -54,6 +56,7 @@ function TableView({
         records,
         headerMenuItems,
         CreateFieldForm,
+        CreateRecordInput,
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [modelFields, headerMenuItems, CreateFieldForm]
@@ -76,9 +79,6 @@ function TableView({
   const columnVisibilityRef = useRef(columnVisibility);
   useEffect(() => {
     const added = columnCountRef.current !== modelFields.length;
-    if (added) {
-      dataTableRef.current?.scrollToRight();
-    }
     const changed =
       added ||
       !isEqual(columnOrderRef.current, columnOrder) ||
@@ -104,6 +104,7 @@ function TableView({
       data: modelRecords,
       columns,
       columnResizeMode: 'onChange',
+      getRowId,
       state: {
         columnOrder,
         columnPinning,

@@ -33,6 +33,11 @@ div[data-top-scrollable='true'] {
     @apply shadow;
   }
 }
+div[data-bottom-scrollable='true'] {
+  tfoot {
+    box-shadow: 0 -1px 3px 0 rgb(0 0 0 / 0.1);
+  }
+}
 div[data-left-scrollable='true'] {
   [data-last-left-pinned='true'] {
     .resizer {
@@ -42,7 +47,7 @@ div[data-left-scrollable='true'] {
       @include edge-shadow();
       right: 0;
       transform: translate(100%);
-      box-shadow: inset 6px 0 8px -8px rgba(0, 0, 0, 0.4);
+      box-shadow: inset 5px 0 3px -3px rgb(0 0 0/0.1);
     }
   }
 }
@@ -52,7 +57,7 @@ div[data-right-scrollable='true'] {
       @include edge-shadow();
       left: 0;
       transform: translate(-100%);
-      box-shadow: inset -6px 0 8px -8px rgba(0, 0, 0, 0.4);
+      box-shadow: inset -5px 0 3px -3px rgb(0 0 0/0.1);
     }
   }
 }

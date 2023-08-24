@@ -64,6 +64,7 @@ export default {
   'dataView.ascending': 'Ascending',
   'dataView.board': 'Board',
   'dataView.descending': 'Descending',
+  'dataView.enterAFieldToAddNewRow': 'Enter {field} to add new row.',
   'dataView.fieldVisibility': 'Field Visibility',
   'dataView.filter': 'Filter',
   'dataView.hide': 'Hide',

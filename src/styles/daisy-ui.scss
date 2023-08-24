@@ -4,7 +4,9 @@ body {
   button,
   input,
   textarea {
-    outline: none !important;
+    &:not(.outline) {
+      outline: none !important;
+    }
     &:not(.no-shadow) {
       &.focus,
       &:focus {

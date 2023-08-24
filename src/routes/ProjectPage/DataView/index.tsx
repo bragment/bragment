@@ -16,6 +16,7 @@ import {
   useUpdateProjectDataViewMutation,
 } from '../../../libs/react-query';
 import CreateFieldForm from './CreateFieldForm';
+import CreateRecordInput from './CreateRecordInput';
 import { useFormatMessage } from '@/components/hooks';
 import { getViewRenderer } from '@/libs/core/view-renderers';
 import {
@@ -154,6 +155,7 @@ function DataView() {
       records={records}
       headerMenuItems={headerMenuItems}
       CreateFieldForm={CreateFieldForm}
+      CreateRecordInput={CreateRecordInput}
       onFieldWidthChange={handleFieldWidthChange}
       onVisibleFieldsChange={handleVisibleFieldsChange}
     />

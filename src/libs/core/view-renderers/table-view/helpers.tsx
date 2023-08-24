@@ -1,4 +1,4 @@
-import { createColumnHelper, HeaderContext } from '@tanstack/react-table';
+import { createColumnHelper } from '@tanstack/react-table';
 import { LuHash } from 'react-icons/lu';
 import { getFieldRenderer } from '../../field-renderers';
 import {
@@ -11,13 +11,10 @@ import {
   ICreateColumnListOptions,
 } from '../types';
 import AddColumn from './AddColumn';
+import AddRow from './AddRow';
 import Cell from './Cell';
 import Header from './Header';
-import {
-  IProjectDataField,
-  IProjectDataRecord,
-  IRecordFieldData,
-} from '@/libs/client/types';
+import { IProjectDataField, IProjectDataRecord } from '@/libs/client/types';
 
 export function createColumnList(
   fields: IProjectDataField[],
@@ -41,6 +38,7 @@ export function createColumnList(
       cell: ({ row }) => (
         <div className="font-semibold text-center">{row.index + 1}</div>
       ),
+      footer: (props) => <AddRow {...props} {...options} />,
     }),
     // NOTE: data columns
     ...fields.map((field) => {
@@ -71,11 +69,13 @@ export function createColumnList(
       id: COLUMN_ADD,
       size: COLUMN_ADD_WIDTH,
       enableResizing: false,
-      header: (props: HeaderContext<IProjectDataRecord, IRecordFieldData>) => (
-        <AddColumn {...props} {...options} />
-      ),
+      header: (props) => <AddColumn {...props} {...options} />,
     }),
   ];
+}
+
+export function getRowId(originalRow: IProjectDataRecord) {
+  return originalRow._id;
 }
 
 export function getColumnOrder(
